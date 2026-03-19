@@ -23,7 +23,8 @@ type ApiResponse = {
 };
 
 async function getTopics(): Promise<ApiResponse> {
-  const res = await fetch("http://localhost/api/topics", {
+  const baseUrl = process.env.API_BASE_URL ?? "http://localhost";
+  const res = await fetch(`${baseUrl}/api/topics`, {
     cache: "no-store",
   });
   if (!res.ok) {

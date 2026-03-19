@@ -27,7 +27,8 @@ type TopicDetail = {
 };
 
 async function getTopic(id: string): Promise<TopicDetail> {
-  const res = await fetch(`http://localhost/api/topics/${id}`, {
+  const baseUrl = process.env.API_BASE_URL ?? "http://localhost";
+  const res = await fetch(`${baseUrl}/api/topics/${id}`, {
     cache: "no-store",
   });
   if (!res.ok) {
