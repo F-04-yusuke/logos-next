@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, FormEvent, useRef, useEffect } from "react";
 import AppLogo from "@/components/AppLogo";
 import { useAuth } from "@/context/AuthContext";
+import { useSidebar } from "@/context/SidebarContext";
 
 // ────────────────────────────────────────────────
 // 通知ベルアイコン（navigation.blade.php と同一SVG）
@@ -29,16 +30,35 @@ function BellIcon({ className }: { className?: string }) {
 }
 
 // ────────────────────────────────────────────────
-// デフォルトアバターアイコン
+// アバター（画像 or デフォルトSVG）
 // ────────────────────────────────────────────────
-function DefaultAvatar({ size = "h-8 w-8" }: { size?: string }) {
+function Avatar({
+  avatar,
+  name,
+  size = "h-8 w-8",
+  iconSize = "h-5 w-5",
+}: {
+  avatar?: string | null;
+  name?: string;
+  size?: string;
+  iconSize?: string;
+}) {
+  if (avatar) {
+    return (
+      <img
+        className={`${size} rounded-full object-cover border border-gray-700`}
+        src={avatar}
+        alt={name ? `${name}のアイコン` : "アイコン"}
+      />
+    );
+  }
   return (
     <div
       className={`${size} rounded-full bg-gray-800 flex items-center justify-center border border-gray-700`}
     >
       <svg
         aria-hidden="true"
-        className="h-5 w-5 text-gray-400"
+        className={`${iconSize} text-gray-400`}
         fill="currentColor"
         viewBox="0 0 24 24"
       >
@@ -49,18 +69,33 @@ function DefaultAvatar({ size = "h-8 w-8" }: { size?: string }) {
 }
 
 // ────────────────────────────────────────────────
+// 通知バッジ（未読 > 0 の時のみ表示）
+// ────────────────────────────────────────────────
+function NotificationBadge({ count }: { count: number }) {
+  if (count <= 0) return null;
+  return (
+    <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white leading-none">
+      {count > 99 ? "99+" : count}
+    </span>
+  );
+}
+
+// ────────────────────────────────────────────────
 // Header
 // ────────────────────────────────────────────────
 export default function Header() {
   const router = useRouter();
   const { user, loading, logout } = useAuth();
+  const { setSidebarOpen } = useSidebar();
 
-  const [menuOpen, setMenuOpen] = useState(false);   // スマホ: アカウントメニュー
-  const [searchOpen, setSearchOpen] = useState(false); // スマホ: 検索スライドダウン
+  const [menuOpen, setMenuOpen] = useState(false);        // スマホ: アカウントメニュー
+  const [searchOpen, setSearchOpen] = useState(false);    // スマホ: 検索スライドダウン
   const [dropdownOpen, setDropdownOpen] = useState(false); // PC: アバタードロップダウン
   const [query, setQuery] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const unreadCount = user?.unread_notifications_count ?? 0;
 
   // ドロップダウン外クリックで閉じる
   useEffect(() => {
@@ -93,8 +128,18 @@ export default function Header() {
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
 
-          {/* ── 左: ロゴ ── */}
+          {/* ── 左: サイドバーボタン（スマホのみ） ＋ ロゴ ── */}
           <div className="flex items-center shrink-0 gap-2">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden inline-flex items-center justify-center p-1.5 rounded-md text-gray-500 hover:text-gray-400 hover:bg-[#222222] focus:outline-none transition"
+            >
+              <span className="sr-only">メニューを開く</span>
+              <svg aria-hidden="true" className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+
             <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
               <AppLogo />
             </Link>
@@ -129,7 +174,7 @@ export default function Header() {
             {loading ? null : user ? (
               <>
                 {/* カテゴリ管理（is_admin のみ） */}
-                {user.is_admin && (
+                {!!user.is_admin && (
                   <Link
                     href="/categories"
                     className="text-sm text-gray-300 hover:text-white transition-colors mr-2"
@@ -138,13 +183,14 @@ export default function Header() {
                   </Link>
                 )}
 
-                {/* 通知ベル */}
+                {/* 通知ベル（PC） */}
                 <Link
                   href="/notifications"
                   className="relative p-2 rounded-full text-gray-400 hover:bg-gray-800 transition-colors"
                   aria-label="通知"
                 >
                   <BellIcon className="h-5 w-5" />
+                  <NotificationBadge count={unreadCount} />
                 </Link>
 
                 {/* アバタードロップダウン */}
@@ -155,7 +201,7 @@ export default function Header() {
                     aria-label="アカウントメニュー"
                     aria-expanded={dropdownOpen}
                   >
-                    <DefaultAvatar size="h-8 w-8" />
+                    <Avatar avatar={user.avatar} name={user.name} size="h-8 w-8" iconSize="h-5 w-5" />
                   </button>
 
                   {dropdownOpen && (
@@ -210,6 +256,7 @@ export default function Header() {
                 aria-label="通知"
               >
                 <BellIcon className="h-6 w-6" />
+                <NotificationBadge count={unreadCount} />
               </Link>
             )}
 
@@ -219,6 +266,7 @@ export default function Header() {
               className="p-2 rounded-md text-gray-500 hover:text-gray-400 hover:bg-[#222222] focus:outline-none transition"
               aria-label="検索を開く"
             >
+              <span className="sr-only">検索を開く</span>
               <svg aria-hidden="true" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -230,6 +278,7 @@ export default function Header() {
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-400 hover:bg-[#222222] focus:outline-none transition"
               aria-label="アカウントメニューを開く"
             >
+              <span className="sr-only">アカウントメニューを開く</span>
               {menuOpen ? (
                 <svg aria-hidden="true" className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -275,7 +324,7 @@ export default function Header() {
           {user ? (
             <>
               {/* カテゴリ管理（is_admin のみ） */}
-              {user.is_admin && (
+              {!!user.is_admin && (
                 <div className="pt-2 pb-1 px-4 space-y-1">
                   <Link
                     href="/categories"
@@ -291,10 +340,11 @@ export default function Header() {
               <div className="pt-4 pb-1 border-t border-gray-700">
                 <div className="px-4 flex items-center">
                   <div className="shrink-0 mr-3">
-                    <DefaultAvatar size="h-10 w-10" />
+                    <Avatar avatar={user.avatar} name={user.name} size="h-10 w-10" iconSize="h-6 w-6" />
                   </div>
                   <div>
                     <div className="font-medium text-base text-gray-200">{user.name}</div>
+                    <div className="font-medium text-sm text-gray-500">{user.email}</div>
                   </div>
                 </div>
                 <div className="mt-3 space-y-1 pb-3">

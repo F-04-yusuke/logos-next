@@ -12,8 +12,11 @@ import { getToken, removeToken, getAuthHeaders } from "@/lib/auth";
 type AuthUser = {
   id: number;
   name: string;
+  email: string;
   is_pro: boolean;
   is_admin: boolean;
+  avatar?: string | null;
+  unread_notifications_count?: number;
 };
 
 type AuthContextType = {
