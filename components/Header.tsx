@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
+import AppLogo from "@/components/AppLogo";
 
 export default function Header() {
   const router = useRouter();
@@ -21,18 +22,8 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-4 h-full flex items-center gap-4">
 
         {/* 左: ロゴ */}
-        <Link href="/" className="flex items-center gap-1.5 shrink-0">
-          <svg
-            className="w-5 h-5 text-white"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M12 2L2 20h20L12 2z" />
-          </svg>
-          <span className="text-white font-bold text-xl tracking-tight">
-            LOGOS
-          </span>
+        <Link href="/" className="shrink-0 hover:opacity-80 transition-opacity">
+          <AppLogo />
         </Link>
 
         {/* 中央: 検索バー（PC） */}
