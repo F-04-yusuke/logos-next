@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
+import SidebarAwareLayout from "@/components/SidebarAwareLayout";
 import { AuthProvider } from "@/context/AuthContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 
@@ -35,12 +36,10 @@ export default function RootLayout({
         <AuthProvider>
           <SidebarProvider>
             <Header />
-            <div className="flex flex-1 overflow-hidden relative">
-              <Sidebar />
-              <div className="flex-1 overflow-y-auto min-h-0">
-                {children}
-              </div>
-            </div>
+            <Sidebar />
+            <SidebarAwareLayout>
+              {children}
+            </SidebarAwareLayout>
           </SidebarProvider>
         </AuthProvider>
       </body>

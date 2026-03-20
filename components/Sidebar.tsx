@@ -36,10 +36,10 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ── モバイル用半透明オーバーレイ ── */}
+      {/* ── モバイル用半透明オーバーレイ（fixed・ヘッダー下） ── */}
       {sidebarOpen && (
         <div
-          className="absolute inset-0 z-40 bg-black/50 md:hidden"
+          className="fixed inset-0 top-16 z-20 bg-black/50 md:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
@@ -47,14 +47,15 @@ export default function Sidebar() {
 
       <aside
         className={[
-          "absolute md:relative z-50 flex-shrink-0",
+          // fixed配置: ヘッダー(h-16=4rem)の直下から画面下端まで
+          "fixed left-0 top-16 h-[calc(100vh-4rem)] z-30",
           "bg-[#1e1f20] border-r border-gray-800",
-          "flex flex-col h-full overflow-hidden",
+          "flex flex-col overflow-hidden",
           "transform transition-all duration-300 ease-in-out",
-          // 幅: PC は w-64↔w-16、モバイルは常に w-64（translate で開閉）
+          // 幅: PC は sidebarOpen で w-64↔w-16、モバイルは常に w-64
           "w-64",
           sidebarOpen ? "md:w-64" : "md:w-16",
-          // 位置: モバイルは translate で開閉、PC は常に表示（md:translate-x-0 で固定）
+          // 位置: モバイルは translate で開閉、PC は常に表示
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         ].join(" ")}
       >
