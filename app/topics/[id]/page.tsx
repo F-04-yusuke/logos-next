@@ -1,3 +1,7 @@
+"use client";
+
+import { useState, useEffect, use } from "react";
+
 type Post = {
   id: number;
   url: string;
@@ -26,17 +30,6 @@ type TopicDetail = {
   comments: Comment[];
 };
 
-async function getTopic(id: string): Promise<TopicDetail> {
-  const baseUrl = process.env.API_BASE_URL ?? "http://localhost";
-  const res = await fetch(`${baseUrl}/api/topics/${id}`, {
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    throw new Error("トピックの取得に失敗しました");
-  }
-  return res.json();
-}
-
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("ja-JP", {
     year: "numeric",
@@ -55,13 +48,47 @@ function shortenUrl(url: string): string {
   }
 }
 
-export default async function TopicPage({
+export default function TopicPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-  const topic = await getTopic(id);
+  const { id } = use(params);
+  const [topic, setTopic] = useState<TopicDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/topics/${id}`)
+      .then((r) => {
+        if (!r.ok) throw new Error();
+        return r.json();
+      })
+      .then((data) => {
+        setTopic(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return (
+      <main className="max-w-3xl mx-auto px-4 py-10">
+        <p className="text-zinc-400 text-sm">読み込み中...</p>
+      </main>
+    );
+  }
+
+  if (error || !topic) {
+    return (
+      <main className="max-w-3xl mx-auto px-4 py-10">
+        <p className="text-red-400 text-sm">トピックの取得に失敗しました</p>
+      </main>
+    );
+  }
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-10">
