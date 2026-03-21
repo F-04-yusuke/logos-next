@@ -1,38 +1,58 @@
 # logos-next ディレクトリ構成
+最終更新: 2026-03-22
 
 ```
 logos-next/
-├── CLAUDE.md                            # 仕様書メイン（スリム版）
+├── CLAUDE.md                            # 仕様書メイン（ルール・進捗概要）
 ├── app/
 │   ├── favicon.ico
-│   ├── globals.css
+│   ├── globals.css                      # グローバルCSS（tree-line等カスタムクラス含む）
 │   ├── layout.tsx                       # ルートレイアウト（AuthProvider・SidebarProvider + LayoutShell）
-│   ├── page.tsx                         # トピック一覧（実装済み・CSR）
+│   ├── page.tsx                         # / トピック一覧（CSR・2カラム・カテゴリタブ・ソート・ページネーション）
 │   ├── login/
-│   │   └── page.tsx                     # ログイン画面（実装済み）
+│   │   └── page.tsx                     # /login ログイン画面（Blade忠実再現・eKYC/SNSボタンUI）
 │   ├── register/
-│   │   └── page.tsx                     # ユーザー登録（実装済み・eKYC/SNS coming soon）
+│   │   └── page.tsx                     # /register ユーザー登録（eKYC/SNS coming soon + 開発用フォーム）
 │   ├── categories/
-│   │   └── page.tsx                     # カテゴリ（admin: CRUD / 一般: グリッド一覧）
-│   └── topics/
-│       ├── create/
-│       │   └── page.tsx                 # トピック作成（PRO限定・実装済み）
-│       └── [id]/
-│           └── page.tsx                 # トピック詳細（CSR骨格・タブ詳細は未実装）
+│   │   └── page.tsx                     # /categories カテゴリ（admin: インライン編集CRUD / 一般: グリッド一覧）
+│   ├── category-list/
+│   │   └── page.tsx                     # /category-list カテゴリ公開グリッド一覧
+│   ├── notifications/
+│   │   └── page.tsx                     # /notifications 通知一覧（TypeBadge・既読・ページネーション）
+│   ├── likes/
+│   │   └── page.tsx                     # /likes 参考になった一覧（3タブ: 情報/コメント/分析）
+│   ├── dashboard/
+│   │   └── page.tsx                     # /dashboard ダッシュボード（5タブ: 投稿/下書き/コメント/分析/トピック）
+│   ├── profile/
+│   │   └── page.tsx                     # /profile プロフィール編集（アバター・名前クールダウン・パスワード変更・アカウント削除）
+│   ├── history/
+│   │   └── page.tsx                     # /history 閲覧履歴（日付グループ・YouTube風ラベル・ページネーション）
+│   ├── topics/
+│   │   ├── create/
+│   │   │   └── page.tsx                 # /topics/create トピック作成（PRO限定・カテゴリmax2・timeline行追加削除）
+│   │   └── [id]/
+│   │       └── page.tsx                 # /topics/[id] トピック詳細（3タブ・投稿・コメント・分析・いいね・ブックマーク・AnalysisCard・AnalysisModal）
+│   └── tools/
+│       ├── tree/
+│       │   └── page.tsx                 # /tools/tree ロジックツリー作成（PRO限定・AIアシスタント・Gemini連携・保存/上書き保存）
+│       ├── matrix/
+│       │   └── page.tsx                 # /tools/matrix 総合評価表作成（PRO限定・列行追加/削除・スコア集計・AI・保存）
+│       └── swot/
+│           └── page.tsx                 # /tools/swot SWOT/PEST分析作成（PRO限定・SWOT/PEST切替・AI・保存）
 ├── components/
 │   ├── AppLogo.tsx                      # 共通ロゴコンポーネント
-│   ├── Header.tsx                       # ヘッダー（実装済み）
+│   ├── Header.tsx                       # ヘッダー（検索・通知バッジ・アバタードロップダウン・スマホメニュー）
 │   ├── LayoutShell.tsx                  # /login・/register でHeader/Sidebar非表示制御
-│   ├── Sidebar.tsx                      # サイドバー（実装済み）
+│   ├── Sidebar.tsx                      # サイドバー（ナビ・PRO機能・分析ツール・保存トピック動的表示）
 │   ├── SidebarAwareLayout.tsx           # サイドバー連動コンテンツ幅調整
 │   └── ui/
 │       └── button.tsx                   # shadcn/uiコンポーネント
 ├── context/
-│   ├── AuthContext.tsx                  # 認証コンテキスト（useAuthフック）
-│   └── SidebarContext.tsx              # サイドバー開閉コンテキスト
+│   ├── AuthContext.tsx                  # 認証コンテキスト（Sanctumトークン・useAuthフック・unread_notifications_count）
+│   └── SidebarContext.tsx               # サイドバー開閉コンテキスト
 ├── lib/
 │   ├── auth.ts                          # トークン管理（getToken/setToken/removeToken/getAuthHeaders）
-│   └── utils.ts
+│   └── utils.ts                         # shadcn/ui utility
 ├── public/                              # SVG等の静的ファイル
 ├── .env.example
 ├── .env.local                           # ローカル環境変数（gitignore済み）
@@ -40,7 +60,7 @@ logos-next/
 │   ├── settings.json
 │   ├── settings.local.json
 │   └── skills/                          # 詳細仕様ファイル群
-│       ├── api-spec.md                  # API仕様・認証・boolean注意
+│       ├── api-spec.md                  # API仕様・認証・boolean注意・型定義
 │       ├── design-spec.md               # デザイン・カラー・a11y・Blade参照表
 │       ├── directory-map.md             # このファイル
 │       ├── deploy-config.md             # Vercel設定・CSR/SSR障害記録
@@ -53,19 +73,33 @@ logos-next/
 
 ---
 
-## 未実装ページ（実装優先順）
+## 実装済みページ一覧
 
-| 優先 | パス | 作成ファイル | 参照Blade |
-|---|---|---|---|
-| 1 | /topics/[id] 強化 | app/topics/[id]/page.tsx | resources/views/topics/show.blade.php |
-| 2 | /notifications | app/notifications/page.tsx | resources/views/notifications/index.blade.php |
-| 3 | /dashboard | app/dashboard/page.tsx | resources/views/dashboard.blade.php |
-| 4 | /profile | app/profile/page.tsx | resources/views/profile/edit.blade.php |
-| 5 | /history | app/history/page.tsx | resources/views/history/index.blade.php |
-| 6 | /likes | app/likes/page.tsx | resources/views/likes/index.blade.php |
-| 7 | /tools/tree | app/tools/tree/page.tsx | resources/views/tools/tree.blade.php |
-| 7 | /tools/matrix | app/tools/matrix/page.tsx | resources/views/tools/matrix.blade.php |
-| 7 | /tools/swot | app/tools/swot/page.tsx | resources/views/tools/swot.blade.php |
+| パス | ファイル | 状態 |
+|---|---|---|
+| `/` | app/page.tsx | ✅ |
+| `/login` | app/login/page.tsx | ✅ |
+| `/register` | app/register/page.tsx | ✅ |
+| `/categories` | app/categories/page.tsx | ✅ |
+| `/category-list` | app/category-list/page.tsx | ✅ |
+| `/notifications` | app/notifications/page.tsx | ✅ |
+| `/likes` | app/likes/page.tsx | ✅ |
+| `/dashboard` | app/dashboard/page.tsx | ✅ |
+| `/profile` | app/profile/page.tsx | ✅ |
+| `/history` | app/history/page.tsx | ✅ |
+| `/topics/create` | app/topics/create/page.tsx | ✅ |
+| `/topics/[id]` | app/topics/[id]/page.tsx | ✅ |
+| `/tools/tree` | app/tools/tree/page.tsx | ✅ |
+| `/tools/matrix` | app/tools/matrix/page.tsx | ✅ |
+| `/tools/swot` | app/tools/swot/page.tsx | ✅ |
+
+## 未実装（残作業）
+
+| 優先 | 内容 | 対象ファイル |
+|---|---|---|
+| 1 | 分析タブ動作確認（AnalysisModal 選択公開・AnalysisCard 表示） | app/topics/[id]/page.tsx |
+| 2 | 返信投稿UI（返信フォーム） | app/topics/[id]/page.tsx |
+| 3 | 投稿・トピック編集画面 | 未作成 |
 
 ---
 
