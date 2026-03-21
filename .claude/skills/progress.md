@@ -71,6 +71,14 @@
 - PUT /api/profile/password（パスワード更新・現在のパスワード検証）
 - DELETE /api/profile（アカウント削除・パスワード確認）
 
+**Step7 分析ツール実装（2026-03-22）:**
+- `app/tools/tree/page.tsx` — ロジックツリー作成（PRO限定・ノード追加/削除・AIで土台生成・AIアシスタントチャット・保存/上書き保存）✅
+- `app/tools/matrix/page.tsx` — 総合評価表作成（PRO限定・列行追加/削除・スコア集計・AIで土台生成・AIアシスタントチャット・保存/上書き保存）✅
+- `app/tools/swot/page.tsx` — SWOT/PEST分析作成（PRO限定・SWOT/PEST切替・AI自動生成・AIアシスタントチャット・保存/上書き保存）✅
+- `app/dashboard/page.tsx` — 分析タブを実データ表示に更新（作成ボタン・一覧・編集リンク・削除ボタン）✅
+- logos-new API追加（GET/POST/PUT/DELETE /api/analyses・POST /api/tools/ai-assist・/api/dashboard analyses実データ）✅
+- globals.css: tree-line CSS追加（ロジックツリーのライン表示）✅
+
 **Step5拡張 logos-new API追加（2026-03-22）:**
 - POST /api/topics/{topic}/posts（エビデンス投稿）
 - POST /api/topics/{topic}/comments（コメント・1人1件制限）

@@ -47,12 +47,21 @@ type DashboardTopic = {
   created_at: string;
 };
 
+type DashboardAnalysis = {
+  id: number;
+  title: string;
+  type: "tree" | "matrix" | "swot";
+  is_published: boolean;
+  topic_id: number | null;
+  created_at: string;
+};
+
 type DashboardData = {
   posts: DashboardPost[];
   drafts: DashboardPost[];
   draft_count: number;
   comments: DashboardComment[];
-  analyses: unknown[];
+  analyses: DashboardAnalysis[];
   topics: DashboardTopic[];
 };
 
@@ -338,6 +347,17 @@ export default function DashboardPage() {
     }
   }
 
+  async function deleteAnalysis(analysisId: number) {
+    if (!window.confirm("この分析・図解を削除しますか？")) return;
+    const res = await fetch(`${API_BASE}/api/analyses/${analysisId}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    if (res.ok && data) {
+      setData({ ...data, analyses: data.analyses.filter((a) => a.id !== analysisId) });
+    }
+  }
+
   async function deleteTopic(topicId: number) {
     if (!window.confirm("本当に削除しますか？")) return;
     const res = await fetch(`${API_BASE}/api/topics/${topicId}`, {
@@ -361,6 +381,7 @@ export default function DashboardPage() {
   const drafts = data?.drafts ?? [];
   const draftCount = data?.draft_count ?? 0;
   const comments = data?.comments ?? [];
+  const analyses = data?.analyses ?? [];
   const topics = data?.topics ?? [];
 
   const blueTab = (tab: Tab) =>
@@ -552,10 +573,89 @@ export default function DashboardPage() {
 
             {/* 作成した分析・図解（PRO） */}
             {activeTab === "analyses" && (
-              <div className="space-y-6">
-                <p className="text-gray-500 text-center py-10 text-sm">
-                  まだ作成した分析・図解はありません。
-                </p>
+              <div className="space-y-3">
+                {/* Create buttons */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <Link
+                    href="/tools/tree"
+                    className="inline-flex items-center text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-md transition-colors shadow-sm"
+                  >
+                    <svg aria-hidden="true" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                    </svg>
+                    ロジックツリー作成
+                  </Link>
+                  <Link
+                    href="/tools/matrix"
+                    className="inline-flex items-center text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-md transition-colors shadow-sm"
+                  >
+                    <svg aria-hidden="true" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    総合評価表作成
+                  </Link>
+                  <Link
+                    href="/tools/swot"
+                    className="inline-flex items-center text-xs font-bold text-white bg-green-600 hover:bg-green-700 px-3 py-1.5 rounded-md transition-colors shadow-sm"
+                  >
+                    <svg aria-hidden="true" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+                    SWOT/PEST分析作成
+                  </Link>
+                </div>
+
+                {analyses.length === 0 ? (
+                  <p className="text-gray-500 text-center py-10 text-sm">
+                    まだ作成した分析・図解はありません。上のボタンから作成できます。
+                  </p>
+                ) : (
+                  analyses.map((analysis) => {
+                    const typeInfo = {
+                      tree: { label: "ロジックツリー", color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800", editPath: "/tools/tree" },
+                      matrix: { label: "総合評価表", color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800", editPath: "/tools/matrix" },
+                      swot: { label: "SWOT/PEST分析", color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800", editPath: "/tools/swot" },
+                    }[analysis.type];
+                    return (
+                      <div
+                        key={analysis.id}
+                        className="p-4 bg-white dark:bg-[#131314] rounded-lg border border-gray-200 dark:border-gray-800 flex justify-between items-start shadow-sm gap-3"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${typeInfo.bg} ${typeInfo.color}`}>
+                              {typeInfo.label}
+                            </span>
+                            {!!analysis.is_published && (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded border bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500">
+                                公開済み
+                              </span>
+                            )}
+                            <span className="text-[11px] text-gray-400">{timeAgo(analysis.created_at)}</span>
+                          </div>
+                          <p className="font-bold text-sm text-gray-900 dark:text-gray-100 truncate">
+                            {analysis.title}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <Link
+                            href={`${typeInfo.editPath}?edit=${analysis.id}`}
+                            className="text-xs text-blue-500 hover:text-blue-700 font-bold transition-colors"
+                          >
+                            編集
+                          </Link>
+                          <span className="text-gray-300 dark:text-gray-700">|</span>
+                          <button
+                            onClick={() => deleteAnalysis(analysis.id)}
+                            className="text-xs text-red-400 hover:text-red-600 font-bold transition-colors"
+                          >
+                            削除
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             )}
 
