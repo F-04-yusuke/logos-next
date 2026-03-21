@@ -85,6 +85,9 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - ダッシュボード分析タブ: 実データ表示・編集リンク・削除ボタン
 - 分析タブ公開連携: トピック詳細に AnalysisCard 表示・AnalysisModal で保存済みツールから選択公開
 
+## コンポーネント分割済み
+- `app/topics/[id]/` → `_types.ts` / `_helpers.ts` / `_components/`（8コンポーネント）に分割（Step10）
+
 ## 未実装（残作業）
 1. 分析タブの動作確認（AnalysisModal での選択公開・AnalysisCard 表示）
 2. 返信投稿UI（`/topics/[id]` の返信フォーム）

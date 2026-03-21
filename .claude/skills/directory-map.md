@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-22
+最終更新: 2026-03-22（Step10 コンポーネント分割反映）
 
 ```
 logos-next/
@@ -31,7 +31,17 @@ logos-next/
 │   │   ├── create/
 │   │   │   └── page.tsx                 # /topics/create トピック作成（PRO限定・カテゴリmax2・timeline行追加削除）
 │   │   └── [id]/
-│   │       └── page.tsx                 # /topics/[id] トピック詳細（3タブ・投稿・コメント・分析・いいね・ブックマーク・AnalysisCard・AnalysisModal）
+│   │       ├── page.tsx                 # /topics/[id] トピック詳細メイン（状態管理・ハンドラー・タブJSX 812行）
+│   │       ├── _types.ts                # 型定義（Post/Comment/TopicAnalysis/TopicDetail等）
+│   │       ├── _helpers.ts             # API_BASE / timeAgo / formatDateTime
+│   │       └── _components/
+│   │           ├── UserAvatar.tsx
+│   │           ├── LikeButton.tsx
+│   │           ├── PostCard.tsx
+│   │           ├── CommentCard.tsx
+│   │           ├── PostModal.tsx        # エビデンス投稿モーダル（OGPプレビュー含む）
+│   │           ├── AnalysisCard.tsx     # typeBadge / AnalysisPreview をエクスポート
+│   │           └── AnalysisModal.tsx    # 分析・図解投稿モーダル
 │   └── tools/
 │       ├── tree/
 │       │   └── page.tsx                 # /tools/tree ロジックツリー作成（PRO限定・AIアシスタント・Gemini連携・保存/上書き保存）
@@ -97,8 +107,8 @@ logos-next/
 
 | 優先 | 内容 | 対象ファイル |
 |---|---|---|
-| 1 | 分析タブ動作確認（AnalysisModal 選択公開・AnalysisCard 表示） | app/topics/[id]/page.tsx |
-| 2 | 返信投稿UI（返信フォーム） | app/topics/[id]/page.tsx |
+| 1 | 分析タブの動作確認（AnalysisModal 選択公開・AnalysisCard 表示） | app/topics/[id]/_components/ |
+| 2 | 返信投稿UI（返信フォーム） | app/topics/[id]/_components/CommentCard.tsx |
 | 3 | 投稿・トピック編集画面 | 未作成 |
 
 ---

@@ -116,6 +116,18 @@
   ```
 - **教訓**: `app/Models/` は編集禁止のため、新規リレーションが必要な場合は常に直接クエリで代替する
 
+**Step10: topics/[id]/page.tsx コンポーネント分割（2026-03-22）:**
+- 1811行 → page.tsx 812行 + 9ファイルに分割（型チェックエラーゼロ確認済み）
+- `app/topics/[id]/_types.ts` — 型定義（TimelineItem/Post/Reply/Comment/TopicAnalysis/TopicDetail）
+- `app/topics/[id]/_helpers.ts` — API_BASE / timeAgo / formatDateTime
+- `app/topics/[id]/_components/UserAvatar.tsx`
+- `app/topics/[id]/_components/LikeButton.tsx`
+- `app/topics/[id]/_components/PostCard.tsx`
+- `app/topics/[id]/_components/CommentCard.tsx`
+- `app/topics/[id]/_components/PostModal.tsx`（OGPプレビュー含む）
+- `app/topics/[id]/_components/AnalysisCard.tsx`（typeBadge / AnalysisPreview をエクスポート）
+- `app/topics/[id]/_components/AnalysisModal.tsx`
+
 **未実装（残作業）:**
 1. 分析タブの動作確認（AnalysisModal での選択公開・AnalysisCard 表示）
 2. 返信投稿UI（topics/[id] の返信フォーム）
