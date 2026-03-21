@@ -1,9 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import AppLogo from "@/components/AppLogo";
 import { useSidebar } from "@/context/SidebarContext";
 import { useAuth } from "@/context/AuthContext";
+import { getAuthHeaders } from "@/lib/auth";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
 
 // ────────────────────────────────────────────────
 // 鍵アイコン（非PRO時）
@@ -34,6 +38,16 @@ export default function Sidebar() {
 
   const unreadCount = user?.unread_notifications_count ?? 0;
   const isPro = !!user?.is_pro;
+
+  const [bookmarks, setBookmarks] = useState<{ id: number; title: string }[]>([]);
+
+  useEffect(() => {
+    if (!user) { setBookmarks([]); return; }
+    fetch(`${API_BASE}/api/user/bookmarks`, { headers: getAuthHeaders() })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => setBookmarks(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, [user]);
 
   return (
     <>
@@ -127,7 +141,24 @@ export default function Sidebar() {
                     保存トピック
                   </h3>
                   <ul className="space-y-1">
-                    <li className="px-2 text-xs text-gray-400">まだ保存したトピックはありません</li>
+                    {bookmarks.length === 0 ? (
+                      <li className="px-2 text-xs text-gray-400">まだ保存したトピックはありません</li>
+                    ) : (
+                      bookmarks.map((t) => (
+                        <li key={t.id}>
+                          <Link
+                            href={`/topics/${t.id}`}
+                            className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-800 group transition-colors"
+                            onClick={() => setSidebarOpen(false)}
+                          >
+                            <span className="w-5 h-5 flex items-center justify-center text-xs font-bold text-gray-500 bg-gray-800 rounded shrink-0">
+                              {t.title.charAt(0)}
+                            </span>
+                            <span className="ml-3 text-sm truncate">{t.title}</span>
+                          </Link>
+                        </li>
+                      ))
+                    )}
                   </ul>
                 </div>
 

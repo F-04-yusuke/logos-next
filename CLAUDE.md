@@ -72,6 +72,11 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - `/profile` — プロフィール編集（アバター・名前クールダウン・パスワード変更・アカウント削除）✅
 - `/history` — 閲覧履歴（日付グループ・YouTube風ラベル・ページネーション）✅
 
+## 実装済み機能（追加）
+- OGP取得: エビデンス投稿時にtitle/thumbnail_urlを自動取得（公開投稿のみ）
+- OGPプレビュー: 投稿モーダルのURL入力後800msデバウンスでサムネイル・タイトルをプレビュー表示
+- Sidebar 保存トピック: ブックマーク済みトピックを動的表示（GET /api/user/bookmarks）
+
 ## 未実装ページ（実装優先順）
 1. `/tools/tree` `/tools/matrix` `/tools/swot` — 分析ツール（PRO限定）
 

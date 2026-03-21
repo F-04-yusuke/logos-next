@@ -63,6 +63,9 @@
 - DELETE /api/posts/{post}（自分の投稿削除）
 - DELETE /api/topics/{topic}（自分のトピック削除）
 - GET /api/history（閲覧履歴・12件ページネーション・last_viewed_at付き）
+- GET /api/og?url=...（OGPプロキシ・認証不要・title/thumbnail_url返却）
+- GET /api/user/bookmarks（保存トピック一覧・上限10件）
+- POST /api/topics/{topic}/posts: OGP取得追加（title/thumbnail_url保存）
 - GET /api/profile（name_updated_at付きユーザー情報）
 - POST /api/profile（プロフィール更新・multipart/form-data・アバター画像対応）
 - PUT /api/profile/password（パスワード更新・現在のパスワード検証）

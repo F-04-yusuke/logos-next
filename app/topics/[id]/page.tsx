@@ -399,6 +399,30 @@ function PostModal({
   onSubmit: (isDraft: boolean) => void;
   submitting: boolean;
 }) {
+  const [ogPreview, setOgPreview] = useState<{ title: string | null; thumbnail: string | null } | null>(null);
+  const [ogLoading, setOgLoading] = useState(false);
+
+  useEffect(() => {
+    setOgPreview(null);
+    setOgLoading(false);
+    if (!url || !url.startsWith("http")) return;
+    const timer = setTimeout(async () => {
+      setOgLoading(true);
+      try {
+        const res = await fetch(`${API_BASE}/api/og?url=${encodeURIComponent(url)}`);
+        if (res.ok) {
+          const data = await res.json();
+          setOgPreview({ title: data.title, thumbnail: data.thumbnail_url });
+        }
+      } catch {
+        // ignore
+      } finally {
+        setOgLoading(false);
+      }
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [url]);
+
   return (
     <div
       className="relative z-50"
@@ -444,6 +468,20 @@ function PostModal({
                   required
                   placeholder="https://..."
                 />
+                {/* OGP プレビュー */}
+                {ogLoading && (
+                  <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">URLを取得中...</p>
+                )}
+                {!ogLoading && ogPreview && (ogPreview.title || ogPreview.thumbnail) && (
+                  <div className="mt-2 p-2 bg-gray-50 dark:bg-[#1e1f20] rounded-md border border-gray-200 dark:border-gray-700 flex gap-2 items-start">
+                    {ogPreview.thumbnail && (
+                      <img src={ogPreview.thumbnail} alt="" className="w-20 h-14 object-cover rounded flex-shrink-0" />
+                    )}
+                    {ogPreview.title && (
+                      <p className="text-xs font-bold text-gray-800 dark:text-gray-200 line-clamp-3 leading-snug">{ogPreview.title}</p>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="mb-5">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
