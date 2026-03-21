@@ -38,8 +38,8 @@ export default function TopicCreatePage() {
   useEffect(() => {
     // カテゴリ取得
     fetch(`${BASE_URL}/api/categories`, { headers: { Accept: "application/json" } })
-      .then((r) => r.json())
-      .then(setCategories)
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((data) => { if (Array.isArray(data)) setCategories(data); })
       .catch(() => {});
   }, []);
 

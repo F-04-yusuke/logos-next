@@ -43,7 +43,8 @@ export default function CategoriesPage() {
         headers: { Accept: "application/json" },
       });
       if (res.ok) {
-        setCategories(await res.json());
+        const data = await res.json();
+        if (Array.isArray(data)) setCategories(data);
       }
     } finally {
       setFetching(false);
