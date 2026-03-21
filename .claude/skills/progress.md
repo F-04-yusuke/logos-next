@@ -54,6 +54,12 @@
 - `app/notifications/page.tsx` — 通知一覧（TypeBadge・既読・ページネーション）✅ 2026-03-22
 - `app/likes/page.tsx` — 参考になった一覧（3タブ: 情報/コメント/分析）✅ 2026-03-22
 - `app/category-list/page.tsx` — カテゴリ公開グリッド一覧 ✅ 2026-03-22
+- `app/dashboard/page.tsx` — ダッシュボード（5タブ: 投稿/下書き/コメント/分析/トピック）✅ 2026-03-22
+
+**Step6拡張 logos-new API追加（2026-03-22）:**
+- GET /api/dashboard（投稿・下書き・コメント・分析・トピック一括取得）
+- DELETE /api/posts/{post}（自分の投稿削除）
+- DELETE /api/topics/{topic}（自分のトピック削除）
 
 **Step5拡張 logos-new API追加（2026-03-22）:**
 - POST /api/topics/{topic}/posts（エビデンス投稿）
@@ -66,8 +72,7 @@
 - GET /api/topics/{id} 拡張（auth-aware: user_has_commented, is_bookmarked, is_liked_by_me）
 
 **未実装（優先順）:**
-1. /dashboard — ダッシュボード（Blade: `resources/views/dashboard.blade.php`）
-2. /profile — プロフィール編集（Blade: `resources/views/profile/edit.blade.php`）
+1. /profile — プロフィール編集（Blade: `resources/views/profile/edit.blade.php`）
 3. /history — 閲覧履歴（Blade: `resources/views/history/index.blade.php`）
 4. /tools/tree, /tools/matrix, /tools/swot — 分析ツール（PRO限定）
 

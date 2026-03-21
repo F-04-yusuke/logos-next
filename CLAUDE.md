@@ -68,10 +68,10 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - `/topics/[id]` — トピック詳細（3タブ・投稿・コメント・いいね・ブックマーク）✅
 - `/notifications` — 通知一覧 ✅
 - `/likes` — 参考になった一覧 ✅
+- `/dashboard` — ダッシュボード（5タブ・投稿/下書き/コメント/分析/トピック）✅
 
 ## 未実装ページ（実装優先順）
-1. `/dashboard` — ダッシュボード（Blade: `resources/views/dashboard.blade.php`）
-2. `/profile` — プロフィール編集（Blade: `resources/views/profile/edit.blade.php`）
+1. `/profile` — プロフィール編集（Blade: `resources/views/profile/edit.blade.php`）
 3. `/history` — 閲覧履歴（Blade: `resources/views/history/index.blade.php`）
 4. `/tools/tree` `/tools/matrix` `/tools/swot` — 分析ツール（PRO限定）
 
