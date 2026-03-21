@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
-import SidebarAwareLayout from "@/components/SidebarAwareLayout";
+import LayoutShell from "@/components/LayoutShell";
 import { AuthProvider } from "@/context/AuthContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 
@@ -35,15 +33,7 @@ export default function RootLayout({
       <body className="bg-[#131314] text-white">
         <AuthProvider>
           <SidebarProvider>
-            <div className="flex h-screen overflow-hidden">
-              <Sidebar />
-              <div className="flex flex-col flex-1 overflow-hidden">
-                <Header />
-                <SidebarAwareLayout>
-                  {children}
-                </SidebarAwareLayout>
-              </div>
-            </div>
+            <LayoutShell>{children}</LayoutShell>
           </SidebarProvider>
         </AuthProvider>
       </body>
