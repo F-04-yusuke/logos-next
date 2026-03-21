@@ -32,14 +32,18 @@ export default function RootLayout({
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
-      <body className="h-full flex flex-col bg-[#131314] text-white">
+      <body className="bg-[#131314] text-white">
         <AuthProvider>
           <SidebarProvider>
-            <Header />
-            <Sidebar />
-            <SidebarAwareLayout>
-              {children}
-            </SidebarAwareLayout>
+            <div className="flex h-screen overflow-hidden">
+              <Sidebar />
+              <div className="flex flex-col flex-1 overflow-hidden">
+                <Header />
+                <SidebarAwareLayout>
+                  {children}
+                </SidebarAwareLayout>
+              </div>
+            </div>
           </SidebarProvider>
         </AuthProvider>
       </body>

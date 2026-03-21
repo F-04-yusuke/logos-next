@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import AppLogo from "@/components/AppLogo";
 import { useSidebar } from "@/context/SidebarContext";
 import { useAuth } from "@/context/AuthContext";
 
@@ -36,10 +37,10 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ── モバイル用半透明オーバーレイ（fixed・ヘッダー下） ── */}
+      {/* ── モバイル用半透明オーバーレイ（fixed・全画面） ── */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 top-16 z-20 bg-black/50 md:hidden"
+          className="fixed inset-0 z-20 bg-black/50 md:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
@@ -47,8 +48,10 @@ export default function Sidebar() {
 
       <aside
         className={[
-          // fixed配置: ヘッダー(h-16=4rem)の直下から画面下端まで
-          "fixed left-0 top-16 h-[calc(100vh-4rem)] z-30",
+          // モバイル: fixed・全高。PC(md+): relative・flexアイテム
+          "fixed md:relative",
+          "top-0 bottom-0 left-0 md:top-auto md:bottom-auto md:left-auto",
+          "h-full z-30",
           "bg-[#1e1f20] border-r border-gray-800",
           "flex flex-col overflow-hidden",
           "transform transition-all duration-300 ease-in-out",
@@ -59,17 +62,22 @@ export default function Sidebar() {
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         ].join(" ")}
       >
-        {/* ── トグルボタン行 ── */}
+        {/* ── トグルボタン行（ハンバーガー ＋ ロゴ） ── */}
         <div className="h-16 flex items-center px-4 shrink-0 border-b border-transparent">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:bg-gray-900 hover:text-gray-300 focus:outline-none transition"
+            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:bg-gray-900 hover:text-gray-300 focus:outline-none transition shrink-0"
             aria-label={sidebarOpen ? "サイドバーを閉じる" : "サイドバーを開く"}
           >
             <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
+          {sidebarOpen && (
+            <Link href="/" className="ml-2 flex items-center hover:opacity-80 transition-opacity">
+              <AppLogo />
+            </Link>
+          )}
         </div>
 
         {/* ── スクロール可能コンテンツ ── */}
