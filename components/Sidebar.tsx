@@ -105,7 +105,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  href="/categories"
+                  href="/category-list"
                   className="flex items-center p-2 text-white rounded-lg hover:bg-gray-800 group transition-colors"
                 >
                   <svg className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

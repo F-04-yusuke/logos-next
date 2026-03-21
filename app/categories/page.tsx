@@ -146,9 +146,17 @@ export default function CategoriesPage() {
     );
   }
 
-  // ─── ADMIN VIEW ───
-  if (!!user?.is_admin) {
+  // 非admin はアクセス不可
+  if (!user || !user.is_admin) {
     return (
+      <div className="flex justify-center items-center py-24">
+        <p className="text-gray-400 text-sm">このページは管理者専用です。</p>
+      </div>
+    );
+  }
+
+  // ─── ADMIN VIEW ───
+  return (
       <div className="py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
 
@@ -374,76 +382,4 @@ export default function CategoriesPage() {
         </div>
       </div>
     );
-  }
-
-  // ─── PUBLIC LIST VIEW ───
-  return (
-    <div className="py-8 sm:py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <div className="mb-6 sm:mb-8">
-          <p className="text-sm text-gray-400">
-            興味のあるカテゴリを選択すると、関連するトピックを絞り込んで表示します。
-          </p>
-        </div>
-
-        {categories.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-800 rounded-xl bg-[#131314]/50 text-center">
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-            <p className="text-sm text-gray-400 font-bold mb-1">カテゴリがありません</p>
-            <p className="text-xs text-gray-500">現在、登録されているカテゴリはまだありません。</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {categories.map((parent) => (
-              <div
-                key={parent.id}
-                className="bg-[#1e1f20] shadow-sm rounded-xl border border-gray-800 overflow-hidden hover:shadow-md transition-shadow duration-200"
-              >
-                {/* 大分類ヘッダー */}
-                <div className="bg-[#131314] border-b border-gray-800 px-4 sm:px-5 py-4">
-                  <Link
-                    href={`/?category=${parent.id}`}
-                    className="flex items-center group"
-                  >
-                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 group-hover:text-blue-500 mr-3 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                    </svg>
-                    <h3 className="font-bold text-base sm:text-lg text-gray-100 group-hover:text-blue-500 transition-colors line-clamp-1">
-                      {parent.name}
-                    </h3>
-                  </Link>
-                </div>
-
-                {/* 中分類リスト */}
-                <div className="p-2 sm:p-3">
-                  {parent.children.length > 0 ? (
-                    <ul className="space-y-1">
-                      {parent.children.map((child) => (
-                        <li key={child.id}>
-                          <Link
-                            href={`/?category=${child.id}`}
-                            className="flex items-center px-3 py-2.5 sm:py-2 rounded-lg text-sm text-gray-300 hover:bg-[#222222] hover:text-blue-400 transition-colors group"
-                          >
-                            <svg aria-hidden="true" className="h-4 w-4 text-gray-600 group-hover:text-blue-400 mr-2 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                            <span className="truncate">{child.name}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-xs text-gray-500 italic px-3 py-2">中分類はありません</p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
 }

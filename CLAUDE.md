@@ -63,17 +63,17 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - `/login` — ログイン
 - `/register` — ユーザー登録 ✅
 - `/categories` — カテゴリ（admin: CRUD / 一般: 一覧）✅
+- `/category-list` — カテゴリ公開一覧 ✅
 - `/topics/create` — トピック作成（PRO限定）✅
-- `/topics/[id]` — トピック詳細（CSR骨格あり・タブ詳細実装は次フェーズ）
+- `/topics/[id]` — トピック詳細（3タブ・投稿・コメント・いいね・ブックマーク）✅
+- `/notifications` — 通知一覧 ✅
+- `/likes` — 参考になった一覧 ✅
 
 ## 未実装ページ（実装優先順）
-1. `/topics/[id]` — 詳細強化（投稿・コメント・分析タブ）（Blade: `resources/views/topics/show.blade.php`）
-2. `/notifications` — 通知一覧（Blade: `resources/views/notifications/index.blade.php`）
-3. `/dashboard` — ダッシュボード（Blade: `resources/views/dashboard.blade.php`）
-4. `/profile` — プロフィール編集（Blade: `resources/views/profile/edit.blade.php`）
-5. `/history` — 閲覧履歴（Blade: `resources/views/history/index.blade.php`）
-6. `/likes` — 参考になった一覧（Blade: `resources/views/likes/index.blade.php`）
-7. `/tools/tree` `/tools/matrix` `/tools/swot` — 分析ツール（PRO限定）
+1. `/dashboard` — ダッシュボード（Blade: `resources/views/dashboard.blade.php`）
+2. `/profile` — プロフィール編集（Blade: `resources/views/profile/edit.blade.php`）
+3. `/history` — 閲覧履歴（Blade: `resources/views/history/index.blade.php`）
+4. `/tools/tree` `/tools/matrix` `/tools/swot` — 分析ツール（PRO限定）
 
 ## Vercel手動設定（未完了・ユーザーが行う）
 - 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定

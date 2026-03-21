@@ -51,14 +51,25 @@
 - `context/AuthContext.tsx` — Sanctumトークン認証・unread_notifications_count対応済み
 - `context/SidebarContext.tsx` — サイドバー開閉状態管理
 
+- `app/notifications/page.tsx` — 通知一覧（TypeBadge・既読・ページネーション）✅ 2026-03-22
+- `app/likes/page.tsx` — 参考になった一覧（3タブ: 情報/コメント/分析）✅ 2026-03-22
+- `app/category-list/page.tsx` — カテゴリ公開グリッド一覧 ✅ 2026-03-22
+
+**Step5拡張 logos-new API追加（2026-03-22）:**
+- POST /api/topics/{topic}/posts（エビデンス投稿）
+- POST /api/topics/{topic}/comments（コメント・1人1件制限）
+- POST /api/posts/{post}/like（いいねトグル）
+- POST /api/comments/{comment}/like（コメントいいねトグル）
+- POST /api/topics/{topic}/bookmark（ブックマークトグル）
+- GET /api/notifications・PATCH /api/notifications/read-all・PATCH /api/notifications/{id}/read
+- GET /api/user/likes
+- GET /api/topics/{id} 拡張（auth-aware: user_has_commented, is_bookmarked, is_liked_by_me）
+
 **未実装（優先順）:**
-1. /topics/[id] — トピック詳細の追加実装（投稿・コメント・分析タブ）※CSR骨格あり
-2. /notifications — 通知一覧
-3. /dashboard — ダッシュボード
-4. /profile — プロフィール編集
-5. /history — 閲覧履歴
-6. /likes — 参考になった一覧
-7. /tools/tree, /tools/matrix, /tools/swot — 分析ツール（PRO限定）
+1. /dashboard — ダッシュボード（Blade: `resources/views/dashboard.blade.php`）
+2. /profile — プロフィール編集（Blade: `resources/views/profile/edit.blade.php`）
+3. /history — 閲覧履歴（Blade: `resources/views/history/index.blade.php`）
+4. /tools/tree, /tools/matrix, /tools/swot — 分析ツール（PRO限定）
 
 ### Step4: 認証（完了）
 - POST /api/login・POST /api/logout
