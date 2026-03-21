@@ -56,11 +56,13 @@
 - `app/category-list/page.tsx` — カテゴリ公開グリッド一覧 ✅ 2026-03-22
 - `app/dashboard/page.tsx` — ダッシュボード（5タブ: 投稿/下書き/コメント/分析/トピック）✅ 2026-03-22
 - `app/profile/page.tsx` — プロフィール編集（アバター・名前クールダウン・パスワード変更・アカウント削除モーダル）✅ 2026-03-22
+- `app/history/page.tsx` — 閲覧履歴（日付グループ・YouTube風ラベル・ページネーション）✅ 2026-03-22
 
 **Step6拡張 logos-new API追加（2026-03-22）:**
 - GET /api/dashboard（投稿・下書き・コメント・分析・トピック一括取得）
 - DELETE /api/posts/{post}（自分の投稿削除）
 - DELETE /api/topics/{topic}（自分のトピック削除）
+- GET /api/history（閲覧履歴・12件ページネーション・last_viewed_at付き）
 - GET /api/profile（name_updated_at付きユーザー情報）
 - POST /api/profile（プロフィール更新・multipart/form-data・アバター画像対応）
 - PUT /api/profile/password（パスワード更新・現在のパスワード検証）

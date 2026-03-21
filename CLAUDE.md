@@ -70,10 +70,10 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - `/likes` — 参考になった一覧 ✅
 - `/dashboard` — ダッシュボード（5タブ・投稿/下書き/コメント/分析/トピック）✅
 - `/profile` — プロフィール編集（アバター・名前クールダウン・パスワード変更・アカウント削除）✅
+- `/history` — 閲覧履歴（日付グループ・YouTube風ラベル・ページネーション）✅
 
 ## 未実装ページ（実装優先順）
-1. `/history` — 閲覧履歴（Blade: `resources/views/history/index.blade.php`）
-2. `/tools/tree` `/tools/matrix` `/tools/swot` — 分析ツール（PRO限定）
+1. `/tools/tree` `/tools/matrix` `/tools/swot` — 分析ツール（PRO限定）
 
 ## Vercel手動設定（未完了・ユーザーが行う）
 - 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定
