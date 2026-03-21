@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-21
+最終更新: 2026-03-22
 
 ---
 
@@ -21,6 +21,8 @@
   - 正しい: `{!!user.is_admin && <Link>}`
   - バグ: `{user.is_admin && <Link>}` ← 0がテキスト表示される
 - 一度に編集するファイルは **5ファイル以内**
+- `app/Models/` は編集禁止のため、新規リレーションが必要な場合は `$model->load()` を使わず直接クエリで代替すること
+  - 例: `\App\Models\Analysis::where('topic_id', $id)->get()` など
 
 ---
 
@@ -40,7 +42,7 @@ cd ~/logos-next && npm run dev           # Next.js起動
 
 ---
 
-# 2. 開発体制（2026-03-21更新）
+# 2. 開発体制（2026-03-22更新）
 
 **Claude Codeがリードエンジニアとしてメインで動く。**
 
@@ -81,9 +83,12 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - Sidebar 保存トピック: ブックマーク済みトピックを動的表示（GET /api/user/bookmarks）
 - 分析ツールAPI: POST/PUT/DELETE /api/analyses + POST /api/tools/ai-assist（Geminiプロキシ）
 - ダッシュボード分析タブ: 実データ表示・編集リンク・削除ボタン
+- 分析タブ公開連携: トピック詳細に AnalysisCard 表示・AnalysisModal で保存済みツールから選択公開
 
-## 未実装ページ
-（主要ページはすべて実装完了）
+## 未実装（残作業）
+1. 分析タブの動作確認（AnalysisModal での選択公開・AnalysisCard 表示）
+2. 返信投稿UI（`/topics/[id]` の返信フォーム）
+3. 投稿・トピック編集画面
 
 ## Vercel手動設定（未完了・ユーザーが行う）
 - 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定

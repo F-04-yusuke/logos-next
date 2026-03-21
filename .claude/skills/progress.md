@@ -89,10 +89,37 @@
 - GET /api/user/likes
 - GET /api/topics/{id} 拡張（auth-aware: user_has_commented, is_bookmarked, is_liked_by_me）
 
-**未実装（優先順）:**
-1. /profile — プロフィール編集（Blade: `resources/views/profile/edit.blade.php`）
-3. /history — 閲覧履歴（Blade: `resources/views/history/index.blade.php`）
-4. /tools/tree, /tools/matrix, /tools/swot — 分析ツール（PRO限定）
+**Step8: 分析タブ ↔ 保存ツール接続（2026-03-22 実装）:**
+- `app/topics/[id]/page.tsx` 更新済み:
+  - `TopicAnalysis` 型・`TopicDetail.analyses` フィールド追加
+  - `AnalysisPreview` / `AnalysisCard` コンポーネント追加（Blade忠実再現）
+  - `AnalysisModal` — 「作成済みツールから選択」タブ: ユーザー分析一覧取得・公開ボタン
+  - 分析タブ: 実件数表示・`AnalysisCard` マップ
+  - `fetchTopic()` 関数を切り出し（publish後に再取得）
+- `routes/api.php` 追加済み:
+  - GET /api/user/analyses（モーダル用）
+  - POST /api/analyses/{id}/publish（トピック公開）
+  - POST /api/analyses/{id}/like（いいねトグル）
+- `TopicApiController.php` に `analyses` 直接クエリで取得 ✅
+
+**Step9: バグ修正（2026-03-22）:**
+- `TopicApiController::show()` バグ修正: `$topic->load(['analyses' => ...])` は `Topic` モデルに `analyses()` リレーション未定義のため500エラー
+- **修正**: `load()` から `analyses` を削除し、直接クエリで代替 ✅
+  ```php
+  $analyses = \App\Models\Analysis::where('topic_id', $topic->id)
+      ->where('is_published', true)
+      ->with('user:id,name,avatar')
+      ->withCount('likes')
+      ->latest()
+      ->get();
+  $data['analyses'] = $analyses->toArray();
+  ```
+- **教訓**: `app/Models/` は編集禁止のため、新規リレーションが必要な場合は常に直接クエリで代替する
+
+**未実装（残作業）:**
+1. 分析タブの動作確認（AnalysisModal での選択公開・AnalysisCard 表示）
+2. 返信投稿UI（topics/[id] の返信フォーム）
+3. 投稿・トピック編集画面
 
 ### Step4: 認証（完了）
 - POST /api/login・POST /api/logout
