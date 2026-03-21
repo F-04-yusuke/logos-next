@@ -245,6 +245,28 @@ logos-next/
 3. サイドバー実装
    - 参照: ~/logos/resources/views/layouts/sidebar.blade.php
 
+## Vercelランタイムエラーと対処（2026-03-21）
+
+### 発生した問題
+- SSR（サーバーサイドレンダリング）でAPIフェッチしていたため
+  VercelサーバーからさくらへのHTTPリクエストがタイムアウトした
+- 症状: "This page couldn't load / A server error occurred"（ERROR 3292540420）
+- ビルドは成功するがランタイムで失敗するため原因特定に時間がかかった
+
+### 対処（暫定）
+- app/page.tsx と app/topics/[id]/page.tsx を CSR（クライアントサイドレンダリング）に変換
+- APIフェッチをVercelサーバーではなくユーザーのブラウザから行うことで解消
+- 合わせて API_BASE_URL → NEXT_PUBLIC_API_BASE_URL に変更（ブラウザから読める変数名に統一）
+
+### 将来の対応（フェーズ3・SEO対策時）
+- SSRに戻すことが望ましい（SEO・初期表示速度の観点）
+- その際はVercelとさくら間のネットワーク設定（IPホワイトリスト等）を解決する必要がある
+- または Next.js の Route Handler（app/api/）経由でプロキシする方式も検討
+
+### 教訓
+- Vercelのビルドログはエラーなしでもランタイムエラーになりうる
+- SSR/CSRの使い分けはVercelとバックエンドのネットワーク疎通を事前確認してから決める
+
 ---
 
 # 9. Vercelデプロイ設定
