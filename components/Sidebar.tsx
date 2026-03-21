@@ -149,7 +149,6 @@ export default function Sidebar() {
                           <Link
                             href={`/topics/${t.id}`}
                             className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-800 group transition-colors"
-                            onClick={() => setSidebarOpen(false)}
                           >
                             <span className="w-5 h-5 flex items-center justify-center text-xs font-bold text-gray-500 bg-gray-800 rounded shrink-0">
                               {t.title.charAt(0)}
