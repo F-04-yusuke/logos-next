@@ -216,6 +216,17 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 
 ## Phase 3 実装済み（2026-03-22〜2026-03-23）
 
+### F-6: Header/Sidebar 細分化 ✅（2026-03-23）
+- `components/Header/NotificationBell.tsx` — BellIcon + NotificationBadge + Link（PC/スマホ共用）
+- `components/Header/SearchBar.tsx` — 再利用可能検索フォーム（PC/スマホ共用・autoFocus 対応）
+- `components/Header/UserMenu.tsx` — Avatar helper（named export）+ PC ドロップダウン
+- `components/Header/index.tsx` — 全 state/handler + 3サブコンポーネントを組み合わせるメイン Header
+- `components/Sidebar/NavLinks.tsx` — メインナビ + ログイン時セクション全体（sidebarOpen props で opacity 制御）
+- `components/Sidebar/index.tsx` — aside ラッパー + トグルボタン + ロゴ + NavLinks
+- `components/Header.tsx` / `components/Sidebar.tsx` — 後方互換 re-export 1行に差し替え
+- **効果**: 原ファイル各377/374行が管理可能なサブコンポーネントに分割・UIは一切変更なし
+- **Gitタグ**: `v3.7-f6-header-sidebar-split`（logos-next push済み）
+
 ### F-7: 共有コンポーネント整理 ✅（2026-03-23）
 - `components/UserAvatar.tsx` — 新規作成（avatar画像対応・sm/md/lg 3サイズ統一）
 - `components/LikeButton.tsx` — 新規作成（topics版をそのまま共有化）

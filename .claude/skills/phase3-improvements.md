@@ -153,9 +153,14 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 
 ### 🟢 優先度: 低（将来）
 
-#### F-6: Header.tsx・Sidebar.tsx の細分化
-- **現状**: Header 377行・Sidebar 374行（Blade の navigation.blade.php を1:1再現）
-- **理想**: `Header/SearchBar.tsx`, `Header/NotificationBell.tsx`, `Header/UserMenu.tsx` に分割
+#### F-6: Header.tsx・Sidebar.tsx の細分化 ✅ 完了（2026-03-23）
+- **完了内容**:
+  - `Header.tsx`（377行）→ `Header/NotificationBell.tsx` + `Header/SearchBar.tsx` + `Header/UserMenu.tsx` + `Header/index.tsx` に分割
+  - `Sidebar.tsx`（374行）→ `Sidebar/NavLinks.tsx` + `Sidebar/index.tsx` に分割
+  - `Header.tsx` / `Sidebar.tsx` は後方互換 re-export として維持（import先への影響ゼロ）
+  - UIは一切変更なし
+- **検証済み**: `npx tsc --noEmit` + `npm run build` エラーなし
+- **Gitタグ**: `v3.7-f6-header-sidebar-split`（logos-next push済み）
 
 #### F-7: 共有コンポーネントの整理 ✅ 完了（2026-03-23）
 - **完了内容**:
@@ -184,7 +189,7 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 | 🟡 中 | B-3 | FormRequest クラス ✅ | バリデーション整理 | 低 |
 | 🟡 中 | B-4 | OgpService 共通化 ✅ | 重複排除 | 低 |
 | 🟢 低 | B-5 | ApiResource クラス | レスポンス統一 | 中 |
-| 🟢 低 | F-6 | Header/Sidebar 細分化 | コンポーネント管理性 | 高 |
+| 🟢 低 ✅ | F-6 | Header/Sidebar 細分化 ✅ | コンポーネント管理性 | 高 |
 | 🟢 低 ✅ | F-7 | 共有コンポーネント整理 | 再利用性向上 | 高 |
 
 ---
