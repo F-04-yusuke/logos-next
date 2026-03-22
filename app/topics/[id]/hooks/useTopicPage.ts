@@ -6,14 +6,19 @@ import { getAuthHeaders } from "@/lib/auth";
 import type { TopicDetail } from "../_types";
 import { API_BASE } from "../_helpers";
 
-export function useTopicPage(id: string) {
+/**
+ * @param id         トピックID
+ * @param initialTopic  SSR で取得済みの初期データ（省略時は CSR フェッチ）
+ */
+export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   const { user } = useAuth();
   const { triggerBookmarkRefresh } = useSidebar();
   const router = useRouter();
 
   // ── 基本データ ──
-  const [topic, setTopic] = useState<TopicDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+  // SSR データがある場合は即表示（loading=false）、ない場合は CSR フェッチ待ち
+  const [topic, setTopic] = useState<TopicDetail | null>(initialTopic ?? null);
+  const [loading, setLoading] = useState(initialTopic == null);
   const [error, setError] = useState(false);
 
   // ── UI 状態 ──
@@ -36,7 +41,9 @@ export function useTopicPage(id: string) {
   const [timelineLoading, setTimelineLoading] = useState(false);
 
   // ── フェッチ ──
-  const fetchTopic = useCallback(() => {
+  // silent=true: SSR データがある場合の再フェッチ（ローディング表示なし・auth付きで user 固有フィールドを補完）
+  const fetchTopic = useCallback((silent = false) => {
+    if (!silent) setLoading(true);
     fetch(`${API_BASE}/api/topics/${id}`, { headers: getAuthHeaders() })
       .then((r) => {
         if (!r.ok) throw new Error();
@@ -47,13 +54,16 @@ export function useTopicPage(id: string) {
         setLoading(false);
       })
       .catch(() => {
-        setError(true);
+        if (!silent) setError(true);
         setLoading(false);
       });
   }, [id]);
 
   useEffect(() => {
-    fetchTopic();
+    // SSR データがある場合: サイレント再フェッチで is_liked_by_me / is_bookmarked 等を補完
+    // SSR データがない場合: 通常のローディングフェッチ
+    fetchTopic(initialTopic != null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchTopic]);
 
   // タブ永続化（sessionStorage）
