@@ -1,11 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import useSWR from "swr";
 import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
 import { getAuthHeaders } from "@/lib/auth";
 import { transformTopic } from "@/lib/transforms";
 import type { TopicDetail } from "../_types";
 import { API_BASE } from "../_helpers";
+
+async function topicFetcher(url: string): Promise<TopicDetail> {
+  const res = await fetch(url, { headers: getAuthHeaders() });
+  if (!res.ok) throw new Error();
+  return transformTopic(await res.json()) as TopicDetail;
+}
 
 /**
  * @param id         トピックID
@@ -17,10 +24,19 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   const router = useRouter();
 
   // ── 基本データ ──
-  // SSR データがある場合は即表示（loading=false）、ない場合は CSR フェッチ待ち
-  const [topic, setTopic] = useState<TopicDetail | null>(initialTopic ?? null);
-  const [loading, setLoading] = useState(initialTopic == null);
-  const [error, setError] = useState(false);
+  // SSR データがある場合: fallbackData で即表示 → バックグラウンドで auth 付き再フェッチ
+  // SSR データがない場合: isLoading=true → フェッチ完了後に表示
+  const {
+    data: topic,
+    isLoading: loading,
+    error: topicError,
+    mutate: mutateTopic,
+  } = useSWR(`${API_BASE}/api/topics/${id}`, topicFetcher, {
+    fallbackData: initialTopic ?? undefined,
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+  });
+  const error = !!topicError;
 
   // ── UI 状態 ──
   const [activeTab, setActiveTab] = useState<"info" | "comments" | "analysis">("info");
@@ -42,30 +58,16 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   const [timelineLoading, setTimelineLoading] = useState(false);
 
   // ── フェッチ ──
-  // silent=true: SSR データがある場合の再フェッチ（ローディング表示なし・auth付きで user 固有フィールドを補完）
-  const fetchTopic = useCallback((silent = false) => {
-    if (!silent) setLoading(true);
-    fetch(`${API_BASE}/api/topics/${id}`, { headers: getAuthHeaders() })
-      .then((r) => {
-        if (!r.ok) throw new Error();
-        return r.json();
-      })
-      .then((data) => {
-        setTopic(transformTopic(data) as TopicDetail);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (!silent) setError(true);
-        setLoading(false);
-      });
-  }, [id]);
+  // SWR の mutate() ラッパー（AnalysisModal.onPublish 等との後方互換のため維持）
+  const fetchTopic = useCallback(() => { mutateTopic(); }, [mutateTopic]);
 
-  useEffect(() => {
-    // SSR データがある場合: サイレント再フェッチで is_liked_by_me / is_bookmarked 等を補完
-    // SSR データがない場合: 通常のローディングフェッチ
-    fetchTopic(initialTopic != null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchTopic]);
+  // 楽観的更新ヘルパー（再フェッチなしでキャッシュを直接更新）
+  const updateTopic = useCallback(
+    (fn: (prev: TopicDetail | undefined) => TopicDetail | undefined) => {
+      mutateTopic(fn, { revalidate: false });
+    },
+    [mutateTopic]
+  );
 
   // タブ永続化（sessionStorage）
   useEffect(() => {
@@ -108,7 +110,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
         return;
       }
       const newPost = await res.json();
-      setTopic((prev) =>
+      updateTopic((prev) =>
         prev ? { ...prev, posts: [newPost, ...prev.posts] } : prev
       );
       setShowPostModal(false);
@@ -138,7 +140,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
         return;
       }
       const newComment = await res.json();
-      setTopic((prev) =>
+      updateTopic((prev) =>
         prev
           ? { ...prev, comments: [...prev.comments, newComment], user_has_commented: true }
           : prev
@@ -159,7 +161,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     });
     if (res.ok) {
       const data = await res.json();
-      setTopic((prev) =>
+      updateTopic((prev) =>
         prev
           ? {
               ...prev,
@@ -182,7 +184,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     });
     if (res.ok) {
       const data = await res.json();
-      setTopic((prev) =>
+      updateTopic((prev) =>
         prev
           ? {
               ...prev,
@@ -202,7 +204,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
       method: "DELETE",
       headers: getAuthHeaders(),
     });
-    setTopic((prev) =>
+    updateTopic((prev) =>
       prev ? { ...prev, posts: prev.posts.filter((p) => p.id !== postId) } : prev
     );
   };
@@ -219,7 +221,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
       return;
     }
     const data = await res.json();
-    setTopic((prev) =>
+    updateTopic((prev) =>
       prev
         ? { ...prev, posts: prev.posts.map((p) => p.id === postId ? { ...p, supplement: data.supplement } : p) }
         : prev
@@ -238,7 +240,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
       return;
     }
     const data = await res.json();
-    setTopic((prev) =>
+    updateTopic((prev) =>
       prev
         ? { ...prev, analyses: prev.analyses?.map((a) => a.id === analysisId ? { ...a, supplement: data.supplement } : a) }
         : prev
@@ -262,7 +264,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     });
     if (res.ok) {
       const data = await res.json();
-      setTopic((prev) =>
+      updateTopic((prev) =>
         prev
           ? {
               ...prev,
@@ -289,7 +291,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
       return;
     }
     const newReply = await res.json();
-    setTopic((prev) =>
+    updateTopic((prev) =>
       prev
         ? {
             ...prev,
@@ -308,7 +310,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
       method: "DELETE",
       headers: getAuthHeaders(),
     });
-    setTopic((prev) =>
+    updateTopic((prev) =>
       prev
         ? { ...prev, comments: prev.comments.filter((c) => c.id !== commentId), user_has_commented: false }
         : prev
@@ -320,7 +322,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
       method: "DELETE",
       headers: getAuthHeaders(),
     });
-    setTopic((prev) =>
+    updateTopic((prev) =>
       prev
         ? {
             ...prev,
@@ -342,7 +344,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     });
     if (res.ok) {
       const data = await res.json();
-      setTopic((prev) =>
+      updateTopic((prev) =>
         prev
           ? {
               ...prev,
@@ -373,7 +375,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
       });
       const data = await res.json();
       if (!res.ok) { alert(data.message ?? "時系列の生成に失敗しました"); return; }
-      setTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
+      updateTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
     } catch {
       alert("時系列の生成に失敗しました");
     } finally {
@@ -390,7 +392,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
       });
       const data = await res.json();
       if (!res.ok) { alert(data.message ?? "AI更新に失敗しました"); return; }
-      setTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
+      updateTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
     } catch {
       alert("AI更新に失敗しました");
     } finally {
@@ -406,7 +408,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     });
     if (res.ok) {
       const data = await res.json();
-      setTopic((prev) =>
+      updateTopic((prev) =>
         prev ? { ...prev, is_bookmarked: data.bookmarked } : prev
       );
       triggerBookmarkRefresh();
