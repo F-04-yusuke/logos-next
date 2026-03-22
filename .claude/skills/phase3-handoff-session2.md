@@ -31,7 +31,7 @@ LOGOSプロジェクト 引継ぎプロンプト（Phase 3 技術改善 Session 
 
 ### F-1 残タスク（将来）
 - analyses/[id] SSR化 → Sakura APIが auth:sanctum 必須のためCookieベース認証まで保留
-- Vercel環境変数: API_BASE_URL=https://gs-f04.sakura.ne.jp（NEXT_PUBLIC_なし）をユーザーがVercelダッシュボードで設定する必要あり
+- 【前セッション最後に完了しました残タスクではありません】Vercel環境変数: API_BASE_URL=https://gs-f04.sakura.ne.jp（NEXT_PUBLIC_なし）をユーザーがVercelダッシュボードで設定する必要あり
 
 ## 今セッションの推奨タスク順（効率重視）
 
