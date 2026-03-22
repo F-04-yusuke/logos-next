@@ -38,9 +38,13 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 - **理想**: `app/Http/Requests/` に FormRequest クラスを切り出し、Controller に注入
 - **対象**: PostRequest, CommentRequest, AnalysisRequest 等
 
-#### B-4: OGP取得ロジックの共通化
-- **現状**: `/api/og` エンドポイントと posts 投稿時の2か所に同じロジックが重複
-- **理想**: `app/Services/OgpService.php` に抽出して両方から呼び出す
+#### B-4: OGP取得ロジックの共通化 ✅ 完了（2026-03-22）
+- **完了内容**: `app/Services/OgpService.php` 新規作成。3箇所の重複ロジックを共通化
+  - `PostApiController::store()` — OGP try ブロック(22行) → `OgpService::fetch($url)` 1行
+  - `PostApiController::update()` — OGP try ブロック(17行) → `OgpService::fetch($url)` 1行（timeout未設定→5秒に統一）
+  - `GET /api/og` クロージャ（routes/api.php）— 30行 → `OgpService::fetch($url)` 1行
+- **検証済み**: route:list確認・tinker直接呼び出し・curl /api/og（有効URL・無効URL両方）
+- **コミット**: ea0b980（logos-laravel push済み）
 
 #### B-5: ApiResource クラスでレスポンス形式を統一
 - **現状**: `data` キーありなし混在・toArray() 直返し混在
@@ -110,10 +114,13 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 - **AnalysisCard**: `analysis.data` を型安全な直接アクセスに更新
 - **注意**: image type の data キーは `image_path`（`url` ではない）—APIの実装と一致
 
-#### F-5: SWR / React Query 導入
-- **現状**: `useEffect + fetch` パターン・キャッシングなし・重複リクエストあり
-- **理想**: SWR 導入でキャッシング・再フェッチ・重複排除を自動化
-  - AuthContext の `user/me` 呼び出しなど、複数コンポーネントで同じAPIを叩いている箇所が対象
+#### F-5: SWR / React Query 導入 ✅ 完了（2026-03-22）
+- **完了内容**: `npm install swr@^2.4.1` 済み。3ファイルを SWR 化
+  - `context/AuthContext.tsx`: useState+useEffect → useSWR("auth-user", fetchUser)。revalidateOnFocus: true / logout: mutate(null,{revalidate:false})
+  - `app/topics/[id]/hooks/useTopicPage.ts`: useSWR(url, {fallbackData: initialTopic}) + updateTopic ヘルパー（mutateTopic経由で15箇所置換）
+  - `app/notifications/page.tsx`: useSWR(user?url:null) ページ依存キー
+- **検証済み**: ビルド×3回通過・ブラウザ確認（user/me取得・revalidateOnFocus・logout即時切替）・ページネーション（tinker25件→curl確認→クリーンアップ）
+- **Gitタグ**: `v3.2-f5-swr`（logos-next）
 
 ### 🟢 優先度: 低（将来）
 
@@ -137,9 +144,9 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 | 🟡 中 | B-2 | Topic::analyses() リレーション追加 | N+1解消・コード簡潔化 | 低 |
 | 🟡 中 | F-3 | boolean 型変換レイヤー | バグリスク排除 | 低 |
 | 🟡 中 | F-4 | 分析型 Discriminated Union | 型安全・バグを型レベルで防止 | 低 |
-| 🟡 中 | F-5 | SWR / React Query | キャッシング・重複排除 | 低〜中 |
+| 🟡 中 | F-5 | SWR / React Query ✅ | キャッシング・重複排除 | 低〜中 |
 | 🟡 中 | B-3 | FormRequest クラス | バリデーション整理 | 低 |
-| 🟡 中 | B-4 | OgpService 共通化 | 重複排除 | 低 |
+| 🟡 中 | B-4 | OgpService 共通化 ✅ | 重複排除 | 低 |
 | 🟢 低 | B-5 | ApiResource クラス | レスポンス統一 | 中 |
 | 🟢 低 | F-6 | Header/Sidebar 細分化 | コンポーネント管理性 | 高 |
 | 🟢 低 | F-7 | 共有コンポーネント整理 | 再利用性向上 | 高 |

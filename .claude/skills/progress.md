@@ -17,6 +17,7 @@
 | v1.0-phase1-complete | Phase1完成・Laravel Blade版本番稼働確認済み | 2026-03-19 |
 | v1.1-phase2-step4-complete | Phase2 Step4完了・Sanctum認証API追加済み | 2026-03-20 |
 | v3.1-b1-controller-split | B-1完了・routes/api.php 1040行→209行・47エンドポイント9コントローラーに分割 | 2026-03-22 |
+| v3.2-b4-ogp-service | B-4完了・OgpService共通化（3箇所の重複ロジックをapp/Services/OgpService.phpに集約） | 2026-03-22 |
 
 ---
 
@@ -85,9 +86,16 @@
 - 検証3: ページネーション → tinker で通知25件作成 → curl page=1/2 確認 → コードレビュー → クリーンアップ ✅
 - Gitタグ: `v3.2-f5-swr`（logos-next）
 
+### B-4: OgpService 共通化（完了）
+**検証済み（route:list・tinker・curl）:**
+- `app/Services/OgpService.php` 新規作成（static fetch()メソッド・timeout=5・preg_match OGP取得）
+- `PostApiController::store()` — 22行の try ブロック → `OgpService::fetch($data['url'])` 1行
+- `PostApiController::update()` — 17行の try ブロック → `OgpService::fetch($validated['url'])` 1行（timeout未設定→5秒に統一）
+- `routes/api.php` GET /og クロージャ — 30行 → `OgpService::fetch($url)` 1行
+- Gitタグ: `v3.2-b4-ogp-service`（logos-laravel push済み・コミット ea0b980）
+
 **Phase 3 残タスク推奨順:**
-1. B-4: OgpService 共通化（軽い・1サービスクラス+3箇所修正）
-2. B-3: FormRequest クラス化（重い・9コントローラー分・専用セッション推奨）
+1. B-3: FormRequest クラス化（重い・9コントローラー分・専用セッション推奨）
 
 ---
 

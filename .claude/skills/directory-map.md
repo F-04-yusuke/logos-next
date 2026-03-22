@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-22（Phase 3 F-1/F-2 完了）
+最終更新: 2026-03-22（Phase 3 B-4 完了・F-3/F-4/F-5 反映）
 
 ```
 logos-next/
@@ -84,6 +84,7 @@ logos-next/
 ├── lib/
 │   ├── auth.ts                          # トークン管理（getToken/setToken/removeToken/getAuthHeaders）
 │   ├── proxy-fetch.ts                   # Route Handler用さくらAPIプロキシユーティリティ（サーバー専用・F-1 Phase3）
+│   ├── transforms.ts                    # boolean型変換レイヤー（transformUser/Post/Comment/Reply/Analysis/Topic）（F-3 Phase3）
 │   └── utils.ts                         # shadcn/ui utility
 ├── public/                              # SVG等の静的ファイル
 ├── .env.example
@@ -96,6 +97,7 @@ logos-next/
 │       ├── design-spec.md               # デザイン・カラー・a11y・Blade参照表
 │       ├── directory-map.md             # このファイル
 │       ├── deploy-config.md             # Vercel設定・CSR/SSR障害記録
+│       ├── phase3-improvements.md       # Phase 3 技術改善計画（完了済みマーク付き）
 │       └── progress.md                  # 進捗・Gitタグ・完了済みステップ
 ├── next.config.ts
 ├── package.json
@@ -121,7 +123,6 @@ logos-next/
 | `/history` | app/history/page.tsx | ✅ |
 | `/topics/create` | app/topics/create/page.tsx | ✅ |
 | `/topics/[id]` | app/topics/[id]/page.tsx | ✅ |
-| `/topics/[id]/edit` | app/topics/[id]/edit/page.tsx | ✅ |
 | `/topics/[id]/edit` | app/topics/[id]/edit/page.tsx | ✅ |
 | `/analyses/[id]` | app/analyses/[id]/page.tsx | ✅ |
 | `/tools/tree` | app/tools/tree/page.tsx | ✅ |
