@@ -46,6 +46,7 @@ export default function TopicPage({
   const [postCategory, setPostCategory] = useState("");
   const [postComment, setPostComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [timelineLoading, setTimelineLoading] = useState(false);
 
   const fetchTopic = () => {
     fetch(`${API_BASE}/api/topics/${id}`, { headers: getAuthHeaders() })
@@ -343,6 +344,46 @@ export default function TopicPage({
     }
   };
 
+  const handleTimelineGenerate = async () => {
+    setTimelineLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/topics/${id}/timeline/generate`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.message ?? "時系列の生成に失敗しました");
+        return;
+      }
+      setTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
+    } catch {
+      alert("時系列の生成に失敗しました");
+    } finally {
+      setTimelineLoading(false);
+    }
+  };
+
+  const handleTimelineUpdate = async () => {
+    setTimelineLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/topics/${id}/timeline/update`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.message ?? "AI更新に失敗しました");
+        return;
+      }
+      setTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
+    } catch {
+      alert("AI更新に失敗しました");
+    } finally {
+      setTimelineLoading(false);
+    }
+  };
+
   const handleBookmark = async () => {
     if (!user) {
       alert("ブックマークするにはログインが必要です");
@@ -419,11 +460,33 @@ export default function TopicPage({
 
             {/* Timeline */}
             <div className="mt-1 mb-1">
-              <div className="flex flex-wrap items-center justify-between gap-6 mb-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                 <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 flex items-center shrink-0">
                   <span className="mr-1" aria-hidden="true">⏳</span>{" "}
                   前提となる時系列
                 </h3>
+                {isOwner && (
+                  timeline.length === 0 ? (
+                    <button
+                      onClick={handleTimelineGenerate}
+                      disabled={timelineLoading}
+                      className="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 font-bold py-0.5 px-2 rounded transition-colors flex items-center gap-1 disabled:opacity-50"
+                    >
+                      <span aria-hidden="true">✨</span>
+                      {timelineLoading ? "生成中..." : "AIで自動生成する"}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleTimelineUpdate}
+                      disabled={timelineLoading}
+                      className="text-[10px] bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/50 font-bold py-0.5 px-2 rounded transition-colors flex items-center gap-1 disabled:opacity-50"
+                      title="投稿されたエビデンスを元に時系列を最新化します"
+                    >
+                      <span aria-hidden="true">🔄</span>
+                      {timelineLoading ? "更新中..." : "最新投稿からAI更新"}
+                    </button>
+                  )
+                )}
               </div>
 
               {timeline.length > 0 && (

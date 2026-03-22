@@ -153,9 +153,26 @@
 - a11y: 全体的に対応済み（`aria-hidden`・`sr-only`・`alt` 確認）
 - レスポンシブ: AnalysisCard SWOT グリッド修正・LikeButton md サイズ修正の2点のみ
 
+**Step12: 通知機能・時系列AIアシスタント（2026-03-22）:**
+
+*logos API追加（routes/api.php）:*
+- POST /api/posts/{post}/like — いいね時に `post_like` 通知（自己除く）
+- POST /api/comments/{comment}/like — いいね時に `comment_like` 通知（自己除く）
+- POST /api/analyses/{analysis}/like — いいね時に `analysis_like` 通知（自己除く）
+- POST /api/comments/{comment}/reply — 返信時に `comment_reply` 通知（自己除く）
+- POST /api/topics/{topic}/bookmark — ブックマーク時に `topic_bookmark` 通知（自己除く）
+- POST /api/topics/{topic}/timeline/generate — Geminiで時系列を自動生成（未生成・作成者限定）
+- POST /api/topics/{topic}/timeline/update — 最新エビデンスからGeminiで時系列を更新（作成者限定）
+- マイグレーション: notifications.type の ENUM を拡張（comment_like/analysis_like/topic_bookmark 追加）
+- マイグレーション: notifications.notifiable_type を varchar(20) → varchar(50) に拡張
+
+*Next.jsフロントエンド:*
+- `app/topics/[id]/page.tsx` — timelineLoading state・handleTimelineGenerate・handleTimelineUpdate ハンドラー追加
+- トピック詳細の時系列ヘッダー横にAIボタン追加: 未生成時は「✨ AIで自動生成する」、生成済みは「🔄 最新投稿からAI更新」（オーナーのみ表示）
+- 処理中は「生成中...」「更新中...」でdisabled表示
+
 **未実装（残作業）:**
-1. 通知機能 — routes/api.php の like/reply/bookmark 系エンドポイントに通知レコード作成を追加（LaravelのCommentController等の通知ロジックを移植）
-2. 投稿・トピック編集画面（`/topics/[id]/edit` など）
+1. 投稿・トピック編集画面（`/topics/[id]/edit` など）
 
 ### Step4: 認証（完了）
 - POST /api/login・POST /api/logout

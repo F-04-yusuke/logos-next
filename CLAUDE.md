@@ -156,13 +156,14 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - 返信投稿UI: 返信制限（投稿主5件・他1件）・自分のコメント/返信削除
 - 補足UI: エビデンス・分析の投稿者が1回のみ補足追加（PostCard/AnalysisCard）
 - エビデンス削除: 投稿者が自分の投稿を削除できる
+- 通知機能: POST like/reply/bookmark の5エンドポイントに Notification::create() 追加。新型(comment_like/analysis_like/topic_bookmark)はnotifications.typeのENUM拡張マイグレーション適用済み
+- 時系列AIアシスタント: トピック詳細のオーナーが「AIで自動生成する」「最新投稿からAI更新」ボタンで時系列をGemini生成・更新できる（POST /api/topics/{id}/timeline/generate・update）
 
 ## コンポーネント分割済み
 - `app/topics/[id]/` → `_types.ts` / `_helpers.ts` / `_components/`（8コンポーネント）に分割（Step10）
 
 ## 未実装（残作業）
 1. 投稿・トピック編集画面（`/topics/[id]/edit`）
-2. 通知連携（返信・補足投稿時の通知送信）
 
 ## Vercel手動設定（未完了・ユーザーが行う）
 - 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定
