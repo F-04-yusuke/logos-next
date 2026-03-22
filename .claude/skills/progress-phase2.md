@@ -1,0 +1,302 @@
+# Phase 2 完了記録：フロントエンドのモダン化（Next.js移行）
+
+完了日: 2026-03-22
+Gitタグ (logos-next): `v2.0-phase2-complete`
+Gitタグ (logos-laravel): `v1.1-phase2-step4-complete`（Step4時点）
+
+---
+
+## フェーズの目的
+
+Laravel Blade 版の全ページ・全機能を Next.js + TypeScript で完全移植し、
+Vercel ↔ さくら API 構成で稼働させる。
+
+---
+
+## Step 1: Laravel JSON API追加（完了）
+
+**logos-laravel API追加:**
+- GET /api/topics（トピック一覧・ページネーション）
+- GET /api/topics/{topic}（トピック詳細）
+- GET /api/user/me（auth:sanctum）
+- GET /api/categories（カテゴリ一覧）
+- TopicApiControllerはcategory→categoriesに修正済み
+- laravel/sanctum ^4.3 インストール済み
+- bootstrap/app.phpにapi:ルート登録済み
+- personal_access_tokens テーブル作成済み（ローカル・さくら両方）
+- CORS設定済み（Vercelドメイン許可）
+- 本番（gs-f04.sakura.ne.jp）での動作確認済み
+
+---
+
+## Step 2: Next.js新規作成（完了）
+
+- Next.js 16.2.0 + TypeScript + Tailwind CSS + shadcn/ui
+- GitHubリポジトリ: F-04-yusuke/logos-next
+- ローカルパス: ~/logos-next
+
+---
+
+## Step 3: 画面移行（完了）
+
+**実装済みページ（Phase 2 Step3）:**
+- `app/page.tsx` — トピック一覧（CSR・2カラム・カテゴリタブ・ソート・ページネーション・人気トピック）
+- `app/topics/[id]/page.tsx` — トピック詳細（CSR）
+- `app/login/page.tsx` — ログイン（Blade忠実再現・eKYC/SNSボタンUI含む）
+- `app/register/page.tsx` — ユーザー登録（eKYC/SNS coming soon + 開発用フォーム）
+- `app/categories/page.tsx` — カテゴリ（admin: インライン編集CRUD / 一般: グリッド一覧）
+- `app/topics/create/page.tsx` — トピック作成（PRO限定ガード・カテゴリmax2・timeline行追加削除）
+- `components/Header.tsx` — 検索・通知バッジ・アバタードロップダウン・スマホメニュー完全実装
+- `components/Sidebar.tsx` — ナビ・PRO機能・分析ツール・鍵アイコン完全実装
+- `components/SidebarAwareLayout.tsx` — サイドバー連動コンテンツ幅調整
+- `components/LayoutShell.tsx` — /login・/register でHeader/Sidebar非表示制御
+- `components/AppLogo.tsx` — 共通ロゴコンポーネント
+- `context/AuthContext.tsx` — Sanctumトークン認証・unread_notifications_count対応済み
+- `context/SidebarContext.tsx` — サイドバー開閉状態管理
+
+**バグ修正（Step3）:**
+- LayoutShell追加: /login・/register でHeader/Sidebar非表示（root layoutのusePathname制御）
+- route:cacheが古くAPIルートが404になる問題 → route:clear で解消・再発防止でArray.isArray()ガード追加
+- navigation.blade.php: auth()->id()===1 ハードコードでadminリンクが消える → ローカルDBでadminをID=1に設定して対応
+
+---
+
+## Step 4: 認証実装（完了）
+
+- POST /api/login・POST /api/logout
+- User モデルに HasApiTokens トレイト追加
+- lib/auth.ts（getToken/setToken/removeToken/getAuthHeaders）
+- context/AuthContext.tsx（AuthProvider・useAuthフック）
+- app/login/page.tsx（Laravel版忠実再現）
+- ヘッダー認証状態反映（通知ベル・アバタードロップダウン・カテゴリ管理）
+
+---
+
+## Step 5: 追加API・ページ実装（完了 2026-03-21）
+
+**logos-laravel API追加:**
+- POST /api/register（新規登録・トークン返却）
+- GET /api/user/me 拡張（email・avatar・unread_notifications_count追加）
+- GET /api/categories 変更（親カテゴリ＋children階層構造で返却）
+- POST /api/topics（PRO限定・TopicApiController::store追加）
+- POST /api/categories・PATCH /api/categories/{id}・DELETE /api/categories/{id}（admin限定CRUD）
+- personal_access_tokens マイグレーションをgitコミット済み
+
+---
+
+## Step 6拡張: 追加ページ・API（2026-03-22）
+
+**実装済みページ（Step6）:**
+- `app/notifications/page.tsx` — 通知一覧（TypeBadge・既読・ページネーション）
+- `app/likes/page.tsx` — 参考になった一覧（3タブ: 情報/コメント/分析）
+- `app/category-list/page.tsx` — カテゴリ公開グリッド一覧
+- `app/dashboard/page.tsx` — ダッシュボード（5タブ: 投稿/下書き/コメント/分析/トピック）
+- `app/profile/page.tsx` — プロフィール編集（アバター・名前クールダウン・パスワード変更・アカウント削除モーダル）
+- `app/history/page.tsx` — 閲覧履歴（日付グループ・YouTube風ラベル・ページネーション）
+
+**logos-laravel API追加（Step6）:**
+- GET /api/dashboard（投稿・下書き・コメント・分析・トピック一括取得）
+- DELETE /api/posts/{post}（自分の投稿削除）
+- DELETE /api/topics/{topic}（自分のトピック削除）
+- GET /api/history（閲覧履歴・12件ページネーション・last_viewed_at付き）
+- GET /api/og?url=...（OGPプロキシ・認証不要・title/thumbnail_url返却）
+- GET /api/user/bookmarks（保存トピック一覧・上限10件）
+- POST /api/topics/{topic}/posts: OGP取得追加（title/thumbnail_url保存）
+- GET /api/profile（name_updated_at付きユーザー情報）
+- POST /api/profile（プロフィール更新・multipart/form-data・アバター画像対応）
+- PUT /api/profile/password（パスワード更新・現在のパスワード検証）
+- DELETE /api/profile（アカウント削除・パスワード確認）
+
+---
+
+## Step 5拡張: 追加API（2026-03-22）
+
+**logos-laravel API追加:**
+- POST /api/topics/{topic}/posts（エビデンス投稿）
+- POST /api/topics/{topic}/comments（コメント・1人1件制限）
+- POST /api/posts/{post}/like（いいねトグル）
+- POST /api/comments/{comment}/like（コメントいいねトグル）
+- POST /api/topics/{topic}/bookmark（ブックマークトグル）
+- GET /api/notifications・PATCH /api/notifications/read-all・PATCH /api/notifications/{id}/read
+- GET /api/user/likes
+- GET /api/topics/{id} 拡張（auth-aware: user_has_commented, is_bookmarked, is_liked_by_me）
+
+---
+
+## Step 7: 分析ツール実装（2026-03-22）
+
+**実装済みページ（Step7）:**
+- `app/tools/tree/page.tsx` — ロジックツリー作成（PRO限定・ノード追加/削除・AIで土台生成・AIアシスタントチャット・保存/上書き保存）
+- `app/tools/matrix/page.tsx` — 総合評価表作成（PRO限定・列行追加/削除・スコア集計・AIで土台生成・AIアシスタントチャット・保存/上書き保存）
+- `app/tools/swot/page.tsx` — SWOT/PEST分析作成（PRO限定・SWOT/PEST切替・AI自動生成・AIアシスタントチャット・保存/上書き保存）
+- `app/dashboard/page.tsx` — 分析タブを実データ表示に更新（作成ボタン・一覧・編集リンク・削除ボタン）
+
+**logos-laravel API追加（Step7）:**
+- GET/POST/PUT/DELETE /api/analyses
+- POST /api/tools/ai-assist（Gemini AI連携プロキシ）
+- GET /api/dashboard analyses実データ
+- globals.css: tree-line CSS追加（ロジックツリーのライン表示）
+
+---
+
+## Step 8: 分析タブ ↔ 保存ツール接続（2026-03-22）
+
+**logos-next更新:**
+- `app/topics/[id]/page.tsx` 更新済み:
+  - `TopicAnalysis` 型・`TopicDetail.analyses` フィールド追加
+  - `AnalysisPreview` / `AnalysisCard` コンポーネント追加（Blade忠実再現）
+  - `AnalysisModal` — 「作成済みツールから選択」タブ: ユーザー分析一覧取得・公開ボタン
+  - 分析タブ: 実件数表示・`AnalysisCard` マップ
+  - `fetchTopic()` 関数を切り出し（publish後に再取得）
+
+**logos-laravel API追加（Step8）:**
+- GET /api/user/analyses（モーダル用）
+- POST /api/analyses/{id}/publish（トピック公開）
+- POST /api/analyses/{id}/like（いいねトグル）
+
+---
+
+## Step 9: バグ修正（2026-03-22）
+
+- `TopicApiController::show()` バグ修正: `$topic->load(['analyses' => ...])` は `Topic` モデルに `analyses()` リレーション未定義のため500エラー
+- **修正**: `load()` から `analyses` を削除し、直接クエリで代替
+  ```php
+  $analyses = \App\Models\Analysis::where('topic_id', $topic->id)
+      ->where('is_published', true)
+      ->with('user:id,name,avatar')
+      ->withCount('likes')
+      ->latest()
+      ->get();
+  $data['analyses'] = $analyses->toArray();
+  ```
+- **教訓（当時）**: `app/Models/` は編集禁止のため、新規リレーションが必要な場合は常に直接クエリで代替する（Phase 3 でこの制約は撤廃済み・B-2でリレーション追加済み）
+
+---
+
+## Step 10: topics/[id]/page.tsx コンポーネント分割（2026-03-22）
+
+1811行 → page.tsx 812行 + 9ファイルに分割（型チェックエラーゼロ確認済み）
+
+- `app/topics/[id]/_types.ts` — 型定義（TimelineItem/Post/Reply/Comment/TopicAnalysis/TopicDetail）
+- `app/topics/[id]/_helpers.ts` — API_BASE / timeAgo / formatDateTime
+- `app/topics/[id]/_components/UserAvatar.tsx`
+- `app/topics/[id]/_components/LikeButton.tsx`
+- `app/topics/[id]/_components/PostCard.tsx`
+- `app/topics/[id]/_components/CommentCard.tsx`
+- `app/topics/[id]/_components/PostModal.tsx`（OGPプレビュー含む）
+- `app/topics/[id]/_components/AnalysisCard.tsx`（typeBadge / AnalysisPreview をエクスポート）
+- `app/topics/[id]/_components/AnalysisModal.tsx`
+
+---
+
+## Step 11: 返信UI・補足UI・PROモーダル・UX修正（2026-03-22）
+
+**logos-laravel API追加:**
+- POST /api/comments/{comment}/reply — 返信投稿（投稿主5件・他1件の制限付き）
+- DELETE /api/comments/{comment} — コメント/返信削除（自分のみ）
+- POST /api/posts/{post}/supplement — エビデンス補足（投稿者1回のみ）
+- POST /api/analyses/{analysis}/supplement — 分析補足（投稿者1回のみ）
+
+**logos-next更新:**
+- `CommentCard.tsx` — 返信フォーム追加（返信制限をUIでも制御）・自分のコメント/返信削除ボタン
+- `PostCard.tsx` — 補足フォーム追加（投稿者1回のみ）・自分の投稿削除ボタン
+- `AnalysisCard.tsx` — 補足フォーム追加（投稿者1回のみ）・SWOT グリッドを `grid-cols-1 sm:grid-cols-2` に修正
+- `LikeButton.tsx` — md サイズを `w-4 h-4 sm:w-5 sm:h-5` にレスポンシブ対応
+- `globals.css` — グローバルスクロールバーCSS追加（Blade版 app.css と統一）
+- `SidebarContext.tsx` — `bookmarkRefreshKey`/`triggerBookmarkRefresh`（サイドバー即時更新）・`openProModal`/`closeProModal` 追加
+- `Sidebar.tsx` — bookmarkRefreshKey 依存追加・非PRO時のPROリンクをモーダル開閉ボタンに変更
+- `ProModal.tsx`（新規）— Blade版 pro-modal.blade.php 忠実再現
+- `LayoutShell.tsx` — `<ProModal />` を全ページに配置
+- `app/topics/[id]/page.tsx` — ブックマーク後 `triggerBookmarkRefresh()` 呼び出し・補足/削除ハンドラー追加
+
+**セキュリティ/a11y/レスポンシブ調査結果:**
+- セキュリティ: 問題なし（APIキー露出なし、認証ヘッダー全API適用済み）
+- a11y: 全体的に対応済み（`aria-hidden`・`sr-only`・`alt` 確認）
+- レスポンシブ: AnalysisCard SWOT グリッド修正・LikeButton md サイズ修正の2点のみ
+
+---
+
+## Step 12: 通知機能・時系列AIアシスタント（2026-03-22）
+
+**logos-laravel API追加:**
+- POST /api/posts/{post}/like — いいね時に `post_like` 通知（自己除く）
+- POST /api/comments/{comment}/like — いいね時に `comment_like` 通知（自己除く）
+- POST /api/analyses/{analysis}/like — いいね時に `analysis_like` 通知（自己除く）
+- POST /api/comments/{comment}/reply — 返信時に `comment_reply` 通知（自己除く）
+- POST /api/topics/{topic}/bookmark — ブックマーク時に `topic_bookmark` 通知（自己除く）
+- POST /api/topics/{topic}/timeline/generate — Geminiで時系列を自動生成（未生成・作成者限定）
+- POST /api/topics/{topic}/timeline/update — 最新エビデンスからGeminiで時系列を更新（作成者限定）
+- マイグレーション: notifications.type の ENUM を拡張（comment_like/analysis_like/topic_bookmark 追加）
+- マイグレーション: notifications.notifiable_type を varchar(20) → varchar(50) に拡張
+
+**logos-next更新:**
+- `app/topics/[id]/page.tsx` — timelineLoading state・handleTimelineGenerate・handleTimelineUpdate ハンドラー追加
+- トピック詳細の時系列ヘッダー横にAIボタン追加: 未生成時は「✨ AIで自動生成する」、生成済みは「🔄 最新投稿からAI更新」（オーナーのみ表示）
+- 処理中は「生成中...」「更新中...」でdisabled表示
+
+---
+
+## Step 13: トピック編集・下書き編集・バグ修正（2026-03-22）
+
+**logos-laravel API追加:**
+- PUT /api/topics/{topic} — トピック編集（作成者限定・title/content/category_ids/timeline・手動編集で is_ai:false）
+- PATCH /api/posts/{post} — 下書き編集（作成者限定・下書きのみ・本投稿昇格時OGP取得・通知送信）
+
+**TopicApiController.php 追加:**
+- `update()` メソッド追加（バリデーション・categories sync・作成者チェック）
+
+**logos-next更新:**
+- `app/topics/[id]/edit/page.tsx`（新規）— トピック編集ページ。手動編集行は `is_ai: false` に自動切替
+- `app/dashboard/page.tsx` — 下書き編集モーダル追加（posts/edit.blade.php 忠実再現）・トピック編集リンク修正（spanからLinkへ）・下書きカード準備中プレースホルダー・タイトル表示修正
+- `app/topics/[id]/page.tsx` — 下書き保存時にトピック詳細に追加しないよう修正・`/dashboard?tab=drafts` へリダイレクト
+
+---
+
+## Step 14: 移行漏れチェック・オリジナル図解・分析閲覧ページ（2026-03-22）
+
+**Blade↔Next.js 総点検（移行漏れ2項目を修正・4項目を対象外と確定）:**
+- 項目5: オリジナル図解（画像アップロード）— Bladeには実装済みだがNext.jsに未実装だったため対応
+- 項目3: `/analyses/[id]` スタンドアロン閲覧ページ — Bladeには実装済みだがNext.jsに未実装だったため対応
+- Phase 2 見送り: パスワードリセット・メール認証・パスワード確認ページ・分析タイトル編集（詳細 → `progress-roadmap.md`）
+
+**logos-laravel API追加:**
+- POST /api/topics/{topic}/analyses/image — オリジナル図解アップロード（PRO限定・jpg/png/gif/webp・5MB制限・即公開）
+- GET /api/analyses/{analysis} — 分析詳細をオーナー限定 → 認証済みユーザー全員閲覧可に変更。user/topic/likes_count/is_liked_by_me 付き
+
+**logos-next更新:**
+- `app/topics/[id]/_types.ts` — TopicAnalysis.type に `"image"` 追加
+- `app/topics/[id]/_components/AnalysisCard.tsx` — typeBadge にオレンジ「オリジナル図解」バッジ追加・AnalysisPreview に画像表示追加・isPro prop 追加・「もっと見る」リンクを PRO→/analyses/[id]・作成者(image以外)→編集ページ・無料→PROバッジ に3分岐
+- `app/topics/[id]/_components/AnalysisModal.tsx` — 「近日公開予定」→実際のFormDataアップロード処理に差し替え（エラー表示・disabled制御）
+- `app/topics/[id]/page.tsx` — AnalysisCard に `isPro={!!user?.is_pro}` を渡すよう修正
+- `app/analyses/[id]/page.tsx`（新規）— tree/matrix/swot/image 全4タイプ完全表示・← 戻るボタン・連携先トピックリンク・補足表示
+
+---
+
+## Vercel環境変数（設定済み）
+
+- `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp`（ブラウザ向け・CSR用）
+- `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし・SSR用・All Environments・2026-03-22設定済み）
+
+---
+
+## Phase 2 完了時点の実装済みページ一覧（全18ページ）
+
+| パス | 説明 |
+|---|---|
+| `/` | トピック一覧（SSR化はPhase 3） |
+| `/login` | ログイン（Blade忠実再現） |
+| `/register` | ユーザー登録 |
+| `/categories` | カテゴリ（admin: CRUD / 一般: 一覧） |
+| `/category-list` | カテゴリ公開グリッド一覧 |
+| `/topics/create` | トピック作成（PRO限定） |
+| `/topics/[id]` | トピック詳細（3タブ・投稿・コメント・いいね・ブックマーク） |
+| `/topics/[id]/edit` | トピック編集（PRO作成者限定） |
+| `/analyses/[id]` | 分析スタンドアロン閲覧（4タイプ対応） |
+| `/notifications` | 通知一覧 |
+| `/likes` | 参考になった一覧 |
+| `/dashboard` | ダッシュボード（5タブ） |
+| `/profile` | プロフィール編集 |
+| `/history` | 閲覧履歴 |
+| `/tools/tree` | ロジックツリー作成（PRO限定） |
+| `/tools/matrix` | 総合評価表作成（PRO限定） |
+| `/tools/swot` | SWOT/PEST分析作成（PRO限定） |

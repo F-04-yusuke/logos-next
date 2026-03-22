@@ -10,7 +10,8 @@
 
 | 変数名 | 値 | 備考 |
 |---|---|---|
-| NEXT_PUBLIC_API_BASE_URL | https://gs-f04.sakura.ne.jp | 本番API URL |
+| NEXT_PUBLIC_API_BASE_URL | https://gs-f04.sakura.ne.jp | 本番API URL（CSR用・ブラウザから読める） |
+| API_BASE_URL | https://gs-f04.sakura.ne.jp | SSR用・NEXT_PUBLIC_なし・All Environments（2026-03-22設定済み） |
 
 ## ローカル環境変数（.env.local）
 ```
@@ -45,10 +46,11 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost
 - `API_BASE_URL` → `NEXT_PUBLIC_API_BASE_URL` に変更（ブラウザから読める変数名に統一）
 - **新ページを作る際は `"use client"` でCSR実装を基本とする（フェーズ3まで）**
 
-### 将来の対応（フェーズ3・SEO対策時）
-- SSRに戻すことが望ましい（SEO・初期表示速度の観点）
-- Vercelとさくら間のネットワーク設定（IPホワイトリスト等）を解決する必要がある
-- または Next.js の Route Handler（app/api/）経由でプロキシする方式も検討
+### 解決済み（Phase 3 F-1・2026-03-22）
+- Next.js Route Handler（`app/api/`）をプロキシとして作成し、SSRに復帰
+- Vercel サーバーがさくら API を叩き、ブラウザには Vercel が返す構成（Vercel内部完結）
+- `/` と `/topics/[id]` が SSR Server Component に移行済み
+- **残タスク**: `/analyses/[id]` のSSR化 — `auth:sanctum` 必須のためCookie認証導入まで保留
 
 ### 教訓
 - Vercelのビルドログはエラーなしでもランタイムエラーになりうる
