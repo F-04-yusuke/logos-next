@@ -1,18 +1,14 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
+import { use } from "react";
 import Link from "next/link";
-import { useAuth } from "@/context/AuthContext";
-import { useSidebar } from "@/context/SidebarContext";
-import { getAuthHeaders } from "@/lib/auth";
-import type { TopicDetail } from "./_types";
-import { API_BASE, formatDateTime } from "./_helpers";
+import { formatDateTime } from "./_helpers";
 import { PostCard } from "./_components/PostCard";
 import { CommentCard } from "./_components/CommentCard";
 import { PostModal } from "./_components/PostModal";
 import { AnalysisCard } from "./_components/AnalysisCard";
 import { AnalysisModal } from "./_components/AnalysisModal";
+import { useTopicPage } from "./hooks/useTopicPage";
 
 export default function TopicPage({
   params,
@@ -20,422 +16,57 @@ export default function TopicPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { user } = useAuth();
-  const { triggerBookmarkRefresh } = useSidebar();
-  const router = useRouter();
-
-  const [topic, setTopic] = useState<TopicDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  const [activeTab, setActiveTab] = useState<"info" | "comments" | "analysis">(
-    "info"
-  );
-  const [timelineExpanded, setTimelineExpanded] = useState(false);
-  const [showPostModal, setShowPostModal] = useState(false);
-  const [showAnalysisModal, setShowAnalysisModal] = useState(false);
-
-  const [postFilter, setPostFilter] = useState("");
-  const [postSort, setPostSort] = useState<"popular" | "newest" | "oldest">(
-    "popular"
-  );
-  const [commentSort, setCommentSort] = useState<
-    "popular" | "newest" | "oldest"
-  >("popular");
-
-  const [commentBody, setCommentBody] = useState("");
-  const [postUrl, setPostUrl] = useState("");
-  const [postCategory, setPostCategory] = useState("");
-  const [postComment, setPostComment] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [timelineLoading, setTimelineLoading] = useState(false);
-
-  const fetchTopic = () => {
-    fetch(`${API_BASE}/api/topics/${id}`, { headers: getAuthHeaders() })
-      .then((r) => {
-        if (!r.ok) throw new Error();
-        return r.json();
-      })
-      .then((data) => {
-        setTopic(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(true);
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    fetchTopic();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
-  // Tab persistence via sessionStorage
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const saved = sessionStorage.getItem(`activeTab_${id}`);
-    if (saved === "info" || saved === "comments" || saved === "analysis") {
-      setActiveTab(saved);
-    }
-  }, [id]);
-
-  const handleTabChange = (tab: "info" | "comments" | "analysis") => {
-    setActiveTab(tab);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(`activeTab_${id}`, tab);
-    }
-  };
-
-  const handlePostSubmit = async (isDraft: boolean) => {
-    if (!postUrl || !postCategory) return;
-    setSubmitting(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/topics/${id}/posts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...getAuthHeaders(),
-        },
-        body: JSON.stringify({
-          url: postUrl,
-          category: postCategory,
-          comment: postComment || undefined,
-          is_published: !isDraft,
-        }),
-      });
-      if (!res.ok) throw new Error();
-      if (isDraft) {
-        // 下書き保存: ダッシュボードの下書きタブへリダイレクト（トピック詳細には表示しない）
-        setShowPostModal(false);
-        setPostUrl("");
-        setPostCategory("");
-        setPostComment("");
-        router.push("/dashboard?tab=drafts");
-        return;
-      }
-      const newPost = await res.json();
-      // 公開投稿のみトピック詳細に追加表示
-      setTopic((prev) =>
-        prev ? { ...prev, posts: [newPost, ...prev.posts] } : prev
-      );
-      setShowPostModal(false);
-      setPostUrl("");
-      setPostCategory("");
-      setPostComment("");
-    } catch {
-      alert("投稿に失敗しました");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleCommentSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!commentBody.trim()) return;
-    setSubmitting(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/topics/${id}/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...getAuthHeaders(),
-        },
-        body: JSON.stringify({ body: commentBody }),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        alert(data.message ?? "コメント投稿に失敗しました");
-        return;
-      }
-      const newComment = await res.json();
-      setTopic((prev) =>
-        prev
-          ? {
-              ...prev,
-              comments: [...prev.comments, newComment],
-              user_has_commented: true,
-            }
-          : prev
-      );
-      setCommentBody("");
-    } catch {
-      alert("コメント投稿に失敗しました");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handlePostLike = async (postId: number) => {
-    if (!user) {
-      alert("いいねするにはログインが必要です");
-      return;
-    }
-    const res = await fetch(`${API_BASE}/api/posts/${postId}/like`, {
-      method: "POST",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setTopic((prev) =>
-        prev
-          ? {
-              ...prev,
-              posts: prev.posts.map((p) =>
-                p.id === postId
-                  ? { ...p, likes_count: data.likes_count, is_liked_by_me: data.liked }
-                  : p
-              ),
-            }
-          : prev
-      );
-    }
-  };
-
-  const handleCommentLike = async (commentId: number) => {
-    if (!user) {
-      alert("いいねするにはログインが必要です");
-      return;
-    }
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}/like`, {
-      method: "POST",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setTopic((prev) =>
-        prev
-          ? {
-              ...prev,
-              comments: prev.comments.map((c) =>
-                c.id === commentId
-                  ? { ...c, likes_count: data.likes_count, is_liked_by_me: data.liked }
-                  : c
-              ),
-            }
-          : prev
-      );
-    }
-  };
-
-  const handlePostDelete = async (postId: number) => {
-    await fetch(`${API_BASE}/api/posts/${postId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    setTopic((prev) =>
-      prev ? { ...prev, posts: prev.posts.filter((p) => p.id !== postId) } : prev
-    );
-  };
-
-  const handlePostSupplement = async (postId: number, supplement: string) => {
-    const res = await fetch(`${API_BASE}/api/posts/${postId}/supplement`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-      body: JSON.stringify({ supplement }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      alert(data.message ?? "補足の投稿に失敗しました");
-      return;
-    }
-    const data = await res.json();
-    setTopic((prev) =>
-      prev
-        ? { ...prev, posts: prev.posts.map((p) => p.id === postId ? { ...p, supplement: data.supplement } : p) }
-        : prev
-    );
-  };
-
-  const handleAnalysisSupplement = async (analysisId: number, supplement: string) => {
-    const res = await fetch(`${API_BASE}/api/analyses/${analysisId}/supplement`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-      body: JSON.stringify({ supplement }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      alert(data.message ?? "補足の投稿に失敗しました");
-      return;
-    }
-    const data = await res.json();
-    setTopic((prev) =>
-      prev
-        ? { ...prev, analyses: prev.analyses?.map((a) => a.id === analysisId ? { ...a, supplement: data.supplement } : a) }
-        : prev
-    );
-  };
-
-  const handleReplySubmit = async (commentId: number, body: string) => {
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}/reply`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-      body: JSON.stringify({ body }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      alert(data.message ?? "返信の投稿に失敗しました");
-      return;
-    }
-    const newReply = await res.json();
-    setTopic((prev) =>
-      prev
-        ? {
-            ...prev,
-            comments: prev.comments.map((c) =>
-              c.id === commentId
-                ? { ...c, replies: [...c.replies, newReply] }
-                : c
-            ),
-          }
-        : prev
-    );
-  };
-
-  const handleDeleteComment = async (commentId: number) => {
-    await fetch(`${API_BASE}/api/comments/${commentId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    setTopic((prev) =>
-      prev
-        ? { ...prev, comments: prev.comments.filter((c) => c.id !== commentId), user_has_commented: false }
-        : prev
-    );
-  };
-
-  const handleDeleteReply = async (commentId: number, replyId: number) => {
-    await fetch(`${API_BASE}/api/comments/${replyId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    setTopic((prev) =>
-      prev
-        ? {
-            ...prev,
-            comments: prev.comments.map((c) =>
-              c.id === commentId
-                ? { ...c, replies: c.replies.filter((r) => r.id !== replyId) }
-                : c
-            ),
-          }
-        : prev
-    );
-  };
-
-  const handleReplyLike = async (commentId: number, replyId: number) => {
-    if (!user) {
-      alert("いいねするにはログインが必要です");
-      return;
-    }
-    const res = await fetch(`${API_BASE}/api/comments/${replyId}/like`, {
-      method: "POST",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setTopic((prev) =>
-        prev
-          ? {
-              ...prev,
-              comments: prev.comments.map((c) =>
-                c.id === commentId
-                  ? {
-                      ...c,
-                      replies: c.replies.map((r) =>
-                        r.id === replyId
-                          ? { ...r, likes_count: data.likes_count, is_liked_by_me: data.liked }
-                          : r
-                      ),
-                    }
-                  : c
-              ),
-            }
-          : prev
-      );
-    }
-  };
-
-  const handleTimelineGenerate = async () => {
-    setTimelineLoading(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/topics/${id}/timeline/generate`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.message ?? "時系列の生成に失敗しました");
-        return;
-      }
-      setTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
-    } catch {
-      alert("時系列の生成に失敗しました");
-    } finally {
-      setTimelineLoading(false);
-    }
-  };
-
-  const handleTimelineUpdate = async () => {
-    setTimelineLoading(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/topics/${id}/timeline/update`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.message ?? "AI更新に失敗しました");
-        return;
-      }
-      setTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
-    } catch {
-      alert("AI更新に失敗しました");
-    } finally {
-      setTimelineLoading(false);
-    }
-  };
-
-  const handleBookmark = async () => {
-    if (!user) {
-      alert("ブックマークするにはログインが必要です");
-      return;
-    }
-    const res = await fetch(`${API_BASE}/api/topics/${id}/bookmark`, {
-      method: "POST",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setTopic((prev) =>
-        prev ? { ...prev, is_bookmarked: data.bookmarked } : prev
-      );
-      triggerBookmarkRefresh();
-    }
-  };
-
-  const filteredPosts = (topic?.posts ?? [])
-    .filter((p) => !postFilter || p.category === postFilter)
-    .slice()
-    .sort((a, b) => {
-      if (postSort === "popular") return b.likes_count - a.likes_count;
-      if (postSort === "newest")
-        return (
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
-      return (
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-      );
-    });
-
-  const sortedComments = (topic?.comments ?? []).slice().sort((a, b) => {
-    if (commentSort === "popular") return b.likes_count - a.likes_count;
-    if (commentSort === "newest")
-      return (
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-  });
+  const {
+    topic,
+    loading,
+    error,
+    user,
+    isOwner,
+    timeline,
+    filteredPosts,
+    sortedComments,
+    activeTab,
+    timelineExpanded,
+    setTimelineExpanded,
+    showPostModal,
+    setShowPostModal,
+    showAnalysisModal,
+    setShowAnalysisModal,
+    postFilter,
+    setPostFilter,
+    postSort,
+    setPostSort,
+    commentSort,
+    setCommentSort,
+    commentBody,
+    setCommentBody,
+    postUrl,
+    setPostUrl,
+    postCategory,
+    setPostCategory,
+    postComment,
+    setPostComment,
+    submitting,
+    timelineLoading,
+    fetchTopic,
+    handleTabChange,
+    handlePostSubmit,
+    handleCommentSubmit,
+    handlePostLike,
+    handleCommentLike,
+    handlePostDelete,
+    handlePostSupplement,
+    handleAnalysisSupplement,
+    handleAnalysisDelete,
+    handleAnalysisLike,
+    handleReplySubmit,
+    handleDeleteComment,
+    handleDeleteReply,
+    handleReplyLike,
+    handleTimelineGenerate,
+    handleTimelineUpdate,
+    handleBookmark,
+  } = useTopicPage(id);
 
   if (loading) {
     return (
@@ -452,9 +83,6 @@ export default function TopicPage({
       </main>
     );
   }
-
-  const isOwner = !!user && user.id === topic.user.id;
-  const timeline = topic.timeline ?? [];
 
   return (
     <div className="w-full">
@@ -704,9 +332,7 @@ export default function TopicPage({
                     <select
                       value={postSort}
                       onChange={(e) =>
-                        setPostSort(
-                          e.target.value as "popular" | "newest" | "oldest"
-                        )
+                        setPostSort(e.target.value as "popular" | "newest" | "oldest")
                       }
                       className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1 hidden sm:block"
                     >
@@ -717,10 +343,7 @@ export default function TopicPage({
                   </div>
                   <button
                     onClick={() => {
-                      if (!user) {
-                        alert("投稿するにはログインが必要です");
-                        return;
-                      }
+                      if (!user) { alert("投稿するにはログインが必要です"); return; }
                       setShowPostModal(true);
                     }}
                     className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0"
@@ -779,9 +402,7 @@ export default function TopicPage({
                 <select
                   value={commentSort}
                   onChange={(e) =>
-                    setCommentSort(
-                      e.target.value as "popular" | "newest" | "oldest"
-                    )
+                    setCommentSort(e.target.value as "popular" | "newest" | "oldest")
                   }
                   className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1"
                 >
@@ -827,9 +448,7 @@ export default function TopicPage({
                       comment={comment}
                       currentUserId={user?.id}
                       onLike={() => handleCommentLike(comment.id)}
-                      onReplyLike={(replyId) =>
-                        handleReplyLike(comment.id, replyId)
-                      }
+                      onReplyLike={(replyId) => handleReplyLike(comment.id, replyId)}
                       onReply={handleReplySubmit}
                       onDeleteComment={handleDeleteComment}
                       onDeleteReply={handleDeleteReply}
@@ -849,10 +468,7 @@ export default function TopicPage({
                 </h3>
                 <button
                   onClick={() => {
-                    if (!user) {
-                      alert("投稿するにはログインが必要です");
-                      return;
-                    }
+                    if (!user) { alert("投稿するにはログインが必要です"); return; }
                     setShowAnalysisModal(true);
                   }}
                   className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0"
@@ -912,30 +528,8 @@ export default function TopicPage({
                       currentUserId={user?.id}
                       isPro={!!user?.is_pro}
                       onSupplement={handleAnalysisSupplement}
-                      onDelete={async (analysisId) => {
-                        if (!confirm("この分析・図解を本当に削除しますか？")) return;
-                        await fetch(`${API_BASE}/api/analyses/${analysisId}`, {
-                          method: "DELETE",
-                          headers: getAuthHeaders(),
-                        });
-                        fetchTopic();
-                      }}
-                      onLike={async (analysisId) => {
-                        if (!user) { alert("いいねするにはログインが必要です"); return; }
-                        const res = await fetch(`${API_BASE}/api/analyses/${analysisId}/like`, {
-                          method: "POST",
-                          headers: getAuthHeaders(),
-                        });
-                        if (res.ok) {
-                          const data = await res.json();
-                          setTopic((prev) => prev ? {
-                            ...prev,
-                            analyses: prev.analyses?.map((a) =>
-                              a.id === analysisId ? { ...a, likes_count: data.likes_count, is_liked_by_me: data.liked } : a
-                            ),
-                          } : prev);
-                        }
-                      }}
+                      onDelete={handleAnalysisDelete}
+                      onLike={handleAnalysisLike}
                     />
                   ))}
                 </div>
