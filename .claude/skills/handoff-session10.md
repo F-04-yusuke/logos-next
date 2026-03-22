@@ -30,7 +30,7 @@
 
 | リポジトリ | ブランチ | 最新タグ | 状態 |
 |---|---|---|---|
-| ~/logos-next | main | v3.7-f6-header-sidebar-split | クリーン |
+| ~/logos-next | main | v3.8-session9-docs-complete | クリーン |
 | ~/logos-laravel | main | v3.5-b6-like-relations | クリーン |
 
 ---
@@ -57,7 +57,12 @@
 
 ## Phase 3 残タスク
 
-`phase3-improvements.md` の全項目が完了済みです。新規タスクが発生した場合は同ファイルに追記してください。
+`phase3-improvements.md` の全項目が完了済みです（v3.8-session9-docs-complete）。
+新規タスクが発生した場合は同ファイルに追記してください。
+
+次のセッションでやること候補（未定・要検討）:
+- CLAUDE.md と skills ファイルの総点検・整理（両リポジトリ）
+- Phase 4 計画策定（新機能追加・ユーザー課金・メール認証など）
 
 ---
 
