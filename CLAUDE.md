@@ -202,9 +202,9 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - `app/topics/[id]/hooks/useTopicPage.ts` — state17個・handler16個・computed値を集約
 - `app/topics/[id]/page.tsx` — 1004行→598行（ロジックゼロ）
 
-## Vercel手動設定（未完了・ユーザーが行う）
-- 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定
-- 環境変数 `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし）をVercelダッシュボードで**追加**（SSR用・Phase 3 F-1で必要）
+## Vercel環境変数設定（設定済み ✅）
+- `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp`（ブラウザ向け・CSR用）
+- `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし・SSR用・All Environments・2026-03-22設定済み）
 
 ---
 

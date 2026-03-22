@@ -34,8 +34,8 @@
 
 **F-1 残（将来タスク）:** `analyses/[id]` SSR化 — Sakura API が `auth:sanctum` 必須のためSSR不可。Cookie ベース認証導入まで保留。
 
-**Vercel側で必要な追加設定（未完了・ユーザーが行う）:**
-- `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_ なし）をVercelダッシュボードで追加
+**Vercel環境変数（設定済み ✅ 2026-03-22）:**
+- `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_ なし・SSR用・All Environments）
 
 ### F-2: Custom Hook化（完了）
 **検証済み（ビルド・TypeScriptエラーなし）:** 純粋なリファクタリングのためビルド通過=動作保証。
@@ -294,5 +294,6 @@
 
 ---
 
-## Vercel手動設定（未完了・ユーザーが行う）
-- 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定
+## Vercel環境変数（設定済み ✅）
+- `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp`（ブラウザ向け・CSR用）
+- `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし・SSR用・All Environments・2026-03-22設定済み）

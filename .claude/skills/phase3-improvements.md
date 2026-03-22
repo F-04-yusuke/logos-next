@@ -67,7 +67,7 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 - **完了内容**: Route Handler 4本（topics/categories/analyses）+ `/` と `/topics/[id]` の SSR 化
 - **検証済み**: curl で HTML にコンテンツ含まれることを確認
 - **F-1 将来タスク**: `/analyses/[id]` SSR化 — `auth:sanctum` 必須のため Cookie ベース認証導入まで保留
-- **Vercel追加設定**: `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし）をVercel環境変数に追加が必要
+- **Vercel追加設定**: `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし・All Environments）✅ 2026-03-22設定済み
 - **旧状況メモ**: 全17ページが `"use client"` CSR（Vercel↔さくら間ネットワーク疎通問題の暫定対処）
   - deploy-config.md に経緯記録済み（ERROR 3292540420）
 - **問題**: SEO ペナルティ・初期表示遅延・FCP低下
