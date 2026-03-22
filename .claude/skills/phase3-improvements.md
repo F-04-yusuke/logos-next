@@ -63,8 +63,12 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 
 ### 🔴 優先度: 高（Phase 3 の核心）
 
-#### F-1: SSR 復帰（Route Handler プロキシ方式）
-- **現状**: 全17ページが `"use client"` CSR（Vercel↔さくら間ネットワーク疎通問題の暫定対処）
+#### F-1: SSR 復帰（Route Handler プロキシ方式）✅ 完了（2026-03-22）
+- **完了内容**: Route Handler 4本（topics/categories/analyses）+ `/` と `/topics/[id]` の SSR 化
+- **検証済み**: curl で HTML にコンテンツ含まれることを確認
+- **F-1 将来タスク**: `/analyses/[id]` SSR化 — `auth:sanctum` 必須のため Cookie ベース認証導入まで保留
+- **Vercel追加設定**: `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし）をVercel環境変数に追加が必要
+- **旧状況メモ**: 全17ページが `"use client"` CSR（Vercel↔さくら間ネットワーク疎通問題の暫定対処）
   - deploy-config.md に経緯記録済み（ERROR 3292540420）
 - **問題**: SEO ペナルティ・初期表示遅延・FCP低下
 - **解決策**: Next.js Route Handler（`app/api/`）をプロキシとして作成
@@ -83,8 +87,10 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 - **移行方針**: Route Handler 作成後、ページを `"use client"` → Server Component に段階移行
 - **SSR優先ページ**: トップ（`/`）・トピック詳細（`/topics/[id]`）・分析閲覧（`/analyses/[id]`）
 
-#### F-2: Custom Hook によるロジック分離（page.tsx の肥大化解消）
-- **現状**: `topics/[id]/page.tsx` が1004行・useState 17個が1ファイルに集中
+#### F-2: Custom Hook によるロジック分離（page.tsx の肥大化解消）✅ 完了（2026-03-22）
+- **完了内容**: `useTopicPage.ts` に全state/handler/computed値を抽出。page.tsx: 1004行→598行
+- **検証済み**: ビルド通過・TypeScriptエラーなし（純粋リファクタリングのためビルド=動作保証）
+- **旧状況メモ**: `topics/[id]/page.tsx` が1004行・useState 17個が1ファイルに集中
 - **問題**: 状態とハンドラーが page.tsx に全集中 → 子コンポーネントは再利用不可
 - **理想**: Custom Hook にロジックを抽出
   ```typescript

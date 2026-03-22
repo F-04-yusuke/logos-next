@@ -189,8 +189,22 @@ cd ~/logos-next && npm run dev           # Next.js起動
 | パスワード確認（`auth/confirm-password.blade.php`） | Sanctum APIトークン認証フローでは現在使用しない | 高セキュリティ操作（アカウント削除等）の UX 改善時に検討 |
 | 分析タイトル編集（`analyses/edit.blade.php`） | Next.js では `/tools/[type]?edit=[id]` でフル編集・上書き保存が可能（Blade より高機能なため対応不要） | 現状の Next.js 実装で十分 |
 
+## Phase 3 実装済み（2026-03-22）
+
+### F-1: SSR復帰・Route Handlerプロキシ ✅
+- `lib/proxy-fetch.ts` — サーバー専用プロキシユーティリティ（API_BASE_URL・NEXT_PUBLIC_なし）
+- `app/api/topics/` `app/api/categories/` `app/api/analyses/` — Route Handler 4本作成
+- `app/page.tsx` — Server Component 化（SSR）+ `app/_components/HomeClient.tsx` でCSR部分分離
+- `app/topics/[id]/page.tsx` — Server Component 化（SSR）+ `TopicPageClient.tsx` でCSR部分分離
+- **F-1 将来タスク**: `/analyses/[id]` SSR化（auth:sanctum必須・Cookie認証導入まで保留）
+
+### F-2: Custom Hook化 ✅
+- `app/topics/[id]/hooks/useTopicPage.ts` — state17個・handler16個・computed値を集約
+- `app/topics/[id]/page.tsx` — 1004行→598行（ロジックゼロ）
+
 ## Vercel手動設定（未完了・ユーザーが行う）
 - 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定
+- 環境変数 `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし）をVercelダッシュボードで**追加**（SSR用・Phase 3 F-1で必要）
 
 ---
 

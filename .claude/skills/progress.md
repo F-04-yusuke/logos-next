@@ -17,6 +17,42 @@
 
 ---
 
+## Phase 3 実装済みステップ（2026-03-22）
+
+### F-1: SSR復帰・Route Handlerプロキシ（完了）
+**検証済み（curl）:** トップページ・topics/[id] ともにSSR HTML にコンテンツ含まれることを確認。
+
+- `lib/proxy-fetch.ts` — さくらAPI プロキシユーティリティ（サーバー専用、NEXT_PUBLIC_なし）
+- `app/api/topics/route.ts` — トピック一覧プロキシ（クエリ文字列転送）
+- `app/api/topics/[id]/route.ts` — トピック詳細プロキシ（Authorizationヘッダー転送）
+- `app/api/categories/route.ts` — カテゴリ一覧プロキシ
+- `app/api/analyses/[id]/route.ts` — 分析詳細プロキシ（Authorizationヘッダー転送）
+- `app/page.tsx` — Server Component 化（SSR）、HomeClient に初期データを渡す
+- `app/_components/HomeClient.tsx` — CSR部分を分離（ソート・ページネーション・タブ）
+- `app/topics/[id]/page.tsx` — Server Component 化（SSR）、TopicPageClient に初期データを渡す
+- `app/topics/[id]/_components/TopicPageClient.tsx` — CSR部分を担当（全JSX・useTopicPage呼び出し）
+
+**F-1 残（将来タスク）:** `analyses/[id]` SSR化 — Sakura API が `auth:sanctum` 必須のためSSR不可。Cookie ベース認証導入まで保留。
+
+**Vercel側で必要な追加設定（未完了・ユーザーが行う）:**
+- `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_ なし）をVercelダッシュボードで追加
+
+### F-2: Custom Hook化（完了）
+**検証済み（ビルド・TypeScriptエラーなし）:** 純粋なリファクタリングのためビルド通過=動作保証。
+
+- `app/topics/[id]/hooks/useTopicPage.ts` — 全state(17個)・handler(16個)・computed値を集約
+- `app/topics/[id]/page.tsx` — ロジックゼロに（598行に削減）
+
+**次フェーズ以降の推奨作業順（Phase 3 残り）:**
+1. B-2: `Topic::analyses()` リレーション追加（logos-laravel側・1ファイル・低コスト）
+2. F-3: boolean型変換レイヤー（lib/transforms.ts 新規・低コスト）
+3. F-4: 分析型 Discriminated Union（型安全化・低コスト）
+4. B-1: routes/api.php → Controller分割（高コスト・複数セッション分割推奨）
+5. B-3/B-4: FormRequest・OgpService（B-1完了後）
+6. F-5: SWR / React Query（パッケージ追加あり）
+
+---
+
 ## Phase 3 開始（2026-03-22）
 
 ### リポジトリ一本化・制約撤廃

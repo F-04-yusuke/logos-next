@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-22（Step14 analyses/[id] 追加）
+最終更新: 2026-03-22（Phase 3 F-1/F-2 完了）
 
 ```
 logos-next/
@@ -8,10 +8,22 @@ logos-next/
 │   ├── favicon.ico
 │   ├── globals.css                      # グローバルCSS（tree-line等カスタムクラス含む）
 │   ├── layout.tsx                       # ルートレイアウト（AuthProvider・SidebarProvider + LayoutShell）
-│   ├── page.tsx                         # / トピック一覧（CSR・2カラム・カテゴリタブ・ソート・ページネーション）
+│   ├── page.tsx                         # / トピック一覧【SSR Server Component】初期データfetch → HomeClient に渡す
+│   ├── _components/
+│   │   └── HomeClient.tsx               # / トピック一覧CSR部分（ソート・ページネーション・タブ・useAuth）
+│   ├── api/                             # Route Handler プロキシ層（F-1 Phase3）
+│   │   ├── topics/
+│   │   │   ├── route.ts                 # GET /api/topics（クエリ文字列転送）
+│   │   │   └── [id]/
+│   │   │       └── route.ts             # GET /api/topics/[id]（Authorizationヘッダー転送）
+│   │   ├── categories/
+│   │   │   └── route.ts                 # GET /api/categories
+│   │   └── analyses/
+│   │       └── [id]/
+│   │           └── route.ts             # GET /api/analyses/[id]（Authorizationヘッダー転送）
 │   ├── analyses/
 │   │   └── [id]/
-│   │       └── page.tsx                 # /analyses/[id] 分析スタンドアロン閲覧（tree/matrix/swot/image 全4タイプ・補足表示・連携トピックリンク）
+│   │       └── page.tsx                 # /analyses/[id] 分析スタンドアロン閲覧（CSR・auth必須のためSSR未対応）
 │   ├── login/
 │   │   └── page.tsx                     # /login ログイン画面（Blade忠実再現・eKYC/SNSボタンUI）
 │   ├── register/
@@ -39,7 +51,10 @@ logos-next/
 │   │       │   └── page.tsx             # /topics/[id]/edit トピック編集（PRO作成者限定・timeline is_ai制御）
 │   │       ├── _types.ts                # 型定義（Post/Comment/TopicAnalysis/TopicDetail等）
 │   │       ├── _helpers.ts             # API_BASE / timeAgo / formatDateTime
+│   │       ├── hooks/
+│   │       │   └── useTopicPage.ts      # 全state・handler・computed値を集約（F-2 Phase3）
 │   │       └── _components/
+│   │           ├── TopicPageClient.tsx  # トピック詳細CSR部分（"use client"・useTopicPage呼び出し・全JSX）
 │   │           ├── UserAvatar.tsx
 │   │           ├── LikeButton.tsx
 │   │           ├── PostCard.tsx
@@ -68,6 +83,7 @@ logos-next/
 │   └── SidebarContext.tsx               # サイドバー開閉・bookmarkRefreshKey・openProModal を管理
 ├── lib/
 │   ├── auth.ts                          # トークン管理（getToken/setToken/removeToken/getAuthHeaders）
+│   ├── proxy-fetch.ts                   # Route Handler用さくらAPIプロキシユーティリティ（サーバー専用・F-1 Phase3）
 │   └── utils.ts                         # shadcn/ui utility
 ├── public/                              # SVG等の静的ファイル
 ├── .env.example
