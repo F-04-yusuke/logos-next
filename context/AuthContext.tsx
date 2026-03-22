@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, useContext, useCallback, ReactNode } from "react";
+import useSWR from "swr";
 import { getToken, removeToken, getAuthHeaders } from "@/lib/auth";
 import { transformUser } from "@/lib/transforms";
 
@@ -34,46 +29,41 @@ const AuthContext = createContext<AuthContextType>({
   refetch: async () => {},
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+
+async function fetchUser(): Promise<AuthUser | null> {
+  const token = getToken();
+  if (!token) return null;
+  try {
+    const res = await fetch(`${baseUrl}/api/user/me`, {
+      headers: getAuthHeaders(),
+    });
+    if (res.ok) return transformUser(await res.json()) as AuthUser;
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: user, isLoading, mutate } = useSWR("auth-user", fetchUser, {
+    revalidateOnFocus: true,   // タブ復帰時に通知数を自動更新
+    shouldRetryOnError: false, // 401/403 はリトライしない
+  });
 
-  async function fetchUser() {
-    const token = getToken();
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
-    }
-    try {
-      const baseUrl =
-        process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
-      const res = await fetch(`${baseUrl}/api/user/me`, {
-        headers: getAuthHeaders(),
-      });
-      if (res.ok) {
-        setUser(transformUser(await res.json()) as AuthUser);
-      } else {
-        setUser(null);
-      }
-    } catch {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  function logout() {
+  const logout = useCallback(() => {
     removeToken();
-    setUser(null);
-  }
+    mutate(null, { revalidate: false }); // キャッシュを即クリア・再フェッチなし
+  }, [mutate]);
+
+  const refetch = useCallback(async () => {
+    await mutate();
+  }, [mutate]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout, refetch: fetchUser }}>
+    <AuthContext.Provider
+      value={{ user: user ?? null, loading: isLoading, logout, refetch }}
+    >
       {children}
     </AuthContext.Provider>
   );
