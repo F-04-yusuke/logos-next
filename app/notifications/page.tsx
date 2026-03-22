@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import useSWR from "swr";
 import { useAuth } from "@/context/AuthContext";
 import { getAuthHeaders } from "@/lib/auth";
 
@@ -17,6 +18,13 @@ type NotificationItem = {
 };
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+
+type NotificationsResponse = {
+  data: NotificationItem[];
+  current_page: number;
+  last_page: number;
+  has_unread: boolean;
+};
 
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -76,39 +84,29 @@ export default function NotificationsPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
 
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [hasUnread, setHasUnread] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
-  const [fetching, setFetching] = useState(true);
   const [readingAll, setReadingAll] = useState(false);
 
-  async function fetchNotifications(page = 1) {
-    setFetching(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/notifications?page=${page}`, {
-        headers: getAuthHeaders(),
-      });
-      if (!res.ok) return;
-      const data = await res.json();
-      setNotifications(data.data ?? []);
-      setCurrentPage(data.current_page ?? 1);
-      setLastPage(data.last_page ?? 1);
-      setHasUnread(data.has_unread ?? false);
-    } finally {
-      setFetching(false);
-    }
-  }
+  const { data: notifData, isLoading: fetching, mutate } = useSWR(
+    user ? `${API_BASE}/api/notifications?page=${currentPage}` : null,
+    async (url) => {
+      const res = await fetch(url, { headers: getAuthHeaders() });
+      if (!res.ok) throw new Error();
+      return res.json() as Promise<NotificationsResponse>;
+    },
+    { revalidateOnFocus: true, shouldRetryOnError: false }
+  );
 
+  const notifications = notifData?.data ?? [];
+  const lastPage = notifData?.last_page ?? 1;
+  const hasUnread = notifData?.has_unread ?? false;
+
+  // 未ログインならリダイレクト
   useEffect(() => {
     if (!authLoading && !user) {
       router.replace("/login");
-      return;
     }
-    if (!authLoading && user) {
-      fetchNotifications(1);
-    }
-  }, [authLoading, user]);
+  }, [authLoading, user, router]);
 
   async function handleReadAll() {
     setReadingAll(true);
@@ -117,8 +115,13 @@ export default function NotificationsPage() {
         method: "PATCH",
         headers: getAuthHeaders(),
       });
-      setNotifications((prev) => prev.map((n) => ({ ...n, is_unread: false })));
-      setHasUnread(false);
+      mutate(
+        (prev) =>
+          prev
+            ? { ...prev, data: prev.data.map((n) => ({ ...n, is_unread: false })), has_unread: false }
+            : prev,
+        { revalidate: false }
+      );
     } finally {
       setReadingAll(false);
     }
@@ -131,15 +134,16 @@ export default function NotificationsPage() {
         method: "PATCH",
         headers: getAuthHeaders(),
       });
-      setNotifications((prev) =>
-        prev.map((n) =>
-          n.id === notification.id ? { ...n, is_unread: false } : n
-        )
+      mutate(
+        (prev) => {
+          if (!prev) return prev;
+          const updatedData = prev.data.map((n) =>
+            n.id === notification.id ? { ...n, is_unread: false } : n
+          );
+          return { ...prev, data: updatedData, has_unread: updatedData.some((n) => n.is_unread) };
+        },
+        { revalidate: false }
       );
-      const stillUnread = notifications.some(
-        (n) => n.id !== notification.id && n.is_unread
-      );
-      setHasUnread(stillUnread);
     }
     // 関連トピックへ遷移
     if (notification.topic_id) {
@@ -147,7 +151,7 @@ export default function NotificationsPage() {
     }
   }
 
-  if (authLoading || (fetching && notifications.length === 0)) {
+  if (authLoading || fetching) {
     return (
       <div className="flex justify-center items-center py-24">
         <p className="text-gray-400 text-sm">読み込み中...</p>
@@ -265,7 +269,7 @@ export default function NotificationsPage() {
         {lastPage > 1 && (
           <div className="mt-6 flex justify-center gap-2">
             <button
-              onClick={() => fetchNotifications(currentPage - 1)}
+              onClick={() => setCurrentPage((p) => p - 1)}
               disabled={currentPage <= 1 || fetching}
               className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 transition-colors"
             >
@@ -275,7 +279,7 @@ export default function NotificationsPage() {
               {currentPage} / {lastPage}
             </span>
             <button
-              onClick={() => fetchNotifications(currentPage + 1)}
+              onClick={() => setCurrentPage((p) => p + 1)}
               disabled={currentPage >= lastPage || fetching}
               className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 transition-colors"
             >
