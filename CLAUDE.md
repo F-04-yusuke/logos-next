@@ -214,7 +214,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | パスワード確認（`auth/confirm-password.blade.php`） | Sanctum APIトークン認証フローでは現在使用しない | 高セキュリティ操作（アカウント削除等）の UX 改善時に検討 |
 | 分析タイトル編集（`analyses/edit.blade.php`） | Next.js では `/tools/[type]?edit=[id]` でフル編集・上書き保存が可能（Blade より高機能なため対応不要） | 現状の Next.js 実装で十分 |
 
-## Phase 3 実装済み（2026-03-22）
+## Phase 3 実装済み（2026-03-22〜2026-03-23）
 
 ### F-1: SSR復帰・Route Handlerプロキシ ✅
 - `lib/proxy-fetch.ts` — サーバー専用プロキシユーティリティ（API_BASE_URL・NEXT_PUBLIC_なし）
@@ -226,6 +226,17 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 ### F-2: Custom Hook化 ✅
 - `app/topics/[id]/hooks/useTopicPage.ts` — state17個・handler16個・computed値を集約
 - `app/topics/[id]/page.tsx` — 1004行→598行（ロジックゼロ）
+
+### B-5: ApiResource クラス導入 ✅（2026-03-23）
+- `AppServiceProvider::boot()` に `JsonResource::withoutWrapping()` を追加（Next.js 側変更ゼロ）
+- `app/Http/Resources/Api/AnalysisResource.php` — show エンドポイントの `toArray()` 直返しを Resource に置き換え
+- `app/Http/Resources/Api/CategoryResource.php` — store/update レスポンスを Resource に統一
+- **技術的負債（記録済み）**: TopicApiController::show の Resource 化・paginator/フラットレスポンスの data ラッピング統一 → `phase3-improvements.md` 参照
+- Gitタグ: `v3.4-b5-api-resource`（logos-laravel）
+
+### B-6: Like モデル逆向きリレーション追加 ✅（2026-03-23）
+- `app/Models/Like.php` に `user()` / `post()` の belongsTo を追加
+- Gitタグ: `v3.5-b6-like-relations`（logos-laravel）
 
 ## Vercel環境変数設定（設定済み ✅）
 - `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp`（ブラウザ向け・CSR用）

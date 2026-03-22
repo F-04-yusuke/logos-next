@@ -54,14 +54,35 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 - **検証済み**: route:list確認・tinker直接呼び出し・curl /api/og（有効URL・無効URL両方）
 - **コミット**: ea0b980（logos-laravel push済み）
 
-#### B-5: ApiResource クラスでレスポンス形式を統一
+#### B-5: ApiResource クラスでレスポンス形式を統一 ✅ 完了（2026-03-23）
 - **現状**: `data` キーありなし混在・toArray() 直返し混在
 - **理想**: `app/Http/Resources/` に JsonResource を定義して一貫したレスポンス形式に
+- **実装方針（Session 7 確定）**:
+  - `JsonResource::withoutWrapping()` で data ラッピングなし（Next.js 側の変更ゼロ）
+  - 適用対象: `AnalysisResource`（show/userAnalyses）・`CategoryResource`
+  - **スキップ**: `TopicApiController::show` は `$topic->toArray()` + 認証フィールド手動追加が複雑で、Resource 化すると PostResource/CommentResource/ReplyResource/AnalysisResource の芋づる式作業になるため今回対象外
+
+**【技術的負債①】paginator 系レスポンスの data ラッピング**
+- **現状**: `index` 系エンドポイントは Laravel paginator が自動で `{data:[...], current_page, last_page, ...}` を返す
+- **意図的に維持**: Next.js 側が既にこの形式に対応済みのため変更しない判断をした（Session 7）
+- **将来対応時の注意**: Next.js 全体で `response.data` / `response.current_page` / `response.last_page` へのアクセス箇所を一括修正する必要がある。Phase 2 完了タグ（v2.0-phase2-complete）を比較元にすること
+
+**【技術的負債②】単一リソース系のフラットレスポンス**
+- **現状**: `show` / `store` / `update` 系は `data` キーなし（フラット）で返している
+- **意図的に維持**: Next.js 側が `response.title` 等フラットアクセスに対応済みのため、`data` ラッピングを入れると全フロントが壊れる（Session 7）
+- **将来対応時の注意**: `withoutWrapping()` を外して data ラッピングを入れる場合、Next.js の全フェッチ呼び出しで `response.data.xxx` に変更が必要
+
+**【技術的負債③】TopicApiController::show の Resource 化**
+- **現状の問題**: `$data = $topic->toArray()` でモデル全フィールドを展開し、認証ユーザーのいいね・ブックマーク状態を手動ループで追加している
+- **理想**: `TopicResource`（+ ネストした PostResource/CommentResource/ReplyResource/AnalysisResource）で明示的なフィールド定義に統一
+- **着手条件**: 関連 Resource（Post/Comment/Reply/Analysis）を全て揃えてから一括対応が望ましい
+- **優先度**: 低（現状バグなし・機能に影響しない純粋な技術改善）
 
 ### 🟢 優先度: 低
 
-#### B-6: Like モデルの逆向きリレーション追加
-- `Like.php` に `post()` / `comment()` / `user()` の belongsTo が未定義
+#### B-6: Like モデルの逆向きリレーション追加 ✅ 完了（2026-03-23）
+- `Like.php` に `user()` / `post()` の belongsTo を追加（comment は likes テーブルでなく comment_likes ピボットのため対象外）
+- Gitタグ: `v3.5-b6-like-relations`（logos-laravel）
 
 ---
 

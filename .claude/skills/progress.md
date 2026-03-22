@@ -19,6 +19,8 @@
 | v3.1-b1-controller-split | B-1完了・routes/api.php 1040行→209行・47エンドポイント9コントローラーに分割 | 2026-03-22 |
 | v3.2-b4-ogp-service | B-4完了・OgpService共通化（3箇所の重複ロジックをapp/Services/OgpService.phpに集約） | 2026-03-22 |
 | v3.3-b3-form-requests | B-3完了・FormRequest16ファイル作成・全ApiControllerのvalidate()をFormRequestに移行 | 2026-03-22 |
+| v3.4-b5-api-resource | B-5完了・AnalysisResource/CategoryResource新規作成・withoutWrapping()設定 | 2026-03-23 |
+| v3.5-b6-like-relations | B-6完了・Like::user()/post() belongsTo追加 | 2026-03-23 |
 
 ---
 
@@ -104,8 +106,23 @@
 - 全コントローラーから $request->validate([...]) を削除し $request->validated() に置換
 - Gitタグ: `v3.3-b3-form-requests`（logos-laravel push済み）
 
+### B-5: ApiResource クラス導入（完了）
+**検証済み（curl）:** GET /api/analyses/{id} → フラット Resource 形式・201/200 ステータス正常確認。
+- `app/Http/Resources/Api/AnalysisResource.php` 新規作成（whenLoaded/whenCounted/動的 is_liked_by_me）
+- `app/Http/Resources/Api/CategoryResource.php` 新規作成
+- `AppServiceProvider::boot()` に `JsonResource::withoutWrapping()` 追加
+- `AnalysisApiController::show` を Resource 経由に変更（`toArray()` 直返し廃止）
+- `CategoryApiController::store/update` を Resource 経由に変更
+- Gitタグ: `v3.4-b5-api-resource`（logos-laravel）
+
+### B-6: Like モデル逆向きリレーション追加（完了）
+**検証済み（tinker）:** like->user・like->post どちらも正常取得確認。
+- `Like.php` に `user()` / `post()` の belongsTo を追加
+- Gitタグ: `v3.5-b6-like-relations`（logos-laravel）
+
 **Phase 3 残タスク:**
-- 現時点で主要な残タスクなし。B-5/B-6/F-6/F-7（低優先度）は将来検討。
+- 主要タスク（B-1〜B-6・F-1〜F-5）は全て完了。残りは低優先度 F-6/F-7 のみ（将来フェーズ検討）。
+- 技術的負債3件は `phase3-improvements.md` の B-5 セクションに記録済み。
 
 ---
 
