@@ -910,6 +910,7 @@ export default function TopicPage({
                       key={analysis.id}
                       analysis={analysis}
                       currentUserId={user?.id}
+                      isPro={!!user?.is_pro}
                       onSupplement={handleAnalysisSupplement}
                       onDelete={async (analysisId) => {
                         if (!confirm("この分析・図解を本当に削除しますか？")) return;

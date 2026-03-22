@@ -26,6 +26,12 @@ export function typeBadge(type: TopicAnalysis["type"], data: Record<string, unkn
       </span>
     );
   }
+  if (type === "image")
+    return (
+      <span className="inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-orange-200 text-orange-600 dark:border-orange-800 dark:text-orange-400">
+        オリジナル図解
+      </span>
+    );
   return null;
 }
 
@@ -76,6 +82,21 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
       </div>
     );
   }
+  if (analysis.type === "image") {
+    const imagePath = d.image_path as string | undefined;
+    return imagePath ? (
+      <div>
+        <div className="font-bold text-base text-gray-900 dark:text-gray-100 mb-3">{analysis.title}</div>
+        <div className="w-full flex justify-center bg-white dark:bg-[#1e1f20] rounded p-2">
+          <img
+            src={`${API_BASE}/storage/${imagePath}`}
+            alt={analysis.title}
+            className="max-w-full max-h-[350px] object-contain rounded border border-gray-200 dark:border-gray-700 shadow-sm"
+          />
+        </div>
+      </div>
+    ) : null;
+  }
   if (analysis.type === "swot") {
     const isPest = d.framework === "PEST";
     const b1: string[] = Array.isArray(d.box1) ? d.box1 : [];
@@ -110,12 +131,14 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
 export function AnalysisCard({
   analysis,
   currentUserId,
+  isPro,
   onDelete,
   onLike,
   onSupplement,
 }: {
   analysis: TopicAnalysis;
   currentUserId?: number;
+  isPro?: boolean;
   onDelete: (id: number) => void;
   onLike: (id: number) => void;
   onSupplement?: (analysisId: number, supplement: string) => Promise<void>;
@@ -234,21 +257,28 @@ export function AnalysisCard({
 
       {/* Footer */}
       <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-3">
-        {isOwner ? (
+        {isOwner && analysis.type !== "image" ? (
           <Link
             href={`/tools/${analysis.type}?edit=${analysis.id}`}
             className="text-xs font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center py-1 pr-2"
           >
             もっと見る <span className="ml-1 text-[10px]" aria-hidden="true">▶</span>
           </Link>
-        ) : (
+        ) : !isOwner && !!isPro ? (
+          <Link
+            href={`/analyses/${analysis.id}`}
+            className="text-xs font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center py-1 pr-2"
+          >
+            もっと見る <span className="ml-1 text-[10px]" aria-hidden="true">▶</span>
+          </Link>
+        ) : !isOwner && !isPro ? (
           <span className="text-xs font-bold text-yellow-500 flex items-center gap-1 py-1 pr-2">
             <svg aria-hidden="true" className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
             </svg>
             もっと見る <span className="text-[9px] ml-0.5 bg-yellow-500/20 text-yellow-400 px-1 rounded font-black">PRO</span>
           </span>
-        )}
+        ) : null}
         <div className="flex items-center gap-4">
           {isOwner && (
             <>

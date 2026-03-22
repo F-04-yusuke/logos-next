@@ -32,6 +32,8 @@
 | GET | /api/topics/{id} | トピック詳細 | 不要 |
 | POST | /api/topics | トピック作成（PRO限定・title/content/category_ids/timeline） | 要トークン |
 | PUT | /api/topics/{topic} | トピック編集（作成者限定・title/content/category_ids/timeline・手動編集で is_ai:false） | 要トークン |
+| POST | /api/topics/{topic}/timeline/generate | 時系列をGeminiで自動生成（作成者限定・未生成時のみ） | 要トークン |
+| POST | /api/topics/{topic}/timeline/update | 最新エビデンスからGeminiで時系列を更新（作成者限定） | 要トークン |
 
 ### エビデンス（情報タブ）
 | メソッド | エンドポイント | 説明 | 認証 |
@@ -54,12 +56,14 @@
 | メソッド | エンドポイント | 説明 | 認証 |
 |---|---|---|---|
 | GET | /api/user/analyses | 自分の分析一覧（モーダル用） | 要トークン |
-| POST | /api/analyses | 分析作成（type/title/data） | 要トークン |
+| GET | /api/analyses/{analysis} | 分析詳細（認証済みユーザー全員閲覧可・user/topic/likes_count/is_liked_by_me付き） | 要トークン |
+| POST | /api/analyses | 分析作成（PRO限定・type/title/data） | 要トークン |
 | PUT | /api/analyses/{analysis} | 分析更新 | 要トークン |
 | DELETE | /api/analyses/{analysis} | 分析削除（自分のみ） | 要トークン |
 | POST | /api/analyses/{analysis}/publish | トピックへ公開（topic_id） | 要トークン |
 | POST | /api/analyses/{analysis}/supplement | 分析補足（投稿者本人・1回のみ・supplement） | 要トークン |
 | POST | /api/analyses/{analysis}/like | 分析いいねトグル（liked/likes_count 返却） | 要トークン |
+| POST | /api/topics/{topic}/analyses/image | オリジナル図解アップロード（PRO限定・multipart・title/image・5MB制限・即公開） | 要トークン |
 | POST | /api/tools/ai-assist | Gemini AI連携プロキシ | 要トークン |
 
 ### ブックマーク・その他

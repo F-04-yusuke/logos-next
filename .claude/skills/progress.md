@@ -171,6 +171,23 @@
 - トピック詳細の時系列ヘッダー横にAIボタン追加: 未生成時は「✨ AIで自動生成する」、生成済みは「🔄 最新投稿からAI更新」（オーナーのみ表示）
 - 処理中は「生成中...」「更新中...」でdisabled表示
 
+**Step14: 移行漏れチェック・オリジナル図解・分析閲覧ページ（2026-03-22）:**
+
+*Blade↔Next.js 総点検（移行漏れ2項目を修正）:*
+- 項目5: オリジナル図解（画像アップロード）— Bladeには実装済みだがNext.jsに未実装だったため対応
+- 項目3: `/analyses/[id]` スタンドアロン閲覧ページ — Bladeには実装済みだがNext.jsに未実装だったため対応
+
+*logos API追加（routes/api.php）:*
+- POST /api/topics/{topic}/analyses/image — オリジナル図解アップロード（PRO限定・jpg/png/gif/webp・5MB制限・即公開）
+- GET /api/analyses/{analysis} — 分析詳細をオーナー限定 → 認証済みユーザー全員閲覧可に変更。user/topic/likes_count/is_liked_by_me 付き
+
+*Next.jsフロントエンド:*
+- `app/topics/[id]/_types.ts` — TopicAnalysis.type に `"image"` 追加
+- `app/topics/[id]/_components/AnalysisCard.tsx` — typeBadge にオレンジ「オリジナル図解」バッジ追加・AnalysisPreview に画像表示追加・isPro prop 追加・「もっと見る」リンクを PRO→/analyses/[id]・作成者(image以外)→編集ページ・無料→PROバッジ に3分岐
+- `app/topics/[id]/_components/AnalysisModal.tsx` — 「近日公開予定」→実際のFormDataアップロード処理に差し替え（エラー表示・disabled制御）
+- `app/topics/[id]/page.tsx` — AnalysisCard に `isPro={!!user?.is_pro}` を渡すよう修正
+- `app/analyses/[id]/page.tsx` （新規）— tree/matrix/swot/image 全4タイプ完全表示・← 戻るボタン・連携先トピックリンク・補足表示
+
 **Step13: トピック編集・下書き編集・バグ修正（2026-03-22）:**
 
 *logos API追加（routes/api.php）:*

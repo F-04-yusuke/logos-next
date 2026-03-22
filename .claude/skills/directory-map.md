@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-22（Step10 コンポーネント分割反映）
+最終更新: 2026-03-22（Step14 analyses/[id] 追加）
 
 ```
 logos-next/
@@ -9,6 +9,9 @@ logos-next/
 │   ├── globals.css                      # グローバルCSS（tree-line等カスタムクラス含む）
 │   ├── layout.tsx                       # ルートレイアウト（AuthProvider・SidebarProvider + LayoutShell）
 │   ├── page.tsx                         # / トピック一覧（CSR・2カラム・カテゴリタブ・ソート・ページネーション）
+│   ├── analyses/
+│   │   └── [id]/
+│   │       └── page.tsx                 # /analyses/[id] 分析スタンドアロン閲覧（tree/matrix/swot/image 全4タイプ・補足表示・連携トピックリンク）
 │   ├── login/
 │   │   └── page.tsx                     # /login ログイン画面（Blade忠実再現・eKYC/SNSボタンUI）
 │   ├── register/
@@ -103,6 +106,8 @@ logos-next/
 | `/topics/create` | app/topics/create/page.tsx | ✅ |
 | `/topics/[id]` | app/topics/[id]/page.tsx | ✅ |
 | `/topics/[id]/edit` | app/topics/[id]/edit/page.tsx | ✅ |
+| `/topics/[id]/edit` | app/topics/[id]/edit/page.tsx | ✅ |
+| `/analyses/[id]` | app/analyses/[id]/page.tsx | ✅ |
 | `/tools/tree` | app/tools/tree/page.tsx | ✅ |
 | `/tools/matrix` | app/tools/matrix/page.tsx | ✅ |
 | `/tools/swot` | app/tools/swot/page.tsx | ✅ |

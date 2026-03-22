@@ -22,6 +22,10 @@ export function AnalysisModal({
   const [userAnalyses, setUserAnalyses] = useState<Array<{ id: number; title: string; type: string; is_published: boolean; topic_id: number | null }>>([]);
   const [loadingAnalyses, setLoadingAnalyses] = useState(true);
   const [publishingId, setPublishingId] = useState<number | null>(null);
+  const [imageTitle, setImageTitle] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/user/analyses`, { headers: getAuthHeaders() })
@@ -54,6 +58,33 @@ export function AnalysisModal({
   };
 
   const availableAnalyses = userAnalyses.filter((a) => !alreadyPublishedIds.includes(a.id));
+
+  const handleImageUpload = async () => {
+    if (!imageTitle.trim() || !imageFile) return;
+    setUploading(true);
+    setUploadError(null);
+    try {
+      const formData = new FormData();
+      formData.append("title", imageTitle.trim());
+      formData.append("image", imageFile);
+      const res = await fetch(`${API_BASE}/api/topics/${topicId}/analyses/image`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: formData,
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        setUploadError(err.message ?? "アップロードに失敗しました");
+        return;
+      }
+      onPublish();
+      onClose();
+    } catch {
+      setUploadError("通信エラーが発生しました");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <div
@@ -189,6 +220,8 @@ export function AnalysisModal({
                   <input
                     type="text"
                     required
+                    value={imageTitle}
+                    onChange={(e) => setImageTitle(e.target.value)}
                     className="w-full text-base sm:text-sm rounded border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white py-3 sm:py-2"
                     placeholder="例：〇〇問題のステークホルダーマップ"
                   />
@@ -201,19 +234,24 @@ export function AnalysisModal({
                     type="file"
                     accept="image/*"
                     required
+                    onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
                     className="w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded file:border-0 file:text-sm file:font-bold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 dark:file:bg-[#1e1f20] dark:file:text-blue-400 dark:hover:file:bg-gray-800 cursor-pointer"
                   />
                   <p className="text-[11px] sm:text-xs text-gray-400 mt-2">
                     ※ファイルサイズは最大5MBまで。オリジナルで作成した図解やグラフのみアップロード可能です。
                   </p>
                 </div>
+                {uploadError && (
+                  <p className="text-sm text-red-500 mb-3">{uploadError}</p>
+                )}
                 <div className="flex justify-end pt-3 border-t border-gray-200 dark:border-gray-700">
                   <button
                     type="button"
-                    onClick={() => alert("この機能は近日公開予定です")}
-                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 sm:py-2 px-6 rounded transition-colors"
+                    onClick={handleImageUpload}
+                    disabled={uploading || !imageTitle.trim() || !imageFile}
+                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 sm:py-2 px-6 rounded transition-colors disabled:opacity-50"
                   >
-                    アップロードして公開
+                    {uploading ? "アップロード中..." : "アップロードして公開"}
                   </button>
                 </div>
               </div>

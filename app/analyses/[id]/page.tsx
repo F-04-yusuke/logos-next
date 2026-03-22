@@ -1,0 +1,348 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { getAuthHeaders } from "@/lib/auth";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+// -------- 型定義 --------
+type TreeNode = {
+  speaker?: string;
+  stance?: string;
+  text?: string;
+  children?: TreeNode[];
+};
+
+type MatrixPattern = { title?: string; description?: string };
+type MatrixEvaluation = { score?: number; reason?: string };
+type MatrixItem = { itemTitle?: string; evaluations?: MatrixEvaluation[]; scores?: MatrixEvaluation[] };
+
+type Analysis = {
+  id: number;
+  title: string;
+  type: "tree" | "matrix" | "swot" | "image";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: Record<string, any>;
+  supplement?: string | null;
+  likes_count: number;
+  is_liked_by_me: boolean;
+  created_at: string;
+  user: { id: number; name: string; avatar?: string | null };
+  topic?: { id: number; title: string } | null;
+};
+
+// -------- ツリーノード再帰コンポーネント --------
+function stanceStyle(stance?: string) {
+  if (stance === "反論") return "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800";
+  if (stance === "賛成・補足") return "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800";
+  if (stance === "疑問") return "bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800";
+  return "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700";
+}
+
+function TreeNodeCard({ node, depth = 0 }: { node: TreeNode; depth?: number }) {
+  const isSelf = node.speaker?.includes("自") ?? false;
+  return (
+    <div className={`relative ${depth > 0 ? "mt-4 ml-8 tree-line" : "mt-4"}`}>
+      <div className="bg-gray-50 dark:bg-[#131314] p-3 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm inline-block min-w-[250px] max-w-lg">
+        <div className="flex items-center gap-2 mb-2">
+          <span className={`text-sm font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-gray-300"}`}>
+            {node.speaker}
+          </span>
+          {node.stance && (
+            <span className={`text-[10px] px-1.5 py-0.5 rounded border font-bold ${stanceStyle(node.stance)}`}>
+              {node.stance}
+            </span>
+          )}
+        </div>
+        <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">{node.text}</p>
+      </div>
+      {node.children?.map((child, i) => (
+        <TreeNodeCard key={i} node={child} depth={depth + 1} />
+      ))}
+    </div>
+  );
+}
+
+// -------- コンテンツ本体 --------
+function AnalysisContent({ analysis }: { analysis: Analysis }) {
+  const d = analysis.data ?? {};
+
+  if (analysis.type === "tree") {
+    const nodes: TreeNode[] = Array.isArray(d.nodes) ? d.nodes : (Array.isArray(d) ? d : []);
+    const meta = d.meta as { url?: string; description?: string } | undefined;
+    return (
+      <div>
+        {meta && (meta.url || meta.description) && (
+          <div className="bg-white dark:bg-[#1e1f20] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 mb-6">
+            <h3 className="font-bold text-gray-900 dark:text-gray-100 flex items-center mb-3">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              事前情報
+            </h3>
+            {meta.description && <p className="text-sm text-gray-700 dark:text-gray-300 mb-2 whitespace-pre-wrap">{meta.description}</p>}
+            {meta.url && (
+              <a href={meta.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline flex items-start sm:items-center break-all transition-colors">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 shrink-0 mt-0.5 sm:mt-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+                {meta.url}
+              </a>
+            )}
+          </div>
+        )}
+        <div className="bg-white dark:bg-[#1e1f20] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 overflow-x-auto">
+          <div className="pl-4 pb-8">
+            {nodes.length > 0
+              ? nodes.map((node, i) => <TreeNodeCard key={i} node={node} />)
+              : <p className="text-gray-500">ツリーデータがありません。</p>
+            }
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (analysis.type === "matrix") {
+    const patterns: MatrixPattern[] = Array.isArray(d.patterns) ? d.patterns : [];
+    const items: MatrixItem[] = Array.isArray(d.items) ? d.items : [];
+    const totals: number[] = Array(patterns.length).fill(0);
+    const isCalculated: boolean[] = Array(patterns.length).fill(false);
+    items.forEach((item) => {
+      const evals = item.evaluations ?? item.scores ?? [];
+      evals.forEach((e, i) => {
+        const val = e.score ?? -1;
+        if (val !== -1) { totals[i] += val; isCalculated[i] = true; }
+      });
+    });
+    const badgeInfo = (val: number) => {
+      if (val === 3) return { text: "◎ 最適 (3pt)", color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" };
+      if (val === 2) return { text: "〇 良い (2pt)", color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" };
+      if (val === 1) return { text: "△ 懸念 (1pt)", color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" };
+      if (val === 0) return { text: "× 不可 (0pt)", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" };
+      return null;
+    };
+    return (
+      <div className="bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 overflow-x-auto custom-scroll p-4">
+        <table className="w-full text-left border-collapse min-w-[800px]">
+          <thead>
+            <tr>
+              <th className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-48 bg-gray-50 dark:bg-[#131314] align-bottom text-xs font-bold text-gray-500 dark:text-gray-400">
+                評価項目 ＼ 比較パターン
+              </th>
+              {patterns.map((p, i) => (
+                <th key={i} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 w-64 bg-gray-50 dark:bg-[#131314] align-top">
+                  <div className="font-bold text-blue-600 dark:text-blue-400 mb-1 text-base">{p.title}</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 whitespace-pre-wrap font-normal">{p.description}</p>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, ri) => {
+              const evals = item.evaluations ?? item.scores ?? [];
+              return (
+                <tr key={ri}>
+                  <td className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] font-bold text-sm text-gray-900 dark:text-gray-200">
+                    {item.itemTitle}
+                  </td>
+                  {patterns.map((_, ci) => {
+                    const e = evals[ci];
+                    const val = e?.score ?? -1;
+                    const badge = badgeInfo(val);
+                    return (
+                      <td key={ci} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 align-top">
+                        {badge && <span className={`inline-block px-2 py-0.5 text-[10px] font-bold rounded mb-2 ${badge.color}`}>{badge.text}</span>}
+                        <p className="text-xs text-gray-800 dark:text-gray-300 whitespace-pre-wrap">{e?.reason ?? ""}</p>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+          <tfoot className="bg-gray-50 dark:bg-[#131314]">
+            <tr>
+              <td className="p-3 border-r border-gray-200 dark:border-gray-700 text-right text-xs font-bold text-gray-500">総合評価</td>
+              {totals.map((total, i) => (
+                <td key={i} className="p-3 border-r border-gray-200 dark:border-gray-700 text-center">
+                  {isCalculated[i]
+                    ? <><span className="text-3xl font-black text-blue-600 dark:text-blue-400">{total}</span><span className="text-xs text-gray-500 ml-1">pt</span></>
+                    : <span className="text-sm text-gray-400">未評価</span>
+                  }
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    );
+  }
+
+  if (analysis.type === "swot") {
+    const isPest = d.framework === "PEST";
+    const b1: string[] = Array.isArray(d.box1) ? d.box1 : [];
+    const b2: string[] = Array.isArray(d.box2) ? d.box2 : [];
+    const b3: string[] = Array.isArray(d.box3) ? d.box3 : [];
+    const b4: string[] = Array.isArray(d.box4) ? d.box4 : [];
+    const boxes = [
+      { label: isPest ? "Politics" : "Strengths", sub: isPest ? "政治" : "強み", items: b1, border: "border-blue-500", title: "text-blue-600 dark:text-blue-400", bullet: "text-blue-500" },
+      { label: isPest ? "Economy" : "Weaknesses", sub: isPest ? "経済" : "弱み", items: b2, border: "border-red-500", title: "text-red-600 dark:text-red-400", bullet: "text-red-500" },
+      { label: isPest ? "Society" : "Opportunities", sub: isPest ? "社会" : "機会", items: b3, border: "border-green-500", title: "text-green-600 dark:text-green-400", bullet: "text-green-500" },
+      { label: isPest ? "Technology" : "Threats", sub: isPest ? "技術" : "脅威", items: b4, border: "border-yellow-500", title: "text-yellow-600 dark:text-yellow-400", bullet: "text-yellow-500" },
+    ];
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        {boxes.map((box, i) => (
+          <div key={i} className={`bg-white dark:bg-[#1e1f20] border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
+            <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center`}>
+              <span className="text-2xl mr-2" aria-hidden="true">{box.label[0]}</span>
+              {box.label.slice(1)}
+              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2 font-normal">{box.sub}</span>
+            </h2>
+            <ul className="space-y-2 pl-1">
+              {box.items.map((item, j) => (
+                <li key={j} className="text-sm text-gray-800 dark:text-gray-200 flex items-start">
+                  <span aria-hidden="true" className={`${box.bullet} mr-2 mt-0.5`}>•</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (analysis.type === "image") {
+    const imagePath = d.image_path as string | undefined;
+    return imagePath ? (
+      <div className="bg-white dark:bg-[#1e1f20] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 flex justify-center">
+        <img
+          src={`${API_BASE}/storage/${imagePath}`}
+          alt={analysis.title}
+          className="max-w-full object-contain rounded border border-gray-200 dark:border-gray-700 shadow-sm"
+        />
+      </div>
+    ) : null;
+  }
+
+  return null;
+}
+
+// -------- ページ本体 --------
+export default function AnalysisShowPage({ params }: { params: { id: string } }) {
+  const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/analyses/${params.id}`, { headers: getAuthHeaders() })
+      .then(async (res) => {
+        if (!res.ok) { setNotFound(true); return; }
+        setAnalysis(await res.json());
+      })
+      .catch(() => setNotFound(true))
+      .finally(() => setLoading(false));
+  }, [params.id]);
+
+  const typeLabel = () => {
+    if (!analysis) return "";
+    if (analysis.type === "tree") return "ロジックツリー分析";
+    if (analysis.type === "matrix") return "総合評価表";
+    if (analysis.type === "swot") {
+      return analysis.data?.framework === "PEST" ? "PEST分析" : "SWOT分析";
+    }
+    if (analysis.type === "image") return "オリジナル図解";
+    return "分析・図解";
+  };
+
+  const typeIcon = () => {
+    if (!analysis) return null;
+    if (analysis.type === "tree")
+      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>;
+    if (analysis.type === "matrix")
+      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
+    if (analysis.type === "swot")
+      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>;
+    if (analysis.type === "image")
+      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
+    return null;
+  };
+
+  if (loading) {
+    return (
+      <div className="py-12 flex justify-center">
+        <p className="text-gray-500 text-sm">読み込み中...</p>
+      </div>
+    );
+  }
+
+  if (notFound || !analysis) {
+    return (
+      <div className="py-12 flex flex-col items-center gap-4">
+        <p className="text-gray-400 text-sm">分析データが見つかりませんでした。</p>
+        <Link href="/" className="text-blue-500 hover:underline text-sm">トップへ戻る</Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8 sm:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* ページヘッダー */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight flex items-center">
+            {typeIcon()}
+            {typeLabel()}
+          </h2>
+          <button
+            onClick={() => window.history.back()}
+            className="text-sm font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors py-1 pl-2"
+          >
+            ← 戻る
+          </button>
+        </div>
+
+        {/* 情報カード */}
+        <div className="bg-white dark:bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-xl mb-6 border border-gray-200 dark:border-gray-800">
+          <div className="p-4 sm:p-6">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">{analysis.title}</h1>
+            <div className="flex flex-wrap items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400 gap-3 sm:gap-4">
+              <span>
+                作成者:{" "}
+                <span className="font-bold text-gray-700 dark:text-gray-300">{analysis.user.name}</span>
+              </span>
+              <span>
+                作成日:{" "}
+                {new Date(analysis.created_at).toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" })}
+              </span>
+              {analysis.topic && (
+                <span>
+                  連携先:{" "}
+                  <Link href={`/topics/${analysis.topic.id}`} className="text-blue-500 hover:underline transition-colors">
+                    {analysis.topic.title}
+                  </Link>
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* メインコンテンツ */}
+        <AnalysisContent analysis={analysis} />
+
+        {/* 補足 */}
+        {analysis.supplement && (
+          <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-800/50">
+            <span className="font-bold text-yellow-600 dark:text-yellow-500 text-[10px] block mb-1">✅ 投稿者からの補足</span>
+            <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{analysis.supplement}</p>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}

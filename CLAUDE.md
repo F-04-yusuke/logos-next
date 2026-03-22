@@ -137,6 +137,8 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - `/category-list` — カテゴリ公開一覧 ✅
 - `/topics/create` — トピック作成（PRO限定）✅
 - `/topics/[id]` — トピック詳細（3タブ・投稿・コメント・いいね・ブックマーク）✅
+- `/topics/[id]/edit` — トピック編集（PRO作成者限定）✅
+- `/analyses/[id]` — 分析スタンドアロン閲覧（tree/matrix/swot/image 全4タイプ対応・PRO/作成者が「もっと見る」から遷移）✅
 - `/notifications` — 通知一覧 ✅
 - `/likes` — 参考になった一覧 ✅
 - `/dashboard` — ダッシュボード（5タブ・投稿/下書き/コメント/分析/トピック）✅
@@ -161,6 +163,8 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - トピック編集: `/topics/[id]/edit` 実装（PRO作成者限定・タイトル/本文/カテゴリmax2/timeline編集・手動編集行は `is_ai: false` 自動切替）PUT /api/topics/{topic} 追加
 - 下書き編集モーダル: ダッシュボード下書きタブの「編集・本投稿」ボタンからモーダル表示（`posts/edit.blade.php` 忠実再現）・PATCH /api/posts/{post}（本投稿昇格時のみOGP取得・通知送信）
 - 下書き保存フロー修正: 投稿モーダルから下書き保存→ `/dashboard?tab=drafts` へリダイレクト（トピック詳細には表示しない）・点線枠「準備中」プレースホルダー・タイトル「※本投稿時にサムネイルとタイトルを自動取得します」表示
+- オリジナル図解アップロード: AnalysisModal の「オリジナル画像のアップロード」タブが実際に動作（PRO限定・POST /api/topics/{topic}/analyses/image・type:image として分析カードに表示）
+- 分析スタンドアロン閲覧: AnalysisCard の「もっと見る」→ PRO ユーザーは `/analyses/[id]` へ遷移（作成者はツール編集ページへ遷移・無料ユーザーは PRO バッジ表示）。`GET /api/analyses/{id}` を認証済みユーザー全員閲覧可に変更し user/topic/likes 情報を付加
 
 ## コンポーネント分割済み
 - `app/topics/[id]/` → `_types.ts` / `_helpers.ts` / `_components/`（8コンポーネント）に分割（Step10）

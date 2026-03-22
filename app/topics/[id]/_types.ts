@@ -40,7 +40,7 @@ export type Comment = {
 export type TopicAnalysis = {
   id: number;
   title: string;
-  type: "tree" | "matrix" | "swot";
+  type: "tree" | "matrix" | "swot" | "image";
   is_published: boolean;
   topic_id: number | null;
   likes_count: number;

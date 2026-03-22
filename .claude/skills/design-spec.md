@@ -59,6 +59,8 @@
 | app/profile/page.tsx | ~/logos/resources/views/profile/edit.blade.php |
 | app/history/page.tsx | ~/logos/resources/views/history/index.blade.php |
 | app/likes/page.tsx | ~/logos/resources/views/likes/index.blade.php |
+| app/topics/[id]/edit/page.tsx | ~/logos/resources/views/topics/edit.blade.php |
+| app/analyses/[id]/page.tsx | ~/logos/resources/views/analyses/show.blade.php |
 | app/tools/tree/page.tsx | ~/logos/resources/views/tools/tree.blade.php |
 | app/tools/matrix/page.tsx | ~/logos/resources/views/tools/matrix.blade.php |
 | app/tools/swot/page.tsx | ~/logos/resources/views/tools/swot.blade.php |
