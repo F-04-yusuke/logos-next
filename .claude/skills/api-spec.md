@@ -32,6 +32,51 @@
 | GET | /api/topics/{id} | トピック詳細 | 不要 |
 | POST | /api/topics | トピック作成（PRO限定・title/content/category_ids/timeline） | 要トークン |
 
+### エビデンス（情報タブ）
+| メソッド | エンドポイント | 説明 | 認証 |
+|---|---|---|---|
+| POST | /api/topics/{topic}/posts | エビデンス投稿（url/category/comment/is_published） | 要トークン |
+| POST | /api/posts/{post}/supplement | 投稿補足（投稿者本人・1回のみ・supplement） | 要トークン |
+| DELETE | /api/posts/{post} | 投稿削除（投稿者本人のみ） | 要トークン |
+| POST | /api/posts/{post}/like | いいねトグル（liked/likes_count 返却） | 要トークン |
+
+### コメント・返信
+| メソッド | エンドポイント | 説明 | 認証 |
+|---|---|---|---|
+| POST | /api/topics/{topic}/comments | 親コメント投稿（1人1件制限・body） | 要トークン |
+| POST | /api/comments/{comment}/reply | 返信投稿（投稿主5件・他1件制限・body） | 要トークン |
+| DELETE | /api/comments/{comment} | コメント/返信削除（自分のみ） | 要トークン |
+| POST | /api/comments/{comment}/like | コメントいいねトグル（liked/likes_count 返却） | 要トークン |
+
+### 分析ツール
+| メソッド | エンドポイント | 説明 | 認証 |
+|---|---|---|---|
+| GET | /api/user/analyses | 自分の分析一覧（モーダル用） | 要トークン |
+| POST | /api/analyses | 分析作成（type/title/data） | 要トークン |
+| PUT | /api/analyses/{analysis} | 分析更新 | 要トークン |
+| DELETE | /api/analyses/{analysis} | 分析削除（自分のみ） | 要トークン |
+| POST | /api/analyses/{analysis}/publish | トピックへ公開（topic_id） | 要トークン |
+| POST | /api/analyses/{analysis}/supplement | 分析補足（投稿者本人・1回のみ・supplement） | 要トークン |
+| POST | /api/analyses/{analysis}/like | 分析いいねトグル（liked/likes_count 返却） | 要トークン |
+| POST | /api/tools/ai-assist | Gemini AI連携プロキシ | 要トークン |
+
+### ブックマーク・その他
+| メソッド | エンドポイント | 説明 | 認証 |
+|---|---|---|---|
+| POST | /api/topics/{topic}/bookmark | ブックマークトグル（bookmarked 返却） | 要トークン |
+| GET | /api/user/bookmarks | 保存トピック一覧（上限10件） | 要トークン |
+| GET | /api/user/likes | いいね一覧 | 要トークン |
+| GET | /api/og?url=... | OGPプロキシ（title/thumbnail_url 返却） | 不要 |
+| GET | /api/history | 閲覧履歴（12件ページネーション） | 要トークン |
+| GET | /api/notifications | 通知一覧 | 要トークン |
+| PATCH | /api/notifications/read-all | 全通知既読 | 要トークン |
+| PATCH | /api/notifications/{id}/read | 個別既読 | 要トークン |
+| GET | /api/dashboard | ダッシュボード一括取得 | 要トークン |
+| GET | /api/profile | プロフィール情報（name_updated_at付き） | 要トークン |
+| POST | /api/profile | プロフィール更新（multipart/form-data） | 要トークン |
+| PUT | /api/profile/password | パスワード変更 | 要トークン |
+| DELETE | /api/profile | アカウント削除 | 要トークン |
+
 ### カテゴリ
 | メソッド | エンドポイント | 説明 | 認証 |
 |---|---|---|---|

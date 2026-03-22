@@ -128,10 +128,34 @@
 - `app/topics/[id]/_components/AnalysisCard.tsx`（typeBadge / AnalysisPreview をエクスポート）
 - `app/topics/[id]/_components/AnalysisModal.tsx`
 
+**Step11: 返信UI・補足UI・PROモーダル・UX修正（2026-03-22）:**
+
+*logos API追加（routes/api.php）:*
+- POST /api/comments/{comment}/reply — 返信投稿（投稿主5件・他1件の制限付き）
+- DELETE /api/comments/{comment} — コメント/返信削除（自分のみ）
+- POST /api/posts/{post}/supplement — エビデンス補足（投稿者1回のみ）
+- POST /api/analyses/{analysis}/supplement — 分析補足（投稿者1回のみ）
+
+*Next.jsフロントエンド:*
+- `CommentCard.tsx` — 返信フォーム追加（返信制限をUIでも制御）・自分のコメント/返信削除ボタン
+- `PostCard.tsx` — 補足フォーム追加（投稿者1回のみ）・自分の投稿削除ボタン
+- `AnalysisCard.tsx` — 補足フォーム追加（投稿者1回のみ）・SWOT グリッドを `grid-cols-1 sm:grid-cols-2` に修正
+- `LikeButton.tsx` — md サイズを `w-4 h-4 sm:w-5 sm:h-5` にレスポンシブ対応
+- `globals.css` — グローバルスクロールバーCSS追加（Blade版 app.css と統一）
+- `SidebarContext.tsx` — `bookmarkRefreshKey`/`triggerBookmarkRefresh`（サイドバー即時更新）・`openProModal`/`closeProModal` 追加
+- `Sidebar.tsx` — bookmarkRefreshKey 依存追加・非PRO時のPROリンクをモーダル開閉ボタンに変更
+- `ProModal.tsx` （新規）— Blade版 pro-modal.blade.php 忠実再現
+- `LayoutShell.tsx` — `<ProModal />` を全ページに配置
+- `app/topics/[id]/page.tsx` — ブックマーク後 `triggerBookmarkRefresh()` 呼び出し・補足/削除ハンドラー追加
+
+*セキュリティ/a11y/レスポンシブ調査結果:*
+- セキュリティ: 問題なし（APIキー露出なし、認証ヘッダー全API適用済み）
+- a11y: 全体的に対応済み（`aria-hidden`・`sr-only`・`alt` 確認）
+- レスポンシブ: AnalysisCard SWOT グリッド修正・LikeButton md サイズ修正の2点のみ
+
 **未実装（残作業）:**
-1. 分析タブの動作確認（AnalysisModal での選択公開・AnalysisCard 表示）
-2. 返信投稿UI（topics/[id] の返信フォーム）
-3. 投稿・トピック編集画面
+1. 通知機能 — routes/api.php の like/reply/bookmark 系エンドポイントに通知レコード作成を追加（LaravelのCommentController等の通知ロジックを移植）
+2. 投稿・トピック編集画面（`/topics/[id]/edit` など）
 
 ### Step4: 認証（完了）
 - POST /api/login・POST /api/logout

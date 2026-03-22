@@ -11,10 +11,13 @@
 | logos-new（~/logos） | Laravel Blade版・さくら本番・参照専用 | **絶対に編集・push禁止**（例外: TopicApiController.php, routes/api.php のみ） |
 | logos-next（~/logos-next） | Next.jsフロントエンド | **ここだけ編集する** |
 
-## UI/UXの鉄則
+## UI/UXの鉄則（違反厳禁）
 - 実装前に必ず `~/logos/resources/views/[該当ファイル]` を読む（`.claude/skills/design-spec.md` にBladeファイル対応表あり）
-- 読まずに実装禁止。勝手なデザイン変更・簡略化・削除禁止
-- ビルド成功だけで完了としない
+- **読まずに実装禁止**。Bladeに存在する機能を勝手に削除・省略・簡略化しない
+- ビルド成功だけで完了としない。Bladeとの機能差分を必ず確認する
+- logos側のスキルファイルも引き継ぎ情報として重要。**実装前に以下も読むこと**:
+  - `~/logos/.claude/skills/features.md` — コア機能仕様・返信制限・補足ルール
+  - `~/logos/.claude/skills/security.md` — セキュリティ・コーディングルール・UIトンマナ
 
 ## コーディング必須ルール
 - LaravelのAPIはboolean値を `0/1` で返す → JSXでは必ず `!!` 変換すること
@@ -58,7 +61,73 @@ cd ~/logos-next && npm run dev           # Next.js起動
 
 ---
 
-# 3. 現在のタスク
+# 3. セキュリティ・コーディングルール（絶対厳守）
+
+## セキュリティ
+1. **GeminiのAPIキーは絶対に `NEXT_PUBLIC_` をつけない**
+   - `NEXT_PUBLIC_` をつけるとブラウザに公開され攻撃者に悪用される
+   - Next.jsからGeminiを呼ぶ場合は必ずサーバーサイド経由（`app/api/` ルートハンドラかLaravel API経由）
+   - フロントエンド（ブラウザで動くコード）にAPIキーを書かない
+2. 認証情報・APIキーを絶対に露出させない
+3. `.env` ファイルを読み取らない
+
+## コーディング原則
+1. **コメント・ロジックの保持**: 既存のコメント（`//`）およびJavaScriptロジックは、明確なバグがない限り削除しない
+2. **構造の維持**: UIを変更する場合はFlexbox等レイアウト構造を破壊しない
+3. **レスポンシブとアクセシビリティ**: Tailwind CSSレスポンシブ + `aria-hidden`/`aria-label`/`sr-only` を常に意識する
+4. **タップ領域**: モバイルで最低44px確保
+
+## UIデザイントンマナ（Bladeと統一・勝手な変更禁止）
+- スタイル: YouTube・Gemini・X（Twitter）ライクなモダンで洗練されたデザイン
+- カラー: ベース背景 `#131314`、カード背景 `#1e1f20`、ボーダー `border-gray-700`
+- コントラスト比: `#131314` 背景に対して文字色 4.5:1 以上
+- 余白: 重苦しいボーダー・箱型を避ける。ホバー時 `hover:shadow-md` or `hover:scale-105`
+- アバター: 「左丸アイコン ＋ 右に名前＋時間」を全画面で統一
+- アイコン: アイコン単独は避け、アイコン＋テキストのペアを基本とする
+- 賛否UIは導入しない（2項対立でまとめられないテーマが多いため）
+- 重要アクション（いいね・保存ボタン）が隠れていないこと
+
+---
+
+# 4. コア機能ルール（Blade側で設計済み・必ず遵守）
+
+## コメント・返信の制限（`~/logos/.claude/skills/features.md` §3 参照）
+これらの制限はバックエンドバリデーション（CommentController）実装済み。フロントエンドのUIも完全に一致させること。
+
+| 操作 | 制限 | 実装箇所 |
+|---|---|---|
+| 親コメント（Root） | 1ユーザー・1トピックにつき1件のみ | POST /api/topics/{id}/comments（既実装） |
+| 自コメントへの補足（返信） | 投稿者本人は最大5件まで | POST /api/comments/{id}/reply（件数チェック実装済み） |
+| 他ユーザーの返信 | 他人のコメントに対して1回のみ | POST /api/comments/{id}/reply（件数チェック実装済み） |
+| エビデンス補足 | 投稿者本人が1回のみ（supplementカラム） | POST /api/posts/{id}/supplement（実装済み） |
+| 分析補足 | 投稿者本人が1回のみ（supplementカラム） | POST /api/analyses/{id}/supplement（実装済み） |
+
+**UIでの制御方法:**
+- CommentCard.tsx: `myRepliesCount` を計算して返信ボタンの表示/非表示を制御
+  - 自分のコメント: 自分の返信が5件未満なら表示
+  - 他人のコメント: 自分の返信が0件なら表示
+- PostCard.tsx / AnalysisCard.tsx: supplement が null かつ投稿者本人なら補足フォームを表示
+
+## 補足（Supplement）UI仕様
+- 「＋ 補足を追加する（※1回のみ）」ボタン → フォーム開閉（State管理）
+- Bladeの `x-show` 相当を React の useState で制御
+- テキストエリアは入力量に応じて自動高さ拡張（`scrollHeight` 計算）
+- 投稿後は二度と編集できない（後から編集不可の旨をプレースホルダーに明記）
+
+## エビデンス（情報タブ）ルール
+- 公開後の編集は一切不可（補足はsupplementカラムで1回のみ）
+- 下書き（is_published=false）中のみ編集可
+- 投稿者本人は自分の投稿を削除できる（DELETE /api/posts/{id}）
+
+## コメント・階層UIルール
+- 親コメントに補足がツリー状にぶら下がる形式
+- 返信は最初から全表示せず「〇件の返信 ▼」のアコーディオンで開閉（useState制御）
+- 投稿者本人は自分のコメントを削除できる（DELETE /api/comments/{id}）
+- 返信した本人は自分の返信を削除できる
+
+---
+
+# 5. 現在のタスク
 
 ## 実装済みページ
 - `/` — トピック一覧
@@ -84,24 +153,25 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - 分析ツールAPI: POST/PUT/DELETE /api/analyses + POST /api/tools/ai-assist（Geminiプロキシ）
 - ダッシュボード分析タブ: 実データ表示・編集リンク・削除ボタン
 - 分析タブ公開連携: トピック詳細に AnalysisCard 表示・AnalysisModal で保存済みツールから選択公開
+- 返信投稿UI: 返信制限（投稿主5件・他1件）・自分のコメント/返信削除
+- 補足UI: エビデンス・分析の投稿者が1回のみ補足追加（PostCard/AnalysisCard）
+- エビデンス削除: 投稿者が自分の投稿を削除できる
 
 ## コンポーネント分割済み
 - `app/topics/[id]/` → `_types.ts` / `_helpers.ts` / `_components/`（8コンポーネント）に分割（Step10）
 
 ## 未実装（残作業）
-1. 分析タブの動作確認（AnalysisModal での選択公開・AnalysisCard 表示）
-2. 返信投稿UI（`/topics/[id]` の返信フォーム）
-3. 投稿・トピック編集画面
+1. 投稿・トピック編集画面（`/topics/[id]/edit`）
+2. 通知連携（返信・補足投稿時の通知送信）
 
 ## Vercel手動設定（未完了・ユーザーが行う）
 - 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定
 
 ---
 
-# 4. スキルファイル（詳細参照先）
+# 6. スキルファイル（詳細参照先）
 
-詳細仕様は必要に応じて以下を読むこと:
-
+## logos-next（本リポジトリ）
 | ファイル | 内容 |
 |---|---|
 | `.claude/skills/api-spec.md` | API全仕様・認証・エンドポイント・boolean注意・型定義 |
@@ -109,3 +179,11 @@ cd ~/logos-next && npm run dev           # Next.js起動
 | `.claude/skills/directory-map.md` | ディレクトリ構成・未実装ページ一覧・将来構想 |
 | `.claude/skills/deploy-config.md` | Vercel設定・環境変数ルール・CSR/SSR障害記録 |
 | `.claude/skills/progress.md` | 進捗・完了済みステップ・Gitタグ履歴 |
+
+## logos（バックエンド・必要に応じて参照）
+| ファイル | 内容 |
+|---|---|
+| `~/logos/.claude/skills/features.md` | コア機能仕様・返信制限・補足ルール・コントローラー一覧 |
+| `~/logos/.claude/skills/security.md` | セキュリティ・コーディングルール・UIトンマナ詳細 |
+| `~/logos/.claude/skills/pro-tools.md` | PRO機能・分析ツール・通知・決済方針 |
+| `~/logos/.claude/skills/infra.md` | さくら本番環境・ローカル開発・GitHub Actions |

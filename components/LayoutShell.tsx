@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import SidebarAwareLayout from "./SidebarAwareLayout";
+import { ProModal } from "./ProModal";
 
 const AUTH_PATHS = ["/login", "/register"];
 
@@ -21,6 +22,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
         <Header />
         <SidebarAwareLayout>{children}</SidebarAwareLayout>
       </div>
+      <ProModal />
     </div>
   );
 }

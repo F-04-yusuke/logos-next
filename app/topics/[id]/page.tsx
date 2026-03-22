@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { useSidebar } from "@/context/SidebarContext";
 import { getAuthHeaders } from "@/lib/auth";
 import type { TopicDetail } from "./_types";
 import { API_BASE, formatDateTime } from "./_helpers";
@@ -19,6 +20,7 @@ export default function TopicPage({
 }) {
   const { id } = use(params);
   const { user } = useAuth();
+  const { triggerBookmarkRefresh } = useSidebar();
 
   const [topic, setTopic] = useState<TopicDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -203,6 +205,111 @@ export default function TopicPage({
     }
   };
 
+  const handlePostDelete = async (postId: number) => {
+    await fetch(`${API_BASE}/api/posts/${postId}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    setTopic((prev) =>
+      prev ? { ...prev, posts: prev.posts.filter((p) => p.id !== postId) } : prev
+    );
+  };
+
+  const handlePostSupplement = async (postId: number, supplement: string) => {
+    const res = await fetch(`${API_BASE}/api/posts/${postId}/supplement`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      body: JSON.stringify({ supplement }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      alert(data.message ?? "補足の投稿に失敗しました");
+      return;
+    }
+    const data = await res.json();
+    setTopic((prev) =>
+      prev
+        ? { ...prev, posts: prev.posts.map((p) => p.id === postId ? { ...p, supplement: data.supplement } : p) }
+        : prev
+    );
+  };
+
+  const handleAnalysisSupplement = async (analysisId: number, supplement: string) => {
+    const res = await fetch(`${API_BASE}/api/analyses/${analysisId}/supplement`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      body: JSON.stringify({ supplement }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      alert(data.message ?? "補足の投稿に失敗しました");
+      return;
+    }
+    const data = await res.json();
+    setTopic((prev) =>
+      prev
+        ? { ...prev, analyses: prev.analyses?.map((a) => a.id === analysisId ? { ...a, supplement: data.supplement } : a) }
+        : prev
+    );
+  };
+
+  const handleReplySubmit = async (commentId: number, body: string) => {
+    const res = await fetch(`${API_BASE}/api/comments/${commentId}/reply`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      body: JSON.stringify({ body }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      alert(data.message ?? "返信の投稿に失敗しました");
+      return;
+    }
+    const newReply = await res.json();
+    setTopic((prev) =>
+      prev
+        ? {
+            ...prev,
+            comments: prev.comments.map((c) =>
+              c.id === commentId
+                ? { ...c, replies: [...c.replies, newReply] }
+                : c
+            ),
+          }
+        : prev
+    );
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    await fetch(`${API_BASE}/api/comments/${commentId}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    setTopic((prev) =>
+      prev
+        ? { ...prev, comments: prev.comments.filter((c) => c.id !== commentId), user_has_commented: false }
+        : prev
+    );
+  };
+
+  const handleDeleteReply = async (commentId: number, replyId: number) => {
+    await fetch(`${API_BASE}/api/comments/${replyId}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    setTopic((prev) =>
+      prev
+        ? {
+            ...prev,
+            comments: prev.comments.map((c) =>
+              c.id === commentId
+                ? { ...c, replies: c.replies.filter((r) => r.id !== replyId) }
+                : c
+            ),
+          }
+        : prev
+    );
+  };
+
   const handleReplyLike = async (commentId: number, replyId: number) => {
     if (!user) {
       alert("いいねするにはログインが必要です");
@@ -250,6 +357,7 @@ export default function TopicPage({
       setTopic((prev) =>
         prev ? { ...prev, is_bookmarked: data.bookmarked } : prev
       );
+      triggerBookmarkRefresh();
     }
   };
 
@@ -575,7 +683,10 @@ export default function TopicPage({
                     <PostCard
                       key={post.id}
                       post={post}
+                      currentUserId={user?.id}
                       onLike={() => handlePostLike(post.id)}
+                      onSupplement={handlePostSupplement}
+                      onDelete={handlePostDelete}
                     />
                   ))
                 )}
@@ -639,10 +750,14 @@ export default function TopicPage({
                     <CommentCard
                       key={comment.id}
                       comment={comment}
+                      currentUserId={user?.id}
                       onLike={() => handleCommentLike(comment.id)}
                       onReplyLike={(replyId) =>
                         handleReplyLike(comment.id, replyId)
                       }
+                      onReply={handleReplySubmit}
+                      onDeleteComment={handleDeleteComment}
+                      onDeleteReply={handleDeleteReply}
                     />
                   ))
                 )}
@@ -720,6 +835,7 @@ export default function TopicPage({
                       key={analysis.id}
                       analysis={analysis}
                       currentUserId={user?.id}
+                      onSupplement={handleAnalysisSupplement}
                       onDelete={async (analysisId) => {
                         if (!confirm("この分析・図解を本当に削除しますか？")) return;
                         await fetch(`${API_BASE}/api/analyses/${analysisId}`, {

@@ -11,7 +11,7 @@ export function LikeButton({
   size?: "sm" | "md";
   onClick: () => void;
 }) {
-  const iconCls = size === "sm" ? "w-3.5 h-3.5 sm:w-4 sm:h-4" : "w-5 h-5";
+  const iconCls = size === "sm" ? "w-3.5 h-3.5 sm:w-4 sm:h-4" : "w-4 h-4 sm:w-5 sm:h-5";
   const textCls = size === "sm" ? "text-[11px] sm:text-xs" : "text-sm";
   return (
     <button

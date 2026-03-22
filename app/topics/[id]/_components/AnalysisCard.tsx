@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef } from "react";
 import Link from "next/link";
 import type { TopicAnalysis } from "../_types";
 import { API_BASE, timeAgo } from "../_helpers";
@@ -88,7 +89,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
       { label: isPest ? "T (技術)" : "T (脅威)", items: b4, color: "text-yellow-500" },
     ];
     return (
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {boxes.map((box, i) => (
           <div key={i}>
             <span className={`font-bold mb-1 inline-block text-sm ${box.color}`}>{box.label}:</span>
@@ -111,13 +112,38 @@ export function AnalysisCard({
   currentUserId,
   onDelete,
   onLike,
+  onSupplement,
 }: {
   analysis: TopicAnalysis;
   currentUserId?: number;
   onDelete: (id: number) => void;
   onLike: (id: number) => void;
+  onSupplement?: (analysisId: number, supplement: string) => Promise<void>;
 }) {
   const isOwner = currentUserId === analysis.user.id;
+  const [openSupplement, setOpenSupplement] = useState(false);
+  const [supplementBody, setSupplementBody] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleSupplementSubmit = async () => {
+    if (!supplementBody.trim() || !onSupplement) return;
+    setSubmitting(true);
+    try {
+      await onSupplement(analysis.id, supplementBody);
+      setOpenSupplement(false);
+      setSupplementBody("");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleTextareaInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setSupplementBody(e.target.value);
+    const el = e.target;
+    el.style.height = "";
+    el.style.height = el.scrollHeight + "px";
+  };
   const avatarSrc = analysis.user.avatar
     ? `${API_BASE}/storage/${analysis.user.avatar}`
     : null;
@@ -158,12 +184,53 @@ export function AnalysisCard({
       </div>
 
       {/* Supplement */}
-      {analysis.supplement && (
+      {analysis.supplement ? (
         <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-800/50 text-sm">
-          <span className="font-bold text-yellow-600 dark:text-yellow-500 text-[10px] block mb-1">投稿者からの補足</span>
+          <span className="font-bold text-yellow-600 dark:text-yellow-500 text-[10px] block mb-1">✅ 投稿者からの補足</span>
           <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{analysis.supplement}</p>
         </div>
-      )}
+      ) : isOwner && onSupplement ? (
+        <div className="mt-1 w-full">
+          {!openSupplement ? (
+            <button
+              onClick={() => setOpenSupplement(true)}
+              type="button"
+              className="text-[11px] text-yellow-600 dark:text-yellow-500 hover:underline font-bold transition-colors py-1 pr-2"
+            >
+              ＋ 補足を追加する（※1回のみ）
+            </button>
+          ) : (
+            <div className="mt-2 p-3 bg-gray-50 dark:bg-[#131314] rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
+              <textarea
+                ref={textareaRef}
+                value={supplementBody}
+                onChange={handleTextareaInput}
+                rows={2}
+                className="w-full text-sm rounded-md border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white mb-2 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500"
+                required
+                placeholder="この分析に対する追加の考察や結論などを入力してください（※後から編集はできません）"
+              />
+              <div className="flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => { setOpenSupplement(false); setSupplementBody(""); }}
+                  className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold py-1.5 px-2"
+                >
+                  キャンセル
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSupplementSubmit}
+                  disabled={submitting || !supplementBody.trim()}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold py-1.5 px-4 rounded transition-colors disabled:opacity-50"
+                >
+                  {submitting ? "投稿中..." : "補足を投稿"}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : null}
 
       {/* Footer */}
       <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-3">

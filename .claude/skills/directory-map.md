@@ -52,14 +52,15 @@ logos-next/
 ├── components/
 │   ├── AppLogo.tsx                      # 共通ロゴコンポーネント
 │   ├── Header.tsx                       # ヘッダー（検索・通知バッジ・アバタードロップダウン・スマホメニュー）
-│   ├── LayoutShell.tsx                  # /login・/register でHeader/Sidebar非表示制御
+│   ├── LayoutShell.tsx                  # /login・/register でHeader/Sidebar非表示制御・ProModal配置
+│   ├── ProModal.tsx                     # PRO誘導モーダル（非PRO会員がPRO機能を押したとき表示）
 │   ├── Sidebar.tsx                      # サイドバー（ナビ・PRO機能・分析ツール・保存トピック動的表示）
 │   ├── SidebarAwareLayout.tsx           # サイドバー連動コンテンツ幅調整
 │   └── ui/
 │       └── button.tsx                   # shadcn/uiコンポーネント
 ├── context/
 │   ├── AuthContext.tsx                  # 認証コンテキスト（Sanctumトークン・useAuthフック・unread_notifications_count）
-│   └── SidebarContext.tsx               # サイドバー開閉コンテキスト
+│   └── SidebarContext.tsx               # サイドバー開閉・bookmarkRefreshKey・openProModal を管理
 ├── lib/
 │   ├── auth.ts                          # トークン管理（getToken/setToken/removeToken/getAuthHeaders）
 │   └── utils.ts                         # shadcn/ui utility
@@ -107,9 +108,8 @@ logos-next/
 
 | 優先 | 内容 | 対象ファイル |
 |---|---|---|
-| 1 | 分析タブの動作確認（AnalysisModal 選択公開・AnalysisCard 表示） | app/topics/[id]/_components/ |
-| 2 | 返信投稿UI（返信フォーム） | app/topics/[id]/_components/CommentCard.tsx |
-| 3 | 投稿・トピック編集画面 | 未作成 |
+| 1 | 通知機能（like/reply/bookmark 時の通知送信） | ~/logos/routes/api.php に通知レコード作成処理を追加 |
+| 2 | 投稿・トピック編集画面 | app/topics/[id]/edit/page.tsx など（新規作成） |
 
 ---
 

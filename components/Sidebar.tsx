@@ -33,7 +33,7 @@ function LockIcon() {
 // Sidebar
 // ────────────────────────────────────────────────
 export default function Sidebar() {
-  const { sidebarOpen, setSidebarOpen } = useSidebar();
+  const { sidebarOpen, setSidebarOpen, bookmarkRefreshKey, openProModal } = useSidebar();
   const { user } = useAuth();
 
   const unreadCount = user?.unread_notifications_count ?? 0;
@@ -47,7 +47,7 @@ export default function Sidebar() {
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => setBookmarks(Array.isArray(data) ? data : []))
       .catch(() => {});
-  }, [user]);
+  }, [user, bookmarkRefreshKey]);
 
   return (
     <>
@@ -246,8 +246,8 @@ export default function Sidebar() {
                         </Link>
                       ) : (
                         <button
-                          disabled
-                          className="w-full flex items-center p-2 rounded-lg hover:bg-gray-800 text-gray-500 transition-colors group cursor-not-allowed"
+                          onClick={() => openProModal("トピックの作成")}
+                          className="w-full flex items-center p-2 rounded-lg hover:bg-gray-800 text-gray-500 transition-colors group"
                         >
                           <svg className="w-5 h-5 text-gray-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
@@ -284,8 +284,8 @@ export default function Sidebar() {
                         </Link>
                       ) : (
                         <button
-                          disabled
-                          className="w-full flex items-center p-2 rounded-lg hover:bg-gray-800 text-gray-500 transition-colors group cursor-not-allowed"
+                          onClick={() => openProModal("ロジックツリー作成")}
+                          className="w-full flex items-center p-2 rounded-lg hover:bg-gray-800 text-gray-500 transition-colors group"
                         >
                           <svg className="w-5 h-5 text-yellow-500/50 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -310,8 +310,8 @@ export default function Sidebar() {
                         </Link>
                       ) : (
                         <button
-                          disabled
-                          className="w-full flex items-center p-2 rounded-lg hover:bg-gray-800 text-gray-500 transition-colors group cursor-not-allowed"
+                          onClick={() => openProModal("総合評価表作成")}
+                          className="w-full flex items-center p-2 rounded-lg hover:bg-gray-800 text-gray-500 transition-colors group"
                         >
                           <svg className="w-5 h-5 text-purple-500/50 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -336,11 +336,11 @@ export default function Sidebar() {
                         </Link>
                       ) : (
                         <button
-                          disabled
-                          className="w-full flex items-center p-2 rounded-lg hover:bg-gray-800 text-gray-500 transition-colors group cursor-not-allowed"
+                          onClick={() => openProModal("SWOT分析作成")}
+                          className="w-full flex items-center p-2 rounded-lg hover:bg-gray-800 text-gray-500 transition-colors group"
                         >
                           <svg className="w-5 h-5 text-green-500/50 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                           </svg>
                           <span className="ml-3">SWOT分析作成</span>
                           <LockIcon />

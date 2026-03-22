@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef } from "react";
 import type { Post } from "../_types";
 import { timeAgo } from "../_helpers";
 import { UserAvatar } from "./UserAvatar";
@@ -7,11 +8,42 @@ import { LikeButton } from "./LikeButton";
 
 export function PostCard({
   post,
+  currentUserId,
   onLike,
+  onSupplement,
+  onDelete,
 }: {
   post: Post;
+  currentUserId?: number;
   onLike: () => void;
+  onSupplement?: (postId: number, supplement: string) => Promise<void>;
+  onDelete?: (postId: number) => void;
 }) {
+  const isOwner = currentUserId === post.user.id;
+  const [openSupplement, setOpenSupplement] = useState(false);
+  const [supplementBody, setSupplementBody] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleSupplementSubmit = async () => {
+    if (!supplementBody.trim() || !onSupplement) return;
+    setSubmitting(true);
+    try {
+      await onSupplement(post.id, supplementBody);
+      setOpenSupplement(false);
+      setSupplementBody("");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleTextareaInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setSupplementBody(e.target.value);
+    const el = e.target;
+    el.style.height = "";
+    el.style.height = el.scrollHeight + "px";
+  };
+
   return (
     <div className="p-3 bg-white dark:bg-[#1e1f20] rounded-lg border border-gray-200 dark:border-transparent shadow-sm flex flex-col md:flex-row gap-3 transition-colors">
       <div className="md:w-1/4 flex-shrink-0">
@@ -78,7 +110,7 @@ export function PostCard({
             </div>
           )}
 
-          {post.supplement && (
+          {post.supplement ? (
             <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800/50 text-sm">
               <span
                 className="font-bold text-blue-600 dark:text-blue-400 text-[10px] block mb-1"
@@ -90,10 +122,65 @@ export function PostCard({
                 {post.supplement}
               </p>
             </div>
-          )}
+          ) : isOwner && onSupplement ? (
+            <div className="mt-2">
+              {!openSupplement ? (
+                <button
+                  onClick={() => setOpenSupplement(true)}
+                  type="button"
+                  className="text-[11px] text-blue-500 hover:text-blue-700 font-bold transition-colors py-1"
+                >
+                  ＋ 補足を追加する（※1回のみ）
+                </button>
+              ) : (
+                <div className="mt-2 p-3 bg-gray-50 dark:bg-[#131314] rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
+                  <textarea
+                    ref={textareaRef}
+                    value={supplementBody}
+                    onChange={handleTextareaInput}
+                    rows={2}
+                    className="w-full text-sm rounded-md border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white mb-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    required
+                    placeholder="URLに対する追加の補足や、時間の経過による状況の変化などを入力してください（※後から編集はできません）"
+                  />
+                  <div className="flex justify-end gap-3">
+                    <button
+                      type="button"
+                      onClick={() => { setOpenSupplement(false); setSupplementBody(""); }}
+                      className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold py-1.5 px-2"
+                    >
+                      キャンセル
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSupplementSubmit}
+                      disabled={submitting || !supplementBody.trim()}
+                      className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1.5 px-4 rounded transition-colors disabled:opacity-50"
+                    >
+                      {submitting ? "投稿中..." : "補足を投稿"}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : null}
         </div>
 
         <div className="mt-3 flex items-center justify-end gap-3">
+          {isOwner && onDelete && (
+            <>
+              <button
+                onClick={() => {
+                  if (confirm("本当に削除しますか？")) onDelete(post.id);
+                }}
+                type="button"
+                className="text-xs text-red-400 hover:text-red-600 transition-colors py-1 px-2"
+              >
+                削除
+              </button>
+              <span className="text-gray-300 dark:text-gray-700" aria-hidden="true">|</span>
+            </>
+          )}
           <LikeButton
             liked={!!post.is_liked_by_me}
             count={post.likes_count}
