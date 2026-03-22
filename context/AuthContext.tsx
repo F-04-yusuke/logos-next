@@ -8,6 +8,7 @@ import {
   ReactNode,
 } from "react";
 import { getToken, removeToken, getAuthHeaders } from "@/lib/auth";
+import { transformUser } from "@/lib/transforms";
 
 type AuthUser = {
   id: number;
@@ -51,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: getAuthHeaders(),
       });
       if (res.ok) {
-        setUser(await res.json());
+        setUser(transformUser(await res.json()) as AuthUser);
       } else {
         setUser(null);
       }

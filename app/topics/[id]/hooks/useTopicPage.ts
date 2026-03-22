@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
 import { getAuthHeaders } from "@/lib/auth";
+import { transformTopic } from "@/lib/transforms";
 import type { TopicDetail } from "../_types";
 import { API_BASE } from "../_helpers";
 
@@ -50,7 +51,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
         return r.json();
       })
       .then((data) => {
-        setTopic(data);
+        setTopic(transformTopic(data) as TopicDetail);
         setLoading(false);
       })
       .catch(() => {

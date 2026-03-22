@@ -526,7 +526,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       key={analysis.id}
                       analysis={analysis}
                       currentUserId={user?.id}
-                      isPro={!!user?.is_pro}
+                      isPro={user?.is_pro ?? false}
                       onSupplement={handleAnalysisSupplement}
                       onDelete={handleAnalysisDelete}
                       onLike={handleAnalysisLike}

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getAuthHeaders } from "@/lib/auth";
+import { transformAnalysis } from "@/lib/transforms";
 import type { TopicAnalysis } from "../_types";
 import { API_BASE } from "../_helpers";
 import { typeBadge } from "./AnalysisCard";
@@ -31,7 +32,8 @@ export function AnalysisModal({
     fetch(`${API_BASE}/api/user/analyses`, { headers: getAuthHeaders() })
       .then((r) => r.json())
       .then((data) => {
-        setUserAnalyses(Array.isArray(data) ? data : []);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setUserAnalyses(Array.isArray(data) ? (data.map(transformAnalysis) as any) : []);
         setLoadingAnalyses(false);
       })
       .catch(() => setLoadingAnalyses(false));

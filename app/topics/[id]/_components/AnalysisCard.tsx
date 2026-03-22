@@ -36,11 +36,9 @@ export function typeBadge(type: TopicAnalysis["type"], data: Record<string, unkn
 }
 
 function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
-  const d = analysis.data ?? {};
   if (analysis.type === "tree") {
-    const nodes: Array<{ speaker?: string; text?: string; children?: Array<{ speaker?: string; text?: string }> }> =
-      Array.isArray(d.nodes) ? d.nodes : Array.isArray(d) ? (d as never) : [];
-    const meta = d.meta as { url?: string; description?: string } | undefined;
+    const nodes = analysis.data.nodes ?? [];
+    const meta = analysis.data.meta;
     return (
       <div>
         {meta && (meta.url || meta.description) && (
@@ -70,7 +68,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     );
   }
   if (analysis.type === "matrix") {
-    const items: Array<{ itemTitle?: string }> = Array.isArray(d.items) ? d.items : [];
+    const items = analysis.data.items ?? [];
     return (
       <div>
         <div className="font-bold text-gray-500 mb-2 text-sm">【評価項目一覧】</div>
@@ -83,7 +81,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     );
   }
   if (analysis.type === "image") {
-    const imagePath = d.image_path as string | undefined;
+    const imagePath = analysis.data.image_path;
     return imagePath ? (
       <div>
         <div className="font-bold text-base text-gray-900 dark:text-gray-100 mb-3">{analysis.title}</div>
@@ -98,11 +96,11 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     ) : null;
   }
   if (analysis.type === "swot") {
-    const isPest = d.framework === "PEST";
-    const b1: string[] = Array.isArray(d.box1) ? d.box1 : [];
-    const b2: string[] = Array.isArray(d.box2) ? d.box2 : [];
-    const b3: string[] = Array.isArray(d.box3) ? d.box3 : [];
-    const b4: string[] = Array.isArray(d.box4) ? d.box4 : [];
+    const isPest = analysis.data.framework === "PEST";
+    const b1 = analysis.data.box1 ?? [];
+    const b2 = analysis.data.box2 ?? [];
+    const b3 = analysis.data.box3 ?? [];
+    const b4 = analysis.data.box4 ?? [];
     const boxes = [
       { label: isPest ? "P (政治)" : "S (強み)", items: b1, color: "text-blue-500" },
       { label: isPest ? "E (経済)" : "W (弱み)", items: b2, color: "text-red-500" },

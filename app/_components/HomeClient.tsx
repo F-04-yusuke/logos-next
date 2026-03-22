@@ -146,7 +146,7 @@ export default function HomeClient({
                 政治・経済・エンタメ・スポーツ・その他
               </span>
             </h2>
-            {!!user?.is_pro && (
+            {user?.is_pro && (
               <Link
                 href="/topics/create"
                 className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm transition-colors shadow-sm"
