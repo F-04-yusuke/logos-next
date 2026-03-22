@@ -28,14 +28,8 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
   ```
 - **優先理由**: 以後の機能追加・テスト・デバッグ全てがここを通る。負債解消効果最大
 
-#### B-2: Topic モデルに analyses() リレーション追加
-- **現状**: `app/Models/` 編集禁止だったため TopicApiController に直接クエリが残存
-  ```php
-  // 現状（TopicApiController::show に残る直接クエリ）
-  $analyses = \App\Models\Analysis::where('topic_id', $topic->id)->get();
-  ```
-- **理想**: `Topic::hasMany(Analysis::class)` を追加して `$topic->load('analyses')` で取得
-- **注意**: モデル変更はさくら本番への影響がないため安全に実施可能（マイグレーション不要）
+#### B-2: Topic モデルに analyses() リレーション追加 ✅ 完了（2026-03-22）
+- **完了内容**: `Topic::hasMany(Analysis::class)` を追加・TopicApiController::show の直接クエリを `$topic->load('analyses' => ...)` に置き換え
 
 ### 🟡 優先度: 中
 
@@ -105,30 +99,16 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 
 ### 🟡 優先度: 中
 
-#### F-3: boolean 型変換レイヤーの導入
-- **現状**: Laravel が `0/1` を返すため JSX に `!!user?.is_pro` が11箇所散在
-  - 変換忘れ → `0` がテキスト表示されるバグのリスク
-- **理想**: APIレスポンスを受け取る口で一括変換
-  ```typescript
-  // lib/transforms.ts
-  function transformUser(raw: ApiUser): User {
-    return { ...raw, is_pro: !!raw.is_pro, is_admin: !!raw.is_admin };
-  }
-  // 以降は !! 不要・型も boolean で確定
-  ```
-- **対象**: User / Post / Comment / Analysis の `is_*` フィールド全て
+#### F-3: boolean 型変換レイヤーの導入 ✅ 完了（2026-03-22）
+- **完了内容**: `lib/transforms.ts` 新規作成（transformUser/Post/Comment/Reply/Analysis/Topic）
+- **適用済み**: AuthContext（is_pro/is_admin）・useTopicPage（is_liked_by_me/is_bookmarked）・AnalysisModal（is_published）
+- **JSX整理**: `!!user?.is_pro` → `user?.is_pro ?? false` に変更
 
-#### F-4: 分析ツール型の Discriminated Union 化
-- **現状**: `TopicAnalysis.data: Record<string, any>` で型安全でない
-- **理想**:
-  ```typescript
-  type Analysis =
-    | { type: "tree";   data: { nodes: TreeNode[] } }
-    | { type: "matrix"; data: { rows: Row[]; cols: Col[] } }
-    | { type: "swot";   data: { s: string[]; w: string[]; o: string[]; t: string[] } }
-    | { type: "image";  data: { url: string } };
-  // type を絞れば data の型が自動的に確定する
-  ```
+#### F-4: 分析ツール型の Discriminated Union 化 ✅ 完了（2026-03-22）
+- **完了内容**: `_types.ts` の `TopicAnalysis.data: Record<string, any>` → Discriminated Union に変更
+- **型定義**: tree（nodes/theme/meta）/ matrix（patterns/items/theme）/ swot（framework/theme/box1-4）/ image（image_path）
+- **AnalysisCard**: `analysis.data` を型安全な直接アクセスに更新
+- **注意**: image type の data キーは `image_path`（`url` ではない）—APIの実装と一致
 
 #### F-5: SWR / React Query 導入
 - **現状**: `useEffect + fetch` パターン・キャッシングなし・重複リクエストあり

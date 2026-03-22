@@ -43,13 +43,26 @@
 - `app/topics/[id]/hooks/useTopicPage.ts` — 全state(17個)・handler(16個)・computed値を集約
 - `app/topics/[id]/page.tsx` — ロジックゼロに（598行に削減）
 
-**次フェーズ以降の推奨作業順（Phase 3 残り）:**
-1. B-2: `Topic::analyses()` リレーション追加（logos-laravel側・1ファイル・低コスト）
-2. F-3: boolean型変換レイヤー（lib/transforms.ts 新規・低コスト）
-3. F-4: 分析型 Discriminated Union（型安全化・低コスト）
-4. B-1: routes/api.php → Controller分割（高コスト・複数セッション分割推奨）
-5. B-3/B-4: FormRequest・OgpService（B-1完了後）
-6. F-5: SWR / React Query（パッケージ追加あり）
+### B-2: Topic::analyses() リレーション追加（完了）
+**検証済み（ビルド通過）:** マイグレーション不要・モデル変更のみ。
+- `Topic.php` に `analyses()` hasMany を追加
+- `TopicApiController::show` の直接クエリを `$topic->load('analyses' => ...)` に置き換え
+
+### F-3: boolean型変換レイヤー（完了）
+**検証済み（ビルド通過）:**
+- `lib/transforms.ts` 新規作成（transformUser/Post/Comment/Reply/Analysis/Topic）
+- AuthContext・useTopicPage・AnalysisModal に適用
+
+### F-4: 分析型 Discriminated Union（完了）
+**検証済み（ビルド通過・TypeScriptエラーなし）:**
+- `_types.ts` の `TopicAnalysis.data: Record<string, any>` → AnalysisData Discriminated Union に変更
+- AnalysisCard の `const d = analysis.data` パターンを型安全な直接アクセスに更新
+- image type の data キーは `image_path`（API実装と一致・`url` ではない）
+
+**Phase 3 残タスク推奨順:**
+1. B-1: routes/api.php → Controller分割（高コスト・専用セッション推奨）
+2. B-3/B-4: FormRequest・OgpService（B-1完了後）
+3. F-5: SWR / React Query（パッケージ追加あり）
 
 ---
 
