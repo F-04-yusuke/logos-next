@@ -204,6 +204,7 @@ cd ~/logos-next && npm run dev           # Next.js起動
 | `.claude/skills/directory-map.md` | ディレクトリ構成・未実装ページ一覧・将来構想 |
 | `.claude/skills/deploy-config.md` | Vercel設定・環境変数ルール・CSR/SSR障害記録 |
 | `.claude/skills/progress.md` | 進捗・完了済みステップ・Gitタグ履歴 |
+| `.claude/skills/phase3-improvements.md` | **Phase 3 技術改善計画**（SSR復帰・Controller分割・CustomHook・型改善等・優先度付き） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
 | ファイル | 内容 |
