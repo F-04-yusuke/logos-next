@@ -9,7 +9,10 @@
 | v3.0-phase3-start | Phase3開始・リポジトリ一本化（logos-new→logos-laravel）・編集制約撤廃 | 2026-03-22 |
 | v3.1-b1-controller-split | B-1完了・routes/api.php→9コントローラー分割・docs更新 | 2026-03-22 |
 | v3.2-f5-swr | F-5完了・SWR導入（AuthContext/useTopicPage/notifications） | 2026-03-22 |
+| v3.3-f1f2-ssr-hooks | F-1完了（SSR復帰・Route Handlerプロキシ）・F-2完了（useTopicPage Custom Hook化） | 2026-03-22 |
+| v3.4-f3f4-types | F-3完了（boolean transforms.ts）・F-4完了（AnalysisData Discriminated Union） | 2026-03-22 |
 | v3.6-f7-shared-components | F-7完了・UserAvatar/LikeButton を components/ に共有化・重複インライン定義60行削除 | 2026-03-23 |
+| v3.7-f6-header-sidebar-split | F-6完了・Header/Sidebar を各4/2サブコンポーネントに分割・後方互換re-export維持 | 2026-03-23 |
 
 ### logos-laravel（参照用・バックエンド）
 | タグ | 内容 | 日付 |
@@ -130,8 +133,20 @@
 - **効果**: 3ヶ所の重複コード解消・137行削減（96行追加）
 - Gitタグ: `v3.6-f7-shared-components`（logos-next）
 
-**Phase 3 残タスク:**
-- F-7 完了により残りは F-6（Header/Sidebar 細分化）のみ。
+### F-6: Header/Sidebar 細分化（完了・2026-03-23）
+**検証済み（tsc --noEmit・npm run build エラーなし）:**
+- `components/Header/NotificationBell.tsx` 新規作成（BellIcon + NotificationBadge + Link、PC/スマホ共用、linkClassName/iconClassName でカスタマイズ）
+- `components/Header/SearchBar.tsx` 新規作成（検索フォーム共用、PC/スマホ両用、autoFocus 対応）
+- `components/Header/UserMenu.tsx` 新規作成（Avatar helper（named export）+ PC アバタードロップダウン）
+- `components/Header/index.tsx` 新規作成（全 state/handler + 3サブコンポーネントを組み合わせるメイン Header）
+- `components/Sidebar/NavLinks.tsx` 新規作成（メインナビ + ログイン時セクション全体、sidebarOpen props で opacity 制御）
+- `components/Sidebar/index.tsx` 新規作成（aside ラッパー + トグルボタン + ロゴ + NavLinks）
+- `components/Header.tsx` → `Header/index.tsx` への後方互換 re-export 1行に差し替え
+- `components/Sidebar.tsx` → `Sidebar/index.tsx` への後方互換 re-export 1行に差し替え
+- **効果**: Header 377行・Sidebar 374行がそれぞれ管理可能なサブコンポーネントに分割・UI変更ゼロ
+- Gitタグ: `v3.7-f6-header-sidebar-split`（logos-next）
+
+**Phase 3 全タスク完了。残タスクなし。**
 - 技術的負債3件は `phase3-improvements.md` の B-5 セクションに記録済み。
 
 ---

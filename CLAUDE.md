@@ -258,6 +258,49 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 - `app/Models/Like.php` に `user()` / `post()` の belongsTo を追加
 - Gitタグ: `v3.5-b6-like-relations`（logos-laravel）
 
+### B-3: FormRequest クラス化 ✅（2026-03-22）
+- `app/Http/Requests/Api/` に16ファイル新規作成（全 ApiController のバリデーションを移行）
+- 対象: StorePostRequest / UpdatePostRequest / SupplementRequest（Post+Analysis共用）/ StoreCommentRequest（store+reply共用）/ StoreAnalysisRequest / UpdateAnalysisRequest / PublishAnalysisRequest / StoreAnalysisImageRequest / AiAssistRequest / UpdateProfileRequest / UpdatePasswordRequest / DestroyProfileRequest / StoreCategoryRequest / UpdateCategoryRequest / StoreTopicRequest / UpdateTopicRequest
+- UpdateProfileRequest は `$canChangeName` 条件を `rules()` 内で処理（`$this->user()` 使用）
+- Gitタグ: `v3.3-b3-form-requests`（logos-laravel）
+
+### B-4: OgpService 共通化 ✅（2026-03-22）
+- `app/Services/OgpService.php` 新規作成（static fetch()・timeout=5秒・preg_match OGP取得）
+- `PostApiController::store()/update()` の重複OGPブロック（22行/17行）→ 1行に
+- `GET /api/og` クロージャ（30行）→ 1行に
+- Gitタグ: `v3.2-b4-ogp-service`（logos-laravel）
+
+### F-5: SWR 導入 ✅（2026-03-22）
+- `npm install swr@^2.4.1`
+- `context/AuthContext.tsx` → useSWR("auth-user")・revalidateOnFocus: true・logout: mutate(null,{revalidate:false})
+- `app/topics/[id]/hooks/useTopicPage.ts` → useSWR(url, {fallbackData})・updateTopic ヘルパー（15箇所置換）
+- `app/notifications/page.tsx` → useSWR(user?url:null) でページ依存キー
+- Gitタグ: `v3.2-f5-swr`（logos-next）
+
+### B-1: routes/api.php → 9コントローラー分割 ✅（2026-03-22）
+- 1040行 → 209行（-80%）・47エンドポイントを9コントローラーに分割（8コミットで段階実施）
+  ```
+  CategoryApiController / NotificationApiController / ProfileApiController / UserApiController
+  DashboardApiController / CommentApiController / PostApiController / AnalysisApiController
+  TopicApiController（destroy/bookmark/timelineGenerate/timelineUpdate 追加）
+  ```
+- 残存クロージャ（意図的）: /og・/register・/login・/logout・GET /categories（認証不要公開API）
+- Gitタグ: `v3.1-b1-controller-split`（logos-laravel・logos-next 両方）
+
+### B-2: Topic::analyses() リレーション追加 ✅（2026-03-22）
+- `Topic.php` に `analyses()` hasMany を追加（logos-laravel）
+- `TopicApiController::show` の直接クエリ → `$topic->load('analyses' => ...)` に置き換え
+
+### F-3: boolean 型変換レイヤー ✅（2026-03-22）
+- `lib/transforms.ts` 新規作成（transformUser/Post/Comment/Reply/Analysis/Topic）
+- AuthContext・useTopicPage・AnalysisModal に適用
+- JSX の `!!user?.is_pro` → `user?.is_pro ?? false` に整理
+
+### F-4: 分析型 Discriminated Union ✅（2026-03-22）
+- `_types.ts` の `TopicAnalysis.data: Record<string, any>` → AnalysisData Discriminated Union に変更
+- AnalysisCard を型安全な直接アクセスに更新
+- **注意**: image type の data キーは `image_path`（`url` ではない・APIの実装と一致）
+
 ## Vercel環境変数設定（設定済み ✅）
 - `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp`（ブラウザ向け・CSR用）
 - `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし・SSR用・All Environments・2026-03-22設定済み）
@@ -274,7 +317,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/directory-map.md` | ディレクトリ構成・未実装ページ一覧・将来構想 |
 | `.claude/skills/deploy-config.md` | Vercel設定・環境変数ルール・CSR/SSR障害記録 |
 | `.claude/skills/progress.md` | 進捗・完了済みステップ・Gitタグ履歴 |
-| `.claude/skills/phase3-improvements.md` | **Phase 3 技術改善計画**（SSR復帰・Controller分割・CustomHook・型改善等・優先度付き） |
+| `.claude/skills/phase3-improvements.md` | **Phase 3 技術改善計画**（SSR復帰・Controller分割・CustomHook・型改善等・優先度付き・全完了） |
+| `.claude/skills/handoff-session10.md` | **次セッション引継ぎプロンプト**（最新版・Session 9完了時点） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
 | ファイル | 内容 |

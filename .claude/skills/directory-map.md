@@ -71,11 +71,21 @@ logos-next/
 │           └── page.tsx                 # /tools/swot SWOT/PEST分析作成（PRO限定・SWOT/PEST切替・AI・保存）
 ├── components/
 │   ├── AppLogo.tsx                      # 共通ロゴコンポーネント
-│   ├── Header.tsx                       # ヘッダー（検索・通知バッジ・アバタードロップダウン・スマホメニュー）
+│   ├── Header.tsx                       # 後方互換 re-export → Header/index.tsx に転送（F-6 Phase3）
+│   ├── Header/                          # Header サブコンポーネント群（F-6 Phase3）
+│   │   ├── index.tsx                    # メイン Header（全 state/handler・3サブコンポを組み合わせ）
+│   │   ├── NotificationBell.tsx         # ベルアイコン+バッジ+Link（PC/スマホ共用・linkClassName/iconClassName）
+│   │   ├── SearchBar.tsx                # 検索フォーム（PC/スマホ共用・autoFocus 対応）
+│   │   └── UserMenu.tsx                 # Avatar helper（named export）+ PC アバタードロップダウン
 │   ├── LayoutShell.tsx                  # /login・/register でHeader/Sidebar非表示制御・ProModal配置
+│   ├── LikeButton.tsx                   # 共有いいねボタン（F-7 Phase3）
 │   ├── ProModal.tsx                     # PRO誘導モーダル（非PRO会員がPRO機能を押したとき表示）
-│   ├── Sidebar.tsx                      # サイドバー（ナビ・PRO機能・分析ツール・保存トピック動的表示）
+│   ├── Sidebar.tsx                      # 後方互換 re-export → Sidebar/index.tsx に転送（F-6 Phase3）
+│   ├── Sidebar/                         # Sidebar サブコンポーネント群（F-6 Phase3）
+│   │   ├── index.tsx                    # メイン Sidebar（aside ラッパー・トグルボタン・ロゴ・NavLinks）
+│   │   └── NavLinks.tsx                 # メインナビ+ログイン時セクション全体（sidebarOpen props で opacity 制御）
 │   ├── SidebarAwareLayout.tsx           # サイドバー連動コンテンツ幅調整
+│   ├── UserAvatar.tsx                   # 共有アバターコンポーネント（sm/md/lg 3サイズ・F-7 Phase3）
 │   └── ui/
 │       └── button.tsx                   # shadcn/uiコンポーネント
 ├── context/
@@ -97,8 +107,9 @@ logos-next/
 │       ├── design-spec.md               # デザイン・カラー・a11y・Blade参照表
 │       ├── directory-map.md             # このファイル
 │       ├── deploy-config.md             # Vercel設定・CSR/SSR障害記録
-│       ├── phase3-improvements.md       # Phase 3 技術改善計画（完了済みマーク付き）
-│       └── progress.md                  # 進捗・Gitタグ・完了済みステップ
+│       ├── phase3-improvements.md       # Phase 3 技術改善計画（全完了・技術的負債3件記録）
+│       ├── progress.md                  # 進捗・Gitタグ・完了済みステップ（Phase 1〜3全記録）
+│       └── handoff-session10.md         # 次セッション引継ぎプロンプト（最新版）
 ├── next.config.ts
 ├── package.json
 ├── tailwind.config.ts
