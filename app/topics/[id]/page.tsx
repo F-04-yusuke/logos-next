@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
@@ -21,6 +22,7 @@ export default function TopicPage({
   const { id } = use(params);
   const { user } = useAuth();
   const { triggerBookmarkRefresh } = useSidebar();
+  const router = useRouter();
 
   const [topic, setTopic] = useState<TopicDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -103,7 +105,17 @@ export default function TopicPage({
         }),
       });
       if (!res.ok) throw new Error();
+      if (isDraft) {
+        // 下書き保存: ダッシュボードの下書きタブへリダイレクト（トピック詳細には表示しない）
+        setShowPostModal(false);
+        setPostUrl("");
+        setPostCategory("");
+        setPostComment("");
+        router.push("/dashboard?tab=drafts");
+        return;
+      }
       const newPost = await res.json();
+      // 公開投稿のみトピック詳細に追加表示
       setTopic((prev) =>
         prev ? { ...prev, posts: [newPost, ...prev.posts] } : prev
       );

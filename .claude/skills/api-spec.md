@@ -31,11 +31,13 @@
 | GET | /api/topics | トピック一覧（ページネーション・sort・category・per_page対応） | 不要 |
 | GET | /api/topics/{id} | トピック詳細 | 不要 |
 | POST | /api/topics | トピック作成（PRO限定・title/content/category_ids/timeline） | 要トークン |
+| PUT | /api/topics/{topic} | トピック編集（作成者限定・title/content/category_ids/timeline・手動編集で is_ai:false） | 要トークン |
 
 ### エビデンス（情報タブ）
 | メソッド | エンドポイント | 説明 | 認証 |
 |---|---|---|---|
-| POST | /api/topics/{topic}/posts | エビデンス投稿（url/category/comment/is_published） | 要トークン |
+| POST | /api/topics/{topic}/posts | エビデンス投稿（url/category/comment/is_published）・公開時OGP取得・通知送信・下書き時はスキップ | 要トークン |
+| PATCH | /api/posts/{post} | 下書き編集（作成者限定・下書きのみ・本投稿昇格時OGP取得・通知送信） | 要トークン |
 | POST | /api/posts/{post}/supplement | 投稿補足（投稿者本人・1回のみ・supplement） | 要トークン |
 | DELETE | /api/posts/{post} | 投稿削除（投稿者本人のみ） | 要トークン |
 | POST | /api/posts/{post}/like | いいねトグル（liked/likes_count 返却） | 要トークン |

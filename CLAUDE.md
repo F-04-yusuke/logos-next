@@ -158,12 +158,15 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - エビデンス削除: 投稿者が自分の投稿を削除できる
 - 通知機能: POST like/reply/bookmark の5エンドポイントに Notification::create() 追加。新型(comment_like/analysis_like/topic_bookmark)はnotifications.typeのENUM拡張マイグレーション適用済み
 - 時系列AIアシスタント: トピック詳細のオーナーが「AIで自動生成する」「最新投稿からAI更新」ボタンで時系列をGemini生成・更新できる（POST /api/topics/{id}/timeline/generate・update）
+- トピック編集: `/topics/[id]/edit` 実装（PRO作成者限定・タイトル/本文/カテゴリmax2/timeline編集・手動編集行は `is_ai: false` 自動切替）PUT /api/topics/{topic} 追加
+- 下書き編集モーダル: ダッシュボード下書きタブの「編集・本投稿」ボタンからモーダル表示（`posts/edit.blade.php` 忠実再現）・PATCH /api/posts/{post}（本投稿昇格時のみOGP取得・通知送信）
+- 下書き保存フロー修正: 投稿モーダルから下書き保存→ `/dashboard?tab=drafts` へリダイレクト（トピック詳細には表示しない）・点線枠「準備中」プレースホルダー・タイトル「※本投稿時にサムネイルとタイトルを自動取得します」表示
 
 ## コンポーネント分割済み
 - `app/topics/[id]/` → `_types.ts` / `_helpers.ts` / `_components/`（8コンポーネント）に分割（Step10）
 
 ## 未実装（残作業）
-1. 投稿・トピック編集画面（`/topics/[id]/edit`）
+- 現時点で主要な未実装ページ・機能はなし。次フェーズ（Phase 3）の内容は §5「次フェーズ構想」を参照。
 
 ## Vercel手動設定（未完了・ユーザーが行う）
 - 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定

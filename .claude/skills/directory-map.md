@@ -31,7 +31,9 @@ logos-next/
 │   │   ├── create/
 │   │   │   └── page.tsx                 # /topics/create トピック作成（PRO限定・カテゴリmax2・timeline行追加削除）
 │   │   └── [id]/
-│   │       ├── page.tsx                 # /topics/[id] トピック詳細メイン（状態管理・ハンドラー・タブJSX 812行）
+│   │       ├── page.tsx                 # /topics/[id] トピック詳細メイン（状態管理・ハンドラー・タブJSX）
+│   │       ├── edit/
+│   │       │   └── page.tsx             # /topics/[id]/edit トピック編集（PRO作成者限定・timeline is_ai制御）
 │   │       ├── _types.ts                # 型定義（Post/Comment/TopicAnalysis/TopicDetail等）
 │   │       ├── _helpers.ts             # API_BASE / timeAgo / formatDateTime
 │   │       └── _components/
@@ -100,16 +102,15 @@ logos-next/
 | `/history` | app/history/page.tsx | ✅ |
 | `/topics/create` | app/topics/create/page.tsx | ✅ |
 | `/topics/[id]` | app/topics/[id]/page.tsx | ✅ |
+| `/topics/[id]/edit` | app/topics/[id]/edit/page.tsx | ✅ |
 | `/tools/tree` | app/tools/tree/page.tsx | ✅ |
 | `/tools/matrix` | app/tools/matrix/page.tsx | ✅ |
 | `/tools/swot` | app/tools/swot/page.tsx | ✅ |
 
 ## 未実装（残作業）
 
-| 優先 | 内容 | 対象ファイル |
-|---|---|---|
-| 1 | 通知機能（like/reply/bookmark 時の通知送信） | ~/logos/routes/api.php に通知レコード作成処理を追加 |
-| 2 | 投稿・トピック編集画面 | app/topics/[id]/edit/page.tsx など（新規作成） |
+現時点で主要な未実装ページ・機能はなし。Phase 2 のすべての機能が実装済み。
+次フェーズ（Phase 3）の構想は将来構想セクションを参照。
 
 ---
 

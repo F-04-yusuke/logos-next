@@ -171,8 +171,22 @@
 - トピック詳細の時系列ヘッダー横にAIボタン追加: 未生成時は「✨ AIで自動生成する」、生成済みは「🔄 最新投稿からAI更新」（オーナーのみ表示）
 - 処理中は「生成中...」「更新中...」でdisabled表示
 
+**Step13: トピック編集・下書き編集・バグ修正（2026-03-22）:**
+
+*logos API追加（routes/api.php）:*
+- PUT /api/topics/{topic} — トピック編集（作成者限定・title/content/category_ids/timeline/is_aiフラグ）
+- PATCH /api/posts/{post} — 下書き編集（作成者限定・下書きのみ・本投稿昇格時OGP取得・通知送信）
+
+*TopicApiController.php 追加:*
+- `update()` メソッド追加（バリデーション・categories sync・作成者チェック）
+
+*Next.jsフロントエンド:*
+- `app/topics/[id]/edit/page.tsx` （新規）— トピック編集ページ。手動編集行は `is_ai: false` に自動切替
+- `app/dashboard/page.tsx` — 下書き編集モーダル追加（posts/edit.blade.php 忠実再現）・トピック編集リンク修正（spanからLinkへ）・下書きカード準備中プレースホルダー・タイトル表示修正
+- `app/topics/[id]/page.tsx` — 下書き保存時にトピック詳細に追加しないよう修正・`/dashboard?tab=drafts` へリダイレクト
+
 **未実装（残作業）:**
-1. 投稿・トピック編集画面（`/topics/[id]/edit` など）
+- 現時点で主要な未実装ページ・機能はなし。次フェーズ（Phase 3）へ移行。
 
 ### Step4: 認証（完了）
 - POST /api/login・POST /api/logout

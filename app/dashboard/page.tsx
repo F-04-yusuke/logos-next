@@ -170,6 +170,11 @@ function PostCard({
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
             </div>
+          ) : isDraft ? (
+            // 下書き時: 点線枠の「準備中」プレースホルダー（本投稿時にOGP取得）
+            <div className="w-full aspect-video bg-gray-100 dark:bg-[#131314] rounded-md mb-2 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-yellow-300 dark:border-yellow-700">
+              <span className="text-xs font-bold text-yellow-600 dark:text-yellow-500">準備中</span>
+            </div>
           ) : (
             <div className="w-full aspect-video bg-gray-100 dark:bg-[#131314] rounded-md mb-2 flex flex-col items-center justify-center text-gray-400 border border-gray-200 dark:border-gray-700 group-hover:border-gray-500 transition-colors">
               <svg
@@ -191,7 +196,9 @@ function PostCard({
             </div>
           )}
           <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
-            {post.title || "タイトルを取得できませんでした"}
+            {isDraft && !post.title
+              ? "※本投稿時にサムネイルとタイトルを自動取得します"
+              : (post.title || "タイトルを取得できませんでした")}
           </h4>
         </a>
       </div>
@@ -317,6 +324,81 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<Tab>("posts");
   const [fetching, setFetching] = useState(true);
 
+  // 下書き編集モーダル
+  const [editingDraft, setEditingDraft] = useState<DashboardPost | null>(null);
+  const [editUrl, setEditUrl] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editComment, setEditComment] = useState("");
+  const [editSubmitting, setEditSubmitting] = useState(false);
+
+  function openDraftEdit(post: DashboardPost) {
+    setEditingDraft(post);
+    setEditUrl(post.url);
+    setEditCategory(post.category);
+    setEditComment(post.comment ?? "");
+  }
+
+  function closeDraftEdit() {
+    setEditingDraft(null);
+    setEditUrl("");
+    setEditCategory("");
+    setEditComment("");
+  }
+
+  async function handleDraftUpdate(isPublishing: boolean) {
+    if (!editingDraft) return;
+    setEditSubmitting(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/posts/${editingDraft.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({
+          url: editUrl,
+          category: editCategory,
+          comment: editComment || null,
+          is_published: isPublishing,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert(err.message ?? "更新に失敗しました");
+        return;
+      }
+      if (isPublishing) {
+        // 本投稿: 下書きリストから削除してトピック詳細へ移動
+        if (data) {
+          setData({
+            ...data,
+            drafts: data.drafts.filter((p) => p.id !== editingDraft.id),
+            draft_count: data.draft_count - 1,
+          });
+        }
+        closeDraftEdit();
+        router.push(`/topics/${editingDraft.topic.id}`);
+      } else {
+        // 下書き保存のまま: リストを更新
+        const updated = await res.json();
+        if (data) {
+          setData({
+            ...data,
+            drafts: data.drafts.map((p) => (p.id === editingDraft.id ? { ...p, ...updated } : p)),
+          });
+        }
+        closeDraftEdit();
+      }
+    } catch {
+      alert("サーバーに接続できませんでした");
+    } finally {
+      setEditSubmitting(false);
+    }
+  }
+
+  // URL ?tab=drafts の場合は下書きタブを初期選択（下書き保存リダイレクト時）
+  useEffect(() => {
+    const tab = new URLSearchParams(window.location.search).get("tab") as Tab | null;
+    if (tab) setActiveTab(tab);
+  }, []);
+
   useEffect(() => {
     if (!authLoading && !user) {
       router.replace("/login");
@@ -395,6 +477,7 @@ export default function DashboardPage() {
       : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300";
 
   return (
+    <>
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
@@ -497,8 +580,9 @@ export default function DashboardPage() {
                           <span className="text-[10px] font-black bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 px-2 py-0.5 rounded">
                             下書き
                           </span>
-                          <Link
-                            href={`/topics/${post.topic.id}`}
+                          <button
+                            type="button"
+                            onClick={() => openDraftEdit(post)}
                             className="text-xs font-bold text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 border border-yellow-300 dark:border-yellow-700 hover:border-yellow-400 py-1 px-3 rounded-md transition-colors flex items-center gap-1"
                           >
                             <svg
@@ -517,7 +601,7 @@ export default function DashboardPage() {
                               />
                             </svg>
                             編集・本投稿
-                          </Link>
+                          </button>
                           <button
                             onClick={() => deleteDraft(post.id)}
                             className="text-xs text-red-400 hover:text-red-600 font-bold transition-colors py-1 px-2"
@@ -692,9 +776,12 @@ export default function DashboardPage() {
                         </Link>
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
-                        <span className="text-xs text-gray-400 dark:text-gray-600 font-bold">
+                        <Link
+                          href={`/topics/${topic.id}/edit`}
+                          className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold transition-colors"
+                        >
                           編集
-                        </span>
+                        </Link>
                         <span className="text-gray-300 dark:text-gray-700">|</span>
                         <button
                           onClick={() => deleteTopic(topic.id)}
@@ -713,5 +800,112 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
+
+    {/* 下書き編集モーダル（posts/edit.blade.php 相当） */}
+    {editingDraft && (
+      <div className="relative z-50" role="dialog" aria-modal="true" aria-labelledby="draft-edit-title">
+        <div className="fixed inset-0 bg-black/60 dark:bg-black/80" onClick={closeDraftEdit} />
+        <div className="fixed inset-0 z-10 overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-0 sm:items-center sm:p-4">
+            <div className="relative bg-white dark:bg-[#18191a] rounded-t-2xl sm:rounded-xl border-t sm:border border-gray-200 dark:border-gray-800 w-full sm:max-w-xl overflow-hidden shadow-2xl">
+              {/* ヘッダー */}
+              <div className="px-4 py-4 sm:px-6 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-[#1e1f20]">
+                <div>
+                  <h3 id="draft-edit-title" className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                    下書きを編集
+                  </h3>
+                  <p className="text-[11px] text-gray-400 mt-0.5">下書き保存中は他のユーザーには見えません。</p>
+                </div>
+                <span className="text-[10px] font-bold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 px-2 py-0.5 rounded">
+                  下書き
+                </span>
+              </div>
+              {/* フォーム */}
+              <div className="p-4 sm:p-6 bg-white dark:bg-[#131314] space-y-5">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                    参考URL (エビデンス)
+                  </label>
+                  <input
+                    type="url"
+                    value={editUrl}
+                    onChange={(e) => setEditUrl(e.target.value)}
+                    required
+                    className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                    メディア分類
+                  </label>
+                  <select
+                    value={editCategory}
+                    onChange={(e) => setEditCategory(e.target.value)}
+                    required
+                    className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 cursor-pointer"
+                  >
+                    <option value="">選択してください</option>
+                    <option value="YouTube">YouTube</option>
+                    <option value="X">X</option>
+                    <option value="記事">記事</option>
+                    <option value="知恵袋">知恵袋</option>
+                    <option value="本">本</option>
+                    <option value="その他">その他</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                    コメント・引用部分の抜粋
+                  </label>
+                  <textarea
+                    value={editComment}
+                    onChange={(e) => setEditComment(e.target.value)}
+                    rows={4}
+                    className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2"
+                  />
+                </div>
+              </div>
+              {/* フッター */}
+              <div className="px-4 py-4 sm:px-6 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center gap-3 bg-gray-50 dark:bg-[#1e1f20]">
+                <button
+                  type="button"
+                  onClick={closeDraftEdit}
+                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 font-bold py-2 px-3 rounded-md text-sm transition-colors"
+                >
+                  キャンセル
+                </button>
+                <div className="flex items-center gap-2">
+                  {/* 下書き保存のまま */}
+                  <button
+                    type="button"
+                    onClick={() => handleDraftUpdate(false)}
+                    disabled={editSubmitting || !editUrl || !editCategory}
+                    className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 font-bold py-2 px-4 rounded-md text-sm transition-colors flex items-center gap-1 disabled:opacity-50"
+                  >
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                    </svg>
+                    下書き保存
+                  </button>
+                  {/* 本投稿する */}
+                  <button
+                    type="button"
+                    onClick={() => handleDraftUpdate(true)}
+                    disabled={editSubmitting || !editUrl || !editCategory}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors flex items-center gap-1.5 disabled:opacity-50"
+                  >
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    本投稿する
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
