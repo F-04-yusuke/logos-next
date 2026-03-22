@@ -5,7 +5,8 @@
 ### logos-next（本リポジトリ）
 | タグ | 内容 | 日付 |
 |---|---|---|
-| （Step3作り直し完了後に打つ） | | |
+| v2.0-phase2-complete | Phase2完成・18ページ全実装・Blade↔Next.js差分なし | 2026-03-22 |
+| v3.0-phase3-start | Phase3開始・リポジトリ一本化（logos-new→logos-laravel）・編集制約撤廃 | 2026-03-22 |
 
 ### logos-laravel（参照用・バックエンド）
 | タグ | 内容 | 日付 |
@@ -13,6 +14,30 @@
 | v1.0-laravel-only | GitHub Actions動作確認版 | 2026-03-18 |
 | v1.0-phase1-complete | Phase1完成・Laravel Blade版本番稼働確認済み | 2026-03-19 |
 | v1.1-phase2-step4-complete | Phase2 Step4完了・Sanctum認証API追加済み | 2026-03-20 |
+
+---
+
+## Phase 3 開始（2026-03-22）
+
+### リポジトリ一本化・制約撤廃
+
+**背景:** Phase 2 完了（Next.js 18ページ全実装）により、Blade版を守るための編集制約が不要になった。
+さらにリポジトリ名が分かりにくく、将来の新セッションで混乱が起きるリスクがあったため整理を実施。
+
+**実施内容（2026-03-22）:**
+- GitHub repo名変更: `logos-new` → `logos-laravel`
+- ローカルフォルダ: `~/logos` → `~/logos-laravel`
+- ローカル・さくらサーバー両方の `git remote URL` を `logos-laravel` に更新
+- **編集制約撤廃**: 「TopicApiController.php と routes/api.php の2ファイルのみ」→「全ファイル自由に編集可」
+- **app/Models/ 制約撤廃**: 直接クエリ縛りを解除（通常の Eloquent リレーション追加も可）
+- 全ドキュメント（CLAUDE.md・skills/*.md・memory/*.md）の `~/logos` → `~/logos-laravel` 一括更新
+
+**注意（エラー調査時）:**
+- Phase 2 以前のgit履歴・コミットメッセージには `logos-new` `~/logos` の表記が残っている（正常）
+- 旧パスが履歴に出てきても、現在の実態は `~/logos-laravel` であることに注意
+- さくらサーバー上のフォルダは `~/www/logos` のまま（Apache .htaccess が参照しているため意図的に変更せず）
+
+**Gitタグ:** `v3.0-phase3-start`（logos-next）・`v2.0-phase2-complete` は logos-next に付与済み
 
 ---
 

@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-22
+最終更新: 2026-03-22（Phase 3 開始・リポジトリ一本化完了）
 
 ---
 
@@ -169,8 +169,15 @@ cd ~/logos-next && npm run dev           # Next.js起動
 ## コンポーネント分割済み
 - `app/topics/[id]/` → `_types.ts` / `_helpers.ts` / `_components/`（8コンポーネント）に分割（Step10）
 
+## Phase 3 開始（2026-03-22）
+- **リポジトリ一本化完了**: logos-new → logos-laravel にリネーム（フォルダ: ~/logos → ~/logos-laravel）
+- **編集制約撤廃**: logos-laravel の全ファイル（app/Models/ 含む）が自由に編集可能
+- **注意（エラー調査時）**: git履歴・旧コミットに `logos-new` `~/logos` の表記が残るが現在の実態は `~/logos-laravel`
+- さくらサーバー上のフォルダは `~/www/logos` のまま（Apache .htaccess が参照しているため意図的に変更せず）
+- Gitタグ: `v3.0-phase3-start`（logos-next）
+
 ## 未実装（残作業）
-- 現時点で主要な未実装ページ・機能はなし。次フェーズ（Phase 3）の内容は §5「次フェーズ構想」を参照。
+- 現時点で主要な未実装ページ・機能はなし。Phase 3 の内容は §5「次フェーズ構想」と `.claude/skills/roadmap.md` を参照。
 
 ## Phase 2 未対応・将来検討項目
 以下は Blade ファイルが存在するが Phase 2 では実装しなかった項目。将来のフェーズで導入を検討する。
