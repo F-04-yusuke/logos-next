@@ -8,24 +8,24 @@
 ## リポジトリの役割
 | リポジトリ | 役割 | 触っていいか |
 |---|---|---|
-| logos-new（~/logos） | Laravel Blade版・さくら本番・参照専用 | **絶対に編集・push禁止**（例外: TopicApiController.php, routes/api.php のみ） |
+| logos-laravel（~/logos-laravel） | Laravel バックエンド・さくら本番 | **自由に編集可**（さくら本番への影響に注意してコミットすること） |
 | logos-next（~/logos-next） | Next.jsフロントエンド | **ここだけ編集する** |
 
 ## UI/UXの鉄則（違反厳禁）
-- 実装前に必ず `~/logos/resources/views/[該当ファイル]` を読む（`.claude/skills/design-spec.md` にBladeファイル対応表あり）
+- 実装前に必ず `~/logos-laravel/resources/views/[該当ファイル]` を読む（`.claude/skills/design-spec.md` にBladeファイル対応表あり）
 - **読まずに実装禁止**。Bladeに存在する機能を勝手に削除・省略・簡略化しない
 - ビルド成功だけで完了としない。Bladeとの機能差分を必ず確認する
-- logos側のスキルファイルも引き継ぎ情報として重要。**実装前に以下も読むこと**:
-  - `~/logos/.claude/skills/features.md` — コア機能仕様・返信制限・補足ルール
-  - `~/logos/.claude/skills/security.md` — セキュリティ・コーディングルール・UIトンマナ
+- logos-laravel側のスキルファイルも引き継ぎ情報として重要。**実装前に以下も読むこと**:
+  - `~/logos-laravel/.claude/skills/features.md` — コア機能仕様・返信制限・補足ルール
+  - `~/logos-laravel/.claude/skills/security.md` — セキュリティ・コーディングルール・UIトンマナ
 
 ## コーディング必須ルール
 - LaravelのAPIはboolean値を `0/1` で返す → JSXでは必ず `!!` 変換すること
   - 正しい: `{!!user.is_admin && <Link>}`
   - バグ: `{user.is_admin && <Link>}` ← 0がテキスト表示される
 - 一度に編集するファイルは **5ファイル以内**
-- `app/Models/` は編集禁止のため、新規リレーションが必要な場合は `$model->load()` を使わず直接クエリで代替すること
-  - 例: `\App\Models\Analysis::where('topic_id', $id)->get()` など
+- `app/Models/` は logos-laravel 側のファイル。編集が必要な場合は直接クエリでも `$model->load()` でも可（さくら本番への影響に注意）
+  - 直接クエリ例: `\App\Models\Analysis::where('topic_id', $id)->get()`
 
 ---
 
@@ -38,7 +38,7 @@
 
 ## 起動手順
 ```bash
-cd ~/logos && ./vendor/bin/sail up -d   # 先にLaravelを起動
+cd ~/logos-laravel && ./vendor/bin/sail up -d   # 先にLaravelを起動
 cd ~/logos-next && npm run dev           # Next.js起動
 # http://localhost:3000 で確認
 ```
@@ -91,7 +91,7 @@ cd ~/logos-next && npm run dev           # Next.js起動
 
 # 4. コア機能ルール（Blade側で設計済み・必ず遵守）
 
-## コメント・返信の制限（`~/logos/.claude/skills/features.md` §3 参照）
+## コメント・返信の制限（`~/logos-laravel/.claude/skills/features.md` §3 参照）
 これらの制限はバックエンドバリデーション（CommentController）実装済み。フロントエンドのUIも完全に一致させること。
 
 | 操作 | 制限 | 実装箇所 |
@@ -198,10 +198,10 @@ cd ~/logos-next && npm run dev           # Next.js起動
 | `.claude/skills/deploy-config.md` | Vercel設定・環境変数ルール・CSR/SSR障害記録 |
 | `.claude/skills/progress.md` | 進捗・完了済みステップ・Gitタグ履歴 |
 
-## logos（バックエンド・必要に応じて参照）
+## logos-laravel（バックエンド・必要に応じて参照）
 | ファイル | 内容 |
 |---|---|
-| `~/logos/.claude/skills/features.md` | コア機能仕様・返信制限・補足ルール・コントローラー一覧 |
-| `~/logos/.claude/skills/security.md` | セキュリティ・コーディングルール・UIトンマナ詳細 |
-| `~/logos/.claude/skills/pro-tools.md` | PRO機能・分析ツール・通知・決済方針 |
-| `~/logos/.claude/skills/infra.md` | さくら本番環境・ローカル開発・GitHub Actions |
+| `~/logos-laravel/.claude/skills/features.md` | コア機能仕様・返信制限・補足ルール・コントローラー一覧 |
+| `~/logos-laravel/.claude/skills/security.md` | セキュリティ・コーディングルール・UIトンマナ詳細 |
+| `~/logos-laravel/.claude/skills/pro-tools.md` | PRO機能・分析ツール・通知・決済方針 |
+| `~/logos-laravel/.claude/skills/infra.md` | さくら本番環境・ローカル開発・GitHub Actions |

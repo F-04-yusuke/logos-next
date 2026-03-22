@@ -7,7 +7,7 @@
 |---|---|---|
 | （Step3作り直し完了後に打つ） | | |
 
-### logos-new（参照用・バックエンド）
+### logos-laravel（参照用・バックエンド）
 | タグ | 内容 | 日付 |
 |---|---|---|
 | v1.0-laravel-only | GitHub Actions動作確認版 | 2026-03-18 |
@@ -58,7 +58,7 @@
 - `app/profile/page.tsx` — プロフィール編集（アバター・名前クールダウン・パスワード変更・アカウント削除モーダル）✅ 2026-03-22
 - `app/history/page.tsx` — 閲覧履歴（日付グループ・YouTube風ラベル・ページネーション）✅ 2026-03-22
 
-**Step6拡張 logos-new API追加（2026-03-22）:**
+**Step6拡張 logos-laravel API追加（2026-03-22）:**
 - GET /api/dashboard（投稿・下書き・コメント・分析・トピック一括取得）
 - DELETE /api/posts/{post}（自分の投稿削除）
 - DELETE /api/topics/{topic}（自分のトピック削除）
@@ -76,10 +76,10 @@
 - `app/tools/matrix/page.tsx` — 総合評価表作成（PRO限定・列行追加/削除・スコア集計・AIで土台生成・AIアシスタントチャット・保存/上書き保存）✅
 - `app/tools/swot/page.tsx` — SWOT/PEST分析作成（PRO限定・SWOT/PEST切替・AI自動生成・AIアシスタントチャット・保存/上書き保存）✅
 - `app/dashboard/page.tsx` — 分析タブを実データ表示に更新（作成ボタン・一覧・編集リンク・削除ボタン）✅
-- logos-new API追加（GET/POST/PUT/DELETE /api/analyses・POST /api/tools/ai-assist・/api/dashboard analyses実データ）✅
+- logos-laravel API追加（GET/POST/PUT/DELETE /api/analyses・POST /api/tools/ai-assist・/api/dashboard analyses実データ）✅
 - globals.css: tree-line CSS追加（ロジックツリーのライン表示）✅
 
-**Step5拡張 logos-new API追加（2026-03-22）:**
+**Step5拡張 logos-laravel API追加（2026-03-22）:**
 - POST /api/topics/{topic}/posts（エビデンス投稿）
 - POST /api/topics/{topic}/comments（コメント・1人1件制限）
 - POST /api/posts/{post}/like（いいねトグル）
@@ -218,7 +218,7 @@
 - ヘッダー認証状態反映（通知ベル・アバタードロップダウン・カテゴリ管理）
 
 ### Step5: 追加API・ページ実装（2026-03-21完了）
-**logos-new API追加（routes/api.php・TopicApiController.php）:**
+**logos-laravel API追加（routes/api.php・TopicApiController.php）:**
 - POST /api/register（新規登録・トークン返却）
 - GET /api/user/me 拡張（email・avatar・unread_notifications_count追加）
 - GET /api/categories 変更（親カテゴリ＋children階層構造で返却）

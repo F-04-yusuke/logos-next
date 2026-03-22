@@ -138,7 +138,7 @@ type AuthUser = {
 - `removeToken()` — localStorageからトークン削除
 - `getAuthHeaders()` — `Authorization: Bearer <token>` ヘッダー生成
 
-## 実装済みバックエンド（logos-new側・参照のみ）
+## 実装済みバックエンド（logos-laravel側）
 - `app/Http/Controllers/Api/TopicApiController.php`
 - `routes/api.php`
 - laravel/sanctum ^4.3 インストール済み

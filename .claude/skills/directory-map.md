@@ -119,7 +119,7 @@ logos-next/
 
 ---
 
-## Next.js移行計画（将来構想・logos-new CLAUDE.mdより）
+## Next.js移行計画（将来構想・logos-laravel CLAUDE.mdより）
 
 ```
 logos-next/

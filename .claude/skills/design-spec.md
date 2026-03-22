@@ -46,30 +46,30 @@
 
 | Next.jsファイル | 参照するBladeファイル |
 |---|---|
-| components/Header.tsx | ~/logos/resources/views/layouts/navigation.blade.php |
-| components/Sidebar.tsx | ~/logos/resources/views/layouts/sidebar.blade.php |
-| app/login/page.tsx | ~/logos/resources/views/auth/login.blade.php |
-| app/register/page.tsx | ~/logos/resources/views/auth/register.blade.php |
-| app/page.tsx | ~/logos/resources/views/topics/index.blade.php |
-| app/topics/[id]/page.tsx | ~/logos/resources/views/topics/show.blade.php |
-| app/topics/create/page.tsx | ~/logos/resources/views/topics/create.blade.php |
-| app/notifications/page.tsx | ~/logos/resources/views/notifications/index.blade.php |
-| app/dashboard/page.tsx | ~/logos/resources/views/dashboard.blade.php |
-| app/categories/page.tsx | ~/logos/resources/views/categories/list.blade.php |
-| app/profile/page.tsx | ~/logos/resources/views/profile/edit.blade.php |
-| app/history/page.tsx | ~/logos/resources/views/history/index.blade.php |
-| app/likes/page.tsx | ~/logos/resources/views/likes/index.blade.php |
-| app/topics/[id]/edit/page.tsx | ~/logos/resources/views/topics/edit.blade.php |
-| app/analyses/[id]/page.tsx | ~/logos/resources/views/analyses/show.blade.php |
-| app/tools/tree/page.tsx | ~/logos/resources/views/tools/tree.blade.php |
-| app/tools/matrix/page.tsx | ~/logos/resources/views/tools/matrix.blade.php |
-| app/tools/swot/page.tsx | ~/logos/resources/views/tools/swot.blade.php |
+| components/Header.tsx | ~/logos-laravel/resources/views/layouts/navigation.blade.php |
+| components/Sidebar.tsx | ~/logos-laravel/resources/views/layouts/sidebar.blade.php |
+| app/login/page.tsx | ~/logos-laravel/resources/views/auth/login.blade.php |
+| app/register/page.tsx | ~/logos-laravel/resources/views/auth/register.blade.php |
+| app/page.tsx | ~/logos-laravel/resources/views/topics/index.blade.php |
+| app/topics/[id]/page.tsx | ~/logos-laravel/resources/views/topics/show.blade.php |
+| app/topics/create/page.tsx | ~/logos-laravel/resources/views/topics/create.blade.php |
+| app/notifications/page.tsx | ~/logos-laravel/resources/views/notifications/index.blade.php |
+| app/dashboard/page.tsx | ~/logos-laravel/resources/views/dashboard.blade.php |
+| app/categories/page.tsx | ~/logos-laravel/resources/views/categories/list.blade.php |
+| app/profile/page.tsx | ~/logos-laravel/resources/views/profile/edit.blade.php |
+| app/history/page.tsx | ~/logos-laravel/resources/views/history/index.blade.php |
+| app/likes/page.tsx | ~/logos-laravel/resources/views/likes/index.blade.php |
+| app/topics/[id]/edit/page.tsx | ~/logos-laravel/resources/views/topics/edit.blade.php |
+| app/analyses/[id]/page.tsx | ~/logos-laravel/resources/views/analyses/show.blade.php |
+| app/tools/tree/page.tsx | ~/logos-laravel/resources/views/tools/tree.blade.php |
+| app/tools/matrix/page.tsx | ~/logos-laravel/resources/views/tools/matrix.blade.php |
+| app/tools/swot/page.tsx | ~/logos-laravel/resources/views/tools/swot.blade.php |
 
 共通UIパーツ参照:
 | 用途 | 参照先 |
 |---|---|
-| エビデンスカード | ~/logos/resources/views/components/post-card.blade.php |
-| コメントカード | ~/logos/resources/views/components/comment-card.blade.php |
-| 分析カード | ~/logos/resources/views/components/analysis-card.blade.php |
-| PRO誘導モーダル | ~/logos/resources/views/components/pro-modal.blade.php |
-| ドロップダウン | ~/logos/resources/views/components/dropdown.blade.php |
+| エビデンスカード | ~/logos-laravel/resources/views/components/post-card.blade.php |
+| コメントカード | ~/logos-laravel/resources/views/components/comment-card.blade.php |
+| 分析カード | ~/logos-laravel/resources/views/components/analysis-card.blade.php |
+| PRO誘導モーダル | ~/logos-laravel/resources/views/components/pro-modal.blade.php |
+| ドロップダウン | ~/logos-laravel/resources/views/components/dropdown.blade.php |
