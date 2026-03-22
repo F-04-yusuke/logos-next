@@ -73,14 +73,16 @@
 - Gitタグ: `v3.1-b1-controller-split`（両リポジトリ・push 済み）
 
 ### F-5: SWR 導入（完了）
-**検証済み（npm run build × 3回通過・TypeScriptエラーなし）:**
+**検証済み（全4確認完了）:**
 - `npm install swr@^2.4.1`
 - `context/AuthContext.tsx`: useState+useEffect → useSWR("auth-user", fetchUser)
   - revalidateOnFocus: true / shouldRetryOnError: false / logout: mutate(null,{revalidate:false})
 - `app/topics/[id]/hooks/useTopicPage.ts`: useSWR(url, {fallbackData: initialTopic})
   - updateTopic ヘルパーで setTopic→mutateTopic(fn,{revalidate:false}) 15箇所置換
 - `app/notifications/page.tsx`: useSWR(user?url:null) ページ依存キー・ページネーションは setCurrentPage のみ
-- **注意**: ブラウザ動作確認（ログイン・タブ復帰・ログアウト）は未実施（要ユーザー確認）
+- 検証1: ビルド × 3回通過・TypeScriptエラーなし
+- 検証2: ブラウザ確認（user/me取得・revalidateOnFocus・logout即時切り替え）→ ✅ ユーザー確認済み
+- 検証3: ページネーション → tinker で通知25件作成 → curl page=1/2 確認 → コードレビュー → クリーンアップ ✅
 - Gitタグ: `v3.2-f5-swr`（logos-next）
 
 **Phase 3 残タスク推奨順:**

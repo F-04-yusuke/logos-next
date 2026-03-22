@@ -22,10 +22,11 @@
 - `logout` → `mutate(null, {revalidate:false})` で即キャッシュクリア
 - 検証: `npm run build` × 3回通過・TypeScriptエラーなし
 
-**ブラウザ動作確認済み（2026-03-22）:**
-- ✅ ログイン後に user/me リクエストが飛ぶ（Network タブで確認）
-- ✅ タブ復帰時に revalidateOnFocus で user/me が自動再フェッチ
-- ✅ ログアウト後に即座に画面が切り替わる
+**全4確認完了（2026-03-22）:**
+- ✅ ログイン後に user/me リクエストが飛ぶ（ブラウザ Network タブで確認）
+- ✅ タブ復帰時に revalidateOnFocus で user/me が自動再フェッチ（ブラウザ確認）
+- ✅ ログアウト後に即座に画面が切り替わる（ブラウザ確認）
+- ✅ ページネーション: tinker で通知25件作成 → curl page=1(20件)/page=2(6件) 確認 → コードレビュー（SWRキー変更→自動フェッチのロジック確認）→ クリーンアップ済み
 
 ---
 

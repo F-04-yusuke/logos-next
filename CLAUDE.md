@@ -59,6 +59,31 @@ cd ~/logos-next && npm run dev           # Next.js起動
 - 技術検証（ビルド・curl・型チェック）はClaude Codeが自己完結する
 - 大きな方針転換があった場合は必ずCLAUDE.mdに追記してから実装する
 
+## 検証方針（2026-03-22 確定）
+
+**「ブラウザ確認が必要」と判断する前に、以下をClaude Codeで自己完結させること。**
+
+| 検証種別 | Claude Codeの手段 | ブラウザ必要か |
+|---|---|---|
+| ビルド・型エラー | `npm run build` / `npx tsc --noEmit` | 不要 |
+| APIレスポンス構造 | `curl` + Bearer トークン | 不要 |
+| ページネーション動作 | tinker でテストデータ作成 → curl で複数ページ確認 → クリーンアップ | 不要 |
+| DB操作・マイグレーション | `php artisan tinker` / `migrate` | 不要 |
+| ルート登録確認 | `php artisan route:list` | 不要 |
+| コード構造・ロジック検証 | コードレビュー（Grep・Read） | 不要 |
+| 視覚的UIデザイン・レイアウト | — | **必要**（ユーザーまたはAIチャット） |
+| 認証フロー・画面遷移の視覚確認 | — | **必要**（ユーザー） |
+
+**tinker 活用パターン（ページネーション検証例）:**
+```bash
+# テストデータ作成
+docker exec logos-laravel.test-1 php artisan tinker --execute="..."
+# curl で確認
+curl -s "http://localhost/api/xxx?page=2" -H "Authorization: Bearer TOKEN" ...
+# クリーンアップ（必ずやる）
+docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)->delete();"
+```
+
 ---
 
 # 3. セキュリティ・コーディングルール（絶対厳守）
