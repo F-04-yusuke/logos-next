@@ -7,6 +7,7 @@
 |---|---|---|
 | v2.0-phase2-complete | Phase2完成・18ページ全実装・Blade↔Next.js差分なし | 2026-03-22 |
 | v3.0-phase3-start | Phase3開始・リポジトリ一本化（logos-new→logos-laravel）・編集制約撤廃 | 2026-03-22 |
+| v3.1-b1-controller-split | B-1完了・routes/api.php→9コントローラー分割・docs更新 | 2026-03-22 |
 
 ### logos-laravel（参照用・バックエンド）
 | タグ | 内容 | 日付 |
@@ -14,6 +15,7 @@
 | v1.0-laravel-only | GitHub Actions動作確認版 | 2026-03-18 |
 | v1.0-phase1-complete | Phase1完成・Laravel Blade版本番稼働確認済み | 2026-03-19 |
 | v1.1-phase2-step4-complete | Phase2 Step4完了・Sanctum認証API追加済み | 2026-03-20 |
+| v3.1-b1-controller-split | B-1完了・routes/api.php 1040行→209行・47エンドポイント9コントローラーに分割 | 2026-03-22 |
 
 ---
 
@@ -59,10 +61,20 @@
 - AnalysisCard の `const d = analysis.data` パターンを型安全な直接アクセスに更新
 - image type の data キーは `image_path`（API実装と一致・`url` ではない）
 
+### B-1: routes/api.php → Controller 分割（完了）
+**検証済み（route:list で全47エンドポイント確認）:**
+- 1040行 → 209行（-80%）・8コミットに分割して段階実施
+- 作成: CategoryApiController / NotificationApiController / ProfileApiController
+  / UserApiController / DashboardApiController / CommentApiController
+  / PostApiController / AnalysisApiController
+- TopicApiController に destroy/bookmark/timelineGenerate/timelineUpdate を追加
+- 残存クロージャ（意図的）: /og・/register・/login・/logout・GET /categories（認証不要公開API）
+- Gitタグ: `v3.1-b1-controller-split`（両リポジトリ・push 済み）
+
 **Phase 3 残タスク推奨順:**
-1. B-1: routes/api.php → Controller分割（高コスト・専用セッション推奨）
-2. B-3/B-4: FormRequest・OgpService（B-1完了後）
-3. F-5: SWR / React Query（パッケージ追加あり）
+1. F-5: SWR / React Query（AuthContext user/me が主ターゲット）
+2. B-3: FormRequest クラス化（B-1完了済みなので着手可）
+3. B-4: OgpService 共通化
 
 ---
 
