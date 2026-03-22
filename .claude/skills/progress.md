@@ -18,6 +18,7 @@
 | v1.1-phase2-step4-complete | Phase2 Step4完了・Sanctum認証API追加済み | 2026-03-20 |
 | v3.1-b1-controller-split | B-1完了・routes/api.php 1040行→209行・47エンドポイント9コントローラーに分割 | 2026-03-22 |
 | v3.2-b4-ogp-service | B-4完了・OgpService共通化（3箇所の重複ロジックをapp/Services/OgpService.phpに集約） | 2026-03-22 |
+| v3.3-b3-form-requests | B-3完了・FormRequest16ファイル作成・全ApiControllerのvalidate()をFormRequestに移行 | 2026-03-22 |
 
 ---
 
@@ -94,8 +95,17 @@
 - `routes/api.php` GET /og クロージャ — 30行 → `OgpService::fetch($url)` 1行
 - Gitタグ: `v3.2-b4-ogp-service`（logos-laravel push済み・コミット ea0b980）
 
-**Phase 3 残タスク推奨順:**
-1. B-3: FormRequest クラス化（重い・9コントローラー分・専用セッション推奨）
+### B-3: FormRequest クラス化（完了）
+**検証済み（route:list × 7コミット・curl バリデーションエラー確認）:**
+- `app/Http/Requests/Api/` に16ファイル新規作成
+- 対象: PostApiController(3) / CommentApiController(1共用) / AnalysisApiController(5) / ProfileApiController(3) / CategoryApiController(2) / TopicApiController(2)
+- 特記: SupplementRequest は Post・Analysis の supplement 共用
+- 特記: UpdateProfileRequest は $canChangeName 条件を rules() 内で処理（$this->user() 使用）
+- 全コントローラーから $request->validate([...]) を削除し $request->validated() に置換
+- Gitタグ: `v3.3-b3-form-requests`（logos-laravel push済み）
+
+**Phase 3 残タスク:**
+- 現時点で主要な残タスクなし。B-5/B-6/F-6/F-7（低優先度）は将来検討。
 
 ---
 

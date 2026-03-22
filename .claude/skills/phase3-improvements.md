@@ -33,10 +33,18 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 
 ### 🟡 優先度: 中
 
-#### B-3: FormRequest クラスによるバリデーション集約
-- **現状**: バリデーションが routes/api.php のクロージャ内に直書き（再利用不可）
-- **理想**: `app/Http/Requests/` に FormRequest クラスを切り出し、Controller に注入
-- **対象**: PostRequest, CommentRequest, AnalysisRequest 等
+#### B-3: FormRequest クラスによるバリデーション集約 ✅ 完了（2026-03-22）
+- **完了内容**: `app/Http/Requests/Api/` に16ファイル作成・全 ApiController のバリデーションを移行
+  ```
+  StorePostRequest / UpdatePostRequest / SupplementRequest（Post+Analysis共用）
+  StoreCommentRequest（store+reply共用）
+  StoreAnalysisRequest / UpdateAnalysisRequest / PublishAnalysisRequest / StoreAnalysisImageRequest / AiAssistRequest
+  UpdateProfileRequest（$canChangeName 条件を rules() 内で処理）/ UpdatePasswordRequest / DestroyProfileRequest
+  StoreCategoryRequest / UpdateCategoryRequest
+  StoreTopicRequest / UpdateTopicRequest
+  ```
+- **検証済み**: 全7コミット後 route:list 確認・curl で 422 バリデーションエラー正常返却を確認
+- **Gitタグ**: `v3.3-b3-form-requests`（logos-laravel push済み）
 
 #### B-4: OGP取得ロジックの共通化 ✅ 完了（2026-03-22）
 - **完了内容**: `app/Services/OgpService.php` 新規作成。3箇所の重複ロジックを共通化
@@ -145,7 +153,7 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 | 🟡 中 | F-3 | boolean 型変換レイヤー | バグリスク排除 | 低 |
 | 🟡 中 | F-4 | 分析型 Discriminated Union | 型安全・バグを型レベルで防止 | 低 |
 | 🟡 中 | F-5 | SWR / React Query ✅ | キャッシング・重複排除 | 低〜中 |
-| 🟡 中 | B-3 | FormRequest クラス | バリデーション整理 | 低 |
+| 🟡 中 | B-3 | FormRequest クラス ✅ | バリデーション整理 | 低 |
 | 🟡 中 | B-4 | OgpService 共通化 ✅ | 重複排除 | 低 |
 | 🟢 低 | B-5 | ApiResource クラス | レスポンス統一 | 中 |
 | 🟢 低 | F-6 | Header/Sidebar 細分化 | コンポーネント管理性 | 高 |
