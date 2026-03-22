@@ -8,6 +8,7 @@
 | v2.0-phase2-complete | Phase2完成・18ページ全実装・Blade↔Next.js差分なし | 2026-03-22 |
 | v3.0-phase3-start | Phase3開始・リポジトリ一本化（logos-new→logos-laravel）・編集制約撤廃 | 2026-03-22 |
 | v3.1-b1-controller-split | B-1完了・routes/api.php→9コントローラー分割・docs更新 | 2026-03-22 |
+| v3.2-f5-swr | F-5完了・SWR導入（AuthContext/useTopicPage/notifications） | 2026-03-22 |
 
 ### logos-laravel（参照用・バックエンド）
 | タグ | 内容 | 日付 |
@@ -71,10 +72,20 @@
 - 残存クロージャ（意図的）: /og・/register・/login・/logout・GET /categories（認証不要公開API）
 - Gitタグ: `v3.1-b1-controller-split`（両リポジトリ・push 済み）
 
+### F-5: SWR 導入（完了）
+**検証済み（npm run build × 3回通過・TypeScriptエラーなし）:**
+- `npm install swr@^2.4.1`
+- `context/AuthContext.tsx`: useState+useEffect → useSWR("auth-user", fetchUser)
+  - revalidateOnFocus: true / shouldRetryOnError: false / logout: mutate(null,{revalidate:false})
+- `app/topics/[id]/hooks/useTopicPage.ts`: useSWR(url, {fallbackData: initialTopic})
+  - updateTopic ヘルパーで setTopic→mutateTopic(fn,{revalidate:false}) 15箇所置換
+- `app/notifications/page.tsx`: useSWR(user?url:null) ページ依存キー・ページネーションは setCurrentPage のみ
+- **注意**: ブラウザ動作確認（ログイン・タブ復帰・ログアウト）は未実施（要ユーザー確認）
+- Gitタグ: `v3.2-f5-swr`（logos-next）
+
 **Phase 3 残タスク推奨順:**
-1. F-5: SWR / React Query（AuthContext user/me が主ターゲット）
-2. B-3: FormRequest クラス化（B-1完了済みなので着手可）
-3. B-4: OgpService 共通化
+1. B-4: OgpService 共通化（軽い・1サービスクラス+3箇所修正）
+2. B-3: FormRequest クラス化（重い・9コントローラー分・専用セッション推奨）
 
 ---
 
