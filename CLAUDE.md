@@ -216,6 +216,15 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 
 ## Phase 3 実装済み（2026-03-22〜2026-03-23）
 
+### F-7: 共有コンポーネント整理 ✅（2026-03-23）
+- `components/UserAvatar.tsx` — 新規作成（avatar画像対応・sm/md/lg 3サイズ統一）
+- `components/LikeButton.tsx` — 新規作成（topics版をそのまま共有化）
+- `app/topics/[id]/_components/UserAvatar.tsx` — shared へ re-export（中身削除）
+- `app/topics/[id]/_components/LikeButton.tsx` — shared へ re-export（中身削除）
+- `PostCard.tsx`・`CommentCard.tsx` — 呼び出し引数を `name=` → `user=` に統一
+- `dashboard/page.tsx`・`likes/page.tsx` — インライン `UserAvatar` 定義（計60行）を削除・import に置換
+- **効果**: 3ヶ所の重複コード解消・137行削減・全ページから共有コンポーネントとして利用可能に
+
 ### F-1: SSR復帰・Route Handlerプロキシ ✅
 - `lib/proxy-fetch.ts` — サーバー専用プロキシユーティリティ（API_BASE_URL・NEXT_PUBLIC_なし）
 - `app/api/topics/` `app/api/categories/` `app/api/analyses/` — Route Handler 4本作成

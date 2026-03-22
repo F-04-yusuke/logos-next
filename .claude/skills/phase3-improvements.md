@@ -157,9 +157,16 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 - **現状**: Header 377行・Sidebar 374行（Blade の navigation.blade.php を1:1再現）
 - **理想**: `Header/SearchBar.tsx`, `Header/NotificationBell.tsx`, `Header/UserMenu.tsx` に分割
 
-#### F-7: 共有コンポーネントの整理
-- **現状**: PostCard 等が topics/[id]/_components/ に局所的
-- **理想**: `components/post/`, `components/comment/` 等に移動し全ページで再利用可能に
+#### F-7: 共有コンポーネントの整理 ✅ 完了（2026-03-23）
+- **完了内容**:
+  - `components/UserAvatar.tsx` 新規作成（avatar画像対応・sm/md/lg 3サイズ）
+  - `components/LikeButton.tsx` 新規作成
+  - `topics/_components/UserAvatar.tsx` → shared へ re-export
+  - `topics/_components/LikeButton.tsx` → shared へ re-export
+  - `PostCard.tsx`・`CommentCard.tsx` の引数を `name=` → `user=` に統一
+  - `dashboard/page.tsx`・`likes/page.tsx` のインライン定義（計60行）を削除・import に置換
+- **PostCard・CommentCard 等は移動対象外**: 各ページで型が異なるため topics/_components/ に残置（適切な設計判断）
+- **検証済み**: 型チェック（noEmit）・npm run build 両方エラーなし
 
 ---
 
@@ -178,7 +185,7 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 | 🟡 中 | B-4 | OgpService 共通化 ✅ | 重複排除 | 低 |
 | 🟢 低 | B-5 | ApiResource クラス | レスポンス統一 | 中 |
 | 🟢 低 | F-6 | Header/Sidebar 細分化 | コンポーネント管理性 | 高 |
-| 🟢 低 | F-7 | 共有コンポーネント整理 | 再利用性向上 | 高 |
+| 🟢 低 ✅ | F-7 | 共有コンポーネント整理 | 再利用性向上 | 高 |
 
 ---
 

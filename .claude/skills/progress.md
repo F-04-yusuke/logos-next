@@ -9,6 +9,7 @@
 | v3.0-phase3-start | Phase3開始・リポジトリ一本化（logos-new→logos-laravel）・編集制約撤廃 | 2026-03-22 |
 | v3.1-b1-controller-split | B-1完了・routes/api.php→9コントローラー分割・docs更新 | 2026-03-22 |
 | v3.2-f5-swr | F-5完了・SWR導入（AuthContext/useTopicPage/notifications） | 2026-03-22 |
+| v3.6-f7-shared-components | F-7完了・UserAvatar/LikeButton を components/ に共有化・重複インライン定義60行削除 | 2026-03-23 |
 
 ### logos-laravel（参照用・バックエンド）
 | タグ | 内容 | 日付 |
@@ -120,8 +121,17 @@
 - `Like.php` に `user()` / `post()` の belongsTo を追加
 - Gitタグ: `v3.5-b6-like-relations`（logos-laravel）
 
+### F-7: 共有コンポーネント整理（完了・2026-03-23）
+**検証済み（tsc --noEmit・npm run build エラーなし）:**
+- `components/UserAvatar.tsx` 新規作成（avatar画像対応・sm/md/lg 3サイズ統一）
+- `components/LikeButton.tsx` 新規作成
+- `topics/_components/UserAvatar.tsx`・`LikeButton.tsx` → shared へ re-export
+- `dashboard/page.tsx`・`likes/page.tsx` のインライン定義（計60行）削除・import に置換
+- **効果**: 3ヶ所の重複コード解消・137行削減（96行追加）
+- Gitタグ: `v3.6-f7-shared-components`（logos-next）
+
 **Phase 3 残タスク:**
-- 主要タスク（B-1〜B-6・F-1〜F-5）は全て完了。残りは低優先度 F-6/F-7 のみ（将来フェーズ検討）。
+- F-7 完了により残りは F-6（Header/Sidebar 細分化）のみ。
 - 技術的負債3件は `phase3-improvements.md` の B-5 セクションに記録済み。
 
 ---
