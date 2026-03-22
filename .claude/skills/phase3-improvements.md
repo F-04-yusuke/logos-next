@@ -11,22 +11,22 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 
 ### 🔴 優先度: 高
 
-#### B-1: routes/api.php をコントローラーに分割
-- **現状**: 1040行・46エンドポイント全てがクロージャで直実装（2ファイル縛りの残骸）
-- **理想**: routes/api.php はルート定義のみ50行程度・ロジックはControllerへ
-- **分割先**:
+#### B-1: routes/api.php をコントローラーに分割 ✅ 完了（2026-03-22）
+- **完了内容**: 1040行→209行(-80%)・全47エンドポイントを9コントローラーに分割
   ```
   app/Http/Controllers/Api/
-  ├── TopicApiController.php   ← 既存
-  ├── PostApiController.php    ← エビデンス CRUD・いいね・supplement
-  ├── CommentApiController.php ← コメント・返信 CRUD・いいね
-  ├── AnalysisApiController.php ← 図解ツール CRUD・公開・いいね・supplement
-  ├── NotificationApiController.php
-  ├── ProfileApiController.php
-  ├── UserApiController.php    ← likes・bookmarks・analyses
-  └── DashboardApiController.php
+  ├── TopicApiController.php      ← index/show/store/update/destroy/bookmark/timelineGenerate/timelineUpdate
+  ├── PostApiController.php       ← store/like/supplement/update/destroy
+  ├── CommentApiController.php    ← store/reply/destroy/like
+  ├── AnalysisApiController.php   ← show/store/update/destroy/publish/like/supplement/userAnalyses/storeImage/aiAssist
+  ├── CategoryApiController.php   ← store/update/destroy（管理者専用）
+  ├── NotificationApiController.php ← index/readAll/read
+  ├── ProfileApiController.php    ← show/update/updatePassword/destroy
+  ├── UserApiController.php       ← me/bookmarks/likes/history
+  └── DashboardApiController.php  ← index
   ```
-- **優先理由**: 以後の機能追加・テスト・デバッグ全てがここを通る。負債解消効果最大
+- **検証済み**: route:list で全47エンドポイント確認・8コミットに分割して段階的に実施
+- **残クロージャ**: /og(公開)・/register・/login・/logout・GET /categories(公開) ← 意図的に残存
 
 #### B-2: Topic モデルに analyses() リレーション追加 ✅ 完了（2026-03-22）
 - **完了内容**: `Topic::hasMany(Analysis::class)` を追加・TopicApiController::show の直接クエリを `$topic->load('analyses' => ...)` に置き換え
@@ -132,7 +132,7 @@ Phase 2 完了後の技術調査で発覚した「制約起因の負債」と「
 | 優先 | ID | 項目 | 効果 | コスト |
 |---|---|---|---|---|
 | 🔴 高 | F-1 | SSR復帰（Route Handler プロキシ） | SEO・表示速度劇的改善 | 中 |
-| 🔴 高 | B-1 | routes/api.php → Controller分割 | 保守性・テスト性大幅向上 | 中〜高 |
+| 🔴 高 | B-1 | routes/api.php → Controller分割 ✅ | 保守性・テスト性大幅向上 | 中〜高 |
 | 🔴 高 | F-2 | Custom Hook化 | page.tsx を管理可能サイズに | 中 |
 | 🟡 中 | B-2 | Topic::analyses() リレーション追加 | N+1解消・コード簡潔化 | 低 |
 | 🟡 中 | F-3 | boolean 型変換レイヤー | バグリスク排除 | 低 |
