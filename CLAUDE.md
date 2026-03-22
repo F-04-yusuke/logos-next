@@ -172,6 +172,16 @@ cd ~/logos-next && npm run dev           # Next.js起動
 ## 未実装（残作業）
 - 現時点で主要な未実装ページ・機能はなし。次フェーズ（Phase 3）の内容は §5「次フェーズ構想」を参照。
 
+## Phase 2 未対応・将来検討項目
+以下は Blade ファイルが存在するが Phase 2 では実装しなかった項目。将来のフェーズで導入を検討する。
+
+| 項目 | Phase 2 で見送った理由 | 将来方針 |
+|---|---|---|
+| パスワードリセット（`auth/forgot-password.blade.php`, `auth/reset-password.blade.php`） | Blade のログインページにもリンクなく未使用。API エンドポイントも未追加 | Phase 3 以降でメール設定（SMTP）と合わせて検討 |
+| メール認証（`auth/verify-email.blade.php`） | `User.php` で `MustVerifyEmail` がコメントアウトされており現在無効 | 本人確認強化フェーズで有効化を検討 |
+| パスワード確認（`auth/confirm-password.blade.php`） | Sanctum APIトークン認証フローでは現在使用しない | 高セキュリティ操作（アカウント削除等）の UX 改善時に検討 |
+| 分析タイトル編集（`analyses/edit.blade.php`） | Next.js では `/tools/[type]?edit=[id]` でフル編集・上書き保存が可能（Blade より高機能なため対応不要） | 現状の Next.js 実装で十分 |
+
 ## Vercel手動設定（未完了・ユーザーが行う）
 - 環境変数 `NEXT_PUBLIC_API_BASE_URL=https://gs-f04.sakura.ne.jp` をVercelダッシュボードで設定
 

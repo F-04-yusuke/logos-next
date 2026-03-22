@@ -173,9 +173,13 @@
 
 **Step14: 移行漏れチェック・オリジナル図解・分析閲覧ページ（2026-03-22）:**
 
-*Blade↔Next.js 総点検（移行漏れ2項目を修正）:*
+*Blade↔Next.js 総点検（移行漏れ2項目を修正・4項目を対象外と確定）:*
 - 項目5: オリジナル図解（画像アップロード）— Bladeには実装済みだがNext.jsに未実装だったため対応
 - 項目3: `/analyses/[id]` スタンドアロン閲覧ページ — Bladeには実装済みだがNext.jsに未実装だったため対応
+- Phase 2 見送り（将来検討）: パスワードリセット（Bladeのloginページにもリンクなし・APIエンドポイント未追加・Phase 3以降でSMTP設定と合わせて検討）
+- Phase 2 見送り（将来検討）: メール認証（User.php で MustVerifyEmail がコメントアウト中・本人確認強化フェーズで検討）
+- Phase 2 見送り（将来検討）: パスワード確認ページ（Sanctum APIトークンフローでは現在不要・高セキュリティ操作UX改善時に検討）
+- Phase 2 不要: 分析タイトル編集（Next.jsでは /tools/[type]?edit=[id] でフル編集可・Blade版より高機能なため対応不要）
 
 *logos API追加（routes/api.php）:*
 - POST /api/topics/{topic}/analyses/image — オリジナル図解アップロード（PRO限定・jpg/png/gif/webp・5MB制限・即公開）
