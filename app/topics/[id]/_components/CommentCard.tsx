@@ -64,7 +64,7 @@ export function CommentCard({
   return (
     <div className="flex gap-4 items-start py-4 border-b border-gray-100 dark:border-gray-800/60">
       <div className="shrink-0 mt-1">
-        <UserAvatar name={comment.user.name} size="lg" />
+        <UserAvatar user={comment.user} size="lg" />
       </div>
 
       <div className="flex-1 min-w-0">
@@ -179,7 +179,7 @@ export function CommentCard({
                 {comment.replies.map((reply) => (
                   <div key={reply.id} className="flex gap-3 items-start">
                     <div className="shrink-0 mt-0.5">
-                      <UserAvatar name={reply.user.name} size="sm" />
+                      <UserAvatar user={reply.user} size="sm" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2">

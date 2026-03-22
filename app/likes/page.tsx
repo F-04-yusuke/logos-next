@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { getAuthHeaders } from "@/lib/auth";
+import { UserAvatar } from "@/components/UserAvatar";
 
 type LikedPost = {
   id: number;
@@ -44,24 +45,6 @@ function timeAgo(dateStr: string): string {
   const months = Math.floor(days / 30);
   if (months < 12) return `${months}ヶ月前`;
   return `${Math.floor(months / 12)}年前`;
-}
-
-function UserAvatar({ user, size = "sm" }: { user: { name: string; avatar?: string | null }; size?: "sm" | "md" }) {
-  const dim = size === "md" ? "h-10 w-10" : "h-6 w-6";
-  const icon = size === "md" ? "h-6 w-6" : "h-4 w-4";
-  return user.avatar ? (
-    <img
-      className={`${dim} rounded-full object-cover border border-gray-200 dark:border-gray-700`}
-      src={user.avatar}
-      alt={`${user.name}のアイコン`}
-    />
-  ) : (
-    <div className={`${dim} rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700`}>
-      <svg aria-hidden="true" className={`${icon} text-gray-400`} fill="currentColor" viewBox="0 0 24 24">
-        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-      </svg>
-    </div>
-  );
 }
 
 function ThumbUpIcon({ filled, size = "md" }: { filled: boolean; size?: "sm" | "md" }) {
@@ -157,7 +140,7 @@ function CommentCard({ comment }: { comment: LikedComment }) {
     <div className="bg-white dark:bg-[#1e1f20] px-4 rounded-lg border border-gray-200 dark:border-transparent shadow-sm">
       <div className="flex gap-4 items-start py-4">
         <div className="shrink-0 mt-1">
-          <UserAvatar user={comment.user} size="md" />
+          <UserAvatar user={comment.user} size="lg" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2 mb-0.5">
