@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-23（Session 14）
+最終更新: 2026-03-23（Session 16）
 
 ---
 
@@ -251,17 +251,88 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 
 ---
 
+## Session 16: サイドバー UI/UX 改善・フォント統一（2026-03-23）
+
+### U-8: サイドバー UI/UX 改善 ✅
+
+**変更ファイル:** `components/Sidebar/NavLinks.tsx`、`components/Sidebar/index.tsx`、`components/AppLogo.tsx`
+
+#### アクティブ状態・アイコン整合・cursor-pointer
+
+| 変更 | 内容 |
+|---|---|
+| アクティブ状態 | `usePathname()` で現在ページに `bg-gray-700` ハイライト（全リンク対応） |
+| 保存トピックアイコン | `w-5 h-5 bg-gray-800` → `w-6 h-6 border border-gray-600 group-hover:bg-gray-600`（Blade統一） |
+| 「設定」アイコン | 歯車アイコン追加（他リンクとの整合性） |
+| 非PROボタン | `cursor-pointer` 追加（全3ボタン） |
+| ホーム・カテゴリ一覧 | `font-bold` 削除（他リンクと統一） |
+| セクション間隔 | `space-y-6` → `space-y-3`（hr前後の余白縮小） |
+| ハンバーガー | `cursor-pointer` 追加 |
+
+#### アイコンサイズ・アライメント統一
+
+| 変更 | 内容 |
+|---|---|
+| アイコンサイズ | `w-5 h-5` → `w-6 h-6`（ハンバーガーと同サイズ） |
+| strokeWidth | `1.5` → `2`（ハンバーガーと統一） |
+| コンテナpadding | `px-3` → `px-4`（アイコン左端 = ハンバーガー左端 = 24px） |
+| 上余白 | `py-4` → `py-2`（LOGOSとホームの間隔縮小） |
+| テキスト ml | `ml-3` → `ml-5`（LOGOSアイコン左端 = ナビテキスト左端 = 68px） |
+| 保存トピック名 ml | `ml-2` → `ml-5`（他ナビ項目と左端統一） |
+
+#### AppLogo コンパクト化（YouTube ライク）
+
+| 変更 | 内容 |
+|---|---|
+| SVG | `h-8` → `h-6`（ハンバーガー三本線縦幅に収める） |
+| テキスト | `text-2xl tracking-widest` → `text-lg tracking-tight`（縮小・字間詰め） |
+| gap | `gap-2` → `gap-1.5` |
+| ハンバーガーとの余白 | `ml-2` → `ml-3` |
+
+### フォントウェイト全ページ統一 ✅
+
+**ルール:** レギュラー（400）とボールド（700）のみ使用（security.md 準拠）
+
+**変更ファイル:** 15ファイル（全ページ横断）
+
+| 違反パターン | 修正 | 対象 |
+|---|---|---|
+| `font-black`（900） | → `font-bold` | 全PRO バッジ・スコア表示・通知ロゴ（AppLogoを除く） |
+| `font-semibold`（600） | → `font-bold` | 全ページ h1/h2 見出し・カテゴリバッジ |
+| `font-medium`（500） | → 削除（font-normal） | ラベル・ユーザー名・メール等 |
+| 未読通知テキスト | `font-medium` → `font-bold` | 既読との差別化維持 |
+
+**除外（意図的維持）:**
+- `AppLogo.tsx` の `font-black`（"LOGOS"ブランドロゴ）
+- サイドバーセクション見出し（保存トピック・マイページ）の `font-semibold`（Blade踏襲・uppercase小文字ラベル慣習）
+
+### トピックページ タイポグラフィ修正 ✅
+
+| 変更 | 内容 |
+|---|---|
+| トピックタイトル | `tracking-tight` 削除（字詰め解消） |
+| 件数表示 | `{N}件の投稿` → `{N} 件の投稿`（数字と単位の間にスペース）（投稿・コメント・分析3箇所） |
+| PostCard タイトル | `font-semibold` → `font-bold` |
+| PostCard ユーザー名 | `font-medium` 削除 |
+
+### Gitタグ（Session 16）
+
+- logos-next: `v4.5-session16-sidebar-font`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
 ## Phase 4 残タスク（優先度別）
 
 ### 最優先：UI/UX 継続改善
 
-**トピックページ（完了済み）:**
-- Batch 1〜4 すべて完了（Session 13〜14）
-- ホバー強化・概要折りたたみ完了（Session 15）
+**完了済み:**
+- トピックページ Batch 1〜4（Session 13〜14）
+- ホバー強化・概要折りたたみ（Session 15）
+- サイドバー UI改善・フォント統一（Session 16）
 
-**次のターゲット（Session 16 予定）:**
-- **サイドバー UI改善**: トピックページの初期印象を最優先にサイドバーを先に整える
-- **コメントタブ**: tinkerでテストデータを充実させてイメージ確認 → UI/UX改善（Session 17以降）
+**次のターゲット（Session 17 予定）:**
+- **コメントタブ**: tinkerでテストデータを充実させてイメージ確認 → UI/UX改善
 - 分析タブ UI/UX 改善
 - トップページ（トピック一覧）UI/UX 改善
 - その他全ページ
