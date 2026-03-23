@@ -74,7 +74,7 @@ export default function NavLinks({
     >
 
       {/* ── メインナビ（全員表示） ── */}
-      <ul className="space-y-1">
+      <ul className="space-y-1 text-sm">
         <li>
           <Link href="/" className={navClass("/")}>
             <svg className={iconClass("/")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

@@ -333,7 +333,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                     <select
                       value={postFilter}
                       onChange={(e) => setPostFilter(e.target.value)}
-                      className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1 cursor-pointer"
+                      className="text-xs sm:text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                     >
                       <option value="">すべてのメディア</option>
                       <option value="YouTube">YouTube</option>
@@ -348,7 +348,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       onChange={(e) =>
                         setPostSort(e.target.value as "popular" | "newest" | "oldest")
                       }
-                      className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1 hidden sm:block cursor-pointer"
+                      className="text-xs sm:text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                     >
                       <option value="popular">人気順</option>
                       <option value="newest">新着順</option>

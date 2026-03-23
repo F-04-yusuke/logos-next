@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-23（Session 17）
+最終更新: 2026-03-24（Session 18）
 
 ---
 
@@ -381,6 +381,56 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 
 ---
 
+---
+
+## Session 18: ヘッダー・サイドバー・PostCard・情報タブ UI調整（2026-03-24）
+
+### U-13: ヘッダー・サイドバー UI調整 ✅
+
+**変更ファイル:** `components/Header/index.tsx`、`components/Header/SearchBar.tsx`、`components/Header/UserMenu.tsx`、`components/Sidebar/index.tsx`、`components/Sidebar/NavLinks.tsx`
+
+| 変更 | 変更前 | 変更後 |
+|---|---|---|
+| ヘッダー高さ | `h-16` | `h-14`（サイドバー上部と統一） |
+| 検索バー縦幅 | `py-2` | `py-2.5` |
+| 右ナビ gap | `gap-2` | `gap-4` |
+| 通知ベルアイコン | `h-5 w-5` | `h-6 w-6` |
+| アバターサイズ | `h-8 w-8` | `h-9 w-9`、iconSize `h-5 w-5` → `h-6 w-6` |
+| サイドバー上部行 | `h-16` | `h-14`（ヘッダーと統一） |
+| サイドバー ホーム・カテゴリ文字サイズ | デフォルト（他より大きめ） | `text-sm`（`<ul>` に追加・他ナビ項目と統一） |
+
+### U-14: PostCard 構造改善 ✅
+
+**変更ファイル:** `app/topics/[id]/_components/PostCard.tsx`
+
+| 変更 | 内容 |
+|---|---|
+| ホバー左切れ修正 | `pl-0` → `-ml-3 pl-3`（負マージンで左方向にホバー背景を拡張） |
+| カード構造 | 2カラムレイアウト（`flex flex-col md:flex-row gap-4 min-h-[170px]`）を内側ラッパーに分離。補足展開・補足フォームを外側に配置 |
+| いいね・削除ボタン位置 | 右列下部に移動（`ml-auto`で右寄せ） |
+| 非オーナー アライン | 削除ボタン位置に `invisible pointer-events-none` プレースホルダーを配置し、いいねボタンのアイラインをオーナーと統一 |
+| 補足を追加するボタン | アクション行左側（`補足あり`ボタンと同位置）に移動 |
+| 補足フォーム | 2カラム外・右列と同位置（flex spacer `hidden md:block md:w-[30%] flex-shrink-0` + `md:gap-4`）に配置 |
+| インデント整合 | 2カラムラッパー追加後のインデント不整合を修正（8sp → 10sp）|
+
+### U-15: 情報タブ セレクト UI調整 ✅
+
+**変更ファイル:** `app/topics/[id]/_components/TopicPageClient.tsx`
+
+| 変更 | 内容 |
+|---|---|
+| セレクト背景 | `bg-transparent` → `bg-white dark:bg-[#131314]`（`bg-transparent` だとOS既定の白背景ドロップダウンで白文字が消えるバグ修正） |
+| セレクト枠線 | `border-gray-700` → `border border-gray-200 dark:border-gray-700` |
+| セレクトホバー | `hover:bg-gray-100 dark:hover:bg-[#1e1f20]` 追加 |
+| セレクトpadding | `px-2 sm:px-3 py-1.5` に調整 |
+
+### Gitタグ（Session 18）
+
+- logos-next: `v4.7-session18-ui-header-postcard`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
 ## Phase 4 残タスク（優先度別）
 
 ### 最優先：UI/UX 継続改善
@@ -390,8 +440,9 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 - ホバー強化・概要折りたたみ（Session 15）
 - サイドバー UI改善・フォント統一（Session 16）
 - Geminiカラー・フォント・タイポグラフィ統一（Session 17）
+- ヘッダー・サイドバー・PostCard・情報タブ UI調整（Session 18）
 
-**次のターゲット（Session 18 予定）:**
+**次のターゲット（Session 19 予定）:**
 - **コメントタブ**: tinkerでテストデータを充実させてイメージ確認 → UI/UX改善
 - 分析タブ UI/UX 改善
 - トップページ（トピック一覧）UI/UX 改善

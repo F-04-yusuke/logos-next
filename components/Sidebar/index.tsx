@@ -52,7 +52,7 @@ export default function Sidebar() {
         ].join(" ")}
       >
         {/* ── トグルボタン行（ハンバーガー ＋ ロゴ） ── */}
-        <div className="h-16 flex items-center px-4 shrink-0 border-b border-transparent">
+        <div className="h-14 flex items-center px-4 shrink-0 border-b border-transparent">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:bg-gray-900 hover:text-gray-300 focus:outline-none transition shrink-0 cursor-pointer"

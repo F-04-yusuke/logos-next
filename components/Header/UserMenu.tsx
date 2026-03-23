@@ -71,7 +71,7 @@ export default function UserMenu({
         aria-label="アカウントメニュー"
         aria-expanded={dropdownOpen}
       >
-        <Avatar avatar={user.avatar} name={user.name} size="h-8 w-8" iconSize="h-5 w-5" />
+        <Avatar avatar={user.avatar} name={user.name} size="h-9 w-9" iconSize="h-6 w-6" />
       </button>
 
       {dropdownOpen && (

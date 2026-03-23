@@ -50,7 +50,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-[#131314] border-b border-transparent">
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-14">
 
           {/* ── 中央: 検索バー（PC） ── */}
           <div className="hidden sm:flex flex-1 items-center justify-center px-4 sm:px-6 lg:px-12">
@@ -60,7 +60,7 @@ export default function Header() {
           </div>
 
           {/* ── 右: PC用ナビ ── */}
-          <div className="hidden sm:flex sm:items-center gap-2">
+          <div className="hidden sm:flex sm:items-center gap-4">
             {loading ? null : user ? (
               <>
                 {/* カテゴリ管理（is_admin のみ） */}
@@ -77,7 +77,7 @@ export default function Header() {
                 <NotificationBell
                   unreadCount={unreadCount}
                   linkClassName="relative p-2 rounded-full text-gray-400 hover:bg-gray-800 transition-colors"
-                  iconClassName="h-5 w-5"
+                  iconClassName="h-6 w-6"
                 />
 
                 {/* アバタードロップダウン */}

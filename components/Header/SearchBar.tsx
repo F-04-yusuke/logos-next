@@ -30,14 +30,14 @@ export default function SearchBar({
         autoFocus={autoFocus}
         className={
           inputClassName ??
-          "w-full bg-[#121212] border border-gray-700 rounded-l-full px-5 py-2 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-white text-sm shadow-inner transition-colors"
+          "w-full bg-[#121212] border border-gray-700 rounded-l-full px-5 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-white text-sm shadow-inner transition-colors"
         }
       />
       <button
         type="submit"
         className={
           buttonClassName ??
-          "bg-[#222222] border border-l-0 border-gray-700 rounded-r-full px-5 py-2 text-gray-400 hover:bg-[#303030] transition-colors flex items-center justify-center"
+          "bg-[#222222] border border-l-0 border-gray-700 rounded-r-full px-5 py-2.5 text-gray-400 hover:bg-[#303030] transition-colors flex items-center justify-center"
         }
       >
         <span className="sr-only">検索する</span>
