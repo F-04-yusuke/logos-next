@@ -86,20 +86,38 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     }
   };
 
-  const handlePostSubmit = async (isDraft: boolean) => {
+  const handlePostSubmit = async (isDraft: boolean, imageFile?: File, customTitle?: string) => {
     if (!postUrl || !postCategory) return;
     setSubmitting(true);
     try {
-      const res = await fetch(`${API_BASE}/api/topics/${id}/posts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-        body: JSON.stringify({
+      let res: Response;
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("url", postUrl);
+        formData.append("category", postCategory);
+        if (postComment) formData.append("comment", postComment);
+        formData.append("custom_thumbnail", imageFile);
+        if (customTitle) formData.append("custom_title", customTitle);
+        formData.append("is_published", isDraft ? "0" : "1");
+        res = await fetch(`${API_BASE}/api/topics/${id}/posts`, {
+          method: "POST",
+          headers: getAuthHeaders(),
+          body: formData,
+        });
+      } else {
+        const body: Record<string, unknown> = {
           url: postUrl,
           category: postCategory,
           comment: postComment || undefined,
           is_published: !isDraft,
-        }),
-      });
+        };
+        if (customTitle) body.custom_title = customTitle;
+        res = await fetch(`${API_BASE}/api/topics/${id}/posts`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+          body: JSON.stringify(body),
+        });
+      }
       if (!res.ok) throw new Error();
       if (isDraft) {
         setShowPostModal(false);

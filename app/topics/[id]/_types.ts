@@ -9,6 +9,7 @@ export type Post = {
   url: string;
   title?: string | null;
   thumbnail_url?: string | null;
+  custom_thumbnail?: string | null;
   comment?: string | null;
   supplement?: string | null;
   category: string;

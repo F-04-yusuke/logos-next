@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-23（Session 11 / F-6・F-7 反映・ドキュメント整理）
+最終更新: 2026-03-23（Session 12 / Phase 4 UI/UX改善・PostCard・PostModal）
 
 ```
 logos-next/
@@ -57,9 +57,9 @@ logos-next/
 │   │           ├── TopicPageClient.tsx  # トピック詳細CSR部分（"use client"・useTopicPage呼び出し・全JSX）
 │   │           ├── UserAvatar.tsx       # → components/UserAvatar への re-export（F-7 Phase3）
 │   │           ├── LikeButton.tsx       # → components/LikeButton への re-export（F-7 Phase3）
-│   │           ├── PostCard.tsx         # エビデンスカード（補足フォーム・削除ボタン）
+│   │           ├── PostCard.tsx         # エビデンスカード（補足フォーム・削除ボタン・YouTube/X SVGフォールバック・lightbox・続きを読む）
 │   │           ├── CommentCard.tsx      # コメントカード（返信フォーム・削除ボタン・返信制限制御）
-│   │           ├── PostModal.tsx        # エビデンス投稿モーダル（OGPプレビュー含む）
+│   │           ├── PostModal.tsx        # エビデンス投稿モーダル（OGPプレビュー・画像添付・タイトル手動入力）
 │   │           ├── AnalysisCard.tsx     # typeBadge / AnalysisPreview をエクスポート
 │   │           └── AnalysisModal.tsx    # 分析・図解投稿モーダル（オリジナル画像アップロード対応）
 │   └── tools/
@@ -78,7 +78,7 @@ logos-next/
 │   │   ├── SearchBar.tsx                # 検索フォーム（PC/スマホ共用・autoFocus 対応）
 │   │   └── UserMenu.tsx                 # Avatar helper（named export）+ PC アバタードロップダウン
 │   ├── LayoutShell.tsx                  # /login・/register でHeader/Sidebar非表示制御・ProModal配置
-│   ├── LikeButton.tsx                   # 共有いいねボタン（F-7 Phase3・sm/md サイズ対応）
+│   ├── LikeButton.tsx                   # 共有いいねボタン（F-7 Phase3・sm/md/lg サイズ対応）
 │   ├── ProModal.tsx                     # PRO誘導モーダル（非PRO会員がPRO機能を押したとき表示）
 │   ├── Sidebar.tsx                      # 後方互換 re-export → Sidebar/index.tsx に転送（F-6 Phase3）
 │   ├── Sidebar/                         # Sidebar サブコンポーネント群（F-6 Phase3）
@@ -111,8 +111,9 @@ logos-next/
 │       ├── progress-phase1.md           # Phase 1 完了記録（Laravel Blade版MVP）
 │       ├── progress-phase2.md           # Phase 2 完了記録（Next.js移行・Step1〜14）
 │       ├── progress-phase3.md           # Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）
-│       ├── handoff-session11.md         # 最新引継ぎプロンプト
-│       └── handoff-archive/             # 過去セッション引継ぎ（Session 6〜10）
+│       ├── progress-phase4.md           # Phase 4 進行中記録（UI/UX改善・Session 12〜）
+│       ├── handoff-session12.md         # 最新引継ぎプロンプト
+│       └── handoff-archive/             # 過去セッション引継ぎ（Session 6〜11）
 ├── next.config.ts
 ├── package.json                         # swr@^2.4.1 など依存関係
 ├── tailwind.config.ts

@@ -1,6 +1,6 @@
 # ロードマップ・Gitタグ履歴・プロジェクト理念
 
-最終更新: 2026-03-23（Session 11 ドキュメント整理）
+最終更新: 2026-03-23（Session 12 Phase 4 開始）
 
 ---
 
@@ -20,7 +20,7 @@
 | Phase 1 | MVPの磨き込み（Laravel Blade版） | 〜2026-03-19 | ✅ 完了 |
 | Phase 2 | フロントエンドのモダン化（Next.js移行） | 2026-03-19〜2026-03-22 | ✅ 完了 |
 | Phase 3 | 技術的負債解消・コード品質改善 | 2026-03-22〜2026-03-23 | ✅ 完了 |
-| Phase 4 | 集客・マーケティング基盤 | 未着手 | 🔲 未着手 |
+| Phase 4 | 集客・マーケティング基盤 | 2026-03-23〜 | 🔄 進行中 |
 | Phase 5 | スケールとマネタイズ | 未着手 | 🔲 未着手 |
 
 ※ 旧ドキュメントでは「Phase 3」が「集客・マーケティング」として定義されていたが、実際には技術改善（B-1〜B-6・F-1〜F-7）を Phase 3 として実施した。集客・マーケティングは Phase 4 に繰り下げ。
@@ -58,7 +58,7 @@
 - LOGOSの思想・機能・UIデザインに影響しない純粋な技術改善
 - 詳細 → `progress-phase3.md`
 
-### Phase 4：集客・マーケティング基盤（未着手）
+### Phase 4：集客・マーケティング基盤（進行中 2026-03-23〜）
 
 - SEO対策: 適切なHTMLタグ（h1, h2）の使用、メタデータ（OGP設定）
 - 表示速度の最適化: 画像の圧縮、不要なコードの削減
@@ -129,6 +129,7 @@
 | v3.6-f7-shared-components | F-7完了・UserAvatar/LikeButton を components/ に共有化・重複インライン定義60行削除 | 2026-03-23 |
 | v3.7-f6-header-sidebar-split | F-6完了・Header/Sidebar を各4/2サブコンポーネントに分割・後方互換re-export維持 | 2026-03-23 |
 | v3.8-session9-docs-complete | Session9ドキュメント総仕上げ | 2026-03-23 |
+| v4.1-session12-ui-postcard | Phase4開始・PostCard UI改修（YouTube/X SVGフォールバック・lightbox・続きを読む）・PostModal画像添付・タイトル手動入力 | 2026-03-23 |
 
 ### logos-laravel
 
@@ -142,6 +143,7 @@
 | v3.3-b3-form-requests | B-3完了・FormRequest16ファイル作成・全ApiControllerのvalidate()をFormRequestに移行 | 2026-03-22 |
 | v3.4-b5-api-resource | B-5完了・AnalysisResource/CategoryResource新規作成・withoutWrapping()設定 | 2026-03-23 |
 | v3.5-b6-like-relations | B-6完了・Like::user()/post() belongsTo追加 | 2026-03-23 |
+| v4.0-p4-custom-thumbnail | Phase4開始・posts.custom_thumbnailカラム追加・ファイルアップロード対応・StorePostRequest更新 | 2026-03-23 |
 
 ---
 

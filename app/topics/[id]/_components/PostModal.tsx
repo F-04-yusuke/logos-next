@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { API_BASE } from "../_helpers";
 
 export function PostModal({
@@ -21,11 +21,21 @@ export function PostModal({
   onCategoryChange: (v: string) => void;
   comment: string;
   onCommentChange: (v: string) => void;
-  onSubmit: (isDraft: boolean) => void;
+  onSubmit: (isDraft: boolean, imageFile?: File, customTitle?: string) => void;
   submitting: boolean;
 }) {
   const [ogPreview, setOgPreview] = useState<{ title: string | null; thumbnail: string | null } | null>(null);
   const [ogLoading, setOgLoading] = useState(false);
+
+  // 画像添付
+  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // タイトル手動入力
+  const [showCustomTitle, setShowCustomTitle] = useState(false);
+  const [customTitle, setCustomTitle] = useState("");
 
   useEffect(() => {
     setOgPreview(null);
@@ -47,6 +57,25 @@ export function PostModal({
     }, 800);
     return () => clearTimeout(timer);
   }, [url]);
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => setImagePreview(ev.target?.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const clearImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleSubmit = (isDraft: boolean) => {
+    onSubmit(isDraft, imageFile ?? undefined, customTitle.trim() || undefined);
+  };
 
   return (
     <div
@@ -81,6 +110,7 @@ export function PostModal({
             </div>
 
             <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-white dark:bg-[#131314]">
+              {/* URL入力 */}
               <div className="mb-5">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
                   参考URL (必須)
@@ -93,11 +123,23 @@ export function PostModal({
                   required
                   placeholder="https://..."
                 />
-                {/* OGP プレビュー */}
+
+                {/* OGP / 添付画像プレビュー */}
                 {ogLoading && (
                   <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">URLを取得中...</p>
                 )}
-                {!ogLoading && ogPreview && (ogPreview.title || ogPreview.thumbnail) && (
+                {imagePreview ? (
+                  <div className="mt-2 relative">
+                    <img src={imagePreview} alt="添付プレビュー" className="w-full max-h-48 object-contain rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1e1f20]" />
+                    <button
+                      type="button"
+                      onClick={clearImage}
+                      className="absolute top-1 right-1 bg-black/50 text-white text-xs px-2 py-0.5 rounded hover:bg-black/70 transition-colors"
+                    >
+                      ✕ 削除
+                    </button>
+                  </div>
+                ) : !ogLoading && ogPreview && (ogPreview.title || ogPreview.thumbnail) ? (
                   <div className="mt-2 p-2 bg-gray-50 dark:bg-[#1e1f20] rounded-md border border-gray-200 dark:border-gray-700 flex gap-2 items-start">
                     {ogPreview.thumbnail && (
                       <img src={ogPreview.thumbnail} alt="" className="w-20 h-14 object-cover rounded flex-shrink-0" />
@@ -106,8 +148,56 @@ export function PostModal({
                       <p className="text-xs font-bold text-gray-800 dark:text-gray-200 line-clamp-3 leading-snug">{ogPreview.title}</p>
                     )}
                   </div>
-                )}
+                ) : null}
+
+                {/* 画像添付トグル */}
+                <div className="mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowImageUpload((v) => !v)}
+                    className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                  >
+                    📎 サムネが取得できない場合は画像を添付する {showImageUpload ? "▲" : "▼"}
+                  </button>
+                  {showImageUpload && (
+                    <div className="mt-2">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageSelect}
+                        className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-bold file:bg-gray-100 dark:file:bg-gray-800 file:text-gray-700 dark:file:text-gray-300 hover:file:bg-gray-200 dark:hover:file:bg-gray-700 transition-colors cursor-pointer"
+                      />
+                      <p className="mt-1 text-[11px] text-gray-400 dark:text-gray-500">JPG・PNG・GIF・WebP / 最大5MB / アップロード画像はスクショ等の添付として表示されます</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* タイトル手動入力トグル */}
+                <div className="mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomTitle((v) => !v)}
+                    className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                  >
+                    ✏️ タイトルを手動入力する {showCustomTitle ? "▲" : "▼"}
+                  </button>
+                  {showCustomTitle && (
+                    <div className="mt-2">
+                      <input
+                        type="text"
+                        value={customTitle}
+                        onChange={(e) => setCustomTitle(e.target.value)}
+                        maxLength={255}
+                        className="w-full rounded-md bg-gray-50 border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-2"
+                        placeholder="タイトルを入力（自動取得より優先されます）"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* メディア分類 */}
               <div className="mb-5">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
                   メディア分類 (必須)
@@ -127,6 +217,8 @@ export function PostModal({
                   <option value="その他">その他</option>
                 </select>
               </div>
+
+              {/* 補足コメント */}
               <div className="mb-2">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
                   補足・コメント (任意)
@@ -152,7 +244,7 @@ export function PostModal({
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => onSubmit(true)}
+                  onClick={() => handleSubmit(true)}
                   disabled={submitting || !url || !category}
                   className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 font-bold py-3 px-4 sm:py-2 rounded-md text-sm transition-colors flex items-center gap-1 disabled:opacity-50"
                 >
@@ -175,7 +267,7 @@ export function PostModal({
                 </button>
                 <button
                   type="button"
-                  onClick={() => onSubmit(false)}
+                  onClick={() => handleSubmit(false)}
                   disabled={submitting || !url || !category}
                   className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-3 px-6 sm:py-2 rounded-md text-sm transition-colors disabled:opacity-50"
                 >

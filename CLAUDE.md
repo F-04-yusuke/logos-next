@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-23（Session 11 / ドキュメント整理完了）
+最終更新: 2026-03-23（Session 12 / Phase 4 UI/UX改善開始）
 
 ---
 
@@ -27,6 +27,15 @@
 - **GeminiのAPIキーは絶対に `NEXT_PUBLIC_` をつけない**（ブラウザに公開され攻撃者に悪用される）
   - Next.js から Gemini を呼ぶ場合は必ずサーバーサイド経由（`app/api/` ルートハンドラか Laravel API 経由）
 - `migrate:fresh`・`db:wipe` 等は**絶対に実行しない**
+
+## ローカル環境の停止手順（厳守）
+**PC終了・WSL再起動・`wsl --shutdown` の前に必ず実行すること:**
+```bash
+cd ~/logos-laravel && ./vendor/bin/sail down
+```
+**理由（2026-03-23 の教訓）:** WSL2シャットダウン時にMySQLコンテナが強制終了されDBデータが消失した。`sail down` で安全に停止してからWSL2を終了すれば防げる。さくら本番・Vercelには影響しないがローカルのテストデータが全消えする。
+- `sail down` はボリュームを削除しない（データ保持）
+- `sail down -v` は**絶対に実行しない**（ボリューム＝全データ削除）
 
 ---
 
@@ -108,8 +117,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v3.8-session9-docs-complete`
-- logos-laravel: `v3.5-b6-like-relations`
+- logos-next: `v4.1-session12-ui-postcard`
+- logos-laravel: `v4.0-p4-custom-thumbnail`
 
 ## Phase 2 未対応・将来検討項目
 
@@ -136,8 +145,9 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase1.md` | Phase 1 完了記録（Laravel Blade版MVP）・障害教訓 |
 | `.claude/skills/progress-phase2.md` | Phase 2 完了記録（Next.js移行・全17ページ・Step1〜14） |
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
-| `.claude/skills/handoff-session11.md` | **最新引継ぎプロンプト** |
-| `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜10 アーカイブ） |
+| `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 12〜） |
+| `.claude/skills/handoff-session12.md` | **最新引継ぎプロンプト** |
+| `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜11 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
 
