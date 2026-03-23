@@ -45,8 +45,8 @@ export function PostCard({
   };
 
   return (
-    <div className="p-3 bg-white dark:bg-[#1e1f20] rounded-lg border border-gray-200 dark:border-transparent shadow-sm flex flex-col md:flex-row gap-3 transition-colors">
-      <div className="md:w-1/4 flex-shrink-0">
+    <div className="p-3 bg-white dark:bg-[#1e1f20] rounded-lg border border-gray-200 dark:border-transparent shadow-sm flex flex-col md:flex-row gap-3 transition-colors min-h-[200px]">
+      <div className="md:w-2/5 flex-shrink-0">
         <a
           href={post.url}
           target="_blank"
@@ -87,7 +87,7 @@ export function PostCard({
         </a>
       </div>
 
-      <div className="md:w-3/4 flex flex-col justify-between">
+      <div className="md:w-3/5 flex flex-col justify-between">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <UserAvatar user={post.user} size="sm" />
@@ -105,7 +105,7 @@ export function PostCard({
           </div>
 
           {post.comment && (
-            <div className="text-[13px] text-gray-800 dark:text-gray-300 whitespace-pre-wrap mt-1 leading-relaxed">
+            <div className="text-[13px] text-gray-800 dark:text-gray-300 line-clamp-3 mt-1 leading-relaxed min-h-[4.5rem]">
               {post.comment}
             </div>
           )}
