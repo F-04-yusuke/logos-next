@@ -93,7 +93,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
           {/* Left: title / content / timeline */}
           <div className="flex-1">
-            <h2 className="text-2xl font-bold mb-2">{topic.title}</h2>
+            <h2 className="text-2xl font-bold tracking-tight mb-2">{topic.title}</h2>
             <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300 mb-3">
               {topic.content}
             </p>

@@ -174,7 +174,7 @@ export function PostCard({
                 <span className="font-medium text-[13px] text-gray-900 dark:text-gray-100">
                   {post.user.name}
                 </span>
-                <span className="text-[11px] text-gray-500">
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">
                   {timeAgo(post.created_at)}
                 </span>
               </div>
@@ -274,7 +274,7 @@ export function PostCard({
             />
             {isOwner && onDelete && (
               <>
-                <span className="text-gray-300 dark:text-gray-700" aria-hidden="true">|</span>
+                <span className="text-gray-300 dark:text-gray-500" aria-hidden="true">|</span>
                 <button
                   onClick={() => {
                     if (confirm("本当に削除しますか？")) onDelete(post.id);
@@ -292,7 +292,7 @@ export function PostCard({
 
       {post.supplement && openSupplementView && (
         <div className="px-3 pt-2 pb-3 bg-gray-50 dark:bg-[#131314] rounded-b-lg">
-          <span className="text-xs text-gray-500 block mb-1">投稿者からの補足</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">投稿者からの補足</span>
           <p className="text-[13px] text-gray-800 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
             {post.supplement}
           </p>
