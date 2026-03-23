@@ -96,7 +96,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
           {/* Left: title / content / timeline */}
           <div className="flex-1">
-            <h2 className="text-2xl font-bold tracking-tight mb-2">{topic.title}</h2>
+            <h2 className="text-2xl font-bold mb-2">{topic.title}</h2>
             <button
               onClick={() => setContentExpanded(!contentExpanded)}
               className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1f20] pl-0 pr-2 py-1 rounded transition-colors cursor-pointer flex items-center gap-1"
@@ -312,7 +312,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                 {tab === "analysis" && (
                   <>
                     分析・図解
-                    <span className="ml-1.5 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1.5 py-0.5 rounded font-black tracking-wider">
+                    <span className="ml-1.5 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1.5 py-0.5 rounded font-bold tracking-wider">
                       PRO
                     </span>
                   </>
@@ -326,7 +326,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
-                  {filteredPosts.length}件の投稿
+                  {filteredPosts.length} 件の投稿
                 </h3>
                 <div className="flex items-center space-x-2">
                   <div className="flex space-x-2">
@@ -411,7 +411,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
-                  {topic.comments.length}件のコメント
+                  {topic.comments.length} 件のコメント
                 </h3>
                 <select
                   value={commentSort}
@@ -478,7 +478,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
-                  {topic.analyses?.length ?? 0}件の分析・図解
+                  {topic.analyses?.length ?? 0} 件の分析・図解
                 </h3>
                 <button
                   onClick={() => {

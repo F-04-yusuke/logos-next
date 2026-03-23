@@ -159,7 +159,7 @@ export function PostCard({
             rel="noopener noreferrer"
             className="group"
           >
-            <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
+            <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
               {post.title || "タイトルを取得できませんでした"}
             </h4>
           </a>
@@ -171,7 +171,7 @@ export function PostCard({
             <div className="flex items-center gap-2 mb-2">
               <div className="flex items-center gap-2 cursor-pointer">
                 <UserAvatar user={post.user} size="sm" />
-                <span className="font-medium text-[13px] text-gray-900 dark:text-gray-100">
+                <span className="text-[13px] text-gray-900 dark:text-gray-100">
                   {post.user.name}
                 </span>
               </div>
