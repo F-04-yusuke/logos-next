@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { formatDateTime } from "../_helpers";
 import { PostCard } from "./PostCard";
@@ -68,6 +69,8 @@ export function TopicPageClient({ id, initialTopic }: Props) {
     handleBookmark,
   } = useTopicPage(id, initialTopic);
 
+  const [contentExpanded, setContentExpanded] = useState(false);
+
   if (loading) {
     return (
       <main className="max-w-7xl mx-auto px-4 py-10">
@@ -89,102 +92,113 @@ export function TopicPageClient({ id, initialTopic }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 text-gray-900 dark:text-gray-100">
 
         {/* ===== Topic Header ===== */}
-        <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-2">
+        <div className={`flex flex-col md:flex-row justify-between items-start gap-4 ${contentExpanded ? "mb-2" : "mb-0"}`}>
 
           {/* Left: title / content / timeline */}
           <div className="flex-1">
-            <h2 className="text-2xl font-bold tracking-tight mb-3">{topic.title}</h2>
-            <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300 mb-5">
-              {topic.content}
-            </p>
+            <h2 className="text-2xl font-bold tracking-tight mb-2">{topic.title}</h2>
+            <button
+              onClick={() => setContentExpanded(!contentExpanded)}
+              className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1f20] pl-0 pr-2 py-1 rounded transition-colors cursor-pointer flex items-center gap-1"
+            >
+              {contentExpanded ? "▲ 閉じる" : "▼ トピックの概要を見る"}
+            </button>
 
-            {/* Timeline */}
-            <div className="mt-1 mb-1">
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 flex items-center shrink-0">
-                  <span className="mr-1" aria-hidden="true">⏳</span>{" "}
-                  前提となる時系列
-                </h3>
-                {isOwner && (
-                  timeline.length === 0 ? (
-                    <button
-                      onClick={handleTimelineGenerate}
-                      disabled={timelineLoading}
-                      className="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 font-bold py-0.5 px-2 rounded transition-colors flex items-center gap-1 disabled:opacity-50"
-                    >
-                      <span aria-hidden="true">✨</span>
-                      {timelineLoading ? "生成中..." : "AIで自動生成する"}
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleTimelineUpdate}
-                      disabled={timelineLoading}
-                      className="text-[10px] bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/50 font-bold py-0.5 px-2 rounded transition-colors flex items-center gap-1 disabled:opacity-50"
-                      title="投稿されたエビデンスを元に時系列を最新化します"
-                    >
-                      <span aria-hidden="true">🔄</span>
-                      {timelineLoading ? "更新中..." : "最新投稿からAI更新"}
-                    </button>
-                  )
-                )}
-              </div>
+            {contentExpanded && (
+              <>
+                <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300 mb-5">
+                  {topic.content}
+                </p>
 
-              {timeline.length > 0 && (
-                <>
-                  <div className="border-l-[1.5px] border-gray-300 dark:border-gray-700 ml-1.5 pl-3">
-                    {timeline.slice(0, 3).map((item, i) => (
-                      <div
-                        key={i}
-                        className="relative flex items-start sm:items-center py-0.5 sm:py-1"
-                      >
-                        <div className="absolute left-[-16.5px] top-2.5 sm:top-1/2 sm:-translate-y-1/2 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                        <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-gray-300 shrink-0">
-                          {item.date ?? ""}
-                        </div>
-                        <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 sm:truncate">
-                          {item.event ?? ""}
-                        </div>
-                        {(item.is_ai === undefined || !!item.is_ai) && (
-                          <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800">
-                            AI生成
-                          </span>
-                        )}
-                      </div>
-                    ))}
-
-                    {timelineExpanded &&
-                      timeline.slice(3).map((item, i) => (
-                        <div
-                          key={i + 3}
-                          className="relative flex items-start sm:items-center py-0.5 sm:py-1"
+                {/* Timeline */}
+                <div className="mt-1 mb-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 flex items-center shrink-0">
+                      <span className="mr-1" aria-hidden="true">⏳</span>{" "}
+                      前提となる時系列
+                    </h3>
+                    {isOwner && (
+                      timeline.length === 0 ? (
+                        <button
+                          onClick={handleTimelineGenerate}
+                          disabled={timelineLoading}
+                          className="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 font-bold py-0.5 px-2 rounded transition-colors flex items-center gap-1 disabled:opacity-50 cursor-pointer"
                         >
-                          <div className="absolute left-[-16.5px] top-2.5 sm:top-1/2 sm:-translate-y-1/2 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                          <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-gray-300 shrink-0">
-                            {item.date ?? ""}
-                          </div>
-                          <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 sm:truncate">
-                            {item.event ?? ""}
-                          </div>
-                          {(item.is_ai === undefined || !!item.is_ai) && (
-                            <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800">
-                              AI生成
-                            </span>
-                          )}
-                        </div>
-                      ))}
+                          <span aria-hidden="true">✨</span>
+                          {timelineLoading ? "生成中..." : "AIで自動生成する"}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handleTimelineUpdate}
+                          disabled={timelineLoading}
+                          className="text-[10px] bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/50 font-bold py-0.5 px-2 rounded transition-colors flex items-center gap-1 disabled:opacity-50 cursor-pointer"
+                          title="投稿されたエビデンスを元に時系列を最新化します"
+                        >
+                          <span aria-hidden="true">🔄</span>
+                          {timelineLoading ? "更新中..." : "最新投稿からAI更新"}
+                        </button>
+                      )
+                    )}
                   </div>
 
-                  {timeline.length > 3 && (
-                    <button
-                      onClick={() => setTimelineExpanded(!timelineExpanded)}
-                      className="mt-1 ml-3 text-xs font-bold text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                    >
-                      {timelineExpanded ? "▲ 閉じる" : "▼ もっと見る"}
-                    </button>
+                  {timeline.length > 0 && (
+                    <>
+                      <div className="border-l-[1.5px] border-gray-300 dark:border-gray-700 ml-1.5 pl-3">
+                        {timeline.slice(0, 3).map((item, i) => (
+                          <div
+                            key={i}
+                            className="relative flex items-start sm:items-center py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
+                          >
+                            <div className="absolute left-[-16.5px] top-2.5 sm:top-1/2 sm:-translate-y-1/2 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
+                            <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-gray-300 shrink-0">
+                              {item.date ?? ""}
+                            </div>
+                            <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 sm:truncate">
+                              {item.event ?? ""}
+                            </div>
+                            {(item.is_ai === undefined || !!item.is_ai) && (
+                              <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800">
+                                AI生成
+                              </span>
+                            )}
+                          </div>
+                        ))}
+
+                        {timelineExpanded &&
+                          timeline.slice(3).map((item, i) => (
+                            <div
+                              key={i + 3}
+                              className="relative flex items-start sm:items-center py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
+                            >
+                              <div className="absolute left-[-16.5px] top-2.5 sm:top-1/2 sm:-translate-y-1/2 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
+                              <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-gray-300 shrink-0">
+                                {item.date ?? ""}
+                              </div>
+                              <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 sm:truncate">
+                                {item.event ?? ""}
+                              </div>
+                              {(item.is_ai === undefined || !!item.is_ai) && (
+                                <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800">
+                                  AI生成
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                      </div>
+
+                      {timeline.length > 3 && (
+                        <button
+                          onClick={() => setTimelineExpanded(!timelineExpanded)}
+                          className="mt-1 ml-3 text-xs font-bold text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-2 py-1 rounded-md transition-colors cursor-pointer"
+                        >
+                          {timelineExpanded ? "▲ 閉じる" : "▼ もっと見る"}
+                        </button>
+                      )}
+                    </>
                   )}
-                </>
-              )}
-            </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Right: categories / meta / actions */}
@@ -238,7 +252,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
               <button
                 onClick={handleBookmark}
-                className="text-xs text-gray-400 hover:text-gray-200 hover:bg-white/10 transition-colors flex items-center px-2 py-1.5 rounded-full"
+                className="text-xs text-gray-400 hover:text-gray-200 hover:bg-white/10 transition-colors flex items-center px-2 py-1.5 rounded-full cursor-pointer"
               >
                 {topic.is_bookmarked ? (
                   <>
@@ -279,13 +293,13 @@ export function TopicPageClient({ id, initialTopic }: Props) {
         </div>
 
         {/* ===== Tabs ===== */}
-        <div className="mt-4">
+        <div className={contentExpanded ? "mt-4" : "mt-0"}>
           <div className="flex border-b border-gray-300 dark:border-gray-800 mb-4 overflow-x-auto">
             {(["info", "comments", "analysis"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
-                className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center ${
+                className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${
                   activeTab === tab
                     ? tab === "analysis"
                       ? "border-yellow-500 text-gray-900 dark:text-white font-bold"
@@ -319,7 +333,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                     <select
                       value={postFilter}
                       onChange={(e) => setPostFilter(e.target.value)}
-                      className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1"
+                      className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1 cursor-pointer"
                     >
                       <option value="">すべてのメディア</option>
                       <option value="YouTube">YouTube</option>
@@ -334,7 +348,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       onChange={(e) =>
                         setPostSort(e.target.value as "popular" | "newest" | "oldest")
                       }
-                      className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1 hidden sm:block"
+                      className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1 hidden sm:block cursor-pointer"
                     >
                       <option value="popular">人気順</option>
                       <option value="newest">新着順</option>
@@ -346,7 +360,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       if (!user) { alert("投稿するにはログインが必要です"); return; }
                       setShowPostModal(true);
                     }}
-                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0"
+                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0 cursor-pointer"
                   >
                     <svg
                       aria-hidden="true"
@@ -371,7 +385,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                 </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {filteredPosts.length === 0 ? (
                   <p className="text-center text-gray-500 py-10 text-sm">
                     投稿はありません
@@ -404,7 +418,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   onChange={(e) =>
                     setCommentSort(e.target.value as "popular" | "newest" | "oldest")
                   }
-                  className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1"
+                  className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1 cursor-pointer"
                 >
                   <option value="popular">人気順</option>
                   <option value="newest">新着順</option>
@@ -520,7 +534,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   </p>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {topic.analyses!.map((analysis) => (
                     <AnalysisCard
                       key={analysis.id}

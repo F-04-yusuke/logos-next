@@ -20,7 +20,7 @@ export function LikeButton({
       <TooltipTrigger
         onClick={onClick}
         type="button"
-        className={`flex items-center space-x-1.5 rounded-full transition-colors duration-200 px-3 py-2 ${
+        className={`flex items-center space-x-1.5 rounded-full transition-colors duration-200 px-3 py-2 cursor-pointer ${
           liked
             ? "text-gray-900 dark:text-white font-bold"
             : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-white/10"

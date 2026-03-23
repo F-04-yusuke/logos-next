@@ -169,15 +169,15 @@ export function PostCard({
         <div className="md:w-[70%] flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <UserAvatar user={post.user} size="sm" />
-              <div className="flex items-baseline gap-2">
+              <div className="flex items-center gap-2 cursor-pointer">
+                <UserAvatar user={post.user} size="sm" />
                 <span className="font-medium text-[13px] text-gray-900 dark:text-gray-100">
                   {post.user.name}
                 </span>
-                <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                  {timeAgo(post.created_at)}
-                </span>
               </div>
+              <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                {timeAgo(post.created_at)}
+              </span>
               <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400">
                 {post.category}
               </span>
@@ -195,7 +195,7 @@ export function PostCard({
                   <button
                     type="button"
                     onClick={() => setOpenComment(true)}
-                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full"
+                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full cursor-pointer"
                   >
                     続きを読む
                   </button>
@@ -204,7 +204,7 @@ export function PostCard({
                   <button
                     type="button"
                     onClick={() => setOpenComment(false)}
-                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full"
+                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full cursor-pointer"
                   >
                     閉じる
                   </button>

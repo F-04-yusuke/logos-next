@@ -207,16 +207,61 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 
 ---
 
+## Session 15: ホバー強化・トピック概要折りたたみ・カード間隔調整（2026-03-23）
+
+### 変更ファイル
+
+| ファイル | 変更内容 |
+|---|---|
+| `app/topics/[id]/_components/TopicPageClient.tsx` | ホバー強化全般・概要折りたたみ実装・カード間隔縮小 |
+| `app/topics/[id]/_components/PostCard.tsx` | cursor-pointer追加（続きを読む/閉じる・ユーザーエリア） |
+| `components/LikeButton.tsx` | cursor-pointer追加 |
+
+### U-5: ホバー強化 ✅
+
+| 要素 | 変更内容 |
+|---|---|
+| 並び替えselect（情報タブ・コメントタブ） | `cursor-pointer` 追加 |
+| 時系列各行 | `hover:bg-gray-100 dark:hover:bg-[#1e1f20]` + `transition-colors` |
+| タイムライン「もっと見る/閉じる」 | ホバー背景 + `cursor-pointer` |
+| AI自動生成・AI更新ボタン | `cursor-pointer` |
+| タブ切替 | `cursor-pointer` |
+| 投稿ボタン | `cursor-pointer` |
+| トピック保存（ブックマーク） | `cursor-pointer` |
+| サムズアップ（LikeButton） | `cursor-pointer` |
+| 続きを読む/閉じる | `cursor-pointer` |
+| ユーザーアイコン＋名前 | `cursor-pointer` ラップ（将来プロフィールリンクを見越して） |
+
+### U-6: トピック概要折りたたみ ✅
+
+- 初期状態：**閉じている**（`contentExpanded = false`）
+- タイトル直下・左寄せに「▼ トピックの概要を見る」ボタン（展開時「▲ 閉じる」）
+- ボタン左端をタイトル左端に揃える（`pl-0`）
+- 閉じている時はヘッダー`mb-0` + タブ`mt-0` でタイトル→タブを詰める
+- 展開時は従来の間隔（`mb-2` / `mt-4`）を維持
+
+### U-7: カード間隔調整 ✅
+
+- 投稿・分析カードリスト `space-y-4` → `space-y-3`
+
+### Gitタグ（Session 15）
+
+- logos-next: `v4.4-session15-ui-hover-collapse`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
 ## Phase 4 残タスク（優先度別）
 
 ### 最優先：UI/UX 継続改善
 
 **トピックページ（完了済み）:**
 - Batch 1〜4 すべて完了（Session 13〜14）
+- ホバー強化・概要折りたたみ完了（Session 15）
 
-**次のターゲット（Session 15 予定）:**
-- **ホバー強化**: 並び替えselect・時系列エリア・ユーザーアイコン+名前にcursor変化追加
-- **コメントタブ**: tinkerでテストデータを充実させてイメージ確認 → UI/UX改善
+**次のターゲット（Session 16 予定）:**
+- **サイドバー UI改善**: トピックページの初期印象を最優先にサイドバーを先に整える
+- **コメントタブ**: tinkerでテストデータを充実させてイメージ確認 → UI/UX改善（Session 17以降）
 - 分析タブ UI/UX 改善
 - トップページ（トピック一覧）UI/UX 改善
 - その他全ページ
