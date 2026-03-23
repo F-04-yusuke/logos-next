@@ -159,19 +159,19 @@ export function PostCard({
             rel="noopener noreferrer"
             className="group"
           >
-            <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
+            <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
               {post.title || "タイトルを取得できませんでした"}
             </h4>
           </a>
         </div>
 
         {/* 右列: ユーザー情報・概要・いいね */}
-        <div className="md:w-[70%] flex flex-col">
+        <div className="md:w-[70%] flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <UserAvatar user={post.user} size="sm" />
               <div className="flex items-baseline gap-2">
-                <span className="font-bold text-[13px] text-gray-900 dark:text-gray-100">
+                <span className="font-medium text-[13px] text-gray-900 dark:text-gray-100">
                   {post.user.name}
                 </span>
                 <span className="text-[11px] text-gray-500">
@@ -245,7 +245,7 @@ export function PostCard({
                         type="button"
                         onClick={handleSupplementSubmit}
                         disabled={submitting || !supplementBody.trim()}
-                        className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1.5 px-4 rounded transition-colors disabled:opacity-50"
+                        className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1.5 px-4 rounded-md transition-colors disabled:opacity-50"
                       >
                         {submitting ? "投稿中..." : "補足を投稿"}
                       </button>

@@ -131,7 +131,7 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 | バッチ | 採用項目 | 内容 | 状態 |
 |---|---|---|---|
 | Batch 1 | 10, 7 | カードbg同化 + 全ボタンYouTubeライクホバー | ✅ 完了 |
-| Batch 2 | 8, 12, 11 | アライメント統一・radius一貫性・フォントウェイト整理 | 🔲 次回 |
+| Batch 2 | 8, 12, 11 | アライメント統一・radius一貫性・フォントウェイト整理 | ✅ 完了 |
 | Batch 3 | 6, 9, 2 | 大見出し字間・小テキストコントラスト・UIコントラスト | 🔲 次回 |
 | Batch 4 | 4, 1 | タップターゲット48px・8ptスペーシング | 🔲 次回 |
 
@@ -187,8 +187,7 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 
 ### 最優先：UI/UX 継続改善
 
-**トピックページ（Batch 2〜4 未完了）:**
-- Batch 2（8+12+11）: PostCard アライメント・radius・フォントウェイト統一
+**トピックページ（Batch 3〜4 未完了）:**
 - Batch 3（6+9+2）: トピックタイトル字間・コントラスト監査
 - Batch 4（4+1）: タップターゲット・スペーシング
 
