@@ -53,21 +53,21 @@ export default function NavLinks({
     return [
       "flex items-center p-2 rounded-lg transition-colors group",
       active
-        ? "bg-gray-700 text-white"
-        : "text-white hover:bg-gray-800",
+        ? "bg-gray-700 text-g-text"
+        : "text-g-text hover:bg-gray-800",
     ].join(" ");
   };
 
   // アクティブ時のアイコン色（通常は text-gray-400、アクティブ時は text-white）
   const iconClass = (href: string, exact = true) => {
     const active = exact ? pathname === href : pathname.startsWith(href);
-    return `w-6 h-6 transition-colors ${active ? "text-white" : "text-gray-400 group-hover:text-white"}`;
+    return `w-6 h-6 transition-colors ${active ? "text-g-text" : "text-g-sub group-hover:text-g-text"}`;
   };
 
   return (
     <div
       className={[
-        "py-2 px-4 space-y-3 w-64",
+        "py-2 px-4 space-y-3 w-72",
         "transition-opacity ease-out duration-300",
         sidebarOpen ? "opacity-100 delay-100" : "opacity-0 pointer-events-none",
       ].join(" ")}

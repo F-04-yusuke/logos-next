@@ -37,7 +37,7 @@ function stanceStyle(stance?: string) {
   if (stance === "反論") return "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800";
   if (stance === "賛成・補足") return "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800";
   if (stance === "疑問") return "bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800";
-  return "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700";
+  return "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-g-sub dark:border-gray-700";
 }
 
 function TreeNodeCard({ node, depth = 0 }: { node: TreeNode; depth?: number }) {
@@ -46,7 +46,7 @@ function TreeNodeCard({ node, depth = 0 }: { node: TreeNode; depth?: number }) {
     <div className={`relative ${depth > 0 ? "mt-4 ml-8 tree-line" : "mt-4"}`}>
       <div className="bg-gray-50 dark:bg-[#131314] p-3 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm inline-block min-w-[250px] max-w-lg">
         <div className="flex items-center gap-2 mb-2">
-          <span className={`text-sm font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-gray-300"}`}>
+          <span className={`text-sm font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>
             {node.speaker}
           </span>
           {node.stance && (
@@ -55,7 +55,7 @@ function TreeNodeCard({ node, depth = 0 }: { node: TreeNode; depth?: number }) {
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">{node.text}</p>
+        <p className="text-sm text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">{node.text}</p>
       </div>
       {node.children?.map((child, i) => (
         <TreeNodeCard key={i} node={child} depth={depth + 1} />
@@ -75,13 +75,13 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
       <div>
         {meta && (meta.url || meta.description) && (
           <div className="bg-white dark:bg-[#1e1f20] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 mb-6">
-            <h3 className="font-bold text-gray-900 dark:text-gray-100 flex items-center mb-3">
+            <h3 className="font-bold text-gray-900 dark:text-g-text flex items-center mb-3">
               <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               事前情報
             </h3>
-            {meta.description && <p className="text-sm text-gray-700 dark:text-gray-300 mb-2 whitespace-pre-wrap">{meta.description}</p>}
+            {meta.description && <p className="text-sm text-gray-700 dark:text-g-text mb-2 whitespace-pre-wrap">{meta.description}</p>}
             {meta.url && (
               <a href={meta.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline flex items-start sm:items-center break-all transition-colors">
                 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 shrink-0 mt-0.5 sm:mt-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -128,13 +128,13 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
         <table className="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr>
-              <th className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-48 bg-gray-50 dark:bg-[#131314] align-bottom text-xs font-bold text-gray-500 dark:text-gray-400">
+              <th className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-48 bg-gray-50 dark:bg-[#131314] align-bottom text-xs font-bold text-gray-500 dark:text-g-sub">
                 評価項目 ＼ 比較パターン
               </th>
               {patterns.map((p, i) => (
                 <th key={i} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 w-64 bg-gray-50 dark:bg-[#131314] align-top">
                   <div className="font-bold text-blue-600 dark:text-blue-400 mb-1 text-base">{p.title}</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 whitespace-pre-wrap font-normal">{p.description}</p>
+                  <p className="text-xs text-gray-600 dark:text-g-sub whitespace-pre-wrap font-normal">{p.description}</p>
                 </th>
               ))}
             </tr>
@@ -144,7 +144,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               const evals = item.evaluations ?? item.scores ?? [];
               return (
                 <tr key={ri}>
-                  <td className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] font-bold text-sm text-gray-900 dark:text-gray-200">
+                  <td className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] font-bold text-sm text-gray-900 dark:text-g-text">
                     {item.itemTitle}
                   </td>
                   {patterns.map((_, ci) => {
@@ -154,7 +154,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
                     return (
                       <td key={ci} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 align-top">
                         {badge && <span className={`inline-block px-2 py-0.5 text-[10px] font-bold rounded mb-2 ${badge.color}`}>{badge.text}</span>}
-                        <p className="text-xs text-gray-800 dark:text-gray-300 whitespace-pre-wrap">{e?.reason ?? ""}</p>
+                        <p className="text-xs text-gray-800 dark:text-g-text whitespace-pre-wrap">{e?.reason ?? ""}</p>
                       </td>
                     );
                   })}
@@ -199,11 +199,11 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
             <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center`}>
               <span className="text-2xl mr-2" aria-hidden="true">{box.label[0]}</span>
               {box.label.slice(1)}
-              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2 font-normal">{box.sub}</span>
+              <span className="text-xs text-gray-500 dark:text-g-sub ml-2 font-normal">{box.sub}</span>
             </h2>
             <ul className="space-y-2 pl-1">
               {box.items.map((item, j) => (
-                <li key={j} className="text-sm text-gray-800 dark:text-gray-200 flex items-start">
+                <li key={j} className="text-sm text-gray-800 dark:text-g-text flex items-start">
                   <span aria-hidden="true" className={`${box.bullet} mr-2 mt-0.5`}>•</span>
                   <span>{item}</span>
                 </li>
@@ -294,13 +294,13 @@ export default function AnalysisShowPage({ params }: { params: { id: string } })
 
         {/* ページヘッダー */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-xl text-gray-800 dark:text-gray-200 leading-tight flex items-center">
+          <h2 className="font-bold text-xl text-gray-800 dark:text-g-text leading-tight flex items-center">
             {typeIcon()}
             {typeLabel()}
           </h2>
           <button
             onClick={() => window.history.back()}
-            className="text-sm font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors py-1 pl-2"
+            className="text-sm font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2"
           >
             ← 戻る
           </button>
@@ -309,11 +309,11 @@ export default function AnalysisShowPage({ params }: { params: { id: string } })
         {/* 情報カード */}
         <div className="bg-white dark:bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-xl mb-6 border border-gray-200 dark:border-gray-800">
           <div className="p-4 sm:p-6">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">{analysis.title}</h1>
-            <div className="flex flex-wrap items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400 gap-3 sm:gap-4">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-g-text mb-3">{analysis.title}</h1>
+            <div className="flex flex-wrap items-center text-xs sm:text-sm text-gray-500 dark:text-g-sub gap-3 sm:gap-4">
               <span>
                 作成者:{" "}
-                <span className="font-bold text-gray-700 dark:text-gray-300">{analysis.user.name}</span>
+                <span className="font-bold text-gray-700 dark:text-g-text">{analysis.user.name}</span>
               </span>
               <span>
                 作成日:{" "}
@@ -338,7 +338,7 @@ export default function AnalysisShowPage({ params }: { params: { id: string } })
         {analysis.supplement && (
           <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-800/50">
             <span className="font-bold text-yellow-600 dark:text-yellow-500 text-[10px] block mb-1">✅ 投稿者からの補足</span>
-            <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{analysis.supplement}</p>
+            <p className="text-sm text-gray-800 dark:text-g-text whitespace-pre-wrap">{analysis.supplement}</p>
           </div>
         )}
 

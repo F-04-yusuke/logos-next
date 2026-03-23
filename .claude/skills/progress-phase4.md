@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-23（Session 16）
+最終更新: 2026-03-23（Session 17）
 
 ---
 
@@ -322,6 +322,65 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 
 ---
 
+## Session 17: Geminiカラー・フォント・タイポグラフィ統一（2026-03-23）
+
+### U-9: トピックページ タイポグラフィ調整 ✅
+
+**ファイル:** `app/topics/[id]/_components/TopicPageClient.tsx`、`PostCard.tsx`
+
+| 変更 | 変更前 | 変更後 |
+|---|---|---|
+| トピックタイトル | `text-2xl` | `text-xl` |
+| トピック概要テキスト | `text-sm` | `text-base` |
+| PostCard 投稿概要 | `text-[14px]` | `text-[15px]` |
+
+### U-10: サイドバー幅・トピックページ余白 Gemini ライク調整 ✅
+
+**ファイル:** `components/Sidebar/index.tsx`、`NavLinks.tsx`、`TopicPageClient.tsx`
+
+| 変更 | 変更前 | 変更後 |
+|---|---|---|
+| サイドバー展開幅 | `w-64` (256px) | `w-72` (288px) |
+| サイドバー折畳幅 | `md:w-16` (64px) | `md:w-14` (56px) |
+| トピックページ余白 | `px-4 sm:px-6 lg:px-8` | `px-6 sm:px-10 lg:px-16` |
+
+### U-11: Gemini テキストカラー全ページ統一 ✅
+
+**ファイル:** `globals.css`（カラー定義）+ 全16ファイル・172箇所
+
+**カラー定義（`globals.css` @theme inline）:**
+```css
+--color-g-text: #E3E3E3;  /* メインテキスト */
+--color-g-sub:  #C4C7C5;  /* サブテキスト */
+```
+
+| 置換前 | 置換後 | 意味 |
+|---|---|---|
+| `dark:text-gray-100/200/300` | `dark:text-g-text` | 明るすぎた白系テキストを Gemini 値に統一 |
+| `dark:text-gray-400` | `dark:text-g-sub` | 暗すぎたサブテキストを Gemini 値に統一 |
+| `text-white`（layout.tsx body） | `text-g-text` | 基底テキスト色を Gemini 値に |
+| サイドバー `text-white`/アイコン `text-gray-400` | `text-g-text`/`text-g-sub` | サイドバーテキスト統一 |
+
+### U-12: Noto Sans JP フォント追加 ✅
+
+**ファイル:** `app/layout.tsx`、`app/globals.css`
+
+- 日本語フォントを未指定（OS依存）→ **Noto Sans JP** に統一
+- フォントスタック: `Geist Sans（欧文）, Noto Sans JP（日本語）, sans-serif`
+
+### ハイドレーションエラー修正
+
+- 原因: `.next` キャッシュに古いサーバーレンダリング結果が残存
+- 解決: `rm -rf .next && npm run dev` で再ビルド
+- **WSL環境での注意**: コード変更後に hydration error が出た場合は `.next` 削除で解決
+
+### Gitタグ（Session 17）
+
+- logos-next: `v4.6-session17-gemini-typography`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
 ## Phase 4 残タスク（優先度別）
 
 ### 最優先：UI/UX 継続改善
@@ -330,8 +389,9 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 - トピックページ Batch 1〜4（Session 13〜14）
 - ホバー強化・概要折りたたみ（Session 15）
 - サイドバー UI改善・フォント統一（Session 16）
+- Geminiカラー・フォント・タイポグラフィ統一（Session 17）
 
-**次のターゲット（Session 17 予定）:**
+**次のターゲット（Session 18 予定）:**
 - **コメントタブ**: tinkerでテストデータを充実させてイメージ確認 → UI/UX改善
 - 分析タブ UI/UX 改善
 - トップページ（トピック一覧）UI/UX 改善

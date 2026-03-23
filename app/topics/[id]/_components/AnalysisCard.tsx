@@ -44,7 +44,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
         {meta && (meta.url || meta.description) && (
           <div className="mb-3 p-3 bg-white dark:bg-[#1e1f20] rounded border border-gray-200 dark:border-gray-700 shadow-sm">
             <div className="text-[10px] font-bold text-blue-600 dark:text-blue-400 mb-1">事前情報</div>
-            {meta.description && <p className="text-xs text-gray-800 dark:text-gray-300 mb-1">{meta.description}</p>}
+            {meta.description && <p className="text-xs text-gray-800 dark:text-g-text mb-1">{meta.description}</p>}
             {meta.url && <a href={meta.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 hover:underline truncate block">{meta.url}</a>}
           </div>
         )}
@@ -53,12 +53,12 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
             <div key={i}>
               <div className="flex gap-2">
                 <span className="font-bold text-blue-500 shrink-0">{node.speaker}:</span>
-                <span className="text-gray-700 dark:text-gray-300 truncate">{node.text}</span>
+                <span className="text-gray-700 dark:text-g-text truncate">{node.text}</span>
               </div>
               {node.children?.slice(0, 1).map((child, j) => (
                 <div key={j} className="ml-4 flex gap-2 border-l-2 border-gray-300 dark:border-gray-700 pl-2 mt-1">
                   <span className="font-bold text-gray-500 shrink-0">↳ {child.speaker}:</span>
-                  <span className="text-gray-600 dark:text-gray-400 truncate">{child.text}</span>
+                  <span className="text-gray-600 dark:text-g-sub truncate">{child.text}</span>
                 </div>
               ))}
             </div>
@@ -72,7 +72,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     return (
       <div>
         <div className="font-bold text-gray-500 mb-2 text-sm">【評価項目一覧】</div>
-        <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1 ml-1">
+        <ul className="list-disc list-inside text-gray-700 dark:text-g-text space-y-1 ml-1">
           {items.slice(0, 5).map((item, i) => (
             <li key={i} className="truncate text-sm">{item.itemTitle}</li>
           ))}
@@ -84,7 +84,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     const imagePath = analysis.data.image_path;
     return imagePath ? (
       <div>
-        <div className="font-bold text-base text-gray-900 dark:text-gray-100 mb-3">{analysis.title}</div>
+        <div className="font-bold text-base text-gray-900 dark:text-g-text mb-3">{analysis.title}</div>
         <div className="w-full flex justify-center bg-white dark:bg-[#1e1f20] rounded p-2">
           <img
             src={`${API_BASE}/storage/${imagePath}`}
@@ -112,7 +112,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
         {boxes.map((box, i) => (
           <div key={i}>
             <span className={`font-bold mb-1 inline-block text-sm ${box.color}`}>{box.label}:</span>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-0.5 text-xs">
+            <ul className="list-disc list-inside text-gray-700 dark:text-g-text space-y-0.5 text-xs">
               {box.items.length === 0
                 ? <li className="text-gray-500">記載なし</li>
                 : box.items.slice(0, 3).map((txt, j) => <li key={j} className="truncate">{txt}</li>)
@@ -186,7 +186,7 @@ export function AnalysisCard({
         </div>
         <div className="flex flex-col">
           <div className="flex items-baseline gap-2">
-            <span className="font-bold text-[14px] text-gray-900 dark:text-gray-100">{analysis.user.name}</span>
+            <span className="font-bold text-[14px] text-gray-900 dark:text-g-text">{analysis.user.name}</span>
             <span className="text-[11px] text-gray-500">{timeAgo(analysis.created_at)}</span>
           </div>
           <div className="mt-0.5">{typeBadge(analysis.type, analysis.data)}</div>
@@ -195,7 +195,7 @@ export function AnalysisCard({
 
       {/* Title for swot */}
       {analysis.type === "swot" && (
-        <div className="font-bold text-base text-gray-900 dark:text-gray-100 -mb-1">{analysis.title}</div>
+        <div className="font-bold text-base text-gray-900 dark:text-g-text -mb-1">{analysis.title}</div>
       )}
 
       {/* Preview */}
@@ -208,7 +208,7 @@ export function AnalysisCard({
       {analysis.supplement ? (
         <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-800/50 text-sm">
           <span className="font-bold text-yellow-600 dark:text-yellow-500 text-[10px] block mb-1">✅ 投稿者からの補足</span>
-          <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{analysis.supplement}</p>
+          <p className="text-gray-800 dark:text-g-text whitespace-pre-wrap">{analysis.supplement}</p>
         </div>
       ) : isOwner && onSupplement ? (
         <div className="mt-1 w-full">

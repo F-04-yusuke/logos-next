@@ -87,13 +87,13 @@ function getSelfLabels(labels: Map<string, string>, nodes: TreeNode[]): string[]
 function getSpeakerColor(speaker: string) {
   return speaker.includes("自分")
     ? "text-blue-600 dark:text-blue-400"
-    : "text-gray-700 dark:text-gray-300";
+    : "text-gray-700 dark:text-g-text";
 }
 
 function getStanceStyle(stance: string) {
   switch (stance) {
     case "主張":
-      return "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-400/10 dark:text-gray-400 dark:border-gray-400/30";
+      return "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-400/10 dark:text-g-sub dark:border-gray-400/30";
     case "反論":
       return "bg-red-100 text-red-600 border-red-200 dark:bg-red-400/10 dark:text-red-400 dark:border-red-400/30";
     case "賛成・補足":
@@ -178,7 +178,7 @@ function NodeEditor({
           onChange={(e) => onChange({ ...node, text: e.target.value })}
           rows={1}
           placeholder="意見を入力..."
-          className="w-full bg-transparent border-0 border-b border-gray-300 dark:border-gray-700 focus:ring-0 focus:border-blue-500 text-gray-900 dark:text-gray-200 text-[15px] sm:text-sm py-1.5 focus:outline-none transition-colors placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed resize-none overflow-hidden"
+          className="w-full bg-transparent border-0 border-b border-gray-300 dark:border-gray-700 focus:ring-0 focus:border-blue-500 text-gray-900 dark:text-g-text text-[15px] sm:text-sm py-1.5 focus:outline-none transition-colors placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed resize-none overflow-hidden"
           onInput={(e) => {
             const t = e.target as HTMLTextAreaElement;
             t.style.height = "auto";
@@ -261,7 +261,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       </div>
-      <div className="bg-gray-100 dark:bg-[#131314] p-3 rounded-lg rounded-tl-none text-sm text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-800 max-w-[85%] whitespace-pre-wrap leading-relaxed">
+      <div className="bg-gray-100 dark:bg-[#131314] p-3 rounded-lg rounded-tl-none text-sm text-gray-800 dark:text-g-text border border-gray-200 dark:border-gray-800 max-w-[85%] whitespace-pre-wrap leading-relaxed">
         {msg.text}
       </div>
     </div>
@@ -328,7 +328,7 @@ function TreePageInner() {
   if (!user.is_pro) {
     return (
       <div className="py-20 text-center">
-        <p className="text-gray-600 dark:text-gray-400 mb-4">このページはPRO会員限定です。</p>
+        <p className="text-gray-600 dark:text-g-sub mb-4">このページはPRO会員限定です。</p>
         <Link href="/" className="text-blue-500 hover:underline">
           トップへ戻る
         </Link>
@@ -438,7 +438,7 @@ function TreePageInner() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-bold text-xl text-gray-800 dark:text-gray-200 flex items-center">
+          <h1 className="font-bold text-xl text-gray-800 dark:text-g-text flex items-center">
             <svg
               aria-hidden="true"
               className="h-5 w-5 mr-2 text-yellow-500"
@@ -468,7 +468,7 @@ function TreePageInner() {
           {/* Tree editor section */}
           <div>
             <div className="mb-6 border-b border-gray-200 dark:border-gray-800 pb-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-g-sub">
                 各コメントに自動でID（自1, A2など）が付与され、下部のAIと連携します。完成したツリーはトピックの分析タブに投稿できます。
               </p>
             </div>
@@ -484,7 +484,7 @@ function TreePageInner() {
                   value={theme}
                   onChange={(e) => setTheme(e.target.value)}
                   placeholder="議論したいテーマを入力（例：消費税増税の是非について）"
-                  className="w-full bg-white dark:bg-[#131314] border border-blue-300 dark:border-blue-700 rounded-lg text-gray-900 dark:text-gray-100 text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                  className="w-full bg-white dark:bg-[#131314] border border-blue-300 dark:border-blue-700 rounded-lg text-gray-900 dark:text-g-text text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
                 />
               </div>
               <button
@@ -517,14 +517,14 @@ function TreePageInner() {
                 value={infoUrl}
                 onChange={(e) => setInfoUrl(e.target.value)}
                 placeholder="元情報のURL (例: https://youtu.be/...)"
-                className="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-200 text-sm py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-400 dark:placeholder-gray-600"
+                className="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-g-text text-sm py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-400 dark:placeholder-gray-600"
               />
               <textarea
                 value={infoDesc}
                 onChange={(e) => setInfoDesc(e.target.value)}
                 rows={1}
                 placeholder="トピックの主題や元情報の概要を入力..."
-                className="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-200 text-sm py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed resize-none overflow-hidden"
+                className="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-g-text text-sm py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed resize-none overflow-hidden"
                 onInput={(e) => {
                   const t = e.target as HTMLTextAreaElement;
                   t.style.height = "auto";
@@ -536,7 +536,7 @@ function TreePageInner() {
             {/* Add root node button */}
             <button
               onClick={() => setNodes([...nodes, createNode()])}
-              className="text-xs font-bold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors flex items-center bg-gray-100 hover:bg-gray-200 dark:bg-[#1e1f20] dark:hover:bg-gray-800 px-4 py-2 rounded-full w-fit border border-gray-200 dark:border-gray-700 shadow-sm mt-4"
+              className="text-xs font-bold text-gray-600 hover:text-gray-900 dark:text-g-sub dark:hover:text-white transition-colors flex items-center bg-gray-100 hover:bg-gray-200 dark:bg-[#1e1f20] dark:hover:bg-gray-800 px-4 py-2 rounded-full w-fit border border-gray-200 dark:border-gray-700 shadow-sm mt-4"
             >
               <span className="text-base mr-1 leading-none">＋</span> 分岐を追加
             </button>
@@ -561,7 +561,7 @@ function TreePageInner() {
 
           {/* AI Chat section */}
           <div className="mt-8 border-t border-gray-200 dark:border-gray-800 pt-8">
-            <h2 className="text-xl font-bold mb-4 flex items-center text-gray-900 dark:text-gray-100">
+            <h2 className="text-xl font-bold mb-4 flex items-center text-gray-900 dark:text-g-text">
               <svg
                 aria-hidden="true"
                 className="h-6 w-6 mr-2 text-blue-500 dark:text-blue-400"
@@ -590,13 +590,13 @@ function TreePageInner() {
               {/* Input */}
               <div className="p-3 sm:p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#18191a]">
                 <div className="flex gap-2 mb-2.5 items-center">
-                  <label className="text-xs text-gray-500 dark:text-gray-400 font-bold shrink-0">
+                  <label className="text-xs text-gray-500 dark:text-g-sub font-bold shrink-0">
                     返信対象:
                   </label>
                   <select
                     value={aiTarget}
                     onChange={(e) => setAiTarget(e.target.value)}
-                    className="bg-white dark:bg-[#131314] text-gray-900 dark:text-gray-200 text-xs px-2 py-1.5 rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500 cursor-pointer shadow-sm w-full sm:w-auto"
+                    className="bg-white dark:bg-[#131314] text-gray-900 dark:text-g-text text-xs px-2 py-1.5 rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500 cursor-pointer shadow-sm w-full sm:w-auto"
                   >
                     <option value="指定なし">指定なし (全体への質問・調査)</option>
                     {selfLabels.map((label) => (
@@ -618,7 +618,7 @@ function TreePageInner() {
                     }}
                     rows={1}
                     placeholder="AIへの指示や修正案を入力..."
-                    className="flex-1 bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-200 text-sm p-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 max-h-32 transition-shadow shadow-sm resize-none overflow-hidden"
+                    className="flex-1 bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-g-text text-sm p-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 max-h-32 transition-shadow shadow-sm resize-none overflow-hidden"
                     onInput={(e) => {
                       const t = e.target as HTMLTextAreaElement;
                       t.style.height = "auto";

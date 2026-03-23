@@ -95,8 +95,8 @@ function ProfileInfoSection({ profile, onSaved }: {
   return (
     <section>
       <header>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">プロフィール情報</h2>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">プロフィール情報</h2>
+        <p className="mt-1 text-sm text-gray-600 dark:text-g-sub">
           プロフィール画像、アカウント名、メールアドレスを更新できます。
         </p>
       </header>
@@ -120,7 +120,7 @@ function ProfileInfoSection({ profile, onSaved }: {
             )}
           </div>
           <div className="flex-1">
-            <label htmlFor="avatar" className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
+            <label htmlFor="avatar" className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1">
               プロフィール画像
             </label>
             <input
@@ -129,7 +129,7 @@ function ProfileInfoSection({ profile, onSaved }: {
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900/30 dark:file:text-blue-400 transition-colors cursor-pointer"
+              className="block w-full text-sm text-gray-500 dark:text-g-sub file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900/30 dark:file:text-blue-400 transition-colors cursor-pointer"
             />
             {errors.avatar && <p className="mt-1 text-xs text-red-500">{errors.avatar[0]}</p>}
           </div>
@@ -137,7 +137,7 @@ function ProfileInfoSection({ profile, onSaved }: {
 
         {/* アカウント名 */}
         <div>
-          <label htmlFor="name" className="block text-sm font-bold text-gray-700 dark:text-gray-300">
+          <label htmlFor="name" className="block text-sm font-bold text-gray-700 dark:text-g-text">
             アカウント名
           </label>
           <input
@@ -158,7 +158,7 @@ function ProfileInfoSection({ profile, onSaved }: {
               ※アカウント名は前回の変更から7日間変更できません。（残り約{daysLeft}日）
             </p>
           ) : (
-            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-xs text-gray-500 dark:text-g-sub">
               ※一度変更すると、その後7日間は再変更できなくなります。
             </p>
           )}
@@ -166,7 +166,7 @@ function ProfileInfoSection({ profile, onSaved }: {
 
         {/* メール */}
         <div>
-          <label htmlFor="email" className="block text-sm font-bold text-gray-700 dark:text-gray-300">
+          <label htmlFor="email" className="block text-sm font-bold text-gray-700 dark:text-g-text">
             Email（ログイン用）
           </label>
           <input
@@ -192,7 +192,7 @@ function ProfileInfoSection({ profile, onSaved }: {
             {saving ? "保存中..." : "保存する"}
           </button>
           {success && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-bold animate-fade-in">
+            <p className="text-sm text-gray-600 dark:text-g-sub font-bold animate-fade-in">
               保存しました。
             </p>
           )}
@@ -248,15 +248,15 @@ function PasswordSection() {
   return (
     <section>
       <header>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">パスワードの更新</h2>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">パスワードの更新</h2>
+        <p className="mt-1 text-sm text-gray-600 dark:text-g-sub">
           アカウントのセキュリティを保つため、長くランダムなパスワードを使用してください。
         </p>
       </header>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-6">
         <div>
-          <label htmlFor="current_password" className="block text-sm font-bold text-gray-700 dark:text-gray-300">
+          <label htmlFor="current_password" className="block text-sm font-bold text-gray-700 dark:text-g-text">
             現在のパスワード
           </label>
           <input
@@ -272,7 +272,7 @@ function PasswordSection() {
         </div>
 
         <div>
-          <label htmlFor="new_password" className="block text-sm font-bold text-gray-700 dark:text-gray-300">
+          <label htmlFor="new_password" className="block text-sm font-bold text-gray-700 dark:text-g-text">
             新しいパスワード
           </label>
           <input
@@ -288,7 +288,7 @@ function PasswordSection() {
         </div>
 
         <div>
-          <label htmlFor="password_confirmation" className="block text-sm font-bold text-gray-700 dark:text-gray-300">
+          <label htmlFor="password_confirmation" className="block text-sm font-bold text-gray-700 dark:text-g-text">
             新しいパスワード（確認用）
           </label>
           <input
@@ -314,7 +314,7 @@ function PasswordSection() {
             {saving ? "更新中..." : "保存する"}
           </button>
           {success && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-bold">保存しました。</p>
+            <p className="text-sm text-gray-600 dark:text-g-sub font-bold">保存しました。</p>
           )}
         </div>
       </form>
@@ -360,8 +360,8 @@ function DeleteAccountSection() {
   return (
     <section className="space-y-6">
       <header>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">アカウントの削除</h2>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">アカウントの削除</h2>
+        <p className="mt-1 text-sm text-gray-600 dark:text-g-sub leading-relaxed">
           アカウントを削除すると、すべてのリソースとデータが完全に削除されます。<br />
           アカウントを削除する前に、保持しておきたいデータや情報をダウンロードしてください。
         </p>
@@ -383,10 +383,10 @@ function DeleteAccountSection() {
         >
           <div className="bg-white dark:bg-[#1e1f20] rounded-xl shadow-xl w-full max-w-md mx-4">
             <form onSubmit={handleDelete} className="p-6">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">
                 本当にアカウントを削除しますか？
               </h2>
-              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              <p className="mt-1 text-sm text-gray-600 dark:text-g-sub leading-relaxed">
                 アカウントを削除すると、すべてのリソースとデータが完全に削除されます。<br />
                 アカウントを完全に削除することを確認するため、パスワードを入力してください。
               </p>
@@ -410,7 +410,7 @@ function DeleteAccountSection() {
                 <button
                   type="button"
                   onClick={() => { setShowModal(false); setPassword(""); setErrors({}); }}
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 font-bold py-2 px-4 rounded-md text-sm transition-colors"
+                  className="text-gray-600 dark:text-g-sub hover:text-gray-900 dark:hover:text-gray-200 font-bold py-2 px-4 rounded-md text-sm transition-colors"
                 >
                   キャンセル
                 </button>

@@ -165,7 +165,7 @@ export default function NotificationsPage() {
 
         {/* ページヘッダー */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+          <h2 className="font-bold text-xl text-gray-800 dark:text-g-text leading-tight">
             通知
           </h2>
           {hasUnread && (
@@ -241,8 +241,8 @@ export default function NotificationsPage() {
                   <p
                     className={`text-[13px] leading-snug ${
                       notification.is_unread
-                        ? "text-gray-900 dark:text-gray-100 font-bold"
-                        : "text-gray-600 dark:text-gray-400"
+                        ? "text-gray-900 dark:text-g-text font-bold"
+                        : "text-gray-600 dark:text-g-sub"
                     }`}
                   >
                     {notification.text}
@@ -271,17 +271,17 @@ export default function NotificationsPage() {
             <button
               onClick={() => setCurrentPage((p) => p - 1)}
               disabled={currentPage <= 1 || fetching}
-              className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 transition-colors"
+              className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 transition-colors"
             >
               前へ
             </button>
-            <span className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+            <span className="px-4 py-2 text-sm text-gray-500 dark:text-g-sub">
               {currentPage} / {lastPage}
             </span>
             <button
               onClick={() => setCurrentPage((p) => p + 1)}
               disabled={currentPage >= lastPage || fetching}
-              className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 transition-colors"
+              className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 transition-colors"
             >
               次へ
             </button>

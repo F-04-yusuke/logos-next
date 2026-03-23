@@ -165,7 +165,7 @@ function PostCard({
               <span className="text-xs">No Image</span>
             </div>
           )}
-          <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
+          <h4 className="font-bold text-sm text-gray-900 dark:text-g-text group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
             {isDraft && !post.title
               ? "※本投稿時にサムネイルとタイトルを自動取得します"
               : (post.title || "タイトルを取得できませんでした")}
@@ -179,17 +179,17 @@ function PostCard({
           <div className="flex items-center gap-2 mb-2">
             <UserAvatar user={post.user} size="sm" />
             <div className="flex items-baseline gap-2">
-              <span className="font-bold text-[13px] text-gray-900 dark:text-gray-100">
+              <span className="font-bold text-[13px] text-gray-900 dark:text-g-text">
                 {post.user.name}
               </span>
               <span className="text-[11px] text-gray-500">{timeAgo(post.created_at)}</span>
             </div>
-            <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400">
+            <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-g-sub">
               {post.category}
             </span>
           </div>
           {post.comment && (
-            <div className="text-[13px] text-gray-800 dark:text-gray-300 whitespace-pre-wrap mt-1 leading-relaxed">
+            <div className="text-[13px] text-gray-800 dark:text-g-text whitespace-pre-wrap mt-1 leading-relaxed">
               {post.comment}
             </div>
           )}
@@ -198,7 +198,7 @@ function PostCard({
               <span className="font-bold text-blue-600 dark:text-blue-400 text-[10px] block mb-1" aria-hidden="true">
                 ✅ 投稿者からの補足
               </span>
-              <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{post.supplement}</p>
+              <p className="text-gray-800 dark:text-g-text whitespace-pre-wrap">{post.supplement}</p>
             </div>
           )}
         </div>
@@ -224,16 +224,16 @@ function ReplyItem({ reply }: { reply: DashboardReply }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2 mb-0.5">
-          <span className="font-bold text-[12px] text-gray-900 dark:text-gray-100">
+          <span className="font-bold text-[12px] text-gray-900 dark:text-g-text">
             {reply.user.name}
           </span>
           <span className="text-[11px] text-gray-500">{timeAgo(reply.created_at)}</span>
         </div>
-        <p className="text-[13px] text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
+        <p className="text-[13px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
           {reply.body}
         </p>
         {reply.likes_count > 0 && (
-          <div className="mt-1.5 flex items-center space-x-1 text-gray-500 dark:text-gray-400">
+          <div className="mt-1.5 flex items-center space-x-1 text-gray-500 dark:text-g-sub">
             <ThumbUpIcon size="sm" />
             <span className="text-xs">{reply.likes_count}</span>
           </div>
@@ -252,12 +252,12 @@ function CommentCard({ comment }: { comment: DashboardComment }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2 mb-0.5">
-            <span className="font-bold text-[13px] text-gray-900 dark:text-gray-100">
+            <span className="font-bold text-[13px] text-gray-900 dark:text-g-text">
               {comment.user.name}
             </span>
             <span className="text-[11px] text-gray-500">{timeAgo(comment.created_at)}</span>
           </div>
-          <p className="text-[14px] text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
+          <p className="text-[14px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
             {comment.body}
           </p>
           <div className="mt-2 flex items-center gap-4">
@@ -515,7 +515,7 @@ export default function DashboardPage() {
                     <div key={post.id} className="flex flex-col gap-1.5">
                       <PostCard post={post} />
                       <div className="text-right px-2">
-                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-gray-400">
+                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
                           <Link
                             href={`/topics/${post.topic.id}`}
@@ -580,7 +580,7 @@ export default function DashboardPage() {
                           </button>
                         </div>
                         <div className="text-right">
-                          <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400">
+                          <span className="text-[11px] font-bold text-gray-500 dark:text-g-sub">
                             🔗 投稿先:{" "}
                             <Link
                               href={`/topics/${post.topic.id}`}
@@ -609,7 +609,7 @@ export default function DashboardPage() {
                     <div key={comment.id} className="flex flex-col gap-1.5">
                       <CommentCard comment={comment} />
                       <div className="text-right px-2">
-                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-gray-400">
+                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
                           <Link
                             href={`/topics/${comment.topic.id}`}
@@ -687,7 +687,7 @@ export default function DashboardPage() {
                             )}
                             <span className="text-[11px] text-gray-400">{timeAgo(analysis.created_at)}</span>
                           </div>
-                          <p className="font-bold text-sm text-gray-900 dark:text-gray-100 truncate">
+                          <p className="font-bold text-sm text-gray-900 dark:text-g-text truncate">
                             {analysis.title}
                           </p>
                         </div>
@@ -730,7 +730,7 @@ export default function DashboardPage() {
                         <div className="flex items-center gap-2 mb-1">
                           {user && <UserAvatar user={user} size="sm" />}
                           <div className="flex items-baseline gap-2">
-                            <span className="font-bold text-[13px] text-gray-900 dark:text-gray-100">
+                            <span className="font-bold text-[13px] text-gray-900 dark:text-g-text">
                               {user?.name}
                             </span>
                             <span className="text-[11px] text-gray-500">
@@ -781,7 +781,7 @@ export default function DashboardPage() {
               {/* ヘッダー */}
               <div className="px-4 py-4 sm:px-6 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-[#1e1f20]">
                 <div>
-                  <h3 id="draft-edit-title" className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                  <h3 id="draft-edit-title" className="text-lg font-bold text-gray-900 dark:text-g-text">
                     下書きを編集
                   </h3>
                   <p className="text-[11px] text-gray-400 mt-0.5">下書き保存中は他のユーザーには見えません。</p>
@@ -793,7 +793,7 @@ export default function DashboardPage() {
               {/* フォーム */}
               <div className="p-4 sm:p-6 bg-white dark:bg-[#131314] space-y-5">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                  <label className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1.5">
                     参考URL (エビデンス)
                   </label>
                   <input
@@ -805,7 +805,7 @@ export default function DashboardPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                  <label className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1.5">
                     メディア分類
                   </label>
                   <select
@@ -824,7 +824,7 @@ export default function DashboardPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                  <label className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1.5">
                     コメント・引用部分の抜粋
                   </label>
                   <textarea
@@ -840,7 +840,7 @@ export default function DashboardPage() {
                 <button
                   type="button"
                   onClick={closeDraftEdit}
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 font-bold py-2 px-3 rounded-md text-sm transition-colors"
+                  className="text-gray-600 dark:text-g-sub hover:text-gray-900 dark:hover:text-gray-200 font-bold py-2 px-3 rounded-md text-sm transition-colors"
                 >
                   キャンセル
                 </button>
@@ -850,7 +850,7 @@ export default function DashboardPage() {
                     type="button"
                     onClick={() => handleDraftUpdate(false)}
                     disabled={editSubmitting || !editUrl || !editCategory}
-                    className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 font-bold py-2 px-4 rounded-md text-sm transition-colors flex items-center gap-1 disabled:opacity-50"
+                    className="text-gray-600 dark:text-g-sub hover:text-gray-800 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 font-bold py-2 px-4 rounded-md text-sm transition-colors flex items-center gap-1 disabled:opacity-50"
                   >
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />

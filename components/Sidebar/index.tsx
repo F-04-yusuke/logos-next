@@ -44,9 +44,9 @@ export default function Sidebar() {
           "bg-[#1e1f20] border-r border-gray-800",
           "flex flex-col overflow-hidden",
           "transform transition-all duration-300 ease-in-out",
-          // 幅: PC は sidebarOpen で w-64↔w-16、モバイルは常に w-64
-          "w-64",
-          sidebarOpen ? "md:w-64" : "md:w-16",
+          // 幅: PC は sidebarOpen で w-72↔w-14、モバイルは常に w-72
+          "w-72",
+          sidebarOpen ? "md:w-72" : "md:w-14",
           // 位置: モバイルは translate で開閉、PC は常に表示
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         ].join(" ")}

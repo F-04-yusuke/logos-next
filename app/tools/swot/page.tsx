@@ -84,7 +84,7 @@ function BoxPanel({
             {label[0]}
           </span>
           {label.slice(1)}{" "}
-          <span className="text-sm text-gray-500 dark:text-gray-400 ml-2 font-normal">{subtitle}</span>
+          <span className="text-sm text-gray-500 dark:text-g-sub ml-2 font-normal">{subtitle}</span>
         </h2>
       </div>
 
@@ -102,7 +102,7 @@ function BoxPanel({
               onChange={(e) => onUpdate(idx, e.target.value)}
               rows={1}
               placeholder="内容を入力..."
-              className="w-full bg-transparent text-[15px] sm:text-sm text-gray-800 dark:text-gray-200 focus:outline-none border-none focus:ring-0 p-0 resize-none leading-relaxed overflow-hidden"
+              className="w-full bg-transparent text-[15px] sm:text-sm text-gray-800 dark:text-g-text focus:outline-none border-none focus:ring-0 p-0 resize-none leading-relaxed overflow-hidden"
               onInput={(e) => {
                 const t = e.target as HTMLTextAreaElement;
                 t.style.height = "auto";
@@ -169,7 +169,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       </div>
-      <div className="bg-gray-100 dark:bg-[#131314] p-3 rounded-lg rounded-tl-none text-sm text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-800 max-w-[85%] whitespace-pre-wrap leading-relaxed">
+      <div className="bg-gray-100 dark:bg-[#131314] p-3 rounded-lg rounded-tl-none text-sm text-gray-800 dark:text-g-text border border-gray-200 dark:border-gray-800 max-w-[85%] whitespace-pre-wrap leading-relaxed">
         {msg.text}
       </div>
     </div>
@@ -239,7 +239,7 @@ function SwotPageInner() {
   if (!user.is_pro) {
     return (
       <div className="py-20 text-center">
-        <p className="text-gray-600 dark:text-gray-400 mb-4">このページはPRO会員限定です。</p>
+        <p className="text-gray-600 dark:text-g-sub mb-4">このページはPRO会員限定です。</p>
         <Link href="/" className="text-blue-500 hover:underline">
           トップへ戻る
         </Link>
@@ -388,7 +388,7 @@ function SwotPageInner() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-bold text-xl text-gray-800 dark:text-gray-200 flex items-center">
+          <h1 className="font-bold text-xl text-gray-800 dark:text-g-text flex items-center">
             <svg
               aria-hidden="true"
               className="h-5 w-5 mr-2 text-green-500"
@@ -418,13 +418,13 @@ function SwotPageInner() {
           {/* Framework select + AI generate */}
           <div className="border-b border-gray-200 dark:border-gray-800 pb-4 flex justify-between items-end">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              <p className="text-sm text-gray-600 dark:text-g-sub mb-2">
                 内部要因・外部要因、またはマクロ環境を整理するフレームワークです。
               </p>
               <select
                 value={framework}
                 onChange={(e) => setFramework(e.target.value as Framework)}
-                className="bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-700 rounded text-gray-900 dark:text-gray-100 text-sm px-2 py-1 focus:outline-none focus:border-blue-500 font-bold"
+                className="bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-700 rounded text-gray-900 dark:text-g-text text-sm px-2 py-1 focus:outline-none focus:border-blue-500 font-bold"
               >
                 <option value="SWOT">SWOT分析 (強み・弱み・機会・脅威)</option>
                 <option value="PEST">PEST分析 (政治・経済・社会・技術)</option>
@@ -451,7 +451,7 @@ function SwotPageInner() {
 
           {/* Theme input */}
           <div className="bg-white dark:bg-[#1e1f20] border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm">
-            <div className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">
+            <div className="text-xs font-bold text-gray-500 dark:text-g-sub mb-1">
               分析テーマ（主題）
             </div>
             <input
@@ -459,7 +459,7 @@ function SwotPageInner() {
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
               placeholder="例：日本の原発再稼働について"
-              className="w-full bg-transparent font-bold text-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:border-b border-blue-500 placeholder-gray-400 dark:placeholder-gray-600 py-1"
+              className="w-full bg-transparent font-bold text-xl text-gray-900 dark:text-g-text focus:outline-none focus:border-b border-blue-500 placeholder-gray-400 dark:placeholder-gray-600 py-1"
             />
           </div>
 
@@ -480,7 +480,7 @@ function SwotPageInner() {
 
           {/* AI Chat */}
           <div className="mt-4 border-t border-gray-200 dark:border-gray-800 pt-8">
-            <h2 className="text-xl font-bold mb-4 flex items-center text-gray-900 dark:text-gray-100">
+            <h2 className="text-xl font-bold mb-4 flex items-center text-gray-900 dark:text-g-text">
               <svg
                 aria-hidden="true"
                 className="h-6 w-6 mr-2 text-blue-500 dark:text-blue-400"
@@ -518,7 +518,7 @@ function SwotPageInner() {
                     }}
                     rows={1}
                     placeholder="AIへの指示や質問を入力..."
-                    className="flex-1 bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-200 text-sm p-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 max-h-32 transition-shadow resize-none overflow-hidden"
+                    className="flex-1 bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-g-text text-sm p-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 max-h-32 transition-shadow resize-none overflow-hidden"
                     onInput={(e) => {
                       const t = e.target as HTMLTextAreaElement;
                       t.style.height = "auto";

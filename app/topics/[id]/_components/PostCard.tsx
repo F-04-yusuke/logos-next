@@ -159,7 +159,7 @@ export function PostCard({
             rel="noopener noreferrer"
             className="group"
           >
-            <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
+            <h4 className="font-bold text-sm text-gray-900 dark:text-g-text group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
               {post.title || "タイトルを取得できませんでした"}
             </h4>
           </a>
@@ -171,14 +171,14 @@ export function PostCard({
             <div className="flex items-center gap-2 mb-2">
               <div className="flex items-center gap-2 cursor-pointer">
                 <UserAvatar user={post.user} size="sm" />
-                <span className="text-[13px] text-gray-900 dark:text-gray-100">
+                <span className="text-[13px] text-gray-900 dark:text-g-text">
                   {post.user.name}
                 </span>
               </div>
-              <span className="text-[11px] text-gray-500 dark:text-gray-400">
+              <span className="text-[11px] text-gray-500 dark:text-g-sub">
                 {timeAgo(post.created_at)}
               </span>
-              <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400">
+              <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-g-sub">
                 {post.category}
               </span>
             </div>
@@ -187,7 +187,7 @@ export function PostCard({
               <div className="mt-2 break-all">
                 <p
                   ref={commentRef}
-                  className={`text-[14px] text-gray-800 dark:text-gray-300 leading-relaxed${openComment ? "" : " line-clamp-3"}`}
+                  className={`text-[15px] text-gray-800 dark:text-g-text leading-relaxed${openComment ? "" : " line-clamp-3"}`}
                 >
                   {post.comment}
                 </p>
@@ -292,8 +292,8 @@ export function PostCard({
 
       {post.supplement && openSupplementView && (
         <div className="pl-0 pr-3 pt-2 pb-3 bg-gray-50 dark:bg-[#131314] rounded-b-lg">
-          <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">投稿者からの補足</span>
-          <p className="text-[13px] text-gray-800 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+          <span className="text-xs text-gray-500 dark:text-g-sub block mb-1">投稿者からの補足</span>
+          <p className="text-[13px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
             {post.supplement}
           </p>
         </div>

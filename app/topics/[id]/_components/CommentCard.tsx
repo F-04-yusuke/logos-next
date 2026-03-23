@@ -69,7 +69,7 @@ export function CommentCard({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2 mb-0.5">
-          <span className="font-bold text-[13px] text-gray-900 dark:text-gray-100">
+          <span className="font-bold text-[13px] text-gray-900 dark:text-g-text">
             {comment.user.name}
           </span>
           <span className="text-[11px] text-gray-500">
@@ -77,7 +77,7 @@ export function CommentCard({
           </span>
         </div>
 
-        <p className="text-[14px] text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
+        <p className="text-[14px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
           {comment.body}
         </p>
 
@@ -130,7 +130,7 @@ export function CommentCard({
                 <button
                   type="button"
                   onClick={() => { setOpenReply(false); setReplyBody(""); }}
-                  className="text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 font-bold px-3 py-2 sm:py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="text-xs text-gray-600 hover:text-gray-900 dark:text-g-sub dark:hover:text-gray-200 font-bold px-3 py-2 sm:py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   キャンセル
                 </button>
@@ -183,14 +183,14 @@ export function CommentCard({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2">
-                        <span className="font-bold text-[12px] text-gray-900 dark:text-gray-100">
+                        <span className="font-bold text-[12px] text-gray-900 dark:text-g-text">
                           {reply.user.name}
                         </span>
                         <span className="text-[11px] text-gray-500">
                           {timeAgo(reply.created_at)}
                         </span>
                       </div>
-                      <p className="text-[13px] text-gray-800 dark:text-gray-200 mt-0.5 whitespace-pre-wrap leading-relaxed">
+                      <p className="text-[13px] text-gray-800 dark:text-g-text mt-0.5 whitespace-pre-wrap leading-relaxed">
                         {reply.body}
                       </p>
                       <div className="mt-1 flex items-center gap-3">

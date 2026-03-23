@@ -87,7 +87,7 @@ function PostCard({ post }: { post: LikedPost }) {
               <span className="text-xs">No Image</span>
             </div>
           )}
-          <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
+          <h4 className="font-bold text-sm text-gray-900 dark:text-g-text group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
             {post.title || "タイトルを取得できませんでした"}
           </h4>
         </a>
@@ -99,15 +99,15 @@ function PostCard({ post }: { post: LikedPost }) {
           <div className="flex items-center gap-2 mb-2">
             <UserAvatar user={post.user} size="sm" />
             <div className="flex items-baseline gap-2">
-              <span className="font-bold text-[13px] text-gray-900 dark:text-gray-100">{post.user.name}</span>
+              <span className="font-bold text-[13px] text-gray-900 dark:text-g-text">{post.user.name}</span>
               <span className="text-[11px] text-gray-500">{timeAgo(post.created_at)}</span>
             </div>
-            <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400">
+            <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-g-sub">
               {post.category}
             </span>
           </div>
           {post.comment && (
-            <div className="text-[13px] text-gray-800 dark:text-gray-300 whitespace-pre-wrap mt-1 leading-relaxed">
+            <div className="text-[13px] text-gray-800 dark:text-g-text whitespace-pre-wrap mt-1 leading-relaxed">
               {post.comment}
             </div>
           )}
@@ -116,7 +116,7 @@ function PostCard({ post }: { post: LikedPost }) {
               <span className="font-bold text-blue-600 dark:text-blue-400 text-[10px] block mb-1" aria-hidden="true">
                 ✅ 投稿者からの補足
               </span>
-              <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{post.supplement}</p>
+              <p className="text-gray-800 dark:text-g-text whitespace-pre-wrap">{post.supplement}</p>
             </div>
           )}
         </div>
@@ -144,10 +144,10 @@ function CommentCard({ comment }: { comment: LikedComment }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2 mb-0.5">
-            <span className="font-bold text-[13px] text-gray-900 dark:text-gray-100">{comment.user.name}</span>
+            <span className="font-bold text-[13px] text-gray-900 dark:text-g-text">{comment.user.name}</span>
             <span className="text-[11px] text-gray-500">{timeAgo(comment.created_at)}</span>
           </div>
-          <p className="text-[14px] text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
+          <p className="text-[14px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
             {comment.body}
           </p>
           <div className="mt-2 flex items-center gap-4">
@@ -249,7 +249,7 @@ export default function LikesPage() {
                     <div key={post.id} className="flex flex-col gap-1.5">
                       <PostCard post={post} />
                       <div className="text-right px-2">
-                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-gray-400">
+                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
                           <Link
                             href={`/topics/${post.topic.id}`}
@@ -275,7 +275,7 @@ export default function LikesPage() {
                     <div key={comment.id} className="flex flex-col gap-1.5">
                       <CommentCard comment={comment} />
                       <div className="text-right px-2">
-                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-gray-400">
+                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
                           <Link
                             href={`/topics/${comment.topic.id}`}

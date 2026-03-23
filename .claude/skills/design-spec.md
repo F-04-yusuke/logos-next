@@ -6,6 +6,25 @@
 - ボーダー: `border-gray-700`
 - コントラスト比: `#131314` 背景に対して文字色 4.5:1 以上を確保すること
 
+### テキストカラー（Gemini準拠・Session 17確立）
+`globals.css` の `@theme inline` に定義済みのカスタムクラスを使うこと:
+
+| クラス | 変数 | HEX | 用途 |
+|---|---|---|---|
+| `text-g-text` | `--color-g-text` | `#E3E3E3` | メインテキスト（見出し・本文・ユーザー名等） |
+| `text-g-sub` | `--color-g-sub` | `#C4C7C5` | サブテキスト（日時・カテゴリ・メタ情報等） |
+
+**新規コンポーネント作成時のルール:**
+- ダークモードのメインテキスト → `dark:text-g-text`（`dark:text-gray-100/200/300` は使わない）
+- ダークモードのサブテキスト → `dark:text-g-sub`（`dark:text-gray-400` は使わない）
+- `text-white` はボタン・バッジ等の白抜き文字のみ使用可
+
+## フォント（Session 17確立）
+- **欧文**: Geist Sans（Vercel製・Next.js最適化済み）
+- **日本語**: Noto Sans JP（Google Fonts・全OS統一）
+- フォントスタック: `var(--font-geist-sans), var(--font-noto-sans-jp), sans-serif`
+- layout.tsx で両フォントをロード済み・globals.css の `--font-sans` に設定済み
+
 ## デザイン基準
 - YouTube・Gemini・X（Twitter）ライクなモダンで洗練されたデザイン
 - ダークモード固定

@@ -89,14 +89,14 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
   return (
     <div className="w-full">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 text-gray-900 dark:text-gray-100">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4 sm:py-6 text-gray-900 dark:text-g-text">
 
         {/* ===== Topic Header ===== */}
         <div className={`flex flex-col md:flex-row justify-between items-start gap-4 ${contentExpanded ? "mb-2" : "mb-0"}`}>
 
           {/* Left: title / content / timeline */}
           <div className="flex-1">
-            <h2 className="text-2xl font-bold mb-2">{topic.title}</h2>
+            <h2 className="text-xl font-bold mb-2">{topic.title}</h2>
             <button
               onClick={() => setContentExpanded(!contentExpanded)}
               className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1f20] pl-0 pr-2 py-1 rounded transition-colors cursor-pointer flex items-center gap-1"
@@ -106,14 +106,14 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
             {contentExpanded && (
               <>
-                <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300 mb-5">
+                <p className="whitespace-pre-wrap text-base text-gray-700 dark:text-g-text mb-5">
                   {topic.content}
                 </p>
 
                 {/* Timeline */}
                 <div className="mt-1 mb-1">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                    <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 flex items-center shrink-0">
+                    <h3 className="text-xs font-bold text-gray-500 dark:text-g-sub flex items-center shrink-0">
                       <span className="mr-1" aria-hidden="true">⏳</span>{" "}
                       前提となる時系列
                     </h3>
@@ -150,10 +150,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                             className="relative flex items-start sm:items-center py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                           >
                             <div className="absolute left-[-16.5px] top-2.5 sm:top-1/2 sm:-translate-y-1/2 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                            <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-gray-300 shrink-0">
+                            <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-g-text shrink-0">
                               {item.date ?? ""}
                             </div>
-                            <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 sm:truncate">
+                            <div className="flex-1 text-sm text-gray-700 dark:text-g-text sm:truncate">
                               {item.event ?? ""}
                             </div>
                             {(item.is_ai === undefined || !!item.is_ai) && (
@@ -171,10 +171,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                               className="relative flex items-start sm:items-center py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                             >
                               <div className="absolute left-[-16.5px] top-2.5 sm:top-1/2 sm:-translate-y-1/2 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                              <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-gray-300 shrink-0">
+                              <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-g-text shrink-0">
                                 {item.date ?? ""}
                               </div>
-                              <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 sm:truncate">
+                              <div className="flex-1 text-sm text-gray-700 dark:text-g-text sm:truncate">
                                 {item.event ?? ""}
                               </div>
                               {(item.is_ai === undefined || !!item.is_ai) && (
@@ -209,7 +209,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   <Link
                     key={cat.id}
                     href={`/?category=${cat.id}`}
-                    className="px-2 py-0.5 text-xs rounded border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="px-2 py-0.5 text-xs rounded border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-g-sub hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                   >
                     {cat.name}
                   </Link>
@@ -217,7 +217,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               </div>
             )}
 
-            <div className="text-xs text-gray-500 dark:text-gray-400 text-right space-y-0.5">
+            <div className="text-xs text-gray-500 dark:text-g-sub text-right space-y-0.5">
               <p>作成者: {topic.user.name}</p>
               <p>{formatDateTime(topic.created_at)}</p>
             </div>
@@ -325,7 +325,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "info" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
+                <h3 className="font-bold text-gray-900 dark:text-g-text text-sm sm:text-base">
                   {filteredPosts.length} 件の投稿
                 </h3>
                 <div className="flex items-center space-x-2">
@@ -410,7 +410,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "comments" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
+                <h3 className="font-bold text-gray-900 dark:text-g-text text-sm sm:text-base">
                   {topic.comments.length} 件のコメント
                 </h3>
                 <select
@@ -441,7 +441,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="bg-gray-800 hover:bg-gray-900 dark:bg-[#131314] dark:text-gray-200 border border-transparent dark:border-gray-700 dark:hover:bg-gray-800 text-white font-bold py-2 px-4 sm:py-1.5 rounded text-sm transition-colors shadow-sm disabled:opacity-50"
+                        className="bg-gray-800 hover:bg-gray-900 dark:bg-[#131314] dark:text-g-text border border-transparent dark:border-gray-700 dark:hover:bg-gray-800 text-white font-bold py-2 px-4 sm:py-1.5 rounded text-sm transition-colors shadow-sm disabled:opacity-50"
                       >
                         コメントする
                       </button>
@@ -477,7 +477,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "analysis" && (
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
+                <h3 className="font-bold text-gray-900 dark:text-g-text text-sm sm:text-base">
                   {topic.analyses?.length ?? 0} 件の分析・図解
                 </h3>
                 <button
@@ -526,7 +526,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                     />
                   </svg>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 font-bold mb-1">
+                  <p className="text-sm text-gray-500 dark:text-g-sub font-bold mb-1">
                     まだ分析・図解は投稿されていません
                   </p>
                   <p className="text-xs text-gray-400 dark:text-gray-500 text-center max-w-sm">

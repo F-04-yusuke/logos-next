@@ -111,7 +111,7 @@ export default function HistoryPage() {
                     d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
                 </svg>
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-bold">
+                <p className="text-gray-500 dark:text-g-sub text-sm font-bold">
                   まだ閲覧履歴はありません。
                 </p>
                 <p className="text-gray-400 dark:text-gray-500 text-xs mt-2">
@@ -123,7 +123,7 @@ export default function HistoryPage() {
                 <div className="space-y-1.5">
                   {groups.map(({ label, topics: groupTopics }) => (
                     <div key={label}>
-                      <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-gray-100 mt-8 mb-3 px-2 border-b border-gray-100 dark:border-gray-800/60 pb-2">
+                      <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-g-text mt-8 mb-3 px-2 border-b border-gray-100 dark:border-gray-800/60 pb-2">
                         {label}
                       </h3>
                       <div className="space-y-1.5">
@@ -169,7 +169,7 @@ export default function HistoryPage() {
                     <button
                       onClick={() => fetchHistory(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="px-4 py-2 text-sm font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      className="px-4 py-2 text-sm font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                     >
                       ← 前
                     </button>
@@ -179,7 +179,7 @@ export default function HistoryPage() {
                     <button
                       onClick={() => fetchHistory(currentPage + 1)}
                       disabled={currentPage === lastPage}
-                      className="px-4 py-2 text-sm font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      className="px-4 py-2 text-sm font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                     >
                       次 →
                     </button>
