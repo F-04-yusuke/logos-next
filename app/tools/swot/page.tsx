@@ -388,7 +388,7 @@ function SwotPageInner() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-semibold text-xl text-gray-800 dark:text-gray-200 flex items-center">
+          <h1 className="font-bold text-xl text-gray-800 dark:text-gray-200 flex items-center">
             <svg
               aria-hidden="true"
               className="h-5 w-5 mr-2 text-green-500"

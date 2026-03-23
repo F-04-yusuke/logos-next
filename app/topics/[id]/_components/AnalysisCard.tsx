@@ -274,7 +274,7 @@ export function AnalysisCard({
             <svg aria-hidden="true" className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
             </svg>
-            もっと見る <span className="text-[9px] ml-0.5 bg-yellow-500/20 text-yellow-400 px-1 rounded font-black">PRO</span>
+            もっと見る <span className="text-[9px] ml-0.5 bg-yellow-500/20 text-yellow-400 px-1 rounded font-bold">PRO</span>
           </span>
         ) : null}
         <div className="flex items-center gap-4">

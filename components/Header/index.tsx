@@ -96,7 +96,7 @@ export default function Header() {
                 </Link>
                 <Link
                   href="/register"
-                  className="text-sm bg-white text-black font-medium rounded-full px-4 py-1.5 hover:bg-gray-200 transition-colors"
+                  className="text-sm bg-white text-black font-bold rounded-full px-4 py-1.5 hover:bg-gray-200 transition-colors"
                 >
                   登録
                 </Link>
@@ -187,8 +187,8 @@ export default function Header() {
                     <Avatar avatar={user.avatar} name={user.name} size="h-10 w-10" iconSize="h-6 w-6" />
                   </div>
                   <div>
-                    <div className="font-medium text-base text-gray-200">{user.name}</div>
-                    <div className="font-medium text-sm text-gray-500">{user.email}</div>
+                    <div className="text-base text-gray-200">{user.name}</div>
+                    <div className="text-sm text-gray-500">{user.email}</div>
                   </div>
                 </div>
                 <div className="mt-3 space-y-1 pb-3">
@@ -227,7 +227,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/register"
-                className="text-sm bg-white text-black font-medium rounded-full px-4 py-2 text-center hover:bg-gray-200 transition-colors"
+                className="text-sm bg-white text-black font-bold rounded-full px-4 py-2 text-center hover:bg-gray-200 transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
                 登録

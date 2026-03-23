@@ -190,7 +190,7 @@ export default function NavLinks({
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                     </svg>
                     <span className="ml-3">トピックの作成</span>
-                    <span className="ml-2 text-[9px] bg-yellow-500 text-white px-1 py-0.5 rounded font-black tracking-wider">PRO</span>
+                    <span className="ml-2 text-[9px] bg-yellow-500 text-white px-1 py-0.5 rounded font-bold tracking-wider">PRO</span>
                   </Link>
                 ) : (
                   <button
@@ -214,7 +214,7 @@ export default function NavLinks({
           <div>
             <h3 className="px-2 text-sm font-semibold text-yellow-500 uppercase tracking-wider mb-2 flex items-center">
               分析ツール
-              <span className="ml-1.5 text-[9px] bg-yellow-500 text-white px-1 py-0.5 rounded font-black tracking-wider">PRO</span>
+              <span className="ml-1.5 text-[9px] bg-yellow-500 text-white px-1 py-0.5 rounded font-bold tracking-wider">PRO</span>
             </h3>
             <ul className="space-y-1 text-sm font-bold">
 

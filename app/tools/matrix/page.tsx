@@ -372,7 +372,7 @@ function MatrixPageInner() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-semibold text-xl text-gray-800 dark:text-gray-200 flex items-center">
+          <h1 className="font-bold text-xl text-gray-800 dark:text-gray-200 flex items-center">
             <svg
               aria-hidden="true"
               className="h-5 w-5 mr-2 text-purple-500"
@@ -591,7 +591,7 @@ function MatrixPageInner() {
                           <div className="text-xs text-gray-500 mb-1 font-bold">総合評価</div>
                           {hasValue ? (
                             <div>
-                              <span className="text-2xl font-black text-blue-600 dark:text-blue-400">
+                              <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                                 {total}
                               </span>
                               <span className="text-xs text-gray-500 ml-1">pt</span>

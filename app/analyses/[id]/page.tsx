@@ -168,7 +168,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               {totals.map((total, i) => (
                 <td key={i} className="p-3 border-r border-gray-200 dark:border-gray-700 text-center">
                   {isCalculated[i]
-                    ? <><span className="text-3xl font-black text-blue-600 dark:text-blue-400">{total}</span><span className="text-xs text-gray-500 ml-1">pt</span></>
+                    ? <><span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{total}</span><span className="text-xs text-gray-500 ml-1">pt</span></>
                     : <span className="text-sm text-gray-400">未評価</span>
                   }
                 </td>
@@ -294,7 +294,7 @@ export default function AnalysisShowPage({ params }: { params: { id: string } })
 
         {/* ページヘッダー */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight flex items-center">
+          <h2 className="font-bold text-xl text-gray-800 dark:text-gray-200 leading-tight flex items-center">
             {typeIcon()}
             {typeLabel()}
           </h2>

@@ -266,7 +266,7 @@ export default function HomeClient({
                             {topic.categories.map((cat) => (
                               <span
                                 key={cat.id}
-                                className="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-[#131314] text-indigo-300 border border-gray-800"
+                                className="inline-block px-2 py-0.5 text-xs font-bold rounded bg-[#131314] text-indigo-300 border border-gray-800"
                               >
                                 {cat.name}
                               </span>
@@ -351,7 +351,7 @@ export default function HomeClient({
                         <h4 className="text-sm font-bold text-gray-200 group-hover:text-blue-400 transition-colors line-clamp-2 leading-tight mb-1">
                           {topic.title}
                         </h4>
-                        <span className="text-xs text-gray-500 font-medium">
+                        <span className="text-xs text-gray-500">
                           エビデンス: {topic.posts_count}件
                         </span>
                       </div>

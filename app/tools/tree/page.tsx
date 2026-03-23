@@ -139,7 +139,7 @@ function NodeEditor({
           </select>
 
           <span
-            className={`text-xs font-black px-1.5 py-0.5 rounded shrink-0 ${
+            className={`text-xs font-bold px-1.5 py-0.5 rounded shrink-0 ${
               isSelf
                 ? "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300"
                 : "bg-gray-200 text-gray-500 dark:bg-gray-800 dark:text-gray-500"
@@ -438,7 +438,7 @@ function TreePageInner() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-semibold text-xl text-gray-800 dark:text-gray-200 flex items-center">
+          <h1 className="font-bold text-xl text-gray-800 dark:text-gray-200 flex items-center">
             <svg
               aria-hidden="true"
               className="h-5 w-5 mr-2 text-yellow-500"

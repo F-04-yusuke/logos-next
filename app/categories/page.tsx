@@ -249,7 +249,7 @@ export default function CategoriesPage() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                             </svg>
                             {cat.name}
-                            <span className="text-[11px] sm:text-xs font-medium ml-3 px-2 py-1 rounded-md bg-emerald-900/30 text-emerald-400 border border-emerald-800/50 shrink-0">
+                            <span className="text-[11px] sm:text-xs ml-3 px-2 py-1 rounded-md bg-emerald-900/30 text-emerald-400 border border-emerald-800/50 shrink-0">
                               順序: {cat.sort_order}
                             </span>
                           </div>
@@ -315,7 +315,7 @@ export default function CategoriesPage() {
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>
                                     {child.name}
-                                    <span className="text-[11px] font-medium ml-3 px-1.5 py-0.5 rounded bg-emerald-900/30 text-emerald-400 border border-emerald-800/50 shrink-0">
+                                    <span className="text-[11px] ml-3 px-1.5 py-0.5 rounded bg-emerald-900/30 text-emerald-400 border border-emerald-800/50 shrink-0">
                                       順序: {child.sort_order}
                                     </span>
                                   </div>

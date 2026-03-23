@@ -467,7 +467,7 @@ export default function DashboardPage() {
             >
               下書き
               {draftCount > 0 && (
-                <span className="text-[10px] font-black bg-yellow-500 text-white px-1.5 py-0.5 rounded-full leading-none">
+                <span className="text-[10px] font-bold bg-yellow-500 text-white px-1.5 py-0.5 rounded-full leading-none">
                   {draftCount}
                 </span>
               )}
@@ -485,7 +485,7 @@ export default function DashboardPage() {
               className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center ${yellowTab("analyses")}`}
             >
               作成した分析・図解
-              <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-black tracking-wider">
+              <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
                 PRO
               </span>
             </button>
@@ -495,7 +495,7 @@ export default function DashboardPage() {
               className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center ${blueTab("topics")}`}
             >
               作成したトピック
-              <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-black tracking-wider">
+              <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
                 PRO
               </span>
             </button>
@@ -547,7 +547,7 @@ export default function DashboardPage() {
                       <PostCard post={post} isDraft />
                       <div className="flex justify-between items-center px-2">
                         <div className="flex items-center gap-3">
-                          <span className="text-[10px] font-black bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 px-2 py-0.5 rounded">
+                          <span className="text-[10px] font-bold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 px-2 py-0.5 rounded">
                             下書き
                           </span>
                           <button

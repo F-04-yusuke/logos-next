@@ -159,7 +159,7 @@ export default function TopicCreatePage() {
         <div className="bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-lg border border-gray-800">
           <div className="p-6 text-gray-100">
 
-            <h2 className="font-semibold text-xl text-gray-200 leading-tight mb-6">
+            <h2 className="font-bold text-xl text-gray-200 leading-tight mb-6">
               新規トピック作成
             </h2>
 
@@ -171,7 +171,7 @@ export default function TopicCreatePage() {
 
               {/* タイトル */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-300">トピックのタイトル</label>
+                <label className="block text-sm text-gray-300">トピックのタイトル</label>
                 <input
                   type="text"
                   value={title}
@@ -192,7 +192,7 @@ export default function TopicCreatePage() {
                   {categories.map((parent) => (
                     <div key={parent.id} className="bg-[#1e1f20] p-3 rounded border border-gray-700">
                       {/* 大分類 */}
-                      <div className="font-semibold text-blue-400 border-b border-gray-700 pb-2 mb-3">
+                      <div className="font-bold text-blue-400 border-b border-gray-700 pb-2 mb-3">
                         <label className="inline-flex items-center cursor-pointer">
                           <input
                             type="checkbox"
@@ -226,7 +226,7 @@ export default function TopicCreatePage() {
 
               {/* 議論の内容・背景 */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-300">議論の内容・背景（概要）</label>
+                <label className="block text-sm text-gray-300">議論の内容・背景（概要）</label>
                 <textarea
                   ref={contentRef}
                   value={content}
@@ -240,7 +240,7 @@ export default function TopicCreatePage() {
 
               {/* 時系列 */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-300 mb-2">前提となる時系列</label>
+                <label className="block text-sm text-gray-300 mb-2">前提となる時系列</label>
                 <p className="text-xs text-gray-500 mb-3">※作成後にトピック詳細画面でAIに自動生成させることも可能です。</p>
 
                 <div className="space-y-2 border-l-2 border-gray-700 pl-3 ml-2">

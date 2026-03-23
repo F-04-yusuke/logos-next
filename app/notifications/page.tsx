@@ -165,7 +165,7 @@ export default function NotificationsPage() {
 
         {/* ページヘッダー */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+          <h2 className="font-bold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             通知
           </h2>
           {hasUnread && (
@@ -228,7 +228,7 @@ export default function NotificationsPage() {
                   ) : (
                     // system通知はLOGOSロゴ
                     <div className="h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center">
-                      <span className="text-white text-[11px] font-black tracking-tight">
+                      <span className="text-white text-[11px] font-bold">
                         L
                       </span>
                     </div>
@@ -241,7 +241,7 @@ export default function NotificationsPage() {
                   <p
                     className={`text-[13px] leading-snug ${
                       notification.is_unread
-                        ? "text-gray-900 dark:text-gray-100 font-medium"
+                        ? "text-gray-900 dark:text-gray-100 font-bold"
                         : "text-gray-600 dark:text-gray-400"
                     }`}
                   >
