@@ -80,7 +80,7 @@ export function PostCard({
         </div>
       )}
 
-      <div className="p-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col md:flex-row gap-4 transition-colors min-h-[170px] hover:bg-gray-100 dark:hover:bg-white/[0.04]">
+      <div className="pl-0 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col md:flex-row gap-4 transition-colors min-h-[170px] hover:bg-gray-100 dark:hover:bg-white/[0.04]">
         {/* 左列: サムネイル + タイトル */}
         <div className="md:w-[30%] flex-shrink-0">
           {/* サムネイルエリア */}
@@ -291,7 +291,7 @@ export function PostCard({
       </div>
 
       {post.supplement && openSupplementView && (
-        <div className="px-3 pt-2 pb-3 bg-gray-50 dark:bg-[#131314] rounded-b-lg">
+        <div className="pl-0 pr-3 pt-2 pb-3 bg-gray-50 dark:bg-[#131314] rounded-b-lg">
           <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">投稿者からの補足</span>
           <p className="text-[13px] text-gray-800 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
             {post.supplement}
