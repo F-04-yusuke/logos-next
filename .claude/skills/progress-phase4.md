@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-23（Session 13）
+最終更新: 2026-03-23（Session 14）
 
 ---
 
@@ -183,16 +183,40 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 
 ---
 
+## Session 14: UI/UX 改善 Batch 2〜4 + 間隔・アライメント調整（2026-03-23）
+
+### 実装内容
+
+| バッチ / 調整 | 変更ファイル | 変更内容 |
+|---|---|---|
+| Batch 2（8+12+11） | `PostCard.tsx` | 右列`justify-between`追加・タイトル`font-semibold`・ユーザー名`font-medium`・補足ボタン`rounded-md` |
+| Batch 4（4+1）先行 | `PostCard.tsx`, `TopicPageClient.tsx` | カードpadding `p-4`統一・gap `gap-4`・コメントmin-h削除・続きを読むpy拡大・カードリスト`space-y-4` |
+| Batch 3（6+9+2） | `PostCard.tsx`, `TopicPageClient.tsx` | h2に`tracking-tight`・timeAgo/補足ラベル`dark:text-gray-400`・区切り`dark:text-gray-500` |
+| 間隔・アライメント調整 | `PostCard.tsx`, `TopicPageClient.tsx` | タイトルmb-3・概要mb-5（時系列との間隔拡大）・カードpl-0（サムネ左端をページ基準軸に統一） |
+
+### アライメント設計方針（Session 14 で確立）
+
+- PostCard の左パディングを撤廃（`pl-0`）し、サムネイル左端をタイトル・タブバーと同じ基準軸に揃える
+- ホバー背景はカード全幅に広がるためアライメントを崩さない
+- 「枠がない状態での初見の印象」を優先する設計
+
+### Gitタグ（Session 14）
+
+- logos-next: `v4.3-session14-ui-spacing-alignment`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
 ## Phase 4 残タスク（優先度別）
 
 ### 最優先：UI/UX 継続改善
 
-**トピックページ（Batch 3〜4 未完了）:**
-- Batch 3（6+9+2）: トピックタイトル字間・コントラスト監査
-- Batch 4（4+1）: タップターゲット・スペーシング
+**トピックページ（完了済み）:**
+- Batch 1〜4 すべて完了（Session 13〜14）
 
-**トピックページ完了後:**
-- コメントタブ UI/UX 改善
+**次のターゲット（Session 15 予定）:**
+- **ホバー強化**: 並び替えselect・時系列エリア・ユーザーアイコン+名前にcursor変化追加
+- **コメントタブ**: tinkerでテストデータを充実させてイメージ確認 → UI/UX改善
 - 分析タブ UI/UX 改善
 - トップページ（トピック一覧）UI/UX 改善
 - その他全ページ
