@@ -45,8 +45,8 @@ export function PostCard({
   };
 
   return (
-    <div className="p-3 bg-white dark:bg-[#1e1f20] rounded-lg border border-gray-200 dark:border-transparent shadow-sm flex flex-col md:flex-row gap-3 transition-colors min-h-[200px]">
-      <div className="md:w-2/5 flex-shrink-0">
+    <div className="p-3 bg-white dark:bg-[#1e1f20] rounded-lg border border-gray-200 dark:border-transparent shadow-sm flex flex-col md:flex-row gap-3 transition-colors min-h-[160px]">
+      <div className="md:w-[30%] flex-shrink-0">
         <a
           href={post.url}
           target="_blank"
@@ -81,14 +81,21 @@ export function PostCard({
               <span className="text-xs">No Image</span>
             </div>
           )}
-          <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
-            {post.title || "タイトルを取得できませんでした"}
-          </h4>
         </a>
       </div>
 
-      <div className="md:w-3/5 flex flex-col justify-between">
+      <div className="md:w-[70%] flex flex-col justify-between">
         <div>
+          <a
+            href={post.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group"
+          >
+            <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors mb-2">
+              {post.title || "タイトルを取得できませんでした"}
+            </h4>
+          </a>
           <div className="flex items-center gap-2 mb-2">
             <UserAvatar user={post.user} size="sm" />
             <div className="flex items-baseline gap-2">
@@ -166,9 +173,16 @@ export function PostCard({
           ) : null}
         </div>
 
-        <div className="mt-3 flex items-center justify-end gap-3">
+        <div className="mt-3 flex items-center justify-start gap-3">
+          <LikeButton
+            liked={!!post.is_liked_by_me}
+            count={post.likes_count}
+            size="lg"
+            onClick={onLike}
+          />
           {isOwner && onDelete && (
             <>
+              <span className="text-gray-300 dark:text-gray-700" aria-hidden="true">|</span>
               <button
                 onClick={() => {
                   if (confirm("本当に削除しますか？")) onDelete(post.id);
@@ -178,14 +192,8 @@ export function PostCard({
               >
                 削除
               </button>
-              <span className="text-gray-300 dark:text-gray-700" aria-hidden="true">|</span>
             </>
           )}
-          <LikeButton
-            liked={!!post.is_liked_by_me}
-            count={post.likes_count}
-            onClick={onLike}
-          />
         </div>
       </div>
     </div>

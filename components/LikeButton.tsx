@@ -8,11 +8,11 @@ export function LikeButton({
 }: {
   liked?: boolean;
   count: number;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   onClick: () => void;
 }) {
-  const iconCls = size === "sm" ? "w-3.5 h-3.5 sm:w-4 sm:h-4" : "w-4 h-4 sm:w-5 sm:h-5";
-  const textCls = size === "sm" ? "text-[11px] sm:text-xs" : "text-sm";
+  const iconCls = size === "sm" ? "w-3.5 h-3.5 sm:w-4 sm:h-4" : size === "lg" ? "w-6 h-6" : "w-4 h-4 sm:w-5 sm:h-5";
+  const textCls = size === "sm" ? "text-[11px] sm:text-xs" : size === "lg" ? "text-base" : "text-sm";
   return (
     <button
       onClick={onClick}
