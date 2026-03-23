@@ -133,7 +133,7 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 | Batch 1 | 10, 7 | カードbg同化 + 全ボタンYouTubeライクホバー | ✅ 完了 |
 | Batch 2 | 8, 12, 11 | アライメント統一・radius一貫性・フォントウェイト整理 | ✅ 完了 |
 | Batch 3 | 6, 9, 2 | 大見出し字間・小テキストコントラスト・UIコントラスト | 🔲 次回 |
-| Batch 4 | 4, 1 | タップターゲット48px・8ptスペーシング | 🔲 次回 |
+| Batch 4 | 4, 1 | タップターゲット48px・8ptスペーシング | ✅ 完了 |
 
 ---
 

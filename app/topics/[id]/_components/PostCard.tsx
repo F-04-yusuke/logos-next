@@ -80,7 +80,7 @@ export function PostCard({
         </div>
       )}
 
-      <div className="pl-3 pt-3 pb-3 pr-5 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col md:flex-row gap-3 transition-colors min-h-[170px] hover:bg-gray-100 dark:hover:bg-white/[0.04]">
+      <div className="p-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col md:flex-row gap-4 transition-colors min-h-[170px] hover:bg-gray-100 dark:hover:bg-white/[0.04]">
         {/* 左列: サムネイル + タイトル */}
         <div className="md:w-[30%] flex-shrink-0">
           {/* サムネイルエリア */}
@@ -184,7 +184,7 @@ export function PostCard({
             </div>
 
             {post.comment && (
-              <div className="mt-1 min-h-[4.5rem] break-all">
+              <div className="mt-2 break-all">
                 <p
                   ref={commentRef}
                   className={`text-[14px] text-gray-800 dark:text-gray-300 leading-relaxed${openComment ? "" : " line-clamp-3"}`}
@@ -195,7 +195,7 @@ export function PostCard({
                   <button
                     type="button"
                     onClick={() => setOpenComment(true)}
-                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-0.5 px-1.5 py-0.5 rounded-full"
+                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full"
                   >
                     続きを読む
                   </button>
@@ -204,7 +204,7 @@ export function PostCard({
                   <button
                     type="button"
                     onClick={() => setOpenComment(false)}
-                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-1.5 py-0.5 rounded-full"
+                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full"
                   >
                     閉じる
                   </button>

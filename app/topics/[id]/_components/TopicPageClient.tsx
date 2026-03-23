@@ -371,7 +371,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {filteredPosts.length === 0 ? (
                   <p className="text-center text-gray-500 py-10 text-sm">
                     投稿はありません
