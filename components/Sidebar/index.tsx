@@ -63,7 +63,7 @@ export default function Sidebar() {
             </svg>
           </button>
           {sidebarOpen && (
-            <Link href="/" className="ml-2 flex items-center hover:opacity-80 transition-opacity">
+            <Link href="/" className="ml-1 flex items-center hover:opacity-80 transition-opacity">
               <AppLogo />
             </Link>
           )}
