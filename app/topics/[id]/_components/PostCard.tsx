@@ -80,7 +80,7 @@ export function PostCard({
         </div>
       )}
 
-      <div className="pl-3 pt-3 pb-3 pr-5 bg-white dark:bg-[#1e1f20] rounded-lg border border-gray-200 dark:border-transparent shadow-sm flex flex-col md:flex-row gap-3 transition-colors min-h-[170px]">
+      <div className="pl-3 pt-3 pb-3 pr-5 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col md:flex-row gap-3 transition-colors min-h-[170px] hover:bg-gray-100 dark:hover:bg-white/[0.04]">
         {/* 左列: サムネイル + タイトル */}
         <div className="md:w-[30%] flex-shrink-0">
           {/* サムネイルエリア */}
@@ -195,7 +195,7 @@ export function PostCard({
                   <button
                     type="button"
                     onClick={() => setOpenComment(true)}
-                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mt-0.5 block"
+                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-0.5 px-1.5 py-0.5 rounded-full"
                   >
                     続きを読む
                   </button>
@@ -204,7 +204,7 @@ export function PostCard({
                   <button
                     type="button"
                     onClick={() => setOpenComment(false)}
-                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mt-1 block"
+                    className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-1.5 py-0.5 rounded-full"
                   >
                     閉じる
                   </button>
@@ -218,7 +218,7 @@ export function PostCard({
                   <button
                     onClick={() => setOpenSupplement(true)}
                     type="button"
-                    className="text-[11px] text-blue-500 hover:text-blue-700 font-bold transition-colors py-1"
+                    className="text-[11px] text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 font-bold transition-colors py-1 px-2 rounded-full"
                   >
                     ＋ 補足を追加する（※1回のみ）
                   </button>
@@ -261,7 +261,7 @@ export function PostCard({
               <button
                 type="button"
                 onClick={() => setOpenSupplementView((v) => !v)}
-                className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors py-1"
+                className="text-[13px] text-gray-500 hover:text-gray-300 hover:bg-white/[0.07] transition-colors py-1 px-2 rounded-full"
               >
                 📎 補足あり {openSupplementView ? "▲" : "▼"}
               </button>
@@ -280,7 +280,7 @@ export function PostCard({
                     if (confirm("本当に削除しますか？")) onDelete(post.id);
                   }}
                   type="button"
-                  className="text-xs text-red-400 hover:text-red-600 transition-colors py-1 px-2"
+                  className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors py-1 px-2 rounded-full"
                 >
                   削除
                 </button>
@@ -291,7 +291,7 @@ export function PostCard({
       </div>
 
       {post.supplement && openSupplementView && (
-        <div className="px-3 pt-2 pb-3 bg-white dark:bg-[#1e1f20] rounded-b-lg border border-t-0 border-gray-200 dark:border-transparent">
+        <div className="px-3 pt-2 pb-3 bg-gray-50 dark:bg-[#131314] rounded-b-lg">
           <span className="text-xs text-gray-500 block mb-1">投稿者からの補足</span>
           <p className="text-[13px] text-gray-800 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
             {post.supplement}

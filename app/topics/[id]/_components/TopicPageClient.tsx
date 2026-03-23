@@ -213,7 +213,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                 <>
                   <Link
                     href={`/topics/${topic.id}/edit`}
-                    className="text-xs font-bold text-gray-400 hover:text-blue-500 transition-colors flex items-center"
+                    className="text-xs font-bold text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors flex items-center px-2 py-1.5 rounded-full"
                   >
                     <svg
                       aria-hidden="true"
@@ -238,7 +238,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
               <button
                 onClick={handleBookmark}
-                className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors flex items-center"
+                className="text-xs text-gray-400 hover:text-gray-200 hover:bg-white/10 transition-colors flex items-center px-2 py-1.5 rounded-full"
               >
                 {topic.is_bookmarked ? (
                   <>
@@ -290,7 +290,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                     ? tab === "analysis"
                       ? "border-yellow-500 text-gray-900 dark:text-white font-bold"
                       : "border-gray-900 text-gray-900 dark:border-gray-200 dark:text-white font-bold"
-                    : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-300"
+                    : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200 hover:bg-white/[0.05]"
                 }`}
               >
                 {tab === "info" && "情報"}

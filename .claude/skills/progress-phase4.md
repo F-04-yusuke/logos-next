@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-23（Session 12）
+最終更新: 2026-03-23（Session 13）
 
 ---
 
@@ -113,7 +113,90 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 
 ---
 
+## Session 13: UI/UX 改善方針確立 + Batch 1 実装（2026-03-23）
+
+### UI/UX 改善方針
+
+参考: https://coliss.com/articles/build-websites/operation/work/logic-driven-ui-design-tips.html
+採用項目: 1, 2, 4, 6, 7, 8, 9, 11, 12（+10 は Session 12 で実施済み）
+
+**思想: 「感覚ではなく論理に基づく UI 設計」**
+- スペースは関連性で決める（8pt グリッド）
+- 色以外の視覚手がかりを必ず用意する
+- アライメント・radius・ウェイトを統一する
+- すべてのインタラクティブ要素にホバーフィードバックを付与する
+
+**実装バッチ計画（トピックページ優先）:**
+
+| バッチ | 採用項目 | 内容 | 状態 |
+|---|---|---|---|
+| Batch 1 | 10, 7 | カードbg同化 + 全ボタンYouTubeライクホバー | ✅ 完了 |
+| Batch 2 | 8, 12, 11 | アライメント統一・radius一貫性・フォントウェイト整理 | 🔲 次回 |
+| Batch 3 | 6, 9, 2 | 大見出し字間・小テキストコントラスト・UIコントラスト | 🔲 次回 |
+| Batch 4 | 4, 1 | タップターゲット48px・8ptスペーシング | 🔲 次回 |
+
+---
+
+### U-3: PostCard 背景ブレンド ✅（logos-next）
+
+**ファイル:** `app/topics/[id]/_components/PostCard.tsx`
+
+| 変更 | 変更前 | 変更後 |
+|---|---|---|
+| カード枠線 | `border border-gray-200 dark:border-transparent` | 削除 |
+| カード影 | `shadow-sm` | 削除 |
+| カード背景 | `bg-white dark:bg-[#1e1f20]` | `bg-gray-50 dark:bg-[#131314]`（ページ背景と同化） |
+| ホバー効果 | なし | `hover:bg-gray-100 dark:hover:bg-white/[0.04]` |
+| 補足セクション背景 | `bg-white dark:bg-[#1e1f20]` + 枠線 | `bg-gray-50 dark:bg-[#131314]`（枠線削除） |
+
+---
+
+### U-4: 全ボタン YouTube ライクホバー + Tooltip ✅（logos-next）
+
+**新規追加コンポーネント:** `components/ui/tooltip.tsx`（shadcn / @base-ui/react ベース）
+
+**Tooltip スタイル仕様（YouTube ライク）:**
+```
+背景: bg-[#212121]/90（暗いチャコール・半透明）
+テキスト: text-white text-[13px]
+パディング: px-2 py-1（コンパクト）
+角丸: rounded（控えめ）
+矢印: なし
+表示遅延: 500ms
+```
+
+**変更ファイル:**
+
+| ファイル | 変更内容 |
+|---|---|
+| `components/LayoutShell.tsx` | `TooltipProvider delay={500}` で全体ラップ |
+| `components/LikeButton.tsx` | `TooltipTrigger` でボタン置き換え・`rounded-full hover:bg-white/10`・"参考になった" tooltip |
+| `app/topics/[id]/_components/PostCard.tsx` | 削除: `rounded-full hover:bg-red-500/10` / 補足あり: `hover:bg-white/[0.07]` / 続きを読む・閉じる: `hover:bg-white/[0.05]` / 補足追加: `hover:bg-blue-500/10` |
+| `app/topics/[id]/_components/TopicPageClient.tsx` | タブ非アクティブ: `hover:bg-white/[0.05]` / ブックマーク・編集: `rounded-full hover:bg-white/10` |
+
+---
+
+### Gitタグ（Session 13）
+
+- logos-next: `v4.2-session13-ui-hover-tooltip`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
 ## Phase 4 残タスク（優先度別）
+
+### 最優先：UI/UX 継続改善
+
+**トピックページ（Batch 2〜4 未完了）:**
+- Batch 2（8+12+11）: PostCard アライメント・radius・フォントウェイト統一
+- Batch 3（6+9+2）: トピックタイトル字間・コントラスト監査
+- Batch 4（4+1）: タップターゲット・スペーシング
+
+**トピックページ完了後:**
+- コメントタブ UI/UX 改善
+- 分析タブ UI/UX 改善
+- トップページ（トピック一覧）UI/UX 改善
+- その他全ページ
 
 ### 優先度高
 - **LP作成**: /（トップ）のランディングページ実装（現在未着手・登録誘導）
@@ -124,7 +207,6 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 - **認証セキュリティ強化**: localStorage → httpOnly Cookie 化（Phase 2 暫定実装の解消）
 - **/analyses/[id] SSR化**: Cookie認証導入後に対応（F-1 残タスク）
 - **パスワードリセット機能**: SMTP設定（さくら or SendGrid）と合わせて実装
-- **UI/UX 継続改善**: 情報タブ以外（コメントタブ・分析タブ・トップページ）
 
 ### 優先度低
 - **eKYC連携**: TRUSTDOCK等（本人確認・質の高い議論コミュニティの維持）
