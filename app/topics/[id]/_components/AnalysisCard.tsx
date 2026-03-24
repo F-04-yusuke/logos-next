@@ -55,7 +55,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
                 <span className="font-bold text-blue-500 shrink-0">{node.speaker}:</span>
                 <span className="text-gray-700 dark:text-g-text truncate">{node.text}</span>
               </div>
-              {node.children?.slice(0, 1).map((child, j) => (
+              {node.children?.slice(0, 2).map((child, j) => (
                 <div key={j} className="ml-4 flex gap-2 border-l-2 border-gray-300 dark:border-gray-700 pl-2 mt-1">
                   <span className="font-bold text-gray-500 shrink-0">↳ {child.speaker}:</span>
                   <span className="text-gray-600 dark:text-g-sub truncate">{child.text}</span>
@@ -69,14 +69,27 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
   }
   if (analysis.type === "matrix") {
     const items = analysis.data.items ?? [];
+    const patterns = (analysis.data.patterns ?? []) as { title?: string }[];
     return (
-      <div>
-        <div className="font-bold text-gray-500 mb-2 text-sm">【評価項目一覧】</div>
-        <ul className="list-disc list-inside text-gray-700 dark:text-g-text space-y-1 ml-1">
-          {items.slice(0, 5).map((item, i) => (
-            <li key={i} className="truncate text-sm">{item.itemTitle}</li>
-          ))}
-        </ul>
+      <div className="space-y-3">
+        {patterns.length > 0 && (
+          <div>
+            <div className="font-bold text-gray-500 mb-1 text-sm">【比較パターン】</div>
+            <ul className="list-disc list-inside text-gray-700 dark:text-g-text space-y-1 ml-1">
+              {patterns.slice(0, 4).map((p, i) => (
+                <li key={i} className="truncate text-sm">{p.title}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <div>
+          <div className="font-bold text-gray-500 mb-1 text-sm">【評価項目一覧】</div>
+          <ul className="list-disc list-inside text-gray-700 dark:text-g-text space-y-1 ml-1">
+            {items.slice(0, 5).map((item, i) => (
+              <li key={i} className="truncate text-sm">{item.itemTitle}</li>
+            ))}
+          </ul>
+        </div>
       </div>
     );
   }
@@ -204,7 +217,7 @@ export function AnalysisCard({
 
       {/* Preview */}
       <div className="rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1f20] p-4 text-sm overflow-hidden relative h-[200px]">
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent dark:from-[#1e1f20] dark:to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent dark:from-[#1e1f20] dark:to-transparent pointer-events-none" />
         <AnalysisPreview analysis={analysis} />
       </div>
 
