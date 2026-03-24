@@ -485,7 +485,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                     if (!user) { alert("投稿するにはログインが必要です"); return; }
                     setShowAnalysisModal(true);
                   }}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0"
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0 cursor-pointer"
                 >
                   <svg
                     aria-hidden="true"

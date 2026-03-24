@@ -170,9 +170,9 @@ export function AnalysisCard({
     : null;
 
   return (
-    <div className="p-4 bg-white dark:bg-[#1e1f20] rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col gap-3">
+    <div className="p-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col gap-3 hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-1">
+      <div className="flex items-center gap-3 mb-1 cursor-pointer">
         <div className="shrink-0 mt-0.5">
           {avatarSrc ? (
             <img className="h-8 w-8 rounded-full object-cover border border-gray-200 dark:border-gray-700" src={avatarSrc} alt={analysis.user.name} />
@@ -199,8 +199,8 @@ export function AnalysisCard({
       )}
 
       {/* Preview */}
-      <div className="rounded-md border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#131314] p-4 text-sm overflow-hidden relative" style={{ maxHeight: "400px" }}>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-50 to-transparent dark:from-[#131314] dark:to-transparent pointer-events-none" />
+      <div className="rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1f20] p-4 text-sm overflow-hidden relative" style={{ maxHeight: "400px" }}>
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent dark:from-[#1e1f20] dark:to-transparent pointer-events-none" />
         <AnalysisPreview analysis={analysis} />
       </div>
 
@@ -282,7 +282,7 @@ export function AnalysisCard({
             <>
               <button
                 onClick={() => onDelete(analysis.id)}
-                className="text-xs text-red-400 hover:text-red-600 transition-colors py-1 px-2"
+                className="text-xs text-red-400 hover:text-red-600 transition-colors py-1 px-2 cursor-pointer"
               >
                 削除
               </button>
@@ -291,7 +291,7 @@ export function AnalysisCard({
           )}
           <button
             onClick={() => onLike(analysis.id)}
-            className={`flex items-center space-x-1 transition-colors py-1 px-2 -mr-2 ${
+            className={`flex items-center space-x-1 transition-colors py-1 px-2 -mr-2 cursor-pointer ${
               analysis.is_liked_by_me ? "text-gray-900 dark:text-white font-bold" : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
           >
