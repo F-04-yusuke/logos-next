@@ -23,7 +23,7 @@ function LockIcon() {
   );
 }
 
-type Bookmark = { id: number; title: string };
+type Bookmark = { id: number; title: string; category_char: string | null };
 type NavLinksUser = {
   is_pro: boolean | number;
   unread_notifications_count?: number;
@@ -114,7 +114,11 @@ export default function NavLinks({
                       className={navClass(`/topics/${t.id}`)}
                     >
                       <span className="w-6 h-6 flex items-center justify-center text-xs font-bold text-indigo-300/80 bg-indigo-500/[0.15] rounded-md shrink-0 transition-colors duration-100">
-                        {t.title.charAt(0)}
+                        {t.category_char ?? (
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                          </svg>
+                        )}
                       </span>
                       <span className="ml-5 text-sm truncate">{t.title}</span>
                     </Link>

@@ -14,7 +14,7 @@ export default function Sidebar() {
   const { sidebarOpen, setSidebarOpen, bookmarkRefreshKey, openProModal } = useSidebar();
   const { user } = useAuth();
 
-  const [bookmarks, setBookmarks] = useState<{ id: number; title: string }[]>([]);
+  const [bookmarks, setBookmarks] = useState<{ id: number; title: string; category_char: string | null }[]>([]);
 
   useEffect(() => {
     if (!user) { setBookmarks([]); return; }

@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-24（Session 23 / Phase 4 UI/UX改善 トップページ刷新・カテゴリ別トピックページ新設・APIバグ修正 完了）
+最終更新: 2026-03-24（Session 24 / Phase 4 UI/UX改善 サイドバー・トピックページ豪華化・豪華要素デザインルール策定 完了）
 
 ---
 
@@ -43,6 +43,15 @@ cd ~/logos-laravel && ./vendor/bin/sail down
 **理由（2026-03-23 の教訓）:** WSL2シャットダウン時にMySQLコンテナが強制終了されDBデータが消失した。`sail down` で安全に停止してからWSL2を終了すれば防げる。さくら本番・Vercelには影響しないがローカルのテストデータが全消えする。
 - `sail down` はボリュームを削除しない（データ保持）
 - `sail down -v` は**絶対に実行しない**（ボリューム＝全データ削除）
+
+## Next.js の .next キャッシュ起因の hydration エラー（Session 24 の教訓）
+**症状:** コンポーネントのクラス名変更後にブラウザコンソールで hydration mismatch エラーが出る。
+**原因:** `.next` ディレクトリが古いサーバーレンダリング結果をキャッシュしており、新しいクライアントコードと食い違う。
+**対処:** `cd ~/logos-next && rm -rf .next && npm run dev` でキャッシュを削除して再起動する。
+
+## 豪華要素デザインルール（Session 24 策定）
+UIを改修・新規ページを作成する際は **`.claude/skills/design-spec.md` の「豪華要素ルール」セクション**を必ず参照すること。
+ホバー速度・ホバー色・カテゴリバッジ・アクセントバー・スケルトンの具体的なクラス値が定義されている。数値を勝手に変えない。
 
 ---
 
@@ -125,8 +134,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v6.0-session23-category-page`
-- logos-laravel: `v4.1-session23-topic-api-category-filter`
+- logos-next: `v6.3-session24-luxury-ui`
+- logos-laravel: `v4.2-session24-bookmarks-category-char`
 
 ## /categories/[id] の実装上の注意（Session 23 技術的負債）
 
@@ -166,7 +175,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase2.md` | Phase 2 完了記録（Next.js移行・全17ページ・Step1〜14） |
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
 | `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 12〜） |
-| `.claude/skills/handoff-session24.md` | **最新引継ぎプロンプト** |
+| `.claude/skills/handoff-session25.md` | **最新引継ぎプロンプト** |
 | `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜23 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）

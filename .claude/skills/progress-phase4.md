@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-24（Session 23 追記）
+最終更新: 2026-03-24（Session 24 追記）
 
 ---
 
@@ -8,6 +8,57 @@
 
 Phase 3 完了後の次ステージ。ユーザー獲得・SEO・UI/UX強化・セキュリティ改善を目指す。
 Session 12 より開始。まず UI/UX の大幅改善から着手。
+
+---
+
+## Session 24: サイドバー・トピックページ豪華化・デザインルール策定（2026-03-24）
+
+### U-13: サイドバー UI 豪華化・ホバー高速化 ✅
+
+**ファイル:** `components/Sidebar/index.tsx`、`components/Sidebar/NavLinks.tsx`
+
+| 変更箇所 | 変更内容 |
+|---|---|
+| ホバー速度 | `transition-colors` → `duration-100` に統一（150ms→100ms） |
+| ホバー色 | `hover:bg-gray-800` → `hover:bg-white/[0.04]`（白もやに統一） |
+| アクティブ状態 | `bg-gray-700` → `bg-white/[0.06]` + 左端 indigo-500 縦バー（`before:` pseudo） |
+| セクション見出し | テキストのみ → `border-l-2` アクセントバー付き（保存トピック・マイページ・分析ツール） |
+| 保存トピックアイコン | `border border-gray-600` → `bg-indigo-500/15 rounded-md`（indigo pill） |
+| ハンバーガーボタン | `hover:bg-gray-900` → `hover:bg-white/[0.04]` |
+
+### U-14: トピックページ UI 豪華化・ヘッダー刷新 ✅
+
+**ファイル:** `app/topics/[id]/_components/TopicPageClient.tsx`
+
+| 変更箇所 | 変更内容 |
+|---|---|
+| タイトル | `border-l-4 border-indigo-500` 左アクセントバー追加 |
+| 「概要を見る」 | テキストのみ → シェブロンSVG + `duration-100` |
+| カテゴリバッジ | 枠線のみ → pill + indigo tint（`text-[10px] font-bold text-indigo-300 px-2`・トップページ統一） |
+| カテゴリリンク先 | `/?category=ID` → `/categories/ID` に統一 |
+| 作成者・日時 | テキスト2行 → `UserAvatar` + インライン1行 |
+| 保存ボタン | 無彩色 → 保存済み=indigo・ホバー=indigo tint |
+| タブ | アクティブ色を `border-indigo-500` に統一（analysis タブのみ `border-yellow-500` 維持）+ `duration-100` |
+| タブ下ヘッダー | `border-l-2 border-gray-700` アクセントバー |
+| ローディング | テキスト → パルスアニメーションスケルトン |
+
+### U-15: 保存トピックアイコン → カテゴリ頭文字化 ✅（logos-next + logos-laravel）
+
+**フロント:** `components/Sidebar/index.tsx`・`components/Sidebar/NavLinks.tsx`
+**バックエンド:** `app/Http/Controllers/Api/UserApiController.php`（logos-laravel）
+
+- `/api/user/bookmarks` に `category_char` フィールドを追加（categories を eager load・ID昇順で先頭の名前の1文字目）
+- カテゴリなしの場合は `null` → bookmark SVGアイコンでフォールバック
+- 複数カテゴリ付きトピックは ID が一番若いカテゴリを採用
+
+### D-1: 豪華要素デザインルール策定・design-spec.md 更新 ✅
+
+`.claude/skills/design-spec.md` に「豪華要素ルール」セクションを新設。
+ホバー速度・色・カテゴリバッジ・アクセントバー・スケルトンの具体的なクラス値を定義。
+次セッション以降の他ページ改修で数値を統一するための基準として機能する。
+
+**教訓:** コンポーネントのクラス名変更後に hydration mismatch エラーが発生することがある。
+対処: `rm -rf .next && npm run dev`（CLAUDE.md にも記載済み）
 
 ---
 
