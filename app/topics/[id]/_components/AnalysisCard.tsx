@@ -173,7 +173,7 @@ export function AnalysisCard({
   return (
     <div className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col gap-3 hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-1 cursor-pointer">
+      <div className="flex items-center gap-3 cursor-pointer">
         <div className="shrink-0 mt-0.5">
           {avatarSrc ? (
             <img className="h-8 w-8 rounded-full object-cover border border-gray-200 dark:border-gray-700" src={avatarSrc} alt={analysis.user.name} />
@@ -185,12 +185,10 @@ export function AnalysisCard({
             </div>
           )}
         </div>
-        <div className="flex flex-col">
-          <div className="flex items-baseline gap-2">
-            <span className="font-bold text-[14px] text-gray-900 dark:text-g-text">{analysis.user.name}</span>
-            <span className="text-[11px] text-gray-500">{timeAgo(analysis.created_at)}</span>
-          </div>
-          <div className="mt-0.5">{typeBadge(analysis.type, analysis.data)}</div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-bold text-[14px] text-gray-900 dark:text-g-text">{analysis.user.name}</span>
+          <span className="text-[11px] text-gray-500">{timeAgo(analysis.created_at)}</span>
+          {typeBadge(analysis.type, analysis.data)}
         </div>
       </div>
 
