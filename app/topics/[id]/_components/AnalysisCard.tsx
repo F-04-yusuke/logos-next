@@ -245,7 +245,7 @@ export function AnalysisCard({
               <button
                 type="button"
                 onClick={() => setOpenSupplement(true)}
-                className="text-[11px] text-yellow-600 dark:text-yellow-500 hover:bg-yellow-500/10 font-bold transition-colors py-1 px-2 rounded-full cursor-pointer"
+                className="text-[11px] text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 font-bold transition-colors py-1 px-2 rounded-full cursor-pointer"
               >
                 ＋ 補足を追加する（※1回のみ）
               </button>
@@ -315,7 +315,7 @@ export function AnalysisCard({
                 type="button"
                 onClick={handleSupplementSubmit}
                 disabled={submitting || !supplementBody.trim()}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold py-1.5 px-4 rounded transition-colors disabled:opacity-50"
+                className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1.5 px-4 rounded-md transition-colors disabled:opacity-50"
               >
                 {submitting ? "投稿中..." : "補足を投稿"}
               </button>

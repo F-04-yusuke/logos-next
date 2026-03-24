@@ -48,6 +48,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   const [postFilter, setPostFilter] = useState("");
   const [postSort, setPostSort] = useState<"popular" | "newest" | "oldest">("popular");
   const [commentSort, setCommentSort] = useState<"popular" | "newest" | "oldest">("popular");
+  const [analysisSort, setAnalysisSort] = useState<"popular" | "newest" | "oldest">("popular");
 
   // ── フォーム入力 ──
   const [commentBody, setCommentBody] = useState("");
@@ -449,6 +450,12 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
   });
 
+  const sortedAnalyses = (topic?.analyses ?? []).slice().sort((a, b) => {
+    if (analysisSort === "popular") return b.likes_count - a.likes_count;
+    if (analysisSort === "newest") return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+  });
+
   const isOwner = !!user && !!topic && user.id === topic.user.id;
   const timeline = topic?.timeline ?? [];
 
@@ -462,6 +469,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     timeline,
     filteredPosts,
     sortedComments,
+    sortedAnalyses,
 
     // UI state
     activeTab,
@@ -479,6 +487,8 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     setPostSort,
     commentSort,
     setCommentSort,
+    analysisSort,
+    setAnalysisSort,
 
     // form input state
     commentBody,

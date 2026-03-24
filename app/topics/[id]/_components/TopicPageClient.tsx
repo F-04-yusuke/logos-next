@@ -26,6 +26,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
     timeline,
     filteredPosts,
     sortedComments,
+    sortedAnalyses,
     activeTab,
     timelineExpanded,
     setTimelineExpanded,
@@ -39,6 +40,8 @@ export function TopicPageClient({ id, initialTopic }: Props) {
     setPostSort,
     commentSort,
     setCommentSort,
+    analysisSort,
+    setAnalysisSort,
     commentBody,
     setCommentBody,
     postUrl,
@@ -476,37 +479,48 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {/* ===== Analysis Tab ===== */}
           {activeTab === "analysis" && (
             <div>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <h3 className="font-bold text-gray-900 dark:text-g-text text-sm sm:text-base">
                   {topic.analyses?.length ?? 0} 件の分析・図解
                 </h3>
-                <button
-                  onClick={() => {
-                    if (!user) { alert("投稿するにはログインが必要です"); return; }
-                    setShowAnalysisModal(true);
-                  }}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0 cursor-pointer"
-                >
-                  <svg
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 sm:mr-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                <div className="flex items-center space-x-2">
+                  <select
+                    value={analysisSort}
+                    onChange={(e) => setAnalysisSort(e.target.value as "popular" | "newest" | "oldest")}
+                    className="text-xs sm:text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                  <span className="sr-only">分析・図解を投稿する</span>
-                  <span className="hidden sm:inline" aria-hidden="true">
-                    分析・図解を投稿
-                  </span>
-                </button>
+                    <option value="popular">人気順</option>
+                    <option value="newest">新着順</option>
+                    <option value="oldest">古い順</option>
+                  </select>
+                  <button
+                    onClick={() => {
+                      if (!user) { alert("投稿するにはログインが必要です"); return; }
+                      setShowAnalysisModal(true);
+                    }}
+                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0 cursor-pointer"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 sm:mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    <span className="sr-only">分析・図解を投稿する</span>
+                    <span className="hidden sm:inline" aria-hidden="true">
+                      分析・図解を投稿
+                    </span>
+                  </button>
+                </div>
               </div>
 
               {(topic.analyses?.length ?? 0) === 0 ? (
@@ -535,7 +549,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {topic.analyses!.map((analysis) => (
+                  {sortedAnalyses.map((analysis) => (
                     <AnalysisCard
                       key={analysis.id}
                       analysis={analysis}
