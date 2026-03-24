@@ -63,13 +63,13 @@ export function CommentCard({
 
   return (
     <div className="flex gap-4 items-start py-4 border-b border-gray-100 dark:border-gray-800/60">
-      <div className="shrink-0 mt-1">
+      <div className="shrink-0 mt-1 cursor-pointer">
         <UserAvatar user={comment.user} size="lg" />
       </div>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2 mb-0.5">
-          <span className="font-bold text-[13px] text-gray-900 dark:text-g-text">
+          <span className="font-bold text-[13px] text-gray-900 dark:text-g-text cursor-pointer">
             {comment.user.name}
           </span>
           <span className="text-[11px] text-gray-500">
@@ -81,7 +81,7 @@ export function CommentCard({
           {comment.body}
         </p>
 
-        <div className="mt-2 flex items-center gap-4">
+        <div className="mt-2 flex items-center gap-4 -ml-3">
           <LikeButton
             liked={!!comment.is_liked_by_me}
             count={comment.likes_count}
@@ -124,7 +124,7 @@ export function CommentCard({
                 rows={1}
                 className="w-full text-[13px] border-0 border-b border-gray-300 dark:border-gray-600 bg-transparent dark:text-white focus:ring-0 focus:border-blue-500 resize-none overflow-hidden py-1"
                 required
-                placeholder={isOwner ? "追加の補足を記入..." : "返信を追加..."}
+                placeholder={isOwner ? "追加の補足をする（※全5件まで）" : "返信を追加する（※1件まで）"}
               />
               <div className="flex gap-2 mt-1">
                 <button
@@ -178,12 +178,12 @@ export function CommentCard({
               <div className="mt-3 space-y-4">
                 {comment.replies.map((reply) => (
                   <div key={reply.id} className="flex gap-3 items-start">
-                    <div className="shrink-0 mt-0.5">
+                    <div className="shrink-0 mt-0.5 cursor-pointer">
                       <UserAvatar user={reply.user} size="sm" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2">
-                        <span className="font-bold text-[12px] text-gray-900 dark:text-g-text">
+                        <span className="font-bold text-[12px] text-gray-900 dark:text-g-text cursor-pointer">
                           {reply.user.name}
                         </span>
                         <span className="text-[11px] text-gray-500">

@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-23（Session 12 / Phase 4 UI/UX改善・PostCard・PostModal）
+最終更新: 2026-03-24（Session 19 / Phase 4 UI/UX改善・コメントタブ）
 
 ```
 logos-next/
@@ -112,8 +112,8 @@ logos-next/
 │       ├── progress-phase2.md           # Phase 2 完了記録（Next.js移行・Step1〜14）
 │       ├── progress-phase3.md           # Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）
 │       ├── progress-phase4.md           # Phase 4 進行中記録（UI/UX改善・Session 12〜）
-│       ├── handoff-session12.md         # 最新引継ぎプロンプト
-│       └── handoff-archive/             # 過去セッション引継ぎ（Session 6〜11）
+│       ├── handoff-session20.md         # 最新引継ぎプロンプト
+│       └── handoff-archive/             # 過去セッション引継ぎ（Session 6〜19）
 ├── next.config.ts
 ├── package.json                         # swr@^2.4.1 など依存関係
 ├── tailwind.config.ts

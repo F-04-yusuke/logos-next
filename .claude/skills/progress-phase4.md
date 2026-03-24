@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-24（Session 18）
+最終更新: 2026-03-24（Session 19）
 
 ---
 
@@ -431,6 +431,36 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 
 ---
 
+## Session 19: コメントタブ UI調整（2026-03-24）
+
+### U-16: コメントタブ テストデータ充実 + UI調整 ✅
+
+**変更ファイル:** `app/topics/[id]/_components/TopicPageClient.tsx`、`app/topics/[id]/_components/CommentCard.tsx`
+
+#### テストデータ投入（tinker）
+
+トピック1「AIの規制はどこまで必要か」に投入：
+- 親コメント 4件（user1/user2/admin/Test User、異なる論点）
+- 返信 9件（補足・他ユーザー返信含む）
+- いいね バラつきあり（最大3件）
+
+#### UI調整
+
+| 変更 | 変更前 | 変更後 |
+|---|---|---|
+| コメント並び替えselect スタイル | `border-gray-300 shadow-sm focus:ring-gray-500` 等 | 情報タブと統一（`border border-gray-200 bg-white dark:bg-[#131314] hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors`） |
+| LikeButton 左端アライン | アクション行 `mt-2 flex gap-4` | `-ml-3` 追加でアイコン左端をコンテンツ左に揃え |
+| アバター・ユーザー名 | カーソルデフォルト | `cursor-pointer`（親コメント・返信両方） |
+| コメント入力 placeholder | `このトピックに対するコメント（※1人1件まで）` | `このトピックに対するあなたの意見を教えてください（※1人1件まで）` |
+| 返信フォーム placeholder | `返信を追加...` / `追加の補足を記入...` | `返信を追加する（※1件まで）` / `追加の補足をする（※全5件まで）` |
+
+### Gitタグ（Session 19）
+
+- logos-next: `v4.8-session19-ui-comment-tab`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
 ## Phase 4 残タスク（優先度別）
 
 ### 最優先：UI/UX 継続改善
@@ -441,9 +471,9 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 - サイドバー UI改善・フォント統一（Session 16）
 - Geminiカラー・フォント・タイポグラフィ統一（Session 17）
 - ヘッダー・サイドバー・PostCard・情報タブ UI調整（Session 18）
+- コメントタブ UI調整（Session 19）
 
-**次のターゲット（Session 19 予定）:**
-- **コメントタブ**: tinkerでテストデータを充実させてイメージ確認 → UI/UX改善
+**次のターゲット（Session 20 予定）:**
 - 分析タブ UI/UX 改善
 - トップページ（トピック一覧）UI/UX 改善
 - その他全ページ

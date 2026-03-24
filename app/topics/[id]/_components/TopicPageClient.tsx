@@ -418,7 +418,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   onChange={(e) =>
                     setCommentSort(e.target.value as "popular" | "newest" | "oldest")
                   }
-                  className="text-xs sm:text-sm rounded border-gray-300 dark:border-gray-700 shadow-sm focus:border-gray-500 focus:ring-gray-500 dark:bg-[#1e1f20] dark:text-white py-1.5 sm:py-1 cursor-pointer"
+                  className="text-xs sm:text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                 >
                   <option value="popular">人気順</option>
                   <option value="newest">新着順</option>
@@ -435,7 +435,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       rows={3}
                       className="w-full rounded-md border-gray-300 dark:bg-[#131314] dark:border-gray-700 dark:text-white mb-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                       required
-                      placeholder="このトピックに対するコメント（※1人1件まで）"
+                      placeholder="このトピックに対するあなたの意見を教えてください（※1人1件まで）"
                     />
                     <div className="flex justify-end">
                       <button
