@@ -95,7 +95,7 @@ function ProfileInfoSection({ profile, onSaved }: {
   return (
     <section>
       <header>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">プロフィール情報</h2>
+        <h2 className="text-sm font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">プロフィール情報</h2>
         <p className="mt-1 text-sm text-gray-600 dark:text-g-sub">
           プロフィール画像、アカウント名、メールアドレスを更新できます。
         </p>
@@ -187,7 +187,7 @@ function ProfileInfoSection({ profile, onSaved }: {
           <button
             type="submit"
             disabled={saving}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors shadow-sm"
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors duration-100 shadow-sm cursor-pointer"
           >
             {saving ? "保存中..." : "保存する"}
           </button>
@@ -248,7 +248,7 @@ function PasswordSection() {
   return (
     <section>
       <header>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">パスワードの更新</h2>
+        <h2 className="text-sm font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">パスワードの更新</h2>
         <p className="mt-1 text-sm text-gray-600 dark:text-g-sub">
           アカウントのセキュリティを保つため、長くランダムなパスワードを使用してください。
         </p>
@@ -309,7 +309,7 @@ function PasswordSection() {
           <button
             type="submit"
             disabled={saving}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors shadow-sm"
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors duration-100 shadow-sm cursor-pointer"
           >
             {saving ? "更新中..." : "保存する"}
           </button>
@@ -360,7 +360,7 @@ function DeleteAccountSection() {
   return (
     <section className="space-y-6">
       <header>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">アカウントの削除</h2>
+        <h2 className="text-sm font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">アカウントの削除</h2>
         <p className="mt-1 text-sm text-gray-600 dark:text-g-sub leading-relaxed">
           アカウントを削除すると、すべてのリソースとデータが完全に削除されます。<br />
           アカウントを削除する前に、保持しておきたいデータや情報をダウンロードしてください。
@@ -370,7 +370,7 @@ function DeleteAccountSection() {
       <button
         type="button"
         onClick={() => setShowModal(true)}
-        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors shadow-sm"
+        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors duration-100 shadow-sm cursor-pointer"
       >
         アカウントを削除
       </button>
@@ -410,14 +410,14 @@ function DeleteAccountSection() {
                 <button
                   type="button"
                   onClick={() => { setShowModal(false); setPassword(""); setErrors({}); }}
-                  className="text-gray-600 dark:text-g-sub hover:text-gray-900 dark:hover:text-gray-200 font-bold py-2 px-4 rounded-md text-sm transition-colors"
+                  className="text-gray-600 dark:text-g-sub hover:text-gray-900 dark:hover:text-gray-200 font-bold py-2 px-4 rounded-md text-sm transition-colors duration-100 cursor-pointer"
                 >
                   キャンセル
                 </button>
                 <button
                   type="submit"
                   disabled={deleting}
-                  className="bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors shadow-sm"
+                  className="bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors duration-100 shadow-sm cursor-pointer"
                 >
                   {deleting ? "削除中..." : "完全に削除する"}
                 </button>
@@ -461,8 +461,15 @@ export default function ProfilePage() {
 
   if (authLoading || fetching) {
     return (
-      <div className="flex justify-center items-center py-24">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+      <div className="py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="animate-pulse">
+            <div className="h-7 bg-white/[0.06] rounded-md w-1/4 mb-6" />
+            <div className="h-48 bg-white/[0.04] rounded-xl mb-6" />
+            <div className="h-48 bg-white/[0.04] rounded-xl mb-6" />
+            <div className="h-32 bg-white/[0.04] rounded-xl" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -472,6 +479,10 @@ export default function ProfilePage() {
   return (
     <div className="py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+
+        <h1 className="text-lg font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
+          プロフィール
+        </h1>
 
         <div className="p-4 sm:p-8 bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800">
           <div className="max-w-xl">

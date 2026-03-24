@@ -130,7 +130,7 @@ export default function CategoryTopicsClient({
 
         {/* ── パンくず ── */}
         <div className="flex items-center gap-2 text-[12px] text-g-sub mb-6 flex-wrap">
-          <Link href="/" className="hover:text-g-text transition-colors cursor-pointer">
+          <Link href="/" className="hover:text-g-text transition-colors duration-100 cursor-pointer">
             ホーム
           </Link>
           {parentCategory && (
@@ -138,7 +138,7 @@ export default function CategoryTopicsClient({
               <span className="text-white/20">›</span>
               <Link
                 href={`/categories/${parentCategory.id}`}
-                className="hover:text-g-text transition-colors cursor-pointer"
+                className="hover:text-g-text transition-colors duration-100 cursor-pointer"
               >
                 {parentCategory.name}
               </Link>
@@ -151,7 +151,7 @@ export default function CategoryTopicsClient({
         {/* ── ページヘッダー ── */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-xl font-bold text-g-text">
+            <h1 className="text-xl font-bold text-g-text pl-3 border-l-4 border-indigo-500">
               {categoryName || <span className="inline-block w-24 h-6 rounded bg-white/[0.08] animate-pulse" />}
             </h1>
             {!loading && (
@@ -189,7 +189,7 @@ export default function CategoryTopicsClient({
                   <Link
                     key={topic.id}
                     href={`/topics/${topic.id}`}
-                    className="block -ml-3 pl-3 pr-4 py-4 hover:bg-white/[0.04] transition-colors group cursor-pointer"
+                    className="block -ml-3 pl-3 pr-4 py-4 hover:bg-white/[0.04] transition-colors duration-100 group cursor-pointer"
                   >
                     {topic.categories.length > 0 && (
                       <div className="flex flex-wrap gap-1 mb-1.5">
@@ -204,7 +204,7 @@ export default function CategoryTopicsClient({
                       </div>
                     )}
 
-                    <h2 className="text-[15px] font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors leading-snug">
+                    <h2 className="text-[15px] font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors duration-100 leading-snug">
                       {topic.title}
                     </h2>
 

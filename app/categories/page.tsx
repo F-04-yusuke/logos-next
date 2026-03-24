@@ -140,8 +140,14 @@ export default function CategoriesPage() {
   // ─── Loading states ───
   if (loading || fetching) {
     return (
-      <div className="flex justify-center items-center py-24">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+      <div className="py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="animate-pulse space-y-6">
+            <div className="h-7 bg-white/[0.06] rounded-md w-1/3 mb-2" />
+            <div className="h-48 bg-white/[0.04] rounded-xl" />
+            <div className="h-64 bg-white/[0.04] rounded-xl" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -160,9 +166,9 @@ export default function CategoriesPage() {
       <div className="py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
 
-          <h2 className="font-bold text-xl text-gray-200 leading-tight">
+          <h1 className="text-lg font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
             カテゴリ管理（大分類・中分類）
-          </h2>
+          </h1>
 
           {/* ステータスメッセージ */}
           {statusMsg && (
@@ -174,7 +180,7 @@ export default function CategoriesPage() {
           {/* 1. 新しいカテゴリの追加カード */}
           <div className="p-6 sm:p-8 bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-800">
             <header>
-              <h2 className="text-lg font-bold text-gray-100 border-b border-gray-800 pb-3">新しいカテゴリの追加</h2>
+              <h2 className="text-sm font-bold text-g-text pl-2 border-l-2 border-gray-700">新しいカテゴリの追加</h2>
             </header>
             <form onSubmit={handleAdd} className="mt-6 space-y-6 max-w-xl">
               {addError && (
@@ -220,7 +226,7 @@ export default function CategoriesPage() {
                 <button
                   type="submit"
                   disabled={addLoading}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-md transition-colors shadow-sm disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-md transition-colors duration-100 shadow-sm disabled:opacity-50 cursor-pointer"
                 >
                   {addLoading ? "追加中..." : "追加する"}
                 </button>
@@ -231,7 +237,7 @@ export default function CategoriesPage() {
           {/* 2. 現在のカテゴリ一覧カード */}
           <div className="p-6 sm:p-8 bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-800">
             <header className="mb-6">
-              <h2 className="text-lg font-bold text-gray-100 border-b border-gray-800 pb-3">現在のカテゴリ一覧（数字で並び替え）</h2>
+              <h2 className="text-sm font-bold text-g-text pl-2 border-l-2 border-gray-700">現在のカテゴリ一覧（数字で並び替え）</h2>
             </header>
             <div className="bg-[#131314] rounded-xl p-4 sm:p-6 border border-gray-800">
               {categories.length === 0 ? (
@@ -256,13 +262,13 @@ export default function CategoriesPage() {
                           <div className="flex space-x-2">
                             <button
                               onClick={() => startEdit(cat)}
-                              className="text-sm bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 py-1 px-3 rounded transition-colors"
+                              className="text-sm bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 py-1 px-3 rounded transition-colors duration-100 cursor-pointer"
                             >
                               編集
                             </button>
                             <button
                               onClick={() => handleDelete(cat.id, cat.children.length > 0)}
-                              className="text-sm bg-red-900/40 hover:bg-red-900/60 border border-red-800 text-red-400 py-1 px-3 rounded transition-colors"
+                              className="text-sm bg-red-900/40 hover:bg-red-900/60 border border-red-800 text-red-400 py-1 px-3 rounded transition-colors duration-100 cursor-pointer"
                             >
                               削除
                             </button>
@@ -289,7 +295,7 @@ export default function CategoriesPage() {
                             />
                             <button
                               onClick={() => handleSaveEdit(cat.id)}
-                              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1.5 px-4 rounded transition-colors"
+                              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-1.5 px-4 rounded transition-colors duration-100 cursor-pointer"
                             >
                               保存
                             </button>
@@ -322,13 +328,13 @@ export default function CategoriesPage() {
                                   <div className="flex space-x-2">
                                     <button
                                       onClick={() => startEdit(child)}
-                                      className="text-xs bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 py-1 px-2 rounded transition-colors"
+                                      className="text-xs bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 py-1 px-2 rounded transition-colors duration-100 cursor-pointer"
                                     >
                                       編集
                                     </button>
                                     <button
                                       onClick={() => handleDelete(child.id, false)}
-                                      className="text-xs bg-red-900/40 hover:bg-red-900/60 border border-red-800 text-red-400 py-1 px-2 rounded transition-colors"
+                                      className="text-xs bg-red-900/40 hover:bg-red-900/60 border border-red-800 text-red-400 py-1 px-2 rounded transition-colors duration-100 cursor-pointer"
                                     >
                                       削除
                                     </button>
@@ -355,7 +361,7 @@ export default function CategoriesPage() {
                                     />
                                     <button
                                       onClick={() => handleSaveEdit(child.id)}
-                                      className="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold py-1.5 px-3 rounded transition-colors"
+                                      className="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold py-1.5 px-3 rounded transition-colors duration-100 cursor-pointer"
                                     >
                                       保存
                                     </button>

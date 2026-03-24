@@ -80,8 +80,17 @@ export default function HistoryPage() {
 
   if (authLoading || fetching) {
     return (
-      <div className="flex justify-center items-center py-24">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+      <div className="py-8 sm:py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="animate-pulse">
+            <div className="h-7 bg-white/[0.06] rounded-md w-1/4 mb-8" />
+            <div className="space-y-3">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-16 bg-white/[0.04] rounded-lg" />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -93,6 +102,11 @@ export default function HistoryPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="sm:rounded-xl overflow-hidden">
           <div className="p-4 sm:p-8">
+
+            {/* ページヘッダー */}
+            <h1 className="text-lg font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500 mb-6">
+              閲覧履歴
+            </h1>
 
             {topics.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4">
@@ -123,19 +137,19 @@ export default function HistoryPage() {
                 <div className="space-y-1.5">
                   {groups.map(({ label, topics: groupTopics }) => (
                     <div key={label}>
-                      <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-g-text mt-8 mb-3 px-2 border-b border-gray-100 dark:border-gray-800/60 pb-2">
+                      <h3 className="font-bold text-sm text-gray-900 dark:text-g-text mt-8 mb-3 pl-2 border-l-2 border-gray-700">
                         {label}
                       </h3>
                       <div className="space-y-1.5">
                         {groupTopics.map((topic) => (
                           <div
                             key={topic.id}
-                            className="-ml-3 pl-3 py-3 sm:py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex justify-between items-center hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors cursor-pointer"
+                            className="-ml-3 pl-3 py-3 sm:py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex justify-between items-center hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors duration-100 cursor-pointer"
                           >
                             <div className="flex-1 min-w-0">
                               <Link
                                 href={`/topics/${topic.id}`}
-                                className="font-bold text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors line-clamp-1 block mb-1.5 cursor-pointer"
+                                className="font-bold text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-100 line-clamp-1 block mb-1.5 cursor-pointer"
                               >
                                 {topic.title}
                               </Link>
@@ -144,13 +158,13 @@ export default function HistoryPage() {
                                   topic.categories.map((cat) => (
                                     <span
                                       key={cat.id}
-                                      className="text-[10px] sm:text-[11px] font-bold text-gray-500 bg-gray-100 dark:bg-[#1e1f20] px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700"
+                                      className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20"
                                     >
                                       {cat.name}
                                     </span>
                                   ))
                                 ) : (
-                                  <span className="text-[10px] sm:text-[11px] font-bold text-gray-500 bg-gray-100 dark:bg-[#1e1f20] px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700">
+                                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
                                     未分類
                                   </span>
                                 )}
@@ -169,7 +183,7 @@ export default function HistoryPage() {
                     <button
                       onClick={() => fetchHistory(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="px-4 py-2 text-sm font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      className="px-4 py-2 text-sm font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-white/[0.04] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
                     >
                       ← 前
                     </button>
@@ -179,7 +193,7 @@ export default function HistoryPage() {
                     <button
                       onClick={() => fetchHistory(currentPage + 1)}
                       disabled={currentPage === lastPage}
-                      className="px-4 py-2 text-sm font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      className="px-4 py-2 text-sm font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-white/[0.04] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
                     >
                       次 →
                     </button>

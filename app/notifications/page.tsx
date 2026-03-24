@@ -153,8 +153,17 @@ export default function NotificationsPage() {
 
   if (authLoading || fetching) {
     return (
-      <div className="flex justify-center items-center py-24">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+      <div className="py-8">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+          <div className="animate-pulse">
+            <div className="h-7 bg-white/[0.06] rounded-md w-1/4 mb-6" />
+            <div className="space-y-3">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="h-16 bg-white/[0.04] rounded-lg" />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -165,14 +174,14 @@ export default function NotificationsPage() {
 
         {/* ページヘッダー */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-xl text-gray-800 dark:text-g-text leading-tight">
+          <h1 className="text-lg font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
             通知
-          </h2>
+          </h1>
           {hasUnread && (
             <button
               onClick={handleReadAll}
               disabled={readingAll}
-              className="text-xs text-blue-500 hover:text-blue-400 font-bold transition-colors disabled:opacity-50"
+              className="text-xs text-blue-500 hover:text-blue-400 font-bold transition-colors duration-100 disabled:opacity-50 cursor-pointer"
             >
               すべて既読にする
             </button>
@@ -206,7 +215,7 @@ export default function NotificationsPage() {
               <button
                 key={notification.id}
                 onClick={() => handleClick(notification)}
-                className={`w-full text-left flex items-start gap-3 px-4 py-4 transition-colors cursor-pointer ${
+                className={`w-full text-left flex items-start gap-3 px-4 py-4 transition-colors duration-100 cursor-pointer ${
                   notification.is_unread
                     ? "bg-blue-50/60 dark:bg-blue-950/20 hover:bg-blue-50 dark:hover:bg-blue-950/30"
                     : "hover:bg-gray-100 dark:hover:bg-white/[0.04]"
@@ -271,7 +280,7 @@ export default function NotificationsPage() {
             <button
               onClick={() => setCurrentPage((p) => p - 1)}
               disabled={currentPage <= 1 || fetching}
-              className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 transition-colors"
+              className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.04] disabled:opacity-40 transition-colors duration-100 cursor-pointer"
             >
               前へ
             </button>
@@ -281,7 +290,7 @@ export default function NotificationsPage() {
             <button
               onClick={() => setCurrentPage((p) => p + 1)}
               disabled={currentPage >= lastPage || fetching}
-              className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 transition-colors"
+              className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.04] disabled:opacity-40 transition-colors duration-100 cursor-pointer"
             >
               次へ
             </button>
