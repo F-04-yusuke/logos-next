@@ -15,7 +15,7 @@ type TreeNode = {
 };
 
 type MatrixPattern = { title?: string; description?: string };
-type MatrixEvaluation = { score?: number; reason?: string };
+type MatrixEvaluation = { score?: number | string; reason?: string };
 type MatrixItem = { itemTitle?: string; evaluations?: MatrixEvaluation[]; scores?: MatrixEvaluation[] };
 
 type Analysis = {
@@ -112,7 +112,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
     items.forEach((item) => {
       const evals = item.evaluations ?? item.scores ?? [];
       evals.forEach((e, i) => {
-        const val = e.score ?? -1;
+        const val = e.score !== undefined && e.score !== null ? Number(e.score) : -1;
         if (val !== -1) { totals[i] += val; isCalculated[i] = true; }
       });
     });
@@ -149,7 +149,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
                   </td>
                   {patterns.map((_, ci) => {
                     const e = evals[ci];
-                    const val = e?.score ?? -1;
+                    const val = e?.score !== undefined && e?.score !== null ? Number(e.score) : -1;
                     const badge = badgeInfo(val);
                     return (
                       <td key={ci} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 align-top">

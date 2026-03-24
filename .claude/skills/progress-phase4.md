@@ -543,6 +543,103 @@ PROユーザー一覧（ローカル）: admin（id=2）・user1（id=3）・use
 
 ---
 
+## Session 21: マイページ群 UI/UX 統一（2026-03-24）
+
+### U-21: マイページ群 5ページ UI統一 ✅
+
+トピックページ基準（`design-spec.md`）に従い以下5ページを改修。
+
+| ページ | タグ | 主な変更 |
+|---|---|---|
+| ダッシュボード | `v5.2-session21-dashboard` | 外枠ボックス除去・カードフラット化・ホバー・-ml-3アライメント・コメント15px・タブcursor-pointer |
+| 参考になった | `v5.3-session21-likes` | 同上 |
+| 閲覧履歴 | `v5.4-session21-history` | 同上 |
+| 通知 | `v5.5-session21-notifications` | 外枠除去・ホバー統一・TypeBadge border色修正 |
+| トピック作成 | `v5.6-session21-topic-create` | 外枠除去・cursor-pointer |
+
+### U-22: PostCard をトピックページ基準に構造統一 ✅
+
+ダッシュボード・参考になったの PostCard をトピックページと同一の visual 構造に揃えた。
+
+| 修正項目 | 内容 |
+|---|---|
+| 列幅 | `md:w-1/4` → `md:w-[30%]` / `md:w-3/4` → `md:w-[70%]` |
+| 最小高さ | `min-h-[170px]` 追加 |
+| YouTube/X ロゴ | URL から自動判定してロゴ表示（トピックページと同一 SVG） |
+| コメントテキスト | `text-[13px]` → `text-[15px]` |
+| 続きを読む | `line-clamp-3` + truncate 検知で展開ボタン表示 |
+| 補足 | インライン青ボックス → 📎補足あり▼ トグル |
+| 分析タブ 編集ボタン | `!analysis.is_published` 条件付きで表示 |
+
+### Blade 参照ルール更新 ✅
+
+- UIデザインのみの変更（色・ホバー等）→ Blade 参照**不要**に変更
+- 機能追加・ロジック変更・新規移植 → 従来通り Blade 必読
+
+### Gitタグ（Session 21）
+
+- logos-next: `v5.7-session21-postcard-align`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
+## Session 22: マイページ共通コンポーネント化・バグ修正（2026-03-24）
+
+### U-23: PostCard/CommentCard/AnalysisCard 共通コンポーネント化 ✅
+
+**新規ファイル:**
+- `components/mypage/PostCard.tsx` — `SharedPost` 型 + `PostCard`（isDraft 対応・YouTube/X ロゴ・補足トグル・続きを読む）
+- `components/mypage/CommentCard.tsx` — `SharedComment`・`SharedReply` 型 + `CommentCard`（返信折りたたみトグル・トピックページ準拠）
+- `components/mypage/AnalysisCard.tsx` — `SharedAnalysis` 型 + `AnalysisCard`（タイプ別カラーボーダー・公開/非公開バッジ・閲覧リンク）
+
+**`lib/utils.ts`:** `timeAgo` 関数を共通ユーティリティとして追加・各ページのインライン定義を削除
+
+**改修:**
+- `app/dashboard/page.tsx` — インライン PostCard/CommentCard/ThumbUpIcon/timeAgo 削除・共通コンポーネントをインポート
+- `app/likes/page.tsx` — 同上
+
+**CommentCard の UI 改善（トピックページ準拠）:**
+- 返信を常時表示 → 折りたたみトグル「X件の返信」ボタン（色: `text-[#3ea6ff]`）
+
+**AnalysisCard の UI 改善:**
+- タイプ別左ボーダーアクセント（青/紫/緑）
+- 「非公開」バッジ（点線ボーダー）追加
+- 公開済み分析に「閲覧▶」リンク追加
+
+### U-24: タブアライメント修正 ✅
+
+dashboard/likes のタブコンテナに `px-4 sm:px-6` 追加。
+カード（`-ml-3 pl-3` のコンテンツ領域）とタブの左端を視覚的に揃えた。
+
+### B-1: analyses/[id] スコア計算バグ修正 ✅
+
+**ファイル:** `app/analyses/[id]/page.tsx`
+
+**バグ:** 総合評価表の ◎〇△× バッジ消失・合計スコアが文字列結合（例: `"01100"`）
+
+**原因:** API が `score` を文字列（`"3"` 等）で返すにもかかわらず、厳密等値比較（`=== 3`）・数値加算を行っていた。Blade からの移植時の見落とし。
+
+**修正:**
+```ts
+// Before
+const val = e.score ?? -1;
+// After
+const val = e.score !== undefined && e.score !== null ? Number(e.score) : -1;
+```
+
+型定義も `score?: number | string` に修正済み。
+
+### さくらサーバー: user2 作成 ✅
+
+- user2 / user2@test.com / password / is_pro=1
+
+### Gitタグ（Session 22）
+
+- logos-next: `v5.8-session22-mypage-components`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
 ## Phase 4 残タスク（優先度別）
 
 ### 最優先：UI/UX 継続改善
@@ -555,11 +652,13 @@ PROユーザー一覧（ローカル）: admin（id=2）・user1（id=3）・use
 - ヘッダー・サイドバー・PostCard・情報タブ UI調整（Session 18）
 - コメントタブ UI調整（Session 19）
 - 分析タブ UI全面刷新・トピックページ UI基準確立（Session 20）
+- マイページ群 5ページ UI統一（Session 21）
+- マイページ共通コンポーネント化・バグ修正（Session 22）
 
-**次のターゲット（Session 21 予定）:**
-- トップページ（トピック一覧）UI/UX 改善（design-spec.md ルール適用）
-- ダッシュボード UI/UX 改善
-- その他全ページ
+**次のターゲット（Session 23 予定）:**
+- トップページ（トピック一覧）UI/UX 改善
+- プロフィールページ UI/UX 改善
+- カテゴリページ UI/UX 改善
 
 ### 優先度高
 - **LP作成**: /（トップ）のランディングページ実装（現在未着手・登録誘導）
