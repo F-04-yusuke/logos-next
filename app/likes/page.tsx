@@ -67,7 +67,7 @@ function ThumbUpIcon({ filled, size = "md" }: { filled: boolean; size?: "sm" | "
 
 function PostCard({ post }: { post: LikedPost }) {
   return (
-    <div className="border-gray-200 dark:border-transparent p-3 bg-white dark:bg-[#1e1f20] rounded-lg border shadow-sm flex flex-col md:flex-row gap-3 transition-colors">
+    <div className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col md:flex-row gap-3 hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors">
       {/* サムネイル */}
       <div className="md:w-1/4 flex-shrink-0">
         <a href={post.url} target="_blank" rel="noopener noreferrer" className="block group">
@@ -137,7 +137,7 @@ function PostCard({ post }: { post: LikedPost }) {
 
 function CommentCard({ comment }: { comment: LikedComment }) {
   return (
-    <div className="bg-white dark:bg-[#1e1f20] px-4 rounded-lg border border-gray-200 dark:border-transparent shadow-sm">
+    <div className="-ml-3 pl-3 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors">
       <div className="flex gap-4 items-start py-4">
         <div className="shrink-0 mt-1">
           <UserAvatar user={comment.user} size="lg" />
@@ -147,7 +147,7 @@ function CommentCard({ comment }: { comment: LikedComment }) {
             <span className="font-bold text-[13px] text-gray-900 dark:text-g-text">{comment.user.name}</span>
             <span className="text-[11px] text-gray-500">{timeAgo(comment.created_at)}</span>
           </div>
-          <p className="text-[14px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
+          <p className="text-[15px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
             {comment.body}
           </p>
           <div className="mt-2 flex items-center gap-4">
@@ -210,25 +210,25 @@ export default function LikesPage() {
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+        <div className="sm:rounded-lg overflow-hidden">
 
           {/* タブ */}
           <div className="flex border-b border-gray-200 dark:border-gray-800 overflow-x-auto">
             <button
               onClick={() => setActiveTab("info")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap ${tabClass("info")}`}
+              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap cursor-pointer ${tabClass("info")}`}
             >
               情報 ({likedPosts.length})
             </button>
             <button
               onClick={() => setActiveTab("comments")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap ${tabClass("comments")}`}
+              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap cursor-pointer ${tabClass("comments")}`}
             >
               コメント ({likedComments.length})
             </button>
             <button
               onClick={() => setActiveTab("analysis")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center ${tabClass("analysis")}`}
+              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${tabClass("analysis")}`}
             >
               分析・図解 (0)
               <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
