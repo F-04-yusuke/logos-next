@@ -25,13 +25,26 @@
 | コメント入力 placeholder | `このトピックに対するコメント（※1人1件まで）` | `このトピックに対するあなたの意見を教えてください（※1人1件まで）` |
 | 返信フォーム placeholder | `返信を追加...` / `追加の補足を記入...` | `返信を追加する（※1件まで）` / `追加の補足をする（※全5件まで）` |
 
+### user2 PRO化・分析タブ テストデータ投入
+
+- user2（id=4, user2@test.com）を `is_pro=1` に変更
+- PROユーザー（ローカル）: admin / user1 / user2 の3名体制
+
+分析テストデータ（トピック1）:
+
+| ID | タイプ | タイトル | 投稿者 | いいね |
+|---|---|---|---|---|
+| 1 | tree | AI規制の賛否：論点ロジックツリー | admin | 3 |
+| 2 | matrix | AI規制アプローチ 総合評価表 | user1 | 2 |
+| 3 | swot | 日本のAI規制導入 SWOT分析 | user2 | 2 |
+
 ---
 
 ## 現在のリポジトリ状態
 
 | リポジトリ | ブランチ | 最新タグ | 状態 |
 |---|---|---|---|
-| ~/logos-next | main | v4.8-session19-ui-comment-tab | クリーン |
+| ~/logos-next | main | v4.9-session19-analysis-testdata | クリーン |
 | ~/logos-laravel | main | v4.0-p4-custom-thumbnail | クリーン（変更なし） |
 
 ---

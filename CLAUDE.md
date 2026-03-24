@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-24（Session 19 / Phase 4 UI/UX改善 コメントタブ UI調整 完了）
+最終更新: 2026-03-24（Session 19 / Phase 4 UI/UX改善 コメントタブ UI調整・分析タブテストデータ投入 完了）
 
 ---
 
@@ -117,7 +117,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v4.8-session19-ui-comment-tab`
+- logos-next: `v4.9-session19-analysis-testdata`
 - logos-laravel: `v4.0-p4-custom-thumbnail`
 
 ## Phase 2 未対応・将来検討項目

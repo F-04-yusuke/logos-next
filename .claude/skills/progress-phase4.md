@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-24（Session 19）
+最終更新: 2026-03-24（Session 19 追記）
 
 ---
 
@@ -454,9 +454,38 @@ res = await fetch(..., { headers: getAuthHeaders(), body: formData });
 | コメント入力 placeholder | `このトピックに対するコメント（※1人1件まで）` | `このトピックに対するあなたの意見を教えてください（※1人1件まで）` |
 | 返信フォーム placeholder | `返信を追加...` / `追加の補足を記入...` | `返信を追加する（※1件まで）` / `追加の補足をする（※全5件まで）` |
 
-### Gitタグ（Session 19）
+### Gitタグ（Session 19 前半）
 
 - logos-next: `v4.8-session19-ui-comment-tab`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
+## Session 19 追記: user2 PRO化・分析タブテストデータ投入（2026-03-24）
+
+### PROユーザー追加
+
+| ユーザー | 変更前 | 変更後 |
+|---|---|---|
+| user2（id=4, user2@test.com） | is_pro=0 | is_pro=1 |
+
+PROユーザー一覧（ローカル）: admin（id=2）・user1（id=3）・user2（id=4）
+
+### 分析タブ テストデータ投入（tinker）
+
+トピック1「AIの規制はどこまで必要か」に投入：
+
+| ID | タイプ | タイトル | 投稿者 | いいね | supplement |
+|---|---|---|---|---|---|
+| 1 | tree | AI規制の賛否：論点ロジックツリー | admin | 3 | あり |
+| 2 | matrix | AI規制アプローチ 総合評価表 | user1 | 2 | なし |
+| 3 | swot | 日本のAI規制導入 SWOT分析 | user2 | 2 | あり |
+
+全件 `is_published: true`
+
+### Gitタグ（Session 19 完了）
+
+- logos-next: `v4.9-session19-analysis-testdata`
 - logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
 
 ---
