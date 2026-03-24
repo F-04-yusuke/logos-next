@@ -9,6 +9,7 @@ import { PostModal } from "./PostModal";
 import { AnalysisCard } from "./AnalysisCard";
 import { AnalysisModal } from "./AnalysisModal";
 import { useTopicPage } from "../hooks/useTopicPage";
+import { UserAvatar } from "./UserAvatar";
 import type { TopicDetail } from "../_types";
 
 type Props = {
@@ -76,9 +77,16 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
   if (loading) {
     return (
-      <main className="max-w-7xl mx-auto px-4 py-10">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
-      </main>
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4 sm:py-6 animate-pulse">
+        <div className="h-7 bg-white/[0.06] rounded-md w-2/3 mb-3" />
+        <div className="h-4 bg-white/[0.04] rounded w-1/4 mb-8" />
+        <div className="flex border-b border-gray-800 gap-1 mb-4">
+          {[1, 2, 3].map((i) => <div key={i} className="h-10 bg-white/[0.04] rounded-t w-24" />)}
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => <div key={i} className="h-32 bg-white/[0.04] rounded-lg" />)}
+        </div>
+      </div>
     );
   }
 
@@ -99,12 +107,15 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
           {/* Left: title / content / timeline */}
           <div className="flex-1">
-            <h2 className="text-xl font-bold mb-2">{topic.title}</h2>
+            <h2 className="text-xl font-bold mb-3 pl-3 border-l-4 border-indigo-500">{topic.title}</h2>
             <button
               onClick={() => setContentExpanded(!contentExpanded)}
-              className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1f20] pl-0 pr-2 py-1 rounded transition-colors cursor-pointer flex items-center gap-1"
+              className="text-xs text-g-sub hover:text-g-text hover:bg-white/[0.04] pr-2 py-1 rounded transition-colors duration-100 cursor-pointer flex items-center gap-1"
             >
-              {contentExpanded ? "▲ 閉じる" : "▼ トピックの概要を見る"}
+              <svg className={`h-3 w-3 transition-transform duration-200 ${contentExpanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+              {contentExpanded ? "閉じる" : "トピックの概要を見る"}
             </button>
 
             {contentExpanded && (
@@ -207,12 +218,12 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {/* Right: categories / meta / actions */}
           <div className="flex flex-col items-end flex-shrink-0 space-y-1">
             {topic.categories.length > 0 && (
-              <div className="flex flex-wrap gap-1 justify-end mb-1">
+              <div className="flex flex-wrap gap-1 justify-end mb-2">
                 {topic.categories.map((cat) => (
                   <Link
                     key={cat.id}
-                    href={`/?category=${cat.id}`}
-                    className="px-2 py-0.5 text-xs rounded border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-g-sub hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    href={`/categories/${cat.id}`}
+                    className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors duration-100"
                   >
                     {cat.name}
                   </Link>
@@ -220,9 +231,11 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               </div>
             )}
 
-            <div className="text-xs text-gray-500 dark:text-g-sub text-right space-y-0.5">
-              <p>作成者: {topic.user.name}</p>
-              <p>{formatDateTime(topic.created_at)}</p>
+            <div className="flex items-center gap-2 text-xs text-g-sub justify-end">
+              <UserAvatar user={topic.user} size="sm" />
+              <span>{topic.user.name}</span>
+              <span className="text-g-sub/40">·</span>
+              <span>{formatDateTime(topic.created_at)}</span>
             </div>
 
             <div className="pt-1 flex items-center justify-end gap-3">
@@ -230,7 +243,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                 <>
                   <Link
                     href={`/topics/${topic.id}/edit`}
-                    className="text-xs font-bold text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors flex items-center px-2 py-1.5 rounded-full"
+                    className="text-xs font-bold text-g-sub hover:text-blue-400 hover:bg-blue-500/10 transition-colors duration-100 flex items-center px-2 py-1.5 rounded-lg"
                   >
                     <svg
                       aria-hidden="true"
@@ -255,7 +268,11 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
               <button
                 onClick={handleBookmark}
-                className="text-xs text-gray-400 hover:text-gray-200 hover:bg-white/10 transition-colors flex items-center px-2 py-1.5 rounded-full cursor-pointer"
+                className={`text-xs transition-colors duration-100 flex items-center px-2 py-1.5 rounded-lg cursor-pointer ${
+                  !!topic.is_bookmarked
+                    ? "text-indigo-400 hover:bg-indigo-500/10"
+                    : "text-g-sub hover:text-indigo-400 hover:bg-indigo-500/10"
+                }`}
               >
                 {topic.is_bookmarked ? (
                   <>
@@ -302,12 +319,12 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
-                className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${
+                className={`py-3 px-6 border-b-2 text-sm transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${
                   activeTab === tab
                     ? tab === "analysis"
-                      ? "border-yellow-500 text-gray-900 dark:text-white font-bold"
-                      : "border-gray-900 text-gray-900 dark:border-gray-200 dark:text-white font-bold"
-                    : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200 hover:bg-white/[0.05]"
+                      ? "border-yellow-500 text-white font-bold"
+                      : "border-indigo-500 text-white font-bold"
+                    : "border-transparent text-g-sub hover:text-g-text hover:bg-white/[0.04]"
                 }`}
               >
                 {tab === "info" && "情報"}
@@ -328,7 +345,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "info" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-900 dark:text-g-text text-sm sm:text-base">
+                <h3 className="font-bold text-g-text text-sm sm:text-base pl-2 border-l-2 border-gray-700">
                   {filteredPosts.length} 件の投稿
                 </h3>
                 <div className="flex items-center space-x-2">
@@ -413,7 +430,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "comments" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-900 dark:text-g-text text-sm sm:text-base">
+                <h3 className="font-bold text-g-text text-sm sm:text-base pl-2 border-l-2 border-gray-700">
                   {topic.comments.length} 件のコメント
                 </h3>
                 <select
@@ -480,7 +497,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "analysis" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-900 dark:text-g-text text-sm sm:text-base">
+                <h3 className="font-bold text-g-text text-sm sm:text-base pl-2 border-l-2 border-gray-700">
                   {topic.analyses?.length ?? 0} 件の分析・図解
                 </h3>
                 <div className="flex items-center space-x-2">
