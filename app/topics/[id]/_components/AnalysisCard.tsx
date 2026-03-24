@@ -143,6 +143,7 @@ export function AnalysisCard({
 }) {
   const isOwner = currentUserId === analysis.user.id;
   const [openSupplement, setOpenSupplement] = useState(false);
+  const [openSupplementView, setOpenSupplementView] = useState(false);
   const [supplementBody, setSupplementBody] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -204,105 +205,123 @@ export function AnalysisCard({
         <AnalysisPreview analysis={analysis} />
       </div>
 
-      {/* Supplement */}
-      {analysis.supplement ? (
-        <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-800/50 text-sm">
-          <span className="font-bold text-yellow-600 dark:text-yellow-500 text-[10px] block mb-1">✅ 投稿者からの補足</span>
-          <p className="text-gray-800 dark:text-g-text whitespace-pre-wrap">{analysis.supplement}</p>
-        </div>
-      ) : isOwner && onSupplement ? (
-        <div className="mt-1 w-full">
-          {!openSupplement ? (
-            <button
-              onClick={() => setOpenSupplement(true)}
-              type="button"
-              className="text-[11px] text-yellow-600 dark:text-yellow-500 hover:underline font-bold transition-colors py-1 pr-2"
-            >
-              ＋ 補足を追加する（※1回のみ）
-            </button>
-          ) : (
-            <div className="mt-2 p-3 bg-gray-50 dark:bg-[#131314] rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
-              <textarea
-                ref={textareaRef}
-                value={supplementBody}
-                onChange={handleTextareaInput}
-                rows={2}
-                className="w-full text-sm rounded-md border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white mb-2 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500"
-                required
-                placeholder="この分析に対する追加の考察や結論などを入力してください（※後から編集はできません）"
-              />
-              <div className="flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => { setOpenSupplement(false); setSupplementBody(""); }}
-                  className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold py-1.5 px-2"
-                >
-                  キャンセル
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSupplementSubmit}
-                  disabled={submitting || !supplementBody.trim()}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold py-1.5 px-4 rounded transition-colors disabled:opacity-50"
-                >
-                  {submitting ? "投稿中..." : "補足を投稿"}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      ) : null}
-
       {/* Footer */}
-      <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-3">
-        {isOwner && analysis.type !== "image" ? (
-          <Link
-            href={`/tools/${analysis.type}?edit=${analysis.id}`}
-            className="text-xs font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center py-1 pr-2"
-          >
-            もっと見る <span className="ml-1 text-[10px]" aria-hidden="true">▶</span>
-          </Link>
-        ) : !isOwner && !!isPro ? (
-          <Link
-            href={`/analyses/${analysis.id}`}
-            className="text-xs font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center py-1 pr-2"
-          >
-            もっと見る <span className="ml-1 text-[10px]" aria-hidden="true">▶</span>
-          </Link>
-        ) : !isOwner && !isPro ? (
-          <span className="text-xs font-bold text-yellow-500 flex items-center gap-1 py-1 pr-2">
-            <svg aria-hidden="true" className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-            </svg>
-            もっと見る <span className="text-[9px] ml-0.5 bg-yellow-500/20 text-yellow-400 px-1 rounded font-bold">PRO</span>
-          </span>
-        ) : null}
-        <div className="flex items-center gap-4">
-          {isOwner && (
-            <>
-              <button
-                onClick={() => onDelete(analysis.id)}
-                className="text-xs text-red-400 hover:text-red-600 transition-colors py-1 px-2 cursor-pointer"
+      <div className="border-t border-gray-100 dark:border-gray-800 pt-3">
+        <div className="flex items-center justify-between">
+          {/* Left: もっと見る + 補足ありトグル or 補足追加ボタン */}
+          <div className="flex items-center gap-1">
+            {isOwner && analysis.type !== "image" ? (
+              <Link
+                href={`/tools/${analysis.type}?edit=${analysis.id}`}
+                className="text-xs font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center py-1 pr-2"
               >
-                削除
+                もっと見る <span className="ml-1 text-[10px]" aria-hidden="true">▶</span>
+              </Link>
+            ) : !isOwner && !!isPro ? (
+              <Link
+                href={`/analyses/${analysis.id}`}
+                className="text-xs font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center py-1 pr-2"
+              >
+                もっと見る <span className="ml-1 text-[10px]" aria-hidden="true">▶</span>
+              </Link>
+            ) : !isOwner && !isPro ? (
+              <span className="text-xs font-bold text-yellow-500 flex items-center gap-1 py-1 pr-2">
+                <svg aria-hidden="true" className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                </svg>
+                もっと見る <span className="text-[9px] ml-0.5 bg-yellow-500/20 text-yellow-400 px-1 rounded font-bold">PRO</span>
+              </span>
+            ) : null}
+
+            {analysis.supplement ? (
+              <button
+                type="button"
+                onClick={() => setOpenSupplementView((v) => !v)}
+                className="text-[13px] text-gray-500 hover:text-gray-300 hover:bg-white/[0.07] transition-colors py-1 px-2 rounded-full cursor-pointer"
+              >
+                📎 補足あり {openSupplementView ? "▲" : "▼"}
               </button>
-              <span className="text-gray-300 dark:text-gray-700" aria-hidden="true">|</span>
-            </>
-          )}
-          <button
-            onClick={() => onLike(analysis.id)}
-            className={`flex items-center space-x-1 transition-colors py-1 px-2 -mr-2 cursor-pointer ${
-              analysis.is_liked_by_me ? "text-gray-900 dark:text-white font-bold" : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-            }`}
-          >
-            <span className="sr-only">いいね</span>
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill={analysis.is_liked_by_me ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 1.5.58c.36.31.6.76.68 1.25.04.24.06.49.06.75 0 .76-.23 1.48-.63 2.08-.2.31-.05.73.3.88l3.126.33a2.25 2.25 0 0 1 1.954 2.65l-1.42 6.75c-.24 1.14-1.28 1.96-2.45 1.96H13.5a5.5 5.5 0 0 1-2.5-.6l-3.11-1.42a4.5 4.5 0 0 0-1.43-.24H5.9c-.83 0-1.5-.67-1.5-1.5V11.75c0-.83.67-1.5 1.5-1.5h.733Z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 10.25h1.5v9h-1.5v-9Z" />
-            </svg>
-            {analysis.likes_count > 0 && <span className="text-sm" aria-hidden="true">{analysis.likes_count}</span>}
-          </button>
+            ) : isOwner && onSupplement && !openSupplement ? (
+              <button
+                type="button"
+                onClick={() => setOpenSupplement(true)}
+                className="text-[11px] text-yellow-600 dark:text-yellow-500 hover:bg-yellow-500/10 font-bold transition-colors py-1 px-2 rounded-full cursor-pointer"
+              >
+                ＋ 補足を追加する（※1回のみ）
+              </button>
+            ) : null}
+          </div>
+
+          {/* Right: 削除 | いいね */}
+          <div className="flex items-center gap-4">
+            {isOwner && (
+              <>
+                <button
+                  onClick={() => onDelete(analysis.id)}
+                  className="text-xs text-red-400 hover:text-red-600 transition-colors py-1 px-2 cursor-pointer"
+                >
+                  削除
+                </button>
+                <span className="text-gray-300 dark:text-gray-700" aria-hidden="true">|</span>
+              </>
+            )}
+            <button
+              onClick={() => onLike(analysis.id)}
+              className={`flex items-center space-x-1 transition-colors py-1 px-2 -mr-2 cursor-pointer ${
+                analysis.is_liked_by_me ? "text-gray-900 dark:text-white font-bold" : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              <span className="sr-only">いいね</span>
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill={analysis.is_liked_by_me ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 1.5.58c.36.31.6.76.68 1.25.04.24.06.49.06.75 0 .76-.23 1.48-.63 2.08-.2.31-.05.73.3.88l3.126.33a2.25 2.25 0 0 1 1.954 2.65l-1.42 6.75c-.24 1.14-1.28 1.96-2.45 1.96H13.5a5.5 5.5 0 0 1-2.5-.6l-3.11-1.42a4.5 4.5 0 0 0-1.43-.24H5.9c-.83 0-1.5-.67-1.5-1.5V11.75c0-.83.67-1.5 1.5-1.5h.733Z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 10.25h1.5v9h-1.5v-9Z" />
+              </svg>
+              {analysis.likes_count > 0 && <span className="text-sm" aria-hidden="true">{analysis.likes_count}</span>}
+            </button>
+          </div>
         </div>
+
+        {/* 補足展開コンテンツ */}
+        {analysis.supplement && openSupplementView && (
+          <div className="pt-2 pb-1">
+            <span className="text-xs text-gray-500 dark:text-g-sub block mb-1">投稿者からの補足</span>
+            <p className="text-[13px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
+              {analysis.supplement}
+            </p>
+          </div>
+        )}
+
+        {/* 補足追加フォーム */}
+        {!analysis.supplement && isOwner && onSupplement && openSupplement && (
+          <div className="pt-2 pb-3">
+            <textarea
+              ref={textareaRef}
+              value={supplementBody}
+              onChange={handleTextareaInput}
+              rows={2}
+              className="w-full text-sm rounded-md border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white mb-2 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500"
+              required
+              placeholder="この分析に対する追加の考察や結論などを入力してください（※後から編集はできません）"
+            />
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => { setOpenSupplement(false); setSupplementBody(""); }}
+                className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold py-1.5 px-2"
+              >
+                キャンセル
+              </button>
+              <button
+                type="button"
+                onClick={handleSupplementSubmit}
+                disabled={submitting || !supplementBody.trim()}
+                className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold py-1.5 px-4 rounded transition-colors disabled:opacity-50"
+              >
+                {submitting ? "投稿中..." : "補足を投稿"}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
