@@ -42,7 +42,7 @@ function timeAgo(dateStr: string): string {
 
 function TypeBadge({ type }: { type: string }) {
   const base =
-    "absolute -bottom-0.5 -right-0.5 flex items-center justify-center h-4 w-4 rounded-full border-2 border-white dark:border-[#1e1f20]";
+    "absolute -bottom-0.5 -right-0.5 flex items-center justify-center h-4 w-4 rounded-full border-2 border-white dark:border-[#131314]";
 
   if (type === "new_post") {
     return (
@@ -180,7 +180,7 @@ export default function NotificationsPage() {
         </div>
 
         {/* 通知リスト */}
-        <div className="bg-white dark:bg-[#1e1f20] rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-transparent divide-y divide-gray-100 dark:divide-gray-800">
+        <div className="rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-gray-800/60">
           {notifications.length === 0 ? (
             <div className="py-16 text-center">
               <svg
@@ -206,10 +206,10 @@ export default function NotificationsPage() {
               <button
                 key={notification.id}
                 onClick={() => handleClick(notification)}
-                className={`w-full text-left flex items-start gap-3 px-4 py-4 transition-colors ${
+                className={`w-full text-left flex items-start gap-3 px-4 py-4 transition-colors cursor-pointer ${
                   notification.is_unread
                     ? "bg-blue-50/60 dark:bg-blue-950/20 hover:bg-blue-50 dark:hover:bg-blue-950/30"
-                    : "hover:bg-gray-50 dark:hover:bg-[#131314]"
+                    : "hover:bg-gray-100 dark:hover:bg-white/[0.04]"
                 }`}
               >
                 {/* アクターアバター + 種別バッジ */}
