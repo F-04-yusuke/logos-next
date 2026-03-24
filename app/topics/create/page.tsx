@@ -156,10 +156,10 @@ export default function TopicCreatePage() {
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div className="bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-lg border border-gray-800">
+        <div className="overflow-hidden sm:rounded-lg">
           <div className="p-6 text-gray-100">
 
-            <h2 className="font-bold text-xl text-gray-200 leading-tight mb-6">
+            <h2 className="font-bold text-xl dark:text-g-text leading-tight mb-6">
               新規トピック作成
             </h2>
 
@@ -268,7 +268,7 @@ export default function TopicCreatePage() {
                       <button
                         type="button"
                         onClick={() => removeTimelineItem(index)}
-                        className="text-red-500 hover:text-red-400 px-2 py-1.5 text-sm shrink-0"
+                        className="text-red-500 hover:text-red-400 px-2 py-1.5 text-sm shrink-0 cursor-pointer"
                       >
                         削除
                       </button>
@@ -289,14 +289,14 @@ export default function TopicCreatePage() {
               <div className="flex items-center justify-end mt-4 border-t border-gray-800 pt-4">
                 <Link
                   href="/"
-                  className="mr-4 text-sm text-gray-500 hover:text-gray-300"
+                  className="mr-4 text-sm text-gray-500 hover:text-gray-300 cursor-pointer"
                 >
                   キャンセル
                 </Link>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? "作成中..." : "トピックを作成する"}
                 </button>
