@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-24（Session 20 追記）
+最終更新: 2026-03-24（Session 23 追記）
 
 ---
 
@@ -8,6 +8,56 @@
 
 Phase 3 完了後の次ステージ。ユーザー獲得・SEO・UI/UX強化・セキュリティ改善を目指す。
 Session 12 より開始。まず UI/UX の大幅改善から着手。
+
+---
+
+## Session 23: トップページ刷新・カテゴリ別トピックページ新設・APIバグ修正（2026-03-24）
+
+### U-11: トップページ（HomeClient）豪華版リデザイン ✅
+
+**ファイル:** `app/_components/HomeClient.tsx`
+
+| 変更箇所 | 変更内容 |
+|---|---|
+| トピックカード | ボックス廃止 → フラット `-ml-3 pl-3` パターン・`hover:bg-white/[0.04]` |
+| テキストカラー | `text-gray-100/400/500` → `text-g-text` / `text-g-sub` に統一 |
+| 日時表示 | `formatDate` → `timeAgo`（相対表示・lib/utils.ts 共通関数使用） |
+| ローディング | 「読み込み中...」テキスト → パルスアニメーションスケルトン |
+| カテゴリバッジ | 角丸四角 → pill（rounded-full）+ indigo tint |
+| ランキングバッジ | 単色 → 金銀銅グラデーション（1位〜3位） |
+| セクション見出し | 🆕🔥 絵文字 → アクセントバー（青/オレンジ） |
+| sort select | hover なし → `cursor-pointer` + `hover:bg-[#1e1f20]` |
+| 新規作成ボタン | ＋テキスト → SVGアイコン + `rounded-lg` |
+| `user?.is_pro` | バグあり → `!!user?.is_pro` に修正 |
+| カテゴリタブ行 | 件数バッジ・日時に固定幅（`w-7` / `w-14`）を付与しカラム揃え |
+
+### U-12: カテゴリ別トピック一覧ページ新設 ✅
+
+**新規ファイル:**
+- `app/categories/[id]/page.tsx` — SSR（初期トピックのみ取得）
+- `app/categories/[id]/_components/CategoryTopicsClient.tsx` — CSR（カテゴリ名解決・ソート・ページネーション）
+
+**変更ファイル:**
+- `app/_components/HomeClient.tsx` — 「もっと見る」リンク `/?category=ID` → `/categories/ID`
+- `app/category-list/page.tsx` — 大分類・中分類リンク `/?category=ID` → `/categories/ID`
+
+**技術的負債（将来改善）:**
+カテゴリ名の解決を SSR で行おうとしたが、Server Component から `http://localhost/api/categories` を
+fetch しても中分類が null を返す不具合（原因不明・Node.js 単体では正常）。
+暫定措置として `CategoryTopicsClient` の `useEffect` でクライアント側から `/api/categories` を取得。
+将来の改善: httpOnly Cookie 認証導入後に SSR 化を再試みるか、`unstable_noStore` 等で安定化を図る。
+
+### B-7: TopicApiController カテゴリフィルタ追加 ✅（logos-laravel）
+
+**ファイル:** `app/Http/Controllers/Api/TopicApiController.php`
+
+**背景:** `GET /api/topics?category=ID` が Blade 版ではフィルタされるが API 版では全件返していた。
+Blade 版の `TopicController` には実装済みだったが `TopicApiController` に未移植。
+
+**修正内容:**
+- 大分類 ID 指定時に中分類も `whereHas` で検索する処理を追加
+- `per_page` クエリパラメータ（最大50）対応を追加
+- logos-laravel コミット: `fix: TopicApiController に category フィルタと per_page パラメータを追加`
 
 ---
 

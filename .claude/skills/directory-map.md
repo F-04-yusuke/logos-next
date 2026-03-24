@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-24（Session 19 / Phase 4 UI/UX改善・コメントタブ）
+最終更新: 2026-03-24（Session 23 / Phase 4 カテゴリ別トピックページ新設）
 
 ```
 logos-next/
@@ -29,9 +29,13 @@ logos-next/
 │   ├── register/
 │   │   └── page.tsx                     # /register ユーザー登録（eKYC/SNS coming soon + 開発用フォーム）
 │   ├── categories/
-│   │   └── page.tsx                     # /categories カテゴリ（admin: インライン編集CRUD / 一般: グリッド一覧）
+│   │   ├── page.tsx                     # /categories カテゴリ（admin: インライン編集CRUD / 一般: グリッド一覧）
+│   │   └── [id]/
+│   │       ├── page.tsx                 # /categories/[id] カテゴリ別トピック一覧【SSR初期トピック+CSRカテゴリ名解決】
+│   │       └── _components/
+│   │           └── CategoryTopicsClient.tsx  # カテゴリ別トピック一覧CSR（useEffectでカテゴリ名取得・ソート・ページネーション）
 │   ├── category-list/
-│   │   └── page.tsx                     # /category-list カテゴリ公開グリッド一覧
+│   │   └── page.tsx                     # /category-list カテゴリ公開グリッド一覧（大分類・中分類 → /categories/[id]）
 │   ├── notifications/
 │   │   └── page.tsx                     # /notifications 通知一覧（TypeBadge・既読・ページネーション）
 │   ├── likes/
@@ -95,7 +99,8 @@ logos-next/
 │   ├── auth.ts                          # トークン管理（getToken/setToken/removeToken/getAuthHeaders）
 │   ├── proxy-fetch.ts                   # Route Handler用さくらAPIプロキシユーティリティ（サーバー専用・F-1 Phase3）
 │   ├── transforms.ts                    # boolean型変換レイヤー（transformUser/Post/Comment/Reply/Analysis/Topic）（F-3 Phase3）
-│   └── utils.ts                         # shadcn/ui utility（cn関数）
+│   ├── utils.ts                         # shadcn/ui utility（cn関数）+ timeAgo（Session 22 共通化）
+│   └── proxy-fetch.ts                   # Route Handler用さくらAPIプロキシユーティリティ（サーバー専用・F-1 Phase3）
 ├── public/                              # SVG等の静的ファイル
 ├── .env.example
 ├── .env.local                           # ローカル環境変数（gitignore済み）
@@ -130,6 +135,7 @@ logos-next/
 | `/login` | app/login/page.tsx | CSR | ✅ |
 | `/register` | app/register/page.tsx | CSR | ✅ |
 | `/categories` | app/categories/page.tsx | CSR | ✅ |
+| `/categories/[id]` | app/categories/[id]/page.tsx | SSR初期トピック+CSRカテゴリ名 | ✅ |
 | `/category-list` | app/category-list/page.tsx | CSR | ✅ |
 | `/notifications` | app/notifications/page.tsx | CSR | ✅ |
 | `/likes` | app/likes/page.tsx | CSR | ✅ |

@@ -1,0 +1,262 @@
+"use client";
+
+import { useState, useCallback, useEffect } from "react";
+import Link from "next/link";
+import { timeAgo } from "@/lib/utils";
+
+type Category = {
+  id: number;
+  name: string;
+  sort_order: number;
+  parent_id: number | null;
+  children?: Category[];
+};
+
+type Topic = {
+  id: number;
+  title: string;
+  content: string;
+  posts_count: number;
+  comments_count: number;
+  created_at: string;
+  user: { id: number; name: string };
+  categories: Category[];
+};
+
+type TopicsResponse = {
+  current_page: number;
+  last_page: number;
+  total: number;
+  data: Topic[];
+};
+
+type SortOption = "newest" | "popular" | "oldest";
+
+function TopicSkeleton() {
+  return (
+    <div className="space-y-0">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="-ml-3 pl-3 pr-4 py-4 animate-pulse">
+          <div className="flex gap-1.5 mb-2">
+            <div className="h-4 w-14 rounded-full bg-white/[0.06]" />
+          </div>
+          <div className="h-5 w-3/4 rounded bg-white/[0.08] mb-2" />
+          <div className="h-3 w-full rounded bg-white/[0.05] mb-1.5" />
+          <div className="h-3 w-2/3 rounded bg-white/[0.05] mb-3" />
+          <div className="flex gap-3">
+            <div className="h-3 w-16 rounded bg-white/[0.04]" />
+            <div className="h-3 w-20 rounded bg-white/[0.04]" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+type Props = {
+  categoryId: number;
+  initialTopics: Topic[];
+  initialPage: number;
+  initialLastPage: number;
+  initialTotal: number;
+};
+
+export default function CategoryTopicsClient({
+  categoryId,
+  initialTopics,
+  initialPage,
+  initialLastPage,
+  initialTotal,
+}: Props) {
+  const [topics, setTopics] = useState<Topic[]>(initialTopics);
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [lastPage, setLastPage] = useState(initialLastPage);
+  const [total, setTotal] = useState(initialTotal);
+  const [sort, setSort] = useState<SortOption>("newest");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  // カテゴリ名・親カテゴリ名をクライアント側で解決
+  const [categoryName, setCategoryName] = useState<string>("");
+  const [parentCategory, setParentCategory] = useState<{ id: number; name: string } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((r) => r.json())
+      .then((cats: Category[]) => {
+        // 大分類を探す
+        const root = cats.find((c) => c.id === categoryId);
+        if (root) {
+          setCategoryName(root.name);
+          setParentCategory(null);
+          return;
+        }
+        // 中分類を探す
+        for (const parent of cats) {
+          const child = (parent.children ?? []).find((c) => c.id === categoryId);
+          if (child) {
+            setCategoryName(child.name);
+            setParentCategory({ id: parent.id, name: parent.name });
+            return;
+          }
+        }
+      })
+      .catch(() => {});
+  }, [categoryId]);
+
+  const fetchTopics = useCallback((page: number, sortVal: SortOption) => {
+    setLoading(true);
+    setError(false);
+    fetch(`/api/topics?category=${categoryId}&sort=${sortVal}&page=${page}`)
+      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+      .then((data: TopicsResponse) => {
+        setTopics(data.data ?? []);
+        setCurrentPage(data.current_page);
+        setLastPage(data.last_page);
+        setTotal(data.total);
+        setLoading(false);
+      })
+      .catch(() => { setError(true); setLoading(false); });
+  }, [categoryId]);
+
+  const handleSort = (newSort: SortOption) => {
+    setSort(newSort);
+    fetchTopics(1, newSort);
+  };
+
+  return (
+    <div className="py-6 sm:py-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* ── パンくず ── */}
+        <div className="flex items-center gap-2 text-[12px] text-g-sub mb-6 flex-wrap">
+          <Link href="/" className="hover:text-g-text transition-colors cursor-pointer">
+            ホーム
+          </Link>
+          {parentCategory && (
+            <>
+              <span className="text-white/20">›</span>
+              <Link
+                href={`/categories/${parentCategory.id}`}
+                className="hover:text-g-text transition-colors cursor-pointer"
+              >
+                {parentCategory.name}
+              </Link>
+            </>
+          )}
+          <span className="text-white/20">›</span>
+          <span className="text-g-text">{categoryName || "…"}</span>
+        </div>
+
+        {/* ── ページヘッダー ── */}
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-xl font-bold text-g-text">
+              {categoryName || <span className="inline-block w-24 h-6 rounded bg-white/[0.08] animate-pulse" />}
+            </h1>
+            {!loading && (
+              <p className="text-[12px] text-g-sub mt-0.5">{total}件のトピック</p>
+            )}
+          </div>
+          <select
+            value={sort}
+            onChange={(e) => handleSort(e.target.value as SortOption)}
+            className="text-xs sm:text-sm rounded border border-gray-700 bg-[#131314] text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-500"
+          >
+            <option value="newest">新着順</option>
+            <option value="popular">エビデンスが多い順</option>
+            <option value="oldest">古い順</option>
+          </select>
+        </div>
+
+        {/* ── トピック一覧 ── */}
+        {loading && <TopicSkeleton />}
+        {error && (
+          <p className="text-red-400 text-sm py-6 text-center">
+            トピックの取得に失敗しました
+          </p>
+        )}
+
+        {!loading && !error && (
+          <>
+            {topics.length === 0 ? (
+              <div className="py-16 text-center text-g-sub">
+                このカテゴリにはまだトピックがありません。
+              </div>
+            ) : (
+              <div>
+                {topics.map((topic) => (
+                  <Link
+                    key={topic.id}
+                    href={`/topics/${topic.id}`}
+                    className="block -ml-3 pl-3 pr-4 py-4 hover:bg-white/[0.04] transition-colors group cursor-pointer"
+                  >
+                    {topic.categories.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-1.5">
+                        {topic.categories.map((cat) => (
+                          <span
+                            key={cat.id}
+                            className="inline-block px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20"
+                          >
+                            {cat.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <h2 className="text-[15px] font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors leading-snug">
+                      {topic.title}
+                    </h2>
+
+                    {topic.content && (
+                      <p className="text-[13px] text-g-sub line-clamp-2 mb-2 leading-relaxed">
+                        {topic.content}
+                      </p>
+                    )}
+
+                    <div className="flex items-center gap-2 text-[11px] text-g-sub">
+                      <span>{topic.user.name}</span>
+                      <span className="text-white/20">·</span>
+                      <span className="flex items-center gap-1">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        エビデンス {topic.posts_count}件
+                      </span>
+                      <span className="text-white/20">·</span>
+                      <span>{timeAgo(topic.created_at)}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+
+            {/* ── ページネーション ── */}
+            {lastPage > 1 && (
+              <div className="mt-6 flex justify-center items-center gap-3">
+                <button
+                  onClick={() => fetchTopics(currentPage - 1, sort)}
+                  disabled={currentPage <= 1}
+                  className="px-4 py-2 text-sm rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                >
+                  ← 前へ
+                </button>
+                <span className="text-sm text-g-sub px-2">
+                  {currentPage} / {lastPage}
+                </span>
+                <button
+                  onClick={() => fetchTopics(currentPage + 1, sort)}
+                  disabled={currentPage >= lastPage}
+                  className="px-4 py-2 text-sm rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                >
+                  次へ →
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+      </div>
+    </div>
+  );
+}

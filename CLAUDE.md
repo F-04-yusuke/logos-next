@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-24（Session 22 / Phase 4 UI/UX改善 マイページ共通コンポーネント化・バグ修正 完了）
+最終更新: 2026-03-24（Session 23 / Phase 4 UI/UX改善 トップページ刷新・カテゴリ別トピックページ新設・APIバグ修正 完了）
 
 ---
 
@@ -101,7 +101,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 
 # 3. 現在の実装状態
 
-## 実装済みページ（全17ページ・Phase 2完了）
+## 実装済みページ（全18ページ・Phase 4 Session 23追加）
 
 | パス | 説明 |
 |---|---|
@@ -109,7 +109,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/login` | ログイン |
 | `/register` | ユーザー登録 |
 | `/categories` | カテゴリ（admin: CRUD / 一般: 一覧） |
-| `/category-list` | カテゴリ公開一覧 |
+| `/categories/[id]` | カテゴリ別トピック一覧（大分類・中分類対応・SSR初期データ+CSRカテゴリ名解決） |
+| `/category-list` | カテゴリ公開一覧（大分類・中分類リンク → /categories/[id]） |
 | `/topics/create` | トピック作成（PRO限定） |
 | `/topics/[id]` | トピック詳細（3タブ・投稿・コメント・いいね・ブックマーク） |
 | `/topics/[id]/edit` | トピック編集（PRO作成者限定） |
@@ -124,8 +125,20 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v5.8-session22-mypage-components`
-- logos-laravel: `v4.0-p4-custom-thumbnail`
+- logos-next: `v6.0-session23-category-page`
+- logos-laravel: `v4.1-session23-topic-api-category-filter`
+
+## /categories/[id] の実装上の注意（Session 23 技術的負債）
+
+`app/categories/[id]/page.tsx` はトピック初期データのみ SSR で取得し、
+カテゴリ名（大分類・中分類）の解決は `CategoryTopicsClient` の `useEffect` でクライアント側が担う。
+
+**理由:** Server Component から `http://localhost/api/categories` を fetch すると
+中分類の検索ロジックが null を返す不具合が確認された（原因不明・Node.js 単体では正常動作）。
+
+**将来の改善方針:** httpOnly Cookie 認証導入後に SSR 化を検討。
+または Next.js の Route Segment Config（`export const dynamic = 'force-dynamic'`）や
+`unstable_noStore` を試して SSR fetch の安定化を図る。
 
 ## Phase 2 未対応・将来検討項目
 
@@ -153,8 +166,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase2.md` | Phase 2 完了記録（Next.js移行・全17ページ・Step1〜14） |
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
 | `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 12〜） |
-| `.claude/skills/handoff-session23.md` | **最新引継ぎプロンプト** |
-| `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜20 アーカイブ） |
+| `.claude/skills/handoff-session24.md` | **最新引継ぎプロンプト** |
+| `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜23 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
 

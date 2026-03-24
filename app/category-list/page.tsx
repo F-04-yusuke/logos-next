@@ -76,7 +76,7 @@ export default function CategoryListPage() {
                 {/* 大分類ヘッダー */}
                 <div className="bg-gray-50 dark:bg-[#131314] border-b border-gray-200 dark:border-gray-800 px-4 sm:px-5 py-4">
                   <Link
-                    href={`/?category=${parent.id}`}
+                    href={`/categories/${parent.id}`}
                     className="flex items-center group"
                   >
                     <svg
@@ -107,7 +107,7 @@ export default function CategoryListPage() {
                       {parent.children.map((child) => (
                         <li key={child.id}>
                           <Link
-                            href={`/?category=${child.id}`}
+                            href={`/categories/${child.id}`}
                             className="flex items-center px-3 py-2.5 sm:py-2 rounded-lg text-sm text-gray-700 dark:text-g-text hover:bg-gray-100 dark:hover:bg-[#222222] hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
                           >
                             <svg
