@@ -68,28 +68,55 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     );
   }
   if (analysis.type === "matrix") {
-    const items = analysis.data.items ?? [];
-    const patterns = (analysis.data.patterns ?? []) as { title?: string }[];
+    const items = (analysis.data.items ?? []) as { itemTitle?: string; evaluations?: { score?: number | string; reason?: string }[]; scores?: { score?: number | string; reason?: string }[] }[];
+    const patterns = (analysis.data.patterns ?? []) as { title?: string; description?: string }[];
+    const badgeInfo = (val: number | string) => {
+      const v = Number(val ?? -1);
+      if (v === 3) return { text: "◎ 最適 (3pt)", color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" };
+      if (v === 2) return { text: "〇 良い (2pt)", color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" };
+      if (v === 1) return { text: "△ 懸念 (1pt)", color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" };
+      if (v === 0) return { text: "× 不可 (0pt)", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" };
+      return null;
+    };
     return (
-      <div className="space-y-3">
-        {patterns.length > 0 && (
-          <div>
-            <div className="font-bold text-gray-500 mb-1 text-sm">【比較パターン】</div>
-            <ul className="list-disc list-inside text-gray-700 dark:text-g-text space-y-1 ml-1">
-              {patterns.slice(0, 4).map((p, i) => (
-                <li key={i} className="truncate text-sm">{p.title}</li>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse min-w-[500px]">
+          <thead>
+            <tr>
+              <th className="p-2 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] text-[10px] font-bold text-gray-500 dark:text-g-sub w-28 align-bottom">
+                評価項目 ＼ 比較パターン
+              </th>
+              {patterns.map((p, i) => (
+                <th key={i} className="p-2 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] align-top">
+                  <div className="font-bold text-blue-600 dark:text-blue-400 mb-0.5 text-xs">{p.title}</div>
+                  <p className="text-[10px] text-gray-500 dark:text-g-sub font-normal line-clamp-2">{p.description}</p>
+                </th>
               ))}
-            </ul>
-          </div>
-        )}
-        <div>
-          <div className="font-bold text-gray-500 mb-1 text-sm">【評価項目一覧】</div>
-          <ul className="list-disc list-inside text-gray-700 dark:text-g-text space-y-1 ml-1">
-            {items.slice(0, 5).map((item, i) => (
-              <li key={i} className="truncate text-sm">{item.itemTitle}</li>
-            ))}
-          </ul>
-        </div>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, ri) => {
+              const evals = item.evaluations ?? item.scores ?? [];
+              return (
+                <tr key={ri}>
+                  <td className="p-2 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] font-bold text-xs text-gray-900 dark:text-g-text">
+                    {item.itemTitle}
+                  </td>
+                  {patterns.map((_, ci) => {
+                    const e = evals[ci];
+                    const badge = badgeInfo(e?.score ?? -1);
+                    return (
+                      <td key={ci} className="p-2 border-b border-r border-gray-200 dark:border-gray-700 align-top">
+                        {badge && <span className={`inline-block px-1.5 py-0.5 text-[10px] font-bold rounded mb-1 ${badge.color}`}>{badge.text}</span>}
+                        <p className="text-[10px] text-gray-700 dark:text-g-text line-clamp-2">{e?.reason ?? ""}</p>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     );
   }
