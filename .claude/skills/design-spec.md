@@ -34,6 +34,59 @@
 
 ---
 
+## 豪華要素ルール（Session 24 確立・全ページ共通）
+
+新規ページ・既存ページ改修時は以下を必ず適用すること。数値を変えない。
+
+### ホバー
+| 用途 | クラス |
+|---|---|
+| 通常アイテム（ナビ・カード等） | `hover:bg-white/[0.04] transition-colors duration-100` |
+| select / 操作ボタン | `hover:bg-[#1e1f20] transition-colors duration-100` |
+- **`hover:bg-gray-800` は使わない**（白もやに統一）
+- **`transition-colors` だけ（duration指定なし）は使わない**（duration-100 を必ず付ける）
+
+### アクティブ状態（ナビ・タブ）
+```
+bg-white/[0.06] text-g-text
+relative before:absolute before:left-0 before:top-1 before:bottom-1 before:w-0.5 before:rounded-r before:bg-indigo-500
+```
+- 左端に indigo-500 の細い縦バー（`w-0.5`）を付ける
+- タブのアクティブ下線: `border-b-2 border-indigo-500 text-white font-bold`（分析タブのみ `border-yellow-500`）
+
+### カテゴリバッジ（pill スタイル）
+```
+px-2 py-0.5 text-[10px] font-bold rounded-full
+bg-indigo-500/10 text-indigo-300 border border-indigo-500/20
+hover:bg-indigo-500/20 transition-colors duration-100
+```
+- サイズ: `text-[10px] font-bold`（`text-xs` は使わない）
+- 色: `text-indigo-300`（`text-indigo-400` は使わない）
+- padding: `px-2`（`px-2.5` は使わない）
+
+### セクション見出し・タイトルアクセントバー
+| 用途 | クラス |
+|---|---|
+| ページタイトル（h2等） | `pl-3 border-l-4 border-indigo-500` |
+| セクション見出し（「N件の投稿」等） | `pl-2 border-l-2 border-gray-700` |
+| サイドバーセクション見出し | `pl-2 border-l-2 border-gray-600 text-xs font-semibold text-g-sub tracking-wider` |
+| 分析ツール見出し（PRO系） | `pl-2 border-l-2 border-yellow-500/60 text-xs font-semibold text-yellow-500 tracking-wider` |
+
+### ローディングスケルトン
+```jsx
+<div className="animate-pulse">
+  <div className="h-7 bg-white/[0.06] rounded-md w-2/3 mb-3" />   {/* タイトル */}
+  <div className="h-4 bg-white/[0.04] rounded w-1/4 mb-8" />       {/* サブ */}
+  <div className="space-y-3">
+    {[1,2,3].map(i => <div key={i} className="h-32 bg-white/[0.04] rounded-lg" />)}
+  </div>
+</div>
+```
+- 「読み込み中...」テキストは使わない
+- カード高さは用途に応じて調整可（`h-32` / `h-24` 等）
+
+---
+
 ## トピックページ UI ルール（Phase 4 Session 12〜20 で確立・全ページ共通基準）
 
 **トピックページ（`app/topics/[id]/`）が UI 基準。他ページ改修時はここに準拠すること。**
