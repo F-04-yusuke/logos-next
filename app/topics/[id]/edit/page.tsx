@@ -168,8 +168,17 @@ export default function TopicEditPage() {
   // ─── Loading ───
   if (loading || dataLoading) {
     return (
-      <div className="flex justify-center items-center py-24">
-        <p className="text-gray-400 text-sm">読み込み中...</p>
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div className="animate-pulse p-6">
+            <div className="h-7 bg-white/[0.06] rounded-md w-1/3 mb-6" />
+            <div className="space-y-4">
+              <div className="h-10 bg-white/[0.04] rounded-md" />
+              <div className="h-40 bg-white/[0.04] rounded-md" />
+              <div className="h-24 bg-white/[0.04] rounded-md" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -226,7 +235,7 @@ export default function TopicEditPage() {
         <div className="bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-lg border border-gray-800">
           <div className="p-6 text-gray-100">
 
-            <h2 className="font-bold text-xl text-gray-200 leading-tight mb-6">
+            <h2 className="font-bold text-xl dark:text-g-text leading-tight mb-6 pl-3 border-l-4 border-indigo-500">
               トピックの編集
             </h2>
 
@@ -363,7 +372,7 @@ export default function TopicEditPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors duration-100 disabled:opacity-50"
                 >
                   {submitting ? "保存中..." : "変更を保存する"}
                 </button>

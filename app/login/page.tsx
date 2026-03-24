@@ -58,14 +58,14 @@ export default function LoginPage() {
         {/* ─── メインビュー ─── */}
         {!showDevLogin && (
           <div>
-            <h2 className="text-lg font-bold text-gray-100 mb-6">LOGOSを始める</h2>
+            <h2 className="text-lg font-bold text-gray-100 mb-6 pl-3 border-l-4 border-indigo-500">LOGOSを始める</h2>
 
             {/* eKYC ボタン群 */}
             <div className="space-y-3">
               {/* マイナンバーカード（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-[#1967D2] hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#1967D2] hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -77,7 +77,7 @@ export default function LoginPage() {
               {/* 運転免許証（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-[#8C939D] hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#8C939D] hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -101,7 +101,7 @@ export default function LoginPage() {
               {/* Google（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -116,7 +116,7 @@ export default function LoginPage() {
               {/* Apple（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-black hover:bg-gray-900 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-black hover:bg-gray-900 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -128,7 +128,7 @@ export default function LoginPage() {
               {/* 電話番号（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-[#8C939D] hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#8C939D] hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -152,7 +152,7 @@ export default function LoginPage() {
             {/* 開発用ログイン切り替えボタン */}
             <button
               onClick={() => setShowDevLogin(true)}
-              className="mt-5 text-[10px] text-gray-400 hover:text-blue-500 transition-colors border-b border-gray-400 hover:border-blue-500 pb-0.5"
+              className="mt-5 text-[10px] text-gray-400 hover:text-blue-500 transition-colors duration-100 border-b border-gray-400 hover:border-blue-500 pb-0.5"
             >
               [開発用] メールアドレスでログイン（テスト環境）
             </button>
@@ -173,7 +173,7 @@ export default function LoginPage() {
               戻る
             </button>
 
-            <h2 className="text-xl font-bold text-gray-100 mb-6 text-center mt-2">
+            <h2 className="text-xl font-bold text-gray-100 mb-6 mt-2 pl-3 border-l-4 border-indigo-500">
               テスト環境ログイン
             </h2>
 
@@ -217,7 +217,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors disabled:opacity-50"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 disabled:opacity-50"
                 >
                   {loading ? "ログイン中..." : "ログイン"}
                 </button>

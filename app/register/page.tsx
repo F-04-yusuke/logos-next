@@ -72,14 +72,14 @@ export default function RegisterPage() {
         {/* ─── メインビュー（coming soon） ─── */}
         {!showDevForm && (
           <div>
-            <h2 className="text-lg font-bold text-gray-100 mb-6">新規アカウント作成</h2>
+            <h2 className="text-lg font-bold text-gray-100 mb-6 pl-3 border-l-4 border-indigo-500">新規アカウント作成</h2>
 
             {/* eKYC ボタン群 */}
             <div className="space-y-3">
               {/* マイナンバーカード（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-[#1967D2] hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#1967D2] hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -91,7 +91,7 @@ export default function RegisterPage() {
               {/* 運転免許証（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-[#8C939D] hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#8C939D] hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -115,7 +115,7 @@ export default function RegisterPage() {
               {/* Google（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -130,7 +130,7 @@ export default function RegisterPage() {
               {/* Apple（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-black hover:bg-gray-900 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-black hover:bg-gray-900 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -142,7 +142,7 @@ export default function RegisterPage() {
               {/* 電話番号（coming soon） */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-2 bg-[#8C939D] hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-sm opacity-60 cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#8C939D] hover:bg-gray-500 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 shadow-sm opacity-60 cursor-not-allowed"
                 disabled
                 title="準備中"
               >
@@ -165,7 +165,7 @@ export default function RegisterPage() {
 
             {/* 既にアカウントお持ちの方 */}
             <div className="mt-5 text-center">
-              <Link href="/login" className="text-xs text-gray-400 hover:text-blue-400 transition-colors">
+              <Link href="/login" className="text-xs text-gray-400 hover:text-blue-400 transition-colors duration-100">
                 既に登録済みですか？ログインはこちら
               </Link>
             </div>
@@ -173,7 +173,7 @@ export default function RegisterPage() {
             {/* 開発用登録切り替えボタン */}
             <button
               onClick={() => setShowDevForm(true)}
-              className="mt-3 text-[10px] text-gray-400 hover:text-blue-500 transition-colors border-b border-gray-400 hover:border-blue-500 pb-0.5"
+              className="mt-3 text-[10px] text-gray-400 hover:text-blue-500 transition-colors duration-100 border-b border-gray-400 hover:border-blue-500 pb-0.5"
             >
               [開発用] メールアドレスで登録（テスト環境）
             </button>
@@ -194,7 +194,7 @@ export default function RegisterPage() {
               戻る
             </button>
 
-            <h2 className="text-xl font-bold text-gray-100 mb-6 text-center mt-2">
+            <h2 className="text-xl font-bold text-gray-100 mb-6 mt-2 pl-3 border-l-4 border-indigo-500">
               新規アカウント作成
             </h2>
 
@@ -274,14 +274,14 @@ export default function RegisterPage() {
               <div className="flex items-center justify-between mt-8 pt-2 border-t border-gray-800">
                 <Link
                   href="/login"
-                  className="text-sm font-bold text-gray-500 hover:text-blue-400 transition-colors"
+                  className="text-sm font-bold text-gray-500 hover:text-blue-400 transition-colors duration-100"
                 >
                   既に登録済みですか？
                 </Link>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-md transition-colors shadow-sm disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-md transition-colors duration-100 shadow-sm disabled:opacity-50"
                 >
                   {loading ? "登録中..." : "登録する"}
                 </button>
