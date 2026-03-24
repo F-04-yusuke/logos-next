@@ -123,10 +123,8 @@ function PostCard({
 }) {
   return (
     <div
-      className={`p-3 bg-white dark:bg-[#1e1f20] rounded-lg border shadow-sm flex flex-col md:flex-row gap-3 transition-colors ${
-        isDraft
-          ? "border-dashed border-yellow-300 dark:border-yellow-700"
-          : "border-gray-200 dark:border-transparent"
+      className={`-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col md:flex-row gap-3 hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors ${
+        isDraft ? "border-l-2 border-yellow-400 dark:border-yellow-600" : ""
       }`}
     >
       {/* サムネイル */}
@@ -245,7 +243,7 @@ function ReplyItem({ reply }: { reply: DashboardReply }) {
 
 function CommentCard({ comment }: { comment: DashboardComment }) {
   return (
-    <div className="bg-white dark:bg-[#1e1f20] px-4 rounded-lg border border-gray-200 dark:border-transparent shadow-sm">
+    <div className="-ml-3 pl-3 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors">
       <div className="flex gap-4 items-start py-4">
         <div className="shrink-0 mt-1">
           <UserAvatar user={comment.user} size="lg" />
@@ -257,7 +255,7 @@ function CommentCard({ comment }: { comment: DashboardComment }) {
             </span>
             <span className="text-[11px] text-gray-500">{timeAgo(comment.created_at)}</span>
           </div>
-          <p className="text-[14px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
+          <p className="text-[15px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
             {comment.body}
           </p>
           <div className="mt-2 flex items-center gap-4">
@@ -450,20 +448,20 @@ export default function DashboardPage() {
     <>
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+        <div className="sm:rounded-lg overflow-hidden">
 
           {/* タブ */}
           <div className="flex border-b border-gray-200 dark:border-gray-800 overflow-x-auto scrollbar-hide">
             <button
               onClick={() => setActiveTab("posts")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap ${blueTab("posts")}`}
+              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap cursor-pointer ${blueTab("posts")}`}
             >
               投稿した情報
             </button>
 
             <button
               onClick={() => setActiveTab("drafts")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center gap-1.5 ${yellowTab("drafts")}`}
+              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${yellowTab("drafts")}`}
             >
               下書き
               {draftCount > 0 && (
@@ -475,14 +473,14 @@ export default function DashboardPage() {
 
             <button
               onClick={() => setActiveTab("comments")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap ${blueTab("comments")}`}
+              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap cursor-pointer ${blueTab("comments")}`}
             >
               自分のコメント
             </button>
 
             <button
               onClick={() => setActiveTab("analyses")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center ${yellowTab("analyses")}`}
+              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analyses")}`}
             >
               作成した分析・図解
               <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
@@ -492,7 +490,7 @@ export default function DashboardPage() {
 
             <button
               onClick={() => setActiveTab("topics")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center ${blueTab("topics")}`}
+              className={`py-3 px-6 border-b-2 text-sm transition-colors focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${blueTab("topics")}`}
             >
               作成したトピック
               <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
@@ -673,7 +671,7 @@ export default function DashboardPage() {
                     return (
                       <div
                         key={analysis.id}
-                        className="p-4 bg-white dark:bg-[#131314] rounded-lg border border-gray-200 dark:border-gray-800 flex justify-between items-start shadow-sm gap-3"
+                        className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex justify-between items-start hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors gap-3"
                       >
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -724,7 +722,7 @@ export default function DashboardPage() {
                   topics.map((topic) => (
                     <div
                       key={topic.id}
-                      className="p-4 bg-white dark:bg-[#131314] rounded-lg border border-gray-200 dark:border-gray-800 flex justify-between items-center shadow-sm"
+                      className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex justify-between items-center hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div>
                         <div className="flex items-center gap-2 mb-1">
