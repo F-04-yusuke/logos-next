@@ -91,7 +91,7 @@ export default function HistoryPage() {
   return (
     <div className="py-8 sm:py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
+        <div className="sm:rounded-xl overflow-hidden">
           <div className="p-4 sm:p-8">
 
             {topics.length === 0 ? (
@@ -130,12 +130,12 @@ export default function HistoryPage() {
                         {groupTopics.map((topic) => (
                           <div
                             key={topic.id}
-                            className="p-3 sm:p-4 bg-white dark:bg-[#131314] rounded-lg border border-gray-200 dark:border-gray-800 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow"
+                            className="-ml-3 pl-3 py-3 sm:py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex justify-between items-center hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors cursor-pointer"
                           >
                             <div className="flex-1 min-w-0">
                               <Link
                                 href={`/topics/${topic.id}`}
-                                className="font-bold text-sm sm:text-base text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors line-clamp-1 block mb-1.5"
+                                className="font-bold text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors line-clamp-1 block mb-1.5 cursor-pointer"
                               >
                                 {topic.title}
                               </Link>
