@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-24（Session 19 / Phase 4 UI/UX改善 コメントタブ UI調整・分析タブテストデータ投入 完了）
+最終更新: 2026-03-24（Session 20 / Phase 4 UI/UX改善 分析タブ UI全面刷新・トピックページ UI基準確立 完了）
 
 ---
 
@@ -18,6 +18,12 @@
 - 実装前に以下も必読:
   - `~/logos-laravel/.claude/skills/features.md` — コア機能仕様・返信制限・補足ルール
   - `~/logos-laravel/.claude/skills/security.md` — セキュリティ・コーディングルール・UI トンマナ
+
+## トピックページが UI 基準（Session 20 確立）
+**`app/topics/[id]/` が全ページの UI デザイン基準。他ページ改修時は必ずここに準拠すること。**
+- カード背景・ホバー・アライメント（-ml-3 pl-3）・セレクトスタイル・ボタンスタイル・テキストサイズ等のルールは `.claude/skills/design-spec.md` の「トピックページ UI ルール」セクションを参照すること
+- **ホームページ（トピック一覧）・カテゴリ一覧の背景色はヘッダーに合わせる必要なし**（現状満足済み・変更不要）
+- ダッシュボード・その他ページを改修する際は design-spec.md のルールに従って順次統一していく
 
 ## コーディング必須ルール
 - LaravelのAPIはboolean値を `0/1` で返す → JSXでは必ず `!!` 変換すること
@@ -117,7 +123,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v4.9-session19-analysis-testdata`
+- logos-next: `v5.0-session20-analysis-ui`
 - logos-laravel: `v4.0-p4-custom-thumbnail`
 
 ## Phase 2 未対応・将来検討項目
@@ -146,8 +152,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase2.md` | Phase 2 完了記録（Next.js移行・全17ページ・Step1〜14） |
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
 | `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 12〜） |
-| `.claude/skills/handoff-session20.md` | **最新引継ぎプロンプト** |
-| `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜16 アーカイブ） |
+| `.claude/skills/handoff-session21.md` | **最新引継ぎプロンプト** |
+| `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜20 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
 

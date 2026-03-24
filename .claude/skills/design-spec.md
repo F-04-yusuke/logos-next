@@ -32,6 +32,74 @@
 - ホバー時: `hover:shadow-md` または `hover:scale-105`
 - 賛否（賛成・反対）UIは導入しない（2項対立でまとめられないテーマが多いため）
 
+---
+
+## トピックページ UI ルール（Phase 4 Session 12〜20 で確立・全ページ共通基準）
+
+**トピックページ（`app/topics/[id]/`）が UI 基準。他ページ改修時はここに準拠すること。**
+
+### カード背景・ホバー
+- カード外枠背景: `bg-gray-50 dark:bg-[#131314]`（ページ背景と同化）
+- `border` / `shadow-sm` は**削除**（浮き上がり感を出さない）
+- ホバー: `hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors`
+
+### 左端アライメント（-ml-3 pl-3 パターン）
+- カード外枠に `-ml-3 pl-3 py-4 pr-4` を付与する
+- コンテンツ左端がセクション見出し（「〇件の投稿」等）と同軸に揃う
+- ホバー背景は左に 12px はみ出してよい（初期状態の見た目を優先）
+
+### 並び替え select スタイル（情報・コメント・分析タブ共通）
+```
+text-xs sm:text-sm rounded border border-gray-200 dark:border-gray-700
+bg-white dark:bg-[#131314] dark:text-white
+px-2 sm:px-3 py-1.5 cursor-pointer
+hover:bg-gray-100 dark:hover:bg-[#1e1f20]
+transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500
+```
+
+### 投稿・アクションボタン（グレー系）
+```
+bg-white border border-gray-300 hover:bg-gray-50
+dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800
+font-bold py-1.5 px-3 sm:px-4 rounded text-xs sm:text-sm transition-colors cursor-pointer
+```
+- **黄色（yellow）ボタンは分析タブの主アクション以外では使わない**
+- 補足投稿ボタン: `bg-blue-500 hover:bg-blue-600`（PostCard 準拠）
+
+### cursor-pointer
+- `<button>` `<select>` `<a>` すべてに明示的に `cursor-pointer` を付ける
+- アバター画像・ユーザー名エリア（将来プロフィールリンク対応を見越して）も付ける
+
+### フォントウェイト（Session 16 確立・全ページ適用済み）
+- **regular（400）と bold（700）の 2 種類のみ使用**
+- `font-semibold`（600）・`font-medium`（500）は使わない
+- 見出し・ユーザー名・ボタンラベル: `font-bold`
+- 本文・メタ情報・補足的テキスト: regular（クラスなし）
+
+### テキストサイズ基準（トピックページ）
+| 用途 | サイズ |
+|---|---|
+| カード内リンクタイトル | `text-sm font-bold` |
+| 投稿概要・コメント本文 | `text-[15px]` |
+| ユーザー名 | `text-[13px]` |
+| 日時・メタ情報 | `text-[11px]` |
+| バッジ・ラベル | `text-[10px] font-bold` |
+
+### 補足（supplement）UI パターン
+- 補足がある場合: フッターの「もっと見る」右隣に `📎 補足あり ▼/▲` トグルボタン
+- トグル展開でフッター直下にテキスト表示（常時展開しない）
+- 補足追加ボタン: `text-blue-500 hover:bg-blue-500/10 rounded-full`（オーナーのみ）
+- 補足フォームもフッター直下展開
+
+### プレビューとフル表示の統一
+- カード内プレビューはフル表示ページ（`/analyses/[id]` 等）と**同一の HTML 構造・CSS クラス**を使う
+- 高さを固定（`h-[200px]`）して `overflow-hidden` + グラデーション(`h-8`)でフェードアウト
+- 独自アレンジ（記号・別レイアウト）は加えない → ユーザーに違和感を与える
+
+### ページ別背景色の方針
+- **ホームページ（トピック一覧）・カテゴリ一覧**: コンテンツエリアの背景色は現状維持。ヘッダーと同じ背景色に揃える必要はない（満足済み）
+- トピック詳細・ダッシュボード等: `bg-[#131314]` でヘッダーと統一
+
 ## レスポンシブ
 - モバイルファーストで実装
 - sm: 640px / md: 768px / lg: 1024px

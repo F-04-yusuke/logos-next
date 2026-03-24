@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-24（Session 19 追記）
+最終更新: 2026-03-24（Session 20 追記）
 
 ---
 
@@ -490,6 +490,59 @@ PROユーザー一覧（ローカル）: admin（id=2）・user1（id=3）・use
 
 ---
 
+## Session 20: 分析タブ UI全面刷新・トピックページ UI基準確立（2026-03-24）
+
+### U-17: 分析タブ UI全面刷新 ✅
+
+**変更ファイル:** `app/topics/[id]/_components/AnalysisCard.tsx`、`app/topics/[id]/_components/TopicPageClient.tsx`、`app/topics/[id]/hooks/useTopicPage.ts`、`app/topics/[id]/_components/CommentCard.tsx`、`app/analyses/[id]/page.tsx`
+
+#### AnalysisCard.tsx 主要変更
+
+| 変更 | 変更前 | 変更後 |
+|---|---|---|
+| カード外枠背景 | `p-4 bg-white dark:bg-[#1e1f20] border shadow-sm` | `-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors` |
+| プレビューボックス | `bg-gray-50 dark:bg-[#131314] maxHeight:400px` | `bg-white dark:bg-[#1e1f20] h-[200px]`（固定高さ） |
+| グラデーション | `h-16 from-gray-50 dark:from-[#131314]` | `h-8 from-white dark:from-[#1e1f20]` |
+| ヘッダー行 | `flex flex-col`（2行） | `flex items-center gap-2 flex-wrap`（1行・ユーザー名+バッジ横並び） |
+| 補足表示 | 常時展開 | `📎 補足あり ▼/▲` トグルボタン（「もっと見る」右隣） |
+| 補足追加ボタン | `bg-yellow-500` | `text-blue-500 hover:bg-blue-500/10 rounded-full` |
+| 投稿ボタン | `bg-yellow-500` | `bg-white border border-gray-300 dark:bg-[#1e1f20]`（グレー系） |
+| テーマ表示 | なし | tree/matrix: `data.theme`、swot: `analysis.title`（`font-bold text-sm`） |
+
+#### プレビューをフル表示と統一
+
+| 分析タイプ | プレビュー内容（`/analyses/[id]` と同一構造） |
+|---|---|
+| tree | カード型ノード（`bg-gray-50 p-2.5 rounded-lg border`）、子ノード2件表示 |
+| matrix | 実テーブル（バッジ: ◎最適/〇良い/△懸念/×不可 + reason テキスト） |
+| swot | `border-t-4` カラーボックス4分割（英ラベル+日本語サブ+色付き箇条書き） |
+
+#### 並び替え機能追加（人気順/新着順/古い順）
+
+- `useTopicPage.ts` に `analysisSort`・`sortedAnalyses` 追加
+- `TopicPageClient.tsx` に情報タブと同スタイルの select 追加
+
+#### コメントタブ テキストサイズ調整
+
+- `CommentCard.tsx`: コメント本文 `text-[14px]` → `text-[15px]`（情報タブ投稿概要と統一）
+
+#### Next.js 16 params Promise 修正
+
+- `app/analyses/[id]/page.tsx`: `params.id` を直接参照 → `const { id } = use(params)` に修正
+
+### トピックページ UI 基準確立 ✅
+
+- `app/topics/[id]/` が全ページの UI デザイン基準として確立
+- ルールを `.claude/skills/design-spec.md` の「トピックページ UI ルール」セクションに文書化
+- `CLAUDE.md` に「トピックページが UI 基準」として明記
+
+### Gitタグ（Session 20）
+
+- logos-next: `v5.0-session20-analysis-ui`
+- logos-laravel: `v4.0-p4-custom-thumbnail`（変更なし）
+
+---
+
 ## Phase 4 残タスク（優先度別）
 
 ### 最優先：UI/UX 継続改善
@@ -501,10 +554,11 @@ PROユーザー一覧（ローカル）: admin（id=2）・user1（id=3）・use
 - Geminiカラー・フォント・タイポグラフィ統一（Session 17）
 - ヘッダー・サイドバー・PostCard・情報タブ UI調整（Session 18）
 - コメントタブ UI調整（Session 19）
+- 分析タブ UI全面刷新・トピックページ UI基準確立（Session 20）
 
-**次のターゲット（Session 20 予定）:**
-- 分析タブ UI/UX 改善
-- トップページ（トピック一覧）UI/UX 改善
+**次のターゲット（Session 21 予定）:**
+- トップページ（トピック一覧）UI/UX 改善（design-spec.md ルール適用）
+- ダッシュボード UI/UX 改善
 - その他全ページ
 
 ### 優先度高
