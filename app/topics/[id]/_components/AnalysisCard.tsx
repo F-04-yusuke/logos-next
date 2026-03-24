@@ -192,10 +192,15 @@ export function AnalysisCard({
         </div>
       </div>
 
-      {/* Title for swot */}
-      {analysis.type === "swot" && (
-        <div className="font-bold text-base text-gray-900 dark:text-g-text -mb-1">{analysis.title}</div>
-      )}
+      {/* Title */}
+      {(() => {
+        const theme = analysis.type === "swot"
+          ? analysis.title
+          : (analysis.data as Record<string, unknown>).theme as string | undefined;
+        return theme ? (
+          <div className="font-bold text-base text-gray-900 dark:text-g-text -mb-1">{theme}</div>
+        ) : null;
+      })()}
 
       {/* Preview */}
       <div className="rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1f20] p-4 text-sm overflow-hidden relative" style={{ maxHeight: "400px" }}>
