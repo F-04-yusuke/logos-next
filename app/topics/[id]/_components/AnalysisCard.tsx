@@ -203,7 +203,7 @@ export function AnalysisCard({
       })()}
 
       {/* Preview */}
-      <div className="rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1f20] p-4 text-sm overflow-hidden relative" style={{ maxHeight: "400px" }}>
+      <div className="rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1f20] p-4 text-sm overflow-hidden relative h-[200px]">
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent dark:from-[#1e1f20] dark:to-transparent pointer-events-none" />
         <AnalysisPreview analysis={analysis} />
       </div>
