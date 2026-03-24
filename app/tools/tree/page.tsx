@@ -27,8 +27,8 @@ type ChatMsg = {
 
 // ===== Constants =====
 
-const SPEAKERS = ["ユーザーA", "ユーザーB", "ユーザーC", "自分 (自)", "その他"];
-const STANCES = ["主張", "反論", "賛成・補足", "疑問"];
+const SPEAKERS = ["自分 (自)", "ユーザーA", "ユーザーB", "ユーザーC", "ユーザーD", "ユーザーE", "その他"];
+const STANCES = ["主張", "反論", "賛成・補足", "疑問", "解決策", "根拠", "事実", "仮説", "前提"];
 
 // ===== Helpers =====
 
@@ -56,10 +56,12 @@ function computeLabels(nodes: TreeNode[]): Map<string, string> {
     for (const node of list) {
       const s = node.speaker;
       let p = "他";
-      if (s.includes("A")) p = "A";
+      if (s.includes("自分")) p = "自";
+      else if (s.includes("A")) p = "A";
       else if (s.includes("B")) p = "B";
       else if (s.includes("C")) p = "C";
-      else if (s.includes("自分")) p = "自";
+      else if (s.includes("D")) p = "D";
+      else if (s.includes("E")) p = "E";
       counts[p] = (counts[p] || 0) + 1;
       labels.set(node.id, p + counts[p]);
       traverse(node.children);
@@ -100,6 +102,16 @@ function getStanceStyle(stance: string) {
       return "bg-green-100 text-green-600 border-green-200 dark:bg-green-400/10 dark:text-green-400 dark:border-green-400/30";
     case "疑問":
       return "bg-yellow-100 text-yellow-600 border-yellow-200 dark:bg-yellow-400/10 dark:text-yellow-400 dark:border-yellow-400/30";
+    case "解決策":
+      return "bg-blue-100 text-blue-600 border-blue-200 dark:bg-blue-400/10 dark:text-blue-400 dark:border-blue-400/30";
+    case "根拠":
+      return "bg-purple-100 text-purple-600 border-purple-200 dark:bg-purple-400/10 dark:text-purple-400 dark:border-purple-400/30";
+    case "事実":
+      return "bg-teal-100 text-teal-600 border-teal-200 dark:bg-teal-400/10 dark:text-teal-400 dark:border-teal-400/30";
+    case "仮説":
+      return "bg-orange-100 text-orange-600 border-orange-200 dark:bg-orange-400/10 dark:text-orange-400 dark:border-orange-400/30";
+    case "前提":
+      return "bg-indigo-100 text-indigo-600 border-indigo-200 dark:bg-indigo-400/10 dark:text-indigo-400 dark:border-indigo-400/30";
     default:
       return "";
   }
@@ -200,7 +212,7 @@ function NodeEditor({
         <button
           type="button"
           onClick={() => onChange({ ...node, children: [...node.children, createNode()] })}
-          className="mt-1 text-[12px] font-bold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center w-fit py-1 pr-2"
+          className="mt-1 text-[13px] font-bold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center w-fit py-1 pr-2"
         >
           <span className="mr-1">＋</span> 返信を追加
         </button>
@@ -407,7 +419,7 @@ function TreePageInner() {
 このテーマについて、多角的な議論を展開するロジックツリー（主張とそれに対する賛成・反論・疑問の分岐）を自動生成してください。
 深さは2〜3階層、合計5〜8ノード程度にしてください。
 各ノードは以下のプロパティを持つJSONオブジェクトの配列として出力してください。他のテキストは一切含めないでください。
-※ "speaker" の値は必ず「自分 (自)」「ユーザーA」「ユーザーB」「ユーザーC」のいずれかにしてください。
+※ "speaker" の値は必ず「自分 (自)」「ユーザーA」「ユーザーB」「ユーザーC」「ユーザーD」「ユーザーE」「その他」のいずれかにしてください。
 [{"speaker":"自分 (自)","stance":"主張","text":"テーマに対するメインの主張","children":[{"speaker":"ユーザーA","stance":"反論","text":"反論","children":[]}]}]`;
 
     try {
