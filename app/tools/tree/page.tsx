@@ -188,7 +188,7 @@ function NodeEditor({
           onChange={(e) => onChange({ ...node, text: e.target.value })}
           rows={1}
           placeholder="意見を入力..."
-          className="w-full bg-transparent text-gray-900 dark:text-g-text text-[15px] sm:text-sm py-1 focus:outline-none placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed resize-none overflow-hidden"
+          className="w-full bg-transparent text-gray-900 dark:text-g-text text-[15px] py-1 focus:outline-none placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed resize-none overflow-hidden"
           onInput={(e) => {
             const t = e.target as HTMLTextAreaElement;
             t.style.height = "auto";
@@ -200,7 +200,7 @@ function NodeEditor({
         <button
           type="button"
           onClick={() => onChange({ ...node, children: [...node.children, createNode()] })}
-          className="mt-2 text-[12px] font-bold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center w-fit py-1 pr-2"
+          className="mt-1 text-[12px] font-bold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center w-fit py-1 pr-2"
         >
           <span className="mr-1">＋</span> 返信を追加
         </button>
@@ -217,7 +217,7 @@ function NodeEditor({
                   - height 16px → bottom border at y=16px ≈ child avatar vertical center (h-8/2)
                 */}
                 <div
-                  className="absolute pointer-events-none -left-7 top-0 w-11 h-4 border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
+                  className="absolute pointer-events-none -left-7 top-0 w-7 h-4 border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
                   aria-hidden="true"
                 />
                 <NodeEditor
