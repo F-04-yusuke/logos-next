@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
@@ -121,95 +121,137 @@ function PostCard({
   post: DashboardPost;
   isDraft?: boolean;
 }) {
+  const [openComment, setOpenComment] = useState(false);
+  const [openSupplementView, setOpenSupplementView] = useState(false);
+  const [isTruncated, setIsTruncated] = useState(false);
+  const commentRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const el = commentRef.current;
+    if (!el) return;
+    setIsTruncated(el.scrollHeight > el.clientHeight);
+  }, [post.comment]);
+
+  const domain = (() => {
+    try { return new URL(post.url).hostname; } catch { return ""; }
+  })();
+  const isYoutube = domain.includes("youtube.com") || domain.includes("youtu.be");
+  const isX = domain.includes("x.com") || domain.includes("twitter.com");
+
   return (
     <div
-      className={`-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col md:flex-row gap-3 hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors ${
-        isDraft ? "border-l-2 border-yellow-400 dark:border-yellow-600" : ""
+      className={`-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors${
+        isDraft ? " border-l-2 border-yellow-400 dark:border-yellow-600" : ""
       }`}
     >
-      {/* サムネイル */}
-      <div className="md:w-1/4 flex-shrink-0">
-        <a href={post.url} target="_blank" rel="noopener noreferrer" className="block group">
-          {post.thumbnail_url ? (
-            <div className="w-full aspect-video rounded-md overflow-hidden mb-2 bg-gray-100 dark:bg-gray-800">
-              <img
-                src={post.thumbnail_url}
-                alt="サムネイル"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          ) : isDraft ? (
-            // 下書き時: 点線枠の「準備中」プレースホルダー（本投稿時にOGP取得）
+      <div className="flex flex-col md:flex-row gap-4 min-h-[170px]">
+        {/* 左列: サムネイル + タイトル */}
+        <div className="md:w-[30%] flex-shrink-0">
+          {isDraft && !post.thumbnail_url ? (
             <div className="w-full aspect-video bg-gray-100 dark:bg-[#131314] rounded-md mb-2 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-yellow-300 dark:border-yellow-700">
               <span className="text-xs font-bold text-yellow-600 dark:text-yellow-500">準備中</span>
             </div>
           ) : (
-            <div className="w-full aspect-video bg-gray-100 dark:bg-[#131314] rounded-md mb-2 flex flex-col items-center justify-center text-gray-400 border border-gray-200 dark:border-gray-700 group-hover:border-gray-500 transition-colors">
-              <svg
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 mb-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                />
-              </svg>
-              <span className="text-xs">No Image</span>
-            </div>
+            <a href={post.url} target="_blank" rel="noopener noreferrer" className="block group mb-2">
+              {post.thumbnail_url ? (
+                <div className="w-full aspect-video rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800">
+                  <img src={post.thumbnail_url} alt="サムネイル" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                </div>
+              ) : isYoutube ? (
+                <div className="w-full aspect-video bg-white rounded-md flex items-center justify-center border border-gray-200 dark:border-gray-700 group-hover:border-gray-400 transition-colors">
+                  <svg viewBox="0 0 90 20" xmlns="http://www.w3.org/2000/svg" className="w-24" aria-label="YouTube">
+                    <path d="M27.97 3.06S27.68 1.1 26.84.24C25.78-.89 24.59-.9 24.04-.84 20.1-.56 14.54-.56 14.54-.56h-.01s-5.56 0-9.5-.28C4.48-.9 3.3-.89 2.23.24 1.39 1.1 1.1 3.06 1.1 3.06S.8 5.35.8 7.64v2.14c0 2.29.3 4.58.3 4.58s.29 1.96 1.13 2.82c1.07 1.13 2.48 1.1 3.11 1.21 2.26.22 9.6.29 9.6.29s5.57-.01 9.51-.29c.55-.07 1.74-.07 2.8-1.21.84-.86 1.13-2.82 1.13-2.82s.3-2.29.3-4.58V7.64c0-2.29-.3-4.58-.3-4.58zM11.52 13.27V5.87l7.56 3.71-7.56 3.69z" fill="#FF0000"/>
+                    <path d="M35.4 12.69V4.94h1.82l2.44 5.37 2.43-5.37h1.81v7.75H42.4V7.25l-2.14 5.44h-1.2L36.9 7.25v5.44H35.4zm13.25.14c-.81 0-1.49-.22-2.04-.67-.55-.45-.82-1.12-.82-2.02V8.66c0-.85.27-1.52.81-2.01.54-.49 1.22-.73 2.05-.73.83 0 1.51.24 2.04.72.53.48.8 1.15.8 2.02v1.48h-4.16v.4c0 .39.1.69.3.92.2.22.5.33.88.33.3 0 .55-.07.73-.21.18-.14.3-.33.36-.58l1.8.19c-.13.56-.42 1-.87 1.32-.45.32-1.03.49-1.75.49zm-.01-6.44c-.34 0-.61.1-.82.31-.2.2-.31.49-.31.87v.36h2.26V7.53c0-.38-.1-.67-.31-.87-.21-.21-.48-.31-.82-.31zm5.25 6.3V6.06h1.54v.77c.36-.56.87-.85 1.53-.85.52 0 .93.16 1.23.49.3.33.45.79.45 1.39v4.83H56.1V8.07c0-.29-.07-.52-.2-.68-.13-.16-.32-.24-.57-.24-.26 0-.5.1-.71.31-.21.21-.31.49-.31.84v4.43H53.9zm8.17-7.75v1.7h1.1v1.24h-1.1v3.46c0 .24.05.41.15.5.1.09.28.14.55.14h.4v1.3h-.78c-.63 0-1.1-.14-1.4-.43-.3-.28-.46-.73-.46-1.35V7.88H59.6V6.64h.92V4.94h1.54zm4.7 7.89c-.81 0-1.49-.22-2.04-.67-.55-.45-.82-1.12-.82-2.02V8.66c0-.85.27-1.52.81-2.01.54-.49 1.22-.73 2.05-.73.83 0 1.51.24 2.04.72.53.48.8 1.15.8 2.02v1.48h-4.16v.4c0 .39.1.69.3.92.2.22.5.33.88.33.3 0 .55-.07.73-.21.18-.14.3-.33.36-.58l1.8.19c-.13.56-.42 1-.87 1.32-.45.32-1.03.49-1.75.49zm-.01-6.44c-.34 0-.61.1-.82.31-.2.2-.31.49-.31.87v.36h2.26V7.53c0-.38-.1-.67-.31-.87-.21-.21-.48-.31-.82-.31zm4.17 6.3V6.06h1.54v.85c.16-.3.4-.54.71-.7.31-.16.65-.24 1.01-.24.1 0 .19.01.27.02v1.6c-.14-.04-.28-.06-.42-.06-.42 0-.77.14-1.04.41-.27.27-.41.62-.41 1.05v3.7H70.93zm5.67 0V6.06h1.54v6.63H76.6zm0-7.64v-1.5h1.54v1.5H76.6zm5.29 7.78c-.81 0-1.49-.22-2.04-.67-.55-.45-.82-1.12-.82-2.02V8.66c0-.85.27-1.52.81-2.01.54-.49 1.22-.73 2.05-.73.83 0 1.51.24 2.04.72.53.48.8 1.15.8 2.02v1.48h-4.16v.4c0 .39.1.69.3.92.2.22.5.33.88.33.3 0 .55-.07.73-.21.18-.14.3-.33.36-.58l1.8.19c-.13.56-.42 1-.87 1.32-.45.32-1.03.49-1.75.49zm-.01-6.44c-.34 0-.61.1-.82.31-.2.2-.31.49-.31.87v.36h2.26V7.53c0-.38-.1-.67-.31-.87-.21-.21-.48-.31-.82-.31z" fill="#282828"/>
+                  </svg>
+                </div>
+              ) : isX ? (
+                <div className="w-full aspect-video bg-black rounded-md flex items-center justify-center border border-gray-700 group-hover:border-gray-500 transition-colors">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 text-white" aria-label="X" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </div>
+              ) : (
+                <div className="w-full aspect-video bg-gray-100 dark:bg-[#131314] rounded-md flex flex-col items-center justify-center text-gray-400 border border-gray-200 dark:border-gray-700 group-hover:border-gray-500 transition-colors">
+                  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                  <span className="text-xs">No Image</span>
+                </div>
+              )}
+            </a>
           )}
-          <h4 className="font-bold text-sm text-gray-900 dark:text-g-text group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
-            {isDraft && !post.title
-              ? "※本投稿時にサムネイルとタイトルを自動取得します"
-              : (post.title || "タイトルを取得できませんでした")}
-          </h4>
-        </a>
-      </div>
-
-      {/* 本文 */}
-      <div className="md:w-3/4 flex flex-col justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <UserAvatar user={post.user} size="sm" />
-            <div className="flex items-baseline gap-2">
-              <span className="font-bold text-[13px] text-gray-900 dark:text-g-text">
-                {post.user.name}
-              </span>
-              <span className="text-[11px] text-gray-500">{timeAgo(post.created_at)}</span>
-            </div>
-            <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-g-sub">
-              {post.category}
-            </span>
-          </div>
-          {post.comment && (
-            <div className="text-[13px] text-gray-800 dark:text-g-text whitespace-pre-wrap mt-1 leading-relaxed">
-              {post.comment}
-            </div>
-          )}
-          {post.supplement && (
-            <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800/50 text-sm">
-              <span className="font-bold text-blue-600 dark:text-blue-400 text-[10px] block mb-1" aria-hidden="true">
-                ✅ 投稿者からの補足
-              </span>
-              <p className="text-gray-800 dark:text-g-text whitespace-pre-wrap">{post.supplement}</p>
-            </div>
-          )}
+          <a href={post.url} target="_blank" rel="noopener noreferrer" className="group">
+            <h4 className="font-bold text-sm text-gray-900 dark:text-g-text group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
+              {isDraft && !post.title
+                ? "※本投稿時にサムネイルとタイトルを自動取得します"
+                : (post.title || "タイトルを取得できませんでした")}
+            </h4>
+          </a>
         </div>
-        <div className="mt-3 flex items-center justify-end gap-3">
-          <div className="flex items-center space-x-1 text-gray-900 dark:text-white font-bold py-1 px-2">
-            <span className="sr-only">いいね</span>
-            <ThumbUpIcon size="md" />
-            {post.likes_count > 0 && (
-              <span className="text-sm" aria-hidden="true">{post.likes_count}</span>
+
+        {/* 右列: ユーザー情報・概要・アクション */}
+        <div className="md:w-[70%] flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 cursor-pointer">
+                <UserAvatar user={post.user} size="sm" />
+                <span className="text-[13px] text-gray-900 dark:text-g-text">{post.user.name}</span>
+              </div>
+              <span className="text-[11px] text-gray-500 dark:text-g-sub">{timeAgo(post.created_at)}</span>
+              <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-g-sub">
+                {post.category}
+              </span>
+            </div>
+            {post.comment && (
+              <div className="mt-2 break-all">
+                <p
+                  ref={commentRef}
+                  className={`text-[15px] text-gray-800 dark:text-g-text leading-relaxed${openComment ? "" : " line-clamp-3"}`}
+                >
+                  {post.comment}
+                </p>
+                {!openComment && isTruncated && (
+                  <button type="button" onClick={() => setOpenComment(true)} className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full cursor-pointer">
+                    続きを読む
+                  </button>
+                )}
+                {openComment && (
+                  <button type="button" onClick={() => setOpenComment(false)} className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full cursor-pointer">
+                    閉じる
+                  </button>
+                )}
+              </div>
             )}
           </div>
+
+          {/* アクション行 */}
+          <div className="mt-2 flex items-center">
+            {post.supplement && (
+              <button type="button" onClick={() => setOpenSupplementView((v) => !v)} className="text-[13px] text-gray-500 hover:text-gray-300 hover:bg-white/[0.07] transition-colors py-1 px-2 rounded-full cursor-pointer">
+                📎 補足あり {openSupplementView ? "▲" : "▼"}
+              </button>
+            )}
+            <div className="ml-auto flex items-center gap-3 pr-2">
+              <div className="flex items-center space-x-1 text-gray-500 dark:text-g-sub py-1 px-2">
+                <span className="sr-only">いいね数</span>
+                <ThumbUpIcon size="md" />
+                {post.likes_count > 0 && <span className="text-sm" aria-hidden="true">{post.likes_count}</span>}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* 補足展開 */}
+      {post.supplement && openSupplementView && (
+        <div className="flex md:gap-4">
+          <div className="hidden md:block md:w-[30%] flex-shrink-0" />
+          <div className="flex-1 pt-2 pb-1">
+            <span className="text-xs text-gray-500 dark:text-g-sub block mb-1">投稿者からの補足</span>
+            <p className="text-[13px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">{post.supplement}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -690,16 +732,20 @@ export default function DashboardPage() {
                           </p>
                         </div>
                         <div className="flex items-center gap-3 shrink-0">
-                          <Link
-                            href={`${typeInfo.editPath}?edit=${analysis.id}`}
-                            className="text-xs text-blue-500 hover:text-blue-700 font-bold transition-colors"
-                          >
-                            編集
-                          </Link>
-                          <span className="text-gray-300 dark:text-gray-700">|</span>
+                          {!analysis.is_published && (
+                            <>
+                              <Link
+                                href={`${typeInfo.editPath}?edit=${analysis.id}`}
+                                className="text-xs text-blue-500 hover:text-blue-700 font-bold transition-colors cursor-pointer"
+                              >
+                                編集
+                              </Link>
+                              <span className="text-gray-300 dark:text-gray-700">|</span>
+                            </>
+                          )}
                           <button
                             onClick={() => deleteAnalysis(analysis.id)}
-                            className="text-xs text-red-400 hover:text-red-600 font-bold transition-colors"
+                            className="text-xs text-red-400 hover:text-red-600 font-bold transition-colors cursor-pointer"
                           >
                             削除
                           </button>
