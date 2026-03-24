@@ -453,6 +453,7 @@ function MatrixPageInner() {
           </div>
 
           {/* Matrix Table */}
+          <div className="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
           <div className="overflow-x-auto custom-scroll">
             <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
@@ -616,6 +617,7 @@ function MatrixPageInner() {
                   </tr>
                 </tfoot>
               </table>
+          </div>
           </div>
 
           {/* AI Chat */}
