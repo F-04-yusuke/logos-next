@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { getAuthHeaders } from "@/lib/auth";
 
@@ -232,20 +232,21 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
 }
 
 // -------- ページ本体 --------
-export default function AnalysisShowPage({ params }: { params: { id: string } }) {
+export default function AnalysisShowPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/analyses/${params.id}`, { headers: getAuthHeaders() })
+    fetch(`${API_BASE}/api/analyses/${id}`, { headers: getAuthHeaders() })
       .then(async (res) => {
         if (!res.ok) { setNotFound(true); return; }
         setAnalysis(await res.json());
       })
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
-  }, [params.id]);
+  }, [id]);
 
   const typeLabel = () => {
     if (!analysis) return "";
