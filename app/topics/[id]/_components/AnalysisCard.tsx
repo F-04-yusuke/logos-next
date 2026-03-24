@@ -35,34 +35,56 @@ export function typeBadge(type: TopicAnalysis["type"], data: Record<string, unkn
   return null;
 }
 
+function stanceStyle(stance?: string) {
+  if (stance === "反論") return "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800";
+  if (stance === "賛成・補足") return "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800";
+  if (stance === "疑問") return "bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800";
+  return "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-g-sub dark:border-gray-700";
+}
+
 function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
   if (analysis.type === "tree") {
-    const nodes = analysis.data.nodes ?? [];
-    const meta = analysis.data.meta;
+    const nodes = (analysis.data.nodes ?? []) as { speaker?: string; stance?: string; text?: string; children?: { speaker?: string; stance?: string; text?: string }[] }[];
+    const meta = analysis.data.meta as { url?: string; description?: string } | undefined;
     return (
       <div>
         {meta && (meta.url || meta.description) && (
-          <div className="mb-3 p-3 bg-white dark:bg-[#1e1f20] rounded border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="mb-3 p-3 bg-gray-50 dark:bg-[#131314] rounded border border-gray-200 dark:border-gray-700">
             <div className="text-[10px] font-bold text-blue-600 dark:text-blue-400 mb-1">事前情報</div>
-            {meta.description && <p className="text-xs text-gray-800 dark:text-g-text mb-1">{meta.description}</p>}
+            {meta.description && <p className="text-xs text-gray-700 dark:text-g-text mb-1">{meta.description}</p>}
             {meta.url && <a href={meta.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 hover:underline truncate block">{meta.url}</a>}
           </div>
         )}
-        <div className="space-y-2">
-          {nodes.slice(0, 5).map((node, i) => (
-            <div key={i}>
-              <div className="flex gap-2">
-                <span className="font-bold text-blue-500 shrink-0">{node.speaker}:</span>
-                <span className="text-gray-700 dark:text-g-text truncate">{node.text}</span>
-              </div>
-              {node.children?.slice(0, 2).map((child, j) => (
-                <div key={j} className="ml-4 flex gap-2 border-l-2 border-gray-300 dark:border-gray-700 pl-2 mt-1">
-                  <span className="font-bold text-gray-500 shrink-0">↳ {child.speaker}:</span>
-                  <span className="text-gray-600 dark:text-g-sub truncate">{child.text}</span>
+        <div className="pl-4 space-y-3">
+          {nodes.slice(0, 5).map((node, i) => {
+            const isSelf = node.speaker?.includes("自") ?? false;
+            return (
+              <div key={i}>
+                <div className="bg-gray-50 dark:bg-[#131314] p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 inline-block min-w-[200px] max-w-full">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className={`text-xs font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>{node.speaker}</span>
+                    {node.stance && (
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded border font-bold ${stanceStyle(node.stance)}`}>{node.stance}</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-800 dark:text-g-text leading-relaxed">{node.text}</p>
                 </div>
-              ))}
-            </div>
-          ))}
+                {node.children?.slice(0, 2).map((child, j) => (
+                  <div key={j} className="ml-8 mt-2">
+                    <div className="bg-gray-50 dark:bg-[#131314] p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 inline-block min-w-[200px] max-w-full">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className={`text-xs font-bold ${child.speaker?.includes("自") ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>{child.speaker}</span>
+                        {child.stance && (
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded border font-bold ${stanceStyle(child.stance)}`}>{child.stance}</span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-800 dark:text-g-text leading-relaxed">{child.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     );
@@ -137,25 +159,34 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
   }
   if (analysis.type === "swot") {
     const isPest = analysis.data.framework === "PEST";
-    const b1 = analysis.data.box1 ?? [];
-    const b2 = analysis.data.box2 ?? [];
-    const b3 = analysis.data.box3 ?? [];
-    const b4 = analysis.data.box4 ?? [];
+    const b1 = (analysis.data.box1 ?? []) as string[];
+    const b2 = (analysis.data.box2 ?? []) as string[];
+    const b3 = (analysis.data.box3 ?? []) as string[];
+    const b4 = (analysis.data.box4 ?? []) as string[];
     const boxes = [
-      { label: isPest ? "P (政治)" : "S (強み)", items: b1, color: "text-blue-500" },
-      { label: isPest ? "E (経済)" : "W (弱み)", items: b2, color: "text-red-500" },
-      { label: isPest ? "S (社会)" : "O (機会)", items: b3, color: "text-green-500" },
-      { label: isPest ? "T (技術)" : "T (脅威)", items: b4, color: "text-yellow-500" },
+      { label: isPest ? "Politics" : "Strengths", sub: isPest ? "政治" : "強み", items: b1, border: "border-blue-500", title: "text-blue-600 dark:text-blue-400", bullet: "text-blue-500" },
+      { label: isPest ? "Economy" : "Weaknesses", sub: isPest ? "経済" : "弱み", items: b2, border: "border-red-500", title: "text-red-600 dark:text-red-400", bullet: "text-red-500" },
+      { label: isPest ? "Society" : "Opportunities", sub: isPest ? "社会" : "機会", items: b3, border: "border-green-500", title: "text-green-600 dark:text-green-400", bullet: "text-green-500" },
+      { label: isPest ? "Technology" : "Threats", sub: isPest ? "技術" : "脅威", items: b4, border: "border-yellow-500", title: "text-yellow-600 dark:text-yellow-400", bullet: "text-yellow-500" },
     ];
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {boxes.map((box, i) => (
-          <div key={i}>
-            <span className={`font-bold mb-1 inline-block text-sm ${box.color}`}>{box.label}:</span>
-            <ul className="list-disc list-inside text-gray-700 dark:text-g-text space-y-0.5 text-xs">
+          <div key={i} className={`bg-white dark:bg-[#1e1f20] border-t-4 ${box.border} rounded-lg p-3 border-x border-b border-gray-200 dark:border-transparent`}>
+            <h3 className={`text-sm font-bold ${box.title} mb-2 border-b border-gray-200 dark:border-gray-700 pb-1.5 flex items-center`}>
+              <span className="text-base mr-1.5" aria-hidden="true">{box.label[0]}</span>
+              {box.label.slice(1)}
+              <span className="text-[10px] text-gray-500 dark:text-g-sub ml-1.5 font-normal">{box.sub}</span>
+            </h3>
+            <ul className="space-y-1 pl-1">
               {box.items.length === 0
-                ? <li className="text-gray-500">記載なし</li>
-                : box.items.slice(0, 3).map((txt, j) => <li key={j} className="truncate">{txt}</li>)
+                ? <li className="text-xs text-gray-500">記載なし</li>
+                : box.items.slice(0, 3).map((item, j) => (
+                    <li key={j} className="text-xs text-gray-800 dark:text-g-text flex items-start">
+                      <span aria-hidden="true" className={`${box.bullet} mr-1.5 mt-0.5 shrink-0`}>•</span>
+                      <span className="line-clamp-2">{item}</span>
+                    </li>
+                  ))
               }
             </ul>
           </div>
