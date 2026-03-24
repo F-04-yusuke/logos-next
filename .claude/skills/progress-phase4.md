@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-24（Session 24 追記）
+最終更新: 2026-03-24（Session 26 追記）
 
 ---
 
@@ -8,6 +8,63 @@
 
 Phase 3 完了後の次ステージ。ユーザー獲得・SEO・UI/UX強化・セキュリティ改善を目指す。
 Session 12 より開始。まず UI/UX の大幅改善から着手。
+
+---
+
+## Session 26: ログイン・登録・トピック作成・編集ページ豪華化・分析ツール設計調査（2026-03-24）
+
+### U-19: ログイン・登録画面 豪華化 ✅
+
+**ファイル:** `app/login/page.tsx`、`app/register/page.tsx`
+
+| 変更箇所 | 変更内容 |
+|---|---|
+| h2タイトル | 「LOGOSを始める」「新規アカウント作成」を中央配置（カード内タイトルはアクセントバー不要） |
+| ボタン | `transition-colors` → `duration-100` 統一 |
+
+### U-20: トピック作成・編集ページ 豪華化 ✅
+
+**ファイル:** `app/topics/create/page.tsx`、`app/topics/[id]/edit/page.tsx`
+
+| 変更箇所 | 変更内容 |
+|---|---|
+| ローディング | 「読み込み中...」テキスト → `animate-pulse` スケルトン |
+| h2タイトル | `pl-3 border-l-4 border-indigo-500` アクセントバー追加 |
+| 保存・作成ボタン | `transition-colors` → `duration-100` 統一 |
+
+### D-2: 分析ツール 設計調査・改修方針決定 ✅
+
+`app/tools/tree/page.tsx`・`app/tools/matrix/page.tsx`・`app/tools/swot/page.tsx` を読み込み調査。
+次フェーズ（Phase 5）での実装に向けた方針を決定。
+
+**確認した問題点と優先度:**
+1. **最優先:** `alert()` → インページトースト通知（保存成功・エラー）
+2. **高:** h1/h2に `border-l-2 border-yellow-500/60` アクセントバー（PRO系ルール適用）
+3. **高:** ローディング `return null` → スケルトン
+4. **中:** matrixの最高スコアパターンを強調（`ring-2 ring-blue-500`等）
+5. **中:** SWOTの4象限ボックスに薄い色背景追加
+
+**PROゲート画面について:** 既存のモーダル（PRO会員限定・機能一覧・アップグレードCTA付き）が
+訴求を担っているため改修不要。LP完成後にそこへの導線を追加する。
+
+---
+
+## Session 25: 残ページ豪華化（ダッシュボード・参考になった・閲覧履歴・通知・カテゴリ・プロフィール）（2026-03-24）
+
+### U-18: 残ページ 豪華化 ✅
+
+| ページ | ファイル | 主な変更 |
+|---|---|---|
+| ダッシュボード | `app/dashboard/page.tsx` | スケルトン・indigoタブ・ページヘッダーアクセントバー・セクション件数表示 |
+| 参考になった | `app/likes/page.tsx` | スケルトン・indigoタブ・ページヘッダー |
+| 閲覧履歴 | `app/history/page.tsx` | スケルトン・ページヘッダー・indigoカテゴリバッジ・日付見出しアクセントバー |
+| 通知 | `app/notifications/page.tsx` | スケルトン・ページヘッダーアクセントバー化 |
+| カテゴリ公開一覧 | `app/category-list/page.tsx` | スケルトン・ページヘッダー・ホバー白もや・indigo hover統一 |
+| カテゴリ管理(admin) | `app/categories/page.tsx` | スケルトン・ページヘッダー・セクション見出しアクセントバー |
+| カテゴリ別トピック一覧 | `app/categories/[id]/_components/CategoryTopicsClient.tsx` | h1アクセントバー・duration-100統一 |
+| プロフィール | `app/profile/page.tsx` | スケルトン・ページヘッダー・セクション見出しアクセントバー |
+
+**共通適用事項:** ローディングスケルトン化・ページタイトルアクセントバー・`duration-100`統一
 
 ---
 
