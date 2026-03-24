@@ -171,7 +171,7 @@ export function AnalysisCard({
     : null;
 
   return (
-    <div className="p-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col gap-3 hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors">
+    <div className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col gap-3 hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors">
       {/* Header */}
       <div className="flex items-center gap-3 mb-1 cursor-pointer">
         <div className="shrink-0 mt-0.5">
