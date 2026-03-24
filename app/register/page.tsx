@@ -72,7 +72,7 @@ export default function RegisterPage() {
         {/* ─── メインビュー（coming soon） ─── */}
         {!showDevForm && (
           <div>
-            <h2 className="text-lg font-bold text-gray-100 mb-6 pl-3 border-l-4 border-indigo-500">新規アカウント作成</h2>
+            <h2 className="text-lg font-bold text-gray-100 mb-6 text-center">新規アカウント作成</h2>
 
             {/* eKYC ボタン群 */}
             <div className="space-y-3">
