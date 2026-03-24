@@ -93,10 +93,10 @@ function scoreLabel(score: string) {
 
 // ===== ChatBubble =====
 
-function GeminiIcon({ className }: { className?: string }) {
+function AiIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z" />
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
     </svg>
   );
 }
@@ -114,8 +114,8 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
   if (msg.role === "loading") {
     return (
       <div className="flex gap-3 items-start">
-        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-400 flex items-center justify-center shrink-0 mt-0.5">
-          <GeminiIcon className="h-3.5 w-3.5 text-white animate-pulse" />
+        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-cyan-500/30">
+          <AiIcon className="h-3.5 w-3.5 text-white animate-pulse" />
         </div>
         <p className="text-sm dark:text-g-sub animate-pulse pt-1">生成中...</p>
       </div>
@@ -123,8 +123,8 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
   }
   return (
     <div className="flex gap-3 items-start">
-      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-400 flex items-center justify-center shrink-0 mt-0.5">
-        <GeminiIcon className="h-3.5 w-3.5 text-white" />
+      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-cyan-500/30">
+        <AiIcon className="h-3.5 w-3.5 text-white" />
       </div>
       <div className="text-sm dark:text-g-text whitespace-pre-wrap leading-relaxed flex-1 pt-0.5">
         {msg.text}
@@ -154,13 +154,7 @@ function MatrixPageInner() {
       ],
     },
   ]);
-  const [chatMsgs, setChatMsgs] = useState<ChatMsg[]>([
-    {
-      id: "init",
-      role: "ai",
-      text: "「評価項目に不足はないか」「パターンAのセルを埋める情報を調べて」など、表を完成させるためのサポートを行います。",
-    },
-  ]);
+  const [chatMsgs, setChatMsgs] = useState<ChatMsg[]>([]);
   const [aiInput, setAiInput] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -626,9 +620,13 @@ function MatrixPageInner() {
 
           {/* AI Chat */}
           <div className="mt-4 border-t border-gray-200 dark:border-gray-800 pt-8">
-            <h2 className="mb-4 text-sm font-bold text-gray-900 dark:text-g-text">
-              AIアシスタント
-            </h2>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-5 h-5 rounded bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shadow-sm shadow-cyan-500/30">
+                <AiIcon className="h-3 w-3 text-white" />
+              </div>
+              <h2 className="text-sm font-bold text-gray-900 dark:text-g-text">AIアシスタント</h2>
+              <span className="text-[11px] dark:text-g-sub">「評価項目に不足はないか」「パターンAのセルを埋める情報を調べて」など指示してみてください。</span>
+            </div>
 
             <div className="bg-[#131314] border border-gray-800 rounded-xl flex flex-col h-[350px] overflow-hidden">
               <div className="custom-scroll flex-1 overflow-y-auto p-4 space-y-4">
