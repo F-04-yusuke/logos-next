@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-24（Session 26 追記）
+最終更新: 2026-03-24（Session 27 追記）
 
 ---
 
@@ -8,6 +8,33 @@
 
 Phase 3 完了後の次ステージ。ユーザー獲得・SEO・UI/UX強化・セキュリティ改善を目指す。
 Session 12 より開始。まず UI/UX の大幅改善から着手。
+
+---
+
+## Session 27: 分析ツール3本 豪華化・UI統一（2026-03-24）
+
+### U-21: 分析ツール豪華化（tree / matrix / swot）✅
+
+**ファイル:** `app/tools/tree/page.tsx`・`app/tools/matrix/page.tsx`・`app/tools/swot/page.tsx`
+
+| 改修項目 | 内容 |
+|---|---|
+| `alert()` 廃止 | 保存成功・エラー時のブラウザ alert → `fixed top-4 right-4` インページトースト（緑/赤・3秒自動消去） |
+| スケルトン化 | `if (isLoading \|\| !user) return null`（真っ白）→ `animate-pulse` スケルトン |
+| h1 SVGアイコン | ツールごとの色付きSVGアイコンを保持（ツリー:紫、マトリクス:紫table、SWOT:緑4象限） |
+| テーマ入力 統一 | 3ツールのテーマ入力をSWOTスタイルに統一（コンパクトカード + インライン「AIで自動生成」ボタン） |
+| AIアシスタント h2 | 「AI SWOT・アシスタント」等 → シンプルに「AIアシスタント」に統一 |
+| 保存ボタン | 「ツリーを保存する」等 → 「保存する」に統一 |
+| 横幅統一 | tree `max-w-4xl`→`max-w-5xl`・matrix `max-w-7xl`→`max-w-5xl`・swot `max-w-5xl`（変更なし） |
+| Gemini Chat UI | チャット背景 `#131314`（ページ背景と同化）・ユーザー発言=`#1e1f20`枠付きカード・AI回答=グラデーション4角星アイコン+バブルなしテキスト |
+| Chat入力エリア | `#1e1f20`背景（`border-t`線なし） |
+| Chat外枠 | `border border-gray-800 rounded-xl` を付与（入力エリアは外枠内に収める） |
+| matrix 外枠削除 | テーブル外側の `bg-[#1e1f20] border` ラッパー削除 → テーブルを広げ色階層で視認性確保 |
+| matrix 色階層 | header/footer: `#252627`・左列: `#1e1f20`・データセル: `#1a1b1c`（hover: `#252627`） |
+| matrix 最高スコア強調 | `tfoot` の最高スコアパターンに `ring-2 ring-blue-500 rounded` 付与 |
+| SWOT 背景色 | 各象限に薄い色背景（box1: `dark:bg-blue-900/5`・box2: `dark:bg-red-900/5`・box3: `dark:bg-green-900/5`・box4: `dark:bg-yellow-900/5`） |
+| 説明テキスト移動 | ツリー: 「各コメントに自動でID...」テキストを「分岐を追加」ボタン直上に移動 |
+| matrix 初期値整理 | 「パターンA: 米国に同調」等→「パターンA」「パターンB」「評価項目1」に汎用化 |
 
 ---
 
