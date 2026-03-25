@@ -4,6 +4,24 @@
 
 ---
 
+## Session 29 完了内容（本番バグ修正）
+
+### B-1: Vercel本番で情報投稿が500エラー（マイグレーション未適用）
+
+- **原因**: `add_custom_thumbnail_to_posts_table`（2026-03-23）が本番DBに未適用。`create_personal_access_tokens_table` が既存テーブルと衝突してそれ以降のマイグレーションをブロックしていた
+- **修正**: `create_personal_access_tokens_table` に `Schema::hasTable()` チェック追加 → `php artisan migrate --force` で3件のPendingを適用
+- **教訓**: 詳細は `logos-laravel/.claude/skills/infra.md` の「2026-03-25 Session 29」セクション参照
+
+### B-2: Vercel本番でOGPサムネイルが取得できない
+
+- **原因①**: さくらサーバーの `file_get_contents` でHTTPS外部取得が失敗（SSL設定問題）
+- **原因②**: さくらのIPがYouTubeのサーバーサイドbot判定を受けており、curlでも最小HTMLしか返らない
+- **修正**: `OgpService` を curl ベースに全面書き替え + YouTube URL は oEmbed API から取得
+- **技術的負債**: `CURLOPT_SSL_VERIFYPEER => false` が残存（低リスク・Phase 5以降で改善検討）
+- **教訓**: 詳細は `logos-laravel/.claude/skills/infra.md` の「2026-03-25 Session 29」セクション参照
+
+---
+
 ## 前回セッション（Session 28）の完了内容
 
 ### U-22: 分析ツール3本 AIアシスタントUI刷新

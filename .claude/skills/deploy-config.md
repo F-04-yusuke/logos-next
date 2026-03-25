@@ -55,3 +55,42 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost
 ### 教訓
 - Vercelのビルドログはエラーなしでもランタイムエラーになりうる
 - SSR/CSRの使い分けはVercelとバックエンドのネットワーク疎通を事前確認してから決める
+
+---
+
+## Vercel環境のみAPIが失敗する場合の診断方法（Session 29 教訓）
+
+「ローカルでは動くがVercelでは動かない」APIエラーは、フロント側の `catch` がエラーを握りつぶしているため原因が見えにくい。以下の手順で診断する。
+
+### Step 1: マイグレーション漏れを確認
+本番APIが 500 を返す最多原因は「マイグレーション未適用」。新しいカラムへの書き込みで即500になる。
+
+```bash
+ssh gs-f04@gs-f04.sakura.ne.jp 'cd ~/www/logos && php artisan migrate:status'
+# Pending が表示されたら即 migrate --force を実行
+ssh gs-f04@gs-f04.sakura.ne.jp 'cd ~/www/logos && php artisan migrate --force'
+```
+
+### Step 2: curlで実際のAPIレスポンスを確認
+フロントの `alert("投稿に失敗しました")` だけではHTTPステータスもエラー内容もわからない。curlで直接叩くこと。
+
+```bash
+# トークン取得
+TOKEN=$(curl -s -X POST "https://gs-f04.sakura.ne.jp/api/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@test.com","password":"password"}' | python3 -c "import sys,json; print(json.load(sys.stdin).get('token',''))")
+
+# 失敗しているエンドポイントを直接テスト
+curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "https://gs-f04.sakura.ne.jp/api/topics/2/posts" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"url":"https://example.com","category":"記事","is_published":true}'
+```
+
+### Step 3: ローカルとVercelの差異を切り分ける
+| 状況 | 疑うべき原因 |
+|---|---|
+| 特定のエンドポイントだけ失敗 | マイグレーション未適用・バリデーションエラー |
+| 全エンドポイントが失敗 | 環境変数 `NEXT_PUBLIC_API_BASE_URL` 未設定・CORS |
+| サムネ・OGPだけ取れない | さくらサーバーの外部HTTP制約（→ logos-laravel の infra.md 参照） |
+| ローカルでは動く | ローカルとさくらのIP・環境差（さくらは `file_get_contents` でHTTPS外部取得が失敗する） |
