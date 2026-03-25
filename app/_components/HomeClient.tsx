@@ -160,17 +160,17 @@ export default function HomeClient({
           {/* ── ページヘッダー ── */}
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="font-bold text-xl text-g-text leading-tight">
+              <h2 className="font-bold text-2xl text-g-text leading-tight">
                 情報共有プラットフォーム
               </h2>
-              <p className="text-xs text-g-sub mt-1">
+              <p className="text-sm text-g-sub mt-1">
                 政治・経済・エンタメ・スポーツ・その他
               </p>
             </div>
             {!!user?.is_pro && (
               <Link
                 href="/topics/create"
-                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-base transition-colors cursor-pointer"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -190,7 +190,7 @@ export default function HomeClient({
                     key={cat.id}
                     onClick={() => setActiveTab(cat.id)}
                     className={[
-                      "flex-1 min-w-[72px] py-3 px-3 text-sm border-b-2 transition-all whitespace-nowrap cursor-pointer font-bold text-center",
+                      "flex-1 min-w-[72px] py-3 px-3 text-base border-b-2 transition-all whitespace-nowrap cursor-pointer font-bold text-center",
                       activeTab === cat.id
                         ? "border-blue-500 text-blue-400 bg-blue-500/[0.06]"
                         : "border-transparent text-g-sub hover:text-g-text hover:bg-white/[0.03]",
@@ -213,7 +213,7 @@ export default function HomeClient({
                         ))}
                       </div>
                     ) : tabTopics[cat.id].length === 0 ? (
-                      <p className="p-6 text-center text-sm text-g-sub">
+                      <p className="p-6 text-center text-base text-g-sub">
                         このカテゴリにはまだトピックがありません。
                       </p>
                     ) : (
@@ -225,14 +225,14 @@ export default function HomeClient({
                                 href={`/topics/${topic.id}`}
                                 className="flex items-center justify-between px-5 py-3.5 hover:bg-white/[0.04] transition-colors group cursor-pointer"
                               >
-                                <h4 className="font-bold text-g-text group-hover:text-blue-400 transition-colors line-clamp-1 text-sm flex-1 mr-4">
+                                <h4 className="font-bold text-g-text group-hover:text-blue-400 transition-colors line-clamp-1 text-base flex-1 mr-4">
                                   {topic.title}
                                 </h4>
                                 <div className="flex items-center gap-2 flex-shrink-0">
                                   <span className="w-7 text-center bg-white/[0.07] py-0.5 rounded text-[10px] tabular-nums text-g-sub">
                                     {topic.posts_count}
                                   </span>
-                                  <span className="w-14 text-right text-[11px] text-g-sub">
+                                  <span className="w-14 text-right text-sm text-g-sub">
                                     {timeAgo(topic.created_at)}
                                   </span>
                                 </div>
@@ -243,7 +243,7 @@ export default function HomeClient({
                         <div className="px-5 py-2.5 border-t border-white/[0.04] text-right">
                           <Link
                             href={`/categories/${cat.id}`}
-                            className="text-xs text-blue-500 hover:text-blue-400 transition-colors cursor-pointer"
+                            className="text-sm text-blue-500 hover:text-blue-400 transition-colors cursor-pointer"
                           >
                             {cat.name}のトピックをもっと見る →
                           </Link>
@@ -259,14 +259,14 @@ export default function HomeClient({
           {/* ── トピック一覧 ── */}
           <div>
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-base font-bold text-g-text flex items-center gap-2">
+              <h3 className="text-lg font-bold text-g-text flex items-center gap-2">
                 <span className="w-1 h-5 rounded-full bg-blue-500 inline-block" />
                 トピック一覧
               </h3>
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
-                className="text-xs sm:text-sm rounded border border-gray-700 bg-[#131314] text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-500"
+                className="text-sm sm:text-base rounded border border-gray-700 bg-[#131314] text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-500"
               >
                 <option value="newest">新着順</option>
                 <option value="popular">エビデンスが多い順</option>
@@ -276,7 +276,7 @@ export default function HomeClient({
 
             {loading && <TopicSkeleton />}
             {error && (
-              <p className="text-red-400 text-sm py-6 text-center">
+              <p className="text-red-400 text-base py-6 text-center">
                 トピックの取得に失敗しました
               </p>
             )}
@@ -309,17 +309,17 @@ export default function HomeClient({
                           </div>
                         )}
 
-                        <h4 className="text-[15px] font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors leading-snug">
+                        <h4 className="text-lg font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors leading-snug">
                           {topic.title}
                         </h4>
 
                         {topic.content && (
-                          <p className="text-[13px] text-g-sub line-clamp-2 mb-2 leading-relaxed">
+                          <p className="text-base text-g-sub line-clamp-2 mb-2 leading-relaxed">
                             {topic.content}
                           </p>
                         )}
 
-                        <div className="flex items-center gap-2 text-[11px] text-g-sub">
+                        <div className="flex items-center gap-2 text-sm text-g-sub">
                           <span>{topic.user.name}</span>
                           <span className="text-white/20">·</span>
                           <span className="flex items-center gap-1">
@@ -342,17 +342,17 @@ export default function HomeClient({
                     <button
                       onClick={() => fetchTopics(currentPage - 1, sort)}
                       disabled={currentPage <= 1}
-                      className="px-4 py-2 text-sm rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                      className="px-4 py-2 text-base rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                     >
                       ← 前へ
                     </button>
-                    <span className="text-sm text-g-sub px-2">
+                    <span className="text-base text-g-sub px-2">
                       {currentPage} / {lastPage}
                     </span>
                     <button
                       onClick={() => fetchTopics(currentPage + 1, sort)}
                       disabled={currentPage >= lastPage}
-                      className="px-4 py-2 text-sm rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                      className="px-4 py-2 text-base rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                     >
                       次へ →
                     </button>
@@ -366,13 +366,13 @@ export default function HomeClient({
         {/* ── 右サイドバー（1/3）sticky ── */}
         <div className="w-full lg:w-1/3">
           <div className="lg:sticky lg:top-6">
-            <h3 className="text-base font-bold text-g-text mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-bold text-g-text mb-4 flex items-center gap-2">
               <span className="w-1 h-5 rounded-full bg-orange-500 inline-block" />
               人気トピック
             </h3>
 
             {popularTopics.length === 0 ? (
-              <p className="text-sm text-g-sub text-center py-4">
+              <p className="text-base text-g-sub text-center py-4">
                 まだトピックがありません。
               </p>
             ) : (
@@ -384,15 +384,15 @@ export default function HomeClient({
                       className="flex items-start gap-3 -ml-2 pl-2 pr-3 py-3 hover:bg-white/[0.04] rounded-xl transition-colors group cursor-pointer"
                     >
                       <div
-                        className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold mt-0.5 ${rankBadgeClass(index)}`}
+                        className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-sm font-bold mt-0.5 ${rankBadgeClass(index)}`}
                       >
                         {index + 1}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-[13px] font-bold text-g-text group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug mb-1">
+                        <h4 className="text-base font-bold text-g-text group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug mb-1">
                           {topic.title}
                         </h4>
-                        <div className="flex items-center gap-2 text-[11px] text-g-sub">
+                        <div className="flex items-center gap-2 text-sm text-g-sub">
                           <span className="flex items-center gap-1">
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
