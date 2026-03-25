@@ -135,120 +135,133 @@ function NodeEditor({
   const hasChildren = node.children.length > 0;
 
   return (
-    <div className="flex gap-3">
-      {/* === Left: avatar circle + vertical connector line === */}
-      <div className="flex flex-col items-center shrink-0 w-8">
-        {/* Avatar: shows auto-assigned label (A1, B1, 自1, etc.) */}
-        <div
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${
-            isSelf
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-          }`}
-        >
-          {label}
+    <div>
+      {/* === Parent row: avatar + content only (children rendered separately below) === */}
+      <div className="flex gap-3">
+        {/* Avatar + vertical line (flex-1 extends only to THIS node's content height) */}
+        <div className="flex flex-col items-center shrink-0 w-8">
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${
+              isSelf
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+            }`}
+          >
+            {label}
+          </div>
+          {/* Line ends at bottom of THIS node's content — never extends into children */}
+          {hasChildren && (
+            <div className="w-0.5 flex-1 bg-gray-300 dark:bg-gray-700 mt-1 rounded-full" />
+          )}
         </div>
-        {/* Vertical connector line (visible only when children exist) */}
-        {hasChildren && (
-          <div className="w-0.5 flex-1 bg-gray-300 dark:bg-gray-700 mt-1 rounded-full" />
-        )}
-      </div>
 
-      {/* === Right: content === */}
-      <div className="flex-1 min-w-0 pb-2">
-        {/* Header: speaker select + stance badge + delete */}
-        <div className="flex flex-wrap items-center gap-2 mb-2">
-          <select
-            value={node.speaker}
-            onChange={(e) => onChange({ ...node, speaker: e.target.value })}
-            className={`bg-transparent dark:bg-[#131314] text-sm font-bold focus:outline-none cursor-pointer py-0.5 ${getSpeakerColor(node.speaker)}`}
-          >
-            {SPEAKERS.map((s) => (
-              <option key={s} value={s} className="bg-white dark:bg-[#1e1f20]">
-                {s}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={node.stance}
-            onChange={(e) => onChange({ ...node, stance: e.target.value })}
-            className={`text-[11px] px-2.5 py-0.5 rounded-full focus:outline-none cursor-pointer border font-bold ${getStanceStyle(node.stance)}`}
-          >
-            {STANCES.map((s) => (
-              <option key={s} value={s} className="bg-white dark:bg-[#1e1f20]">
-                {s}
-              </option>
-            ))}
-          </select>
-
+        {/* Content: header + text + reply button (no children nested here) */}
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <select
+              value={node.speaker}
+              onChange={(e) => onChange({ ...node, speaker: e.target.value })}
+              className={`bg-transparent dark:bg-[#131314] text-sm font-bold focus:outline-none cursor-pointer py-0.5 ${getSpeakerColor(node.speaker)}`}
+            >
+              {SPEAKERS.map((s) => (
+                <option key={s} value={s} className="bg-white dark:bg-[#1e1f20]">
+                  {s}
+                </option>
+              ))}
+            </select>
+            <select
+              value={node.stance}
+              onChange={(e) => onChange({ ...node, stance: e.target.value })}
+              className={`text-[11px] px-2.5 py-0.5 rounded-full focus:outline-none cursor-pointer border font-bold ${getStanceStyle(node.stance)}`}
+            >
+              {STANCES.map((s) => (
+                <option key={s} value={s} className="bg-white dark:bg-[#1e1f20]">
+                  {s}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={onRemove}
+              className="ml-auto text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1 rounded"
+            >
+              <span className="sr-only">削除</span>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <textarea
+            value={node.text}
+            onChange={(e) => onChange({ ...node, text: e.target.value })}
+            rows={1}
+            placeholder="意見を入力..."
+            className="w-full bg-transparent text-gray-900 dark:text-g-text text-[15px] py-1 focus:outline-none placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed resize-none overflow-hidden"
+            onInput={(e) => {
+              const t = e.target as HTMLTextAreaElement;
+              t.style.height = "auto";
+              t.style.height = t.scrollHeight + "px";
+            }}
+          />
           <button
             type="button"
-            onClick={onRemove}
-            className="ml-auto text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1 rounded"
+            onClick={() => onChange({ ...node, children: [...node.children, createNode()] })}
+            className="mt-1 text-[13px] font-bold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center w-fit py-1 pr-2"
           >
-            <span className="sr-only">削除</span>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <span className="mr-1">＋</span> 返信を追加
           </button>
         </div>
-
-        {/* Text input */}
-        <textarea
-          value={node.text}
-          onChange={(e) => onChange({ ...node, text: e.target.value })}
-          rows={1}
-          placeholder="意見を入力..."
-          className="w-full bg-transparent text-gray-900 dark:text-g-text text-[15px] py-1 focus:outline-none placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed resize-none overflow-hidden"
-          onInput={(e) => {
-            const t = e.target as HTMLTextAreaElement;
-            t.style.height = "auto";
-            t.style.height = t.scrollHeight + "px";
-          }}
-        />
-
-        {/* Add reply button */}
-        <button
-          type="button"
-          onClick={() => onChange({ ...node, children: [...node.children, createNode()] })}
-          className="mt-1 text-[13px] font-bold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center w-fit py-1 pr-2"
-        >
-          <span className="mr-1">＋</span> 返信を追加
-        </button>
-
-        {/* Children with L-curve connectors */}
-        {hasChildren && (
-          <div className="mt-3 space-y-4">
-            {node.children.map((child, idx) => (
-              <div key={child.id} className="relative">
-                {/*
-                  L-curve connector:
-                  - left border at x=-28px → aligns with parent avatar center (w-8/2=16px, gap-3=12px → 16+12=28px left of content)
-                  - width 44px → right edge at x=16px = child avatar center (w-8/2)
-                  - height 16px → bottom border at y=16px ≈ child avatar vertical center (h-8/2)
-                */}
-                <div
-                  className="absolute pointer-events-none -left-7 top-0 w-7 h-4 border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
-                  aria-hidden="true"
-                />
-                <NodeEditor
-                  node={child}
-                  labels={labels}
-                  onChange={(updated) => {
-                    const newChildren = [...node.children];
-                    newChildren[idx] = updated;
-                    onChange({ ...node, children: newChildren });
-                  }}
-                  onRemove={() => {
-                    onChange({ ...node, children: node.children.filter((_, i) => i !== idx) });
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
       </div>
+
+      {/* === Children section: outside parent flex row so parent line never overruns === */}
+      {hasChildren && (
+        <div className="flex gap-3">
+          {/* Spacer matches avatar column width */}
+          <div className="shrink-0 w-8" />
+          <div className="flex-1 space-y-4">
+            {node.children.map((child, idx) => {
+              const isLast = idx === node.children.length - 1;
+              return (
+                <div key={child.id} className="relative">
+                  {isLast ? (
+                    /* Last child: curved L-connector — no vertical line below */
+                    <div
+                      className="absolute pointer-events-none -left-7 top-0 w-7 h-4 border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    /* Non-last child: vertical line bridges to next sibling + horizontal branch */
+                    <>
+                      <div
+                        className="absolute pointer-events-none w-0.5 bg-gray-300 dark:bg-gray-700 rounded-full"
+                        style={{ left: "-28px", top: 0, height: "calc(100% + 16px)" }}
+                        aria-hidden="true"
+                      />
+                      <div
+                        className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-gray-700"
+                        style={{ left: "-28px", top: "16px", width: "28px" }}
+                        aria-hidden="true"
+                      />
+                    </>
+                  )}
+                  <NodeEditor
+                    node={child}
+                    labels={labels}
+                    onChange={(updated) => {
+                      const newChildren = [...node.children];
+                      newChildren[idx] = updated;
+                      onChange({ ...node, children: newChildren });
+                    }}
+                    onRemove={() => {
+                      onChange({ ...node, children: node.children.filter((_, i) => i !== idx) });
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
