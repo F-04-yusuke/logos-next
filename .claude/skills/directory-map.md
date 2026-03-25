@@ -124,7 +124,7 @@ logos-next/
 │       ├── progress-phase2.md           # Phase 2 完了記録（Next.js移行・Step1〜14）
 │       ├── progress-phase3.md           # Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）
 │       ├── progress-phase4.md           # Phase 4 進行中記録（UI/UX改善・Session 12〜）
-│       ├── handoff-session32.md         # 最新引継ぎプロンプト
+│       ├── handoff-session33.md         # 最新引継ぎプロンプト
 │       └── handoff-archive/             # 過去セッション引継ぎ（Session 6〜31）
 ├── next.config.ts
 ├── package.json                         # swr@^2.4.1 など依存関係

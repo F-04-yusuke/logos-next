@@ -186,8 +186,9 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase1.md` | Phase 1 完了記録（Laravel Blade版MVP）・障害教訓 |
 | `.claude/skills/progress-phase2.md` | Phase 2 完了記録（Next.js移行・全17ページ・Step1〜14） |
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
-| `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 12〜） |
-| `.claude/skills/handoff-session32.md` | **最新引継ぎプロンプト** |
+| `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 20〜） |
+| `.claude/skills/progress-phase4-s12-s19.md` | Phase 4 アーカイブ（Session 12〜19・早期UI改善記録） |
+| `.claude/skills/handoff-session33.md` | **最新引継ぎプロンプト** |
 | `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜31 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
