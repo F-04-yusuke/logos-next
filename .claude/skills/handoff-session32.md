@@ -27,11 +27,31 @@
 
 ---
 
+## Session 32 完了内容（途中）
+
+### ドキュメント整理
+- `progress-phase4.md` を Session 12〜19（アーカイブ）と Session 20〜31（メイン）に分割
+- `progress-phase4-s12-s19.md` を新規作成
+
+### R-1: dashboard リファクタリング ✅
+
+`useTopicPage.ts` パターンに準拠した構成に整理。
+
+| ファイル | 変更内容 |
+|---|---|
+| `app/dashboard/_hooks/useDashboard.ts` | **新規** state・fetch・全10ハンドラ・下書き編集ロジックを集約（334行） |
+| `app/dashboard/_components/DraftEditModal.tsx` | **新規** 下書き編集モーダルUIを独立コンポーネントとして抽出（134行） |
+| `app/dashboard/page.tsx` | JSX描画・レイアウトのみに削ぎ落とし（774行 → 421行） |
+
+**タグ:** `v6.16-session32-before-dashboard-refactor` → `v6.17-session32-dashboard-refactor`
+
+---
+
 ## 現在のリポジトリ状態
 
 | リポジトリ | ブランチ | 最新タグ | 状態 |
 |---|---|---|---|
-| ~/logos-next | main | `v6.15-session31-card-unification` | クリーン |
+| ~/logos-next | main | `v6.17-session32-dashboard-refactor` | クリーン |
 | ~/logos-laravel | main | `v4.4-session31-liked-by-me` | クリーン |
 
 ---

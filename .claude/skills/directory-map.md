@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-25（Session 31 / PostCard・CommentCard 共通コンポーネント化）
+最終更新: 2026-03-25（Session 32 / dashboard リファクタリング）
 
 ```
 logos-next/
@@ -41,7 +41,11 @@ logos-next/
 │   ├── likes/
 │   │   └── page.tsx                     # /likes 参考になった一覧（3タブ: 情報/コメント/分析）
 │   ├── dashboard/
-│   │   └── page.tsx                     # /dashboard ダッシュボード（5タブ: 投稿/下書き/コメント/分析/トピック）
+│   │   ├── page.tsx                     # /dashboard ダッシュボード（5タブ: 投稿/下書き/コメント/分析/トピック・JSX描画のみ）
+│   │   ├── _hooks/
+│   │   │   └── useDashboard.ts          # state・fetch・全ハンドラ集約（useTopicPage パターン準拠・Session 32）
+│   │   └── _components/
+│   │       └── DraftEditModal.tsx       # 下書き編集モーダル（Session 32 抽出）
 │   ├── profile/
 │   │   └── page.tsx                     # /profile プロフィール編集（アバター・名前クールダウン・パスワード変更・アカウント削除）
 │   ├── history/
