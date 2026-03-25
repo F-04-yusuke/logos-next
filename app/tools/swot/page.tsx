@@ -84,7 +84,7 @@ function BoxPanel({
             {label[0]}
           </span>
           {label.slice(1)}{" "}
-          <span className="text-sm text-gray-500 dark:text-g-sub ml-2 font-normal">{subtitle}</span>
+          <span className="text-base text-gray-500 dark:text-g-sub ml-2 font-normal">{subtitle}</span>
         </h2>
       </div>
 
@@ -102,7 +102,7 @@ function BoxPanel({
               onChange={(e) => onUpdate(idx, e.target.value)}
               rows={1}
               placeholder="内容を入力..."
-              className="w-full bg-transparent text-[15px] sm:text-sm text-gray-800 dark:text-g-text focus:outline-none border-none focus:ring-0 p-0 resize-none leading-relaxed overflow-hidden"
+              className="w-full bg-transparent text-base text-gray-800 dark:text-g-text focus:outline-none border-none focus:ring-0 p-0 resize-none leading-relaxed overflow-hidden"
               onInput={(e) => {
                 const t = e.target as HTMLTextAreaElement;
                 t.style.height = "auto";
@@ -122,7 +122,7 @@ function BoxPanel({
 
       <button
         onClick={onAdd}
-        className={`text-xs font-bold text-gray-400 hover:${colors.title.split(" ")[0].replace("text-", "text-")} transition-colors flex items-center mt-auto pt-2 py-1 pr-2 w-fit`}
+        className={`text-sm font-bold text-gray-400 hover:${colors.title.split(" ")[0].replace("text-", "text-")} transition-colors flex items-center mt-auto pt-2 py-1 pr-2 w-fit`}
       >
         <span aria-hidden="true" className="mr-1">
           ＋
@@ -147,7 +147,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
   if (msg.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="bg-[#1e1f20] border border-gray-700 rounded-2xl rounded-tr-sm px-4 py-3 text-sm dark:text-g-text max-w-[85%] whitespace-pre-wrap leading-relaxed">
+        <div className="bg-[#1e1f20] border border-gray-700 rounded-2xl rounded-tr-sm px-4 py-3 text-base dark:text-g-text max-w-[85%] whitespace-pre-wrap leading-relaxed">
           {msg.text}
         </div>
       </div>
@@ -159,7 +159,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
         <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-cyan-500/30">
           <AiIcon className="h-3.5 w-3.5 text-white animate-pulse" />
         </div>
-        <p className="text-sm dark:text-g-sub animate-pulse pt-1">生成中...</p>
+        <p className="text-base dark:text-g-sub animate-pulse pt-1">生成中...</p>
       </div>
     );
   }
@@ -168,7 +168,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
       <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-cyan-500/30">
         <AiIcon className="h-3.5 w-3.5 text-white" />
       </div>
-      <div className="text-sm dark:text-g-text whitespace-pre-wrap leading-relaxed flex-1 pt-0.5">
+      <div className="text-base dark:text-g-text whitespace-pre-wrap leading-relaxed flex-1 pt-0.5">
         {msg.text}
       </div>
     </div>
@@ -413,7 +413,7 @@ function SwotPageInner() {
         )}
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-bold text-xl dark:text-g-text flex items-center gap-2">
+          <h1 className="font-bold text-2xl dark:text-g-text flex items-center gap-2">
             <svg aria-hidden="true" className="h-5 w-5 text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
@@ -423,7 +423,7 @@ function SwotPageInner() {
           <button
             onClick={saveSwot}
             disabled={isSaving}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-1.5 px-4 rounded text-sm transition-colors shadow-sm"
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-1.5 px-4 rounded text-base transition-colors shadow-sm"
           >
             {isSaving ? "保存中..." : "保存する"}
           </button>
@@ -432,13 +432,13 @@ function SwotPageInner() {
         <div className="flex flex-col gap-6">
           {/* Framework select */}
           <div className="border-b border-gray-200 dark:border-gray-800 pb-4">
-            <p className="text-sm text-gray-600 dark:text-g-sub mb-2">
+            <p className="text-base text-gray-600 dark:text-g-sub mb-2">
               内部要因・外部要因、またはマクロ環境を整理するフレームワークです。
             </p>
             <select
               value={framework}
               onChange={(e) => setFramework(e.target.value as Framework)}
-              className="bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-700 rounded text-gray-900 dark:text-g-text text-sm px-2 py-1 focus:outline-none focus:border-blue-500 font-bold cursor-pointer"
+              className="bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-700 rounded text-gray-900 dark:text-g-text text-base px-2 py-1 focus:outline-none focus:border-blue-500 font-bold cursor-pointer"
             >
               <option value="SWOT">SWOT分析 (強み・弱み・機会・脅威)</option>
               <option value="PEST">PEST分析 (政治・経済・社会・技術)</option>
@@ -456,13 +456,13 @@ function SwotPageInner() {
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
                 placeholder="例：AIの普及が社会に与える影響について"
-                className="w-full bg-transparent font-bold text-sm text-gray-900 dark:text-g-text focus:outline-none placeholder-gray-400 dark:placeholder-gray-600"
+                className="w-full bg-transparent font-bold text-base text-gray-900 dark:text-g-text focus:outline-none placeholder-gray-400 dark:placeholder-gray-600"
               />
             </div>
             <button
               onClick={generateWithAI}
               disabled={isGenerating}
-              className="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-bold py-2 px-4 rounded text-sm transition-colors shadow-sm shrink-0 flex items-center gap-1.5 cursor-pointer"
+              className="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-bold py-2 px-4 rounded text-base transition-colors shadow-sm shrink-0 flex items-center gap-1.5 cursor-pointer"
             >
               <svg aria-hidden="true" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -492,8 +492,8 @@ function SwotPageInner() {
               <div className="w-5 h-5 rounded bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shadow-sm shadow-cyan-500/30">
                 <AiIcon className="h-3 w-3 text-white" />
               </div>
-              <h2 className="text-sm font-bold text-gray-900 dark:text-g-text">AIアシスタント</h2>
-              <span className="text-[11px] dark:text-g-sub">「この強みを活かした戦略を提案して」など、SWOTをもとにAIと議論できます。</span>
+              <h2 className="text-base font-bold text-gray-900 dark:text-g-text">AIアシスタント</h2>
+              <span className="text-xs dark:text-g-sub">「この強みを活かした戦略を提案して」など、SWOTをもとにAIと議論できます。</span>
             </div>
 
             <div className="bg-[#131314] border border-gray-800 rounded-xl flex flex-col h-[350px] overflow-hidden">
@@ -516,7 +516,7 @@ function SwotPageInner() {
                     }}
                     rows={1}
                     placeholder="AIへの指示や質問を入力..."
-                    className="flex-1 bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-g-text text-sm p-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 max-h-32 transition-shadow resize-none overflow-hidden"
+                    className="flex-1 bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-g-text text-base p-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 max-h-32 transition-shadow resize-none overflow-hidden"
                     onInput={(e) => {
                       const t = e.target as HTMLTextAreaElement;
                       t.style.height = "auto";
@@ -525,7 +525,7 @@ function SwotPageInner() {
                   />
                   <button
                     onClick={sendAiMessage}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-md shrink-0"
+                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg font-bold text-base transition-colors shadow-md shrink-0"
                   >
                     送信
                   </button>

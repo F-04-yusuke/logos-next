@@ -105,7 +105,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
   if (msg.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="bg-[#1e1f20] border border-gray-700 rounded-2xl rounded-tr-sm px-4 py-3 text-sm dark:text-g-text max-w-[85%] whitespace-pre-wrap leading-relaxed">
+        <div className="bg-[#1e1f20] border border-gray-700 rounded-2xl rounded-tr-sm px-4 py-3 text-base dark:text-g-text max-w-[85%] whitespace-pre-wrap leading-relaxed">
           {msg.text}
         </div>
       </div>
@@ -117,7 +117,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
         <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-cyan-500/30">
           <AiIcon className="h-3.5 w-3.5 text-white animate-pulse" />
         </div>
-        <p className="text-sm dark:text-g-sub animate-pulse pt-1">生成中...</p>
+        <p className="text-base dark:text-g-sub animate-pulse pt-1">生成中...</p>
       </div>
     );
   }
@@ -126,7 +126,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
       <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-cyan-500/30">
         <AiIcon className="h-3.5 w-3.5 text-white" />
       </div>
-      <div className="text-sm dark:text-g-text whitespace-pre-wrap leading-relaxed flex-1 pt-0.5">
+      <div className="text-base dark:text-g-text whitespace-pre-wrap leading-relaxed flex-1 pt-0.5">
         {msg.text}
       </div>
     </div>
@@ -402,7 +402,7 @@ function MatrixPageInner() {
         )}
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-bold text-xl dark:text-g-text flex items-center gap-2">
+          <h1 className="font-bold text-2xl dark:text-g-text flex items-center gap-2">
             <svg aria-hidden="true" className="h-5 w-5 text-purple-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
@@ -412,7 +412,7 @@ function MatrixPageInner() {
           <button
             onClick={saveMatrix}
             disabled={isSaving}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-2 sm:py-1.5 px-4 rounded text-sm transition-colors shadow-sm"
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-2 sm:py-1.5 px-4 rounded text-base transition-colors shadow-sm"
           >
             {isSaving ? "保存中..." : "保存する"}
           </button>
@@ -430,13 +430,13 @@ function MatrixPageInner() {
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
                 placeholder="例：AIの普及が社会に与える影響について"
-                className="w-full bg-transparent font-bold text-sm text-gray-900 dark:text-g-text focus:outline-none placeholder-gray-400 dark:placeholder-gray-600"
+                className="w-full bg-transparent font-bold text-base text-gray-900 dark:text-g-text focus:outline-none placeholder-gray-400 dark:placeholder-gray-600"
               />
             </div>
             <button
               onClick={generateWithAI}
               disabled={isGenerating}
-              className="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-bold py-2 px-4 rounded text-sm transition-colors shadow-sm shrink-0 flex items-center gap-1.5 cursor-pointer"
+              className="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-bold py-2 px-4 rounded text-base transition-colors shadow-sm shrink-0 flex items-center gap-1.5 cursor-pointer"
             >
               <svg aria-hidden="true" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -447,7 +447,7 @@ function MatrixPageInner() {
 
           {/* Description */}
           <div className="border-b border-gray-200 dark:border-gray-800 pb-4">
-            <p className="text-sm text-gray-600 dark:text-g-sub">
+            <p className="text-base text-gray-600 dark:text-g-sub">
               行（評価項目）と列（パターン）を自由に追加・削除できます。◎=3点, 〇=2点, △=1点, ×=0点で下部に自動集計されます。
             </p>
           </div>
@@ -476,7 +476,7 @@ function MatrixPageInner() {
                             type="text"
                             value={pattern.title}
                             onChange={(e) => updatePattern(pIdx, { title: e.target.value })}
-                            className="w-full bg-transparent font-bold text-blue-600 dark:text-blue-400 focus:outline-none focus:border-b border-blue-500 text-sm"
+                            className="w-full bg-transparent font-bold text-blue-600 dark:text-blue-400 focus:outline-none focus:border-b border-blue-500 text-base"
                           />
                           <button
                             onClick={() => removeColumn(pIdx)}
@@ -529,7 +529,7 @@ function MatrixPageInner() {
                             type="text"
                             value={row.itemTitle}
                             onChange={(e) => updateRow(rIdx, { itemTitle: e.target.value })}
-                            className="w-full bg-transparent dark:bg-[#131314] font-bold text-gray-900 dark:text-g-text focus:outline-none focus:border-b border-gray-300 dark:border-gray-500 text-sm"
+                            className="w-full bg-transparent dark:bg-[#131314] font-bold text-gray-900 dark:text-g-text focus:outline-none focus:border-b border-gray-300 dark:border-gray-500 text-base"
                           />
                         </div>
                       </td>
@@ -546,7 +546,7 @@ function MatrixPageInner() {
                               <select
                                 value={cell.score}
                                 onChange={(e) => updateCell(rIdx, cIdx, { score: e.target.value })}
-                                className="w-full bg-white dark:bg-[#131314] text-gray-900 dark:text-g-text border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500 font-bold"
+                                className="w-full bg-white dark:bg-[#131314] text-gray-900 dark:text-g-text border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-base focus:outline-none focus:border-blue-500 font-bold"
                               >
                                 <option value="3">◎ 最適</option>
                                 <option value="2">〇 良い</option>
@@ -626,8 +626,8 @@ function MatrixPageInner() {
               <div className="w-5 h-5 rounded bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shadow-sm shadow-cyan-500/30">
                 <AiIcon className="h-3 w-3 text-white" />
               </div>
-              <h2 className="text-sm font-bold text-gray-900 dark:text-g-text">AIアシスタント</h2>
-              <span className="text-[11px] dark:text-g-sub">「評価項目に不足はないか」「パターンAのセルを埋める情報を調べて」など指示してみてください。</span>
+              <h2 className="text-base font-bold text-gray-900 dark:text-g-text">AIアシスタント</h2>
+              <span className="text-xs dark:text-g-sub">「評価項目に不足はないか」「パターンAのセルを埋める情報を調べて」など指示してみてください。</span>
             </div>
 
             <div className="bg-[#131314] border border-gray-800 rounded-xl flex flex-col h-[350px] overflow-hidden">
@@ -650,7 +650,7 @@ function MatrixPageInner() {
                     }}
                     rows={1}
                     placeholder="AIに項目出しや評価のサポートを依頼..."
-                    className="flex-1 bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-g-text text-sm p-2.5 focus:outline-none focus:border-blue-500 max-h-32 resize-none overflow-hidden"
+                    className="flex-1 bg-white dark:bg-[#131314] border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-g-text text-base p-2.5 focus:outline-none focus:border-blue-500 max-h-32 resize-none overflow-hidden"
                     onInput={(e) => {
                       const t = e.target as HTMLTextAreaElement;
                       t.style.height = "auto";
@@ -659,7 +659,7 @@ function MatrixPageInner() {
                   />
                   <button
                     onClick={sendAiMessage}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-md shrink-0"
+                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg font-bold text-base transition-colors shadow-md shrink-0"
                   >
                     送信
                   </button>

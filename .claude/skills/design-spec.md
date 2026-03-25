@@ -138,6 +138,26 @@ font-bold py-1.5 px-3 sm:px-4 rounded text-xs sm:text-sm transition-colors curso
 | 日時・メタ情報 | `text-[11px]` |
 | バッジ・ラベル | `text-[10px] font-bold` |
 
+### ページレベルのテキストサイズ目標（Session 33 確定ルール）
+
+**テキストサイズを変更するときは最初から目標サイズに直接変換すること。段階的に2回に分けない。**
+
+| 用途 | 目標サイズ |
+|---|---|
+| ページタイトル（h1・h2） | `text-2xl` |
+| タブ（ページ内タブ切替） | `text-lg` |
+| メイン本文・リストタイトル・ラベル・input/textarea | `text-lg` |
+| サブテキスト・説明文・注記 | `text-base` |
+| 時刻・メタ情報・細かい補助テキスト | `text-sm` |
+| カテゴリバッジ | `text-[10px]`（変更禁止） |
+
+**参照元:** トピックページ（`app/topics/[id]/`）がUIの基準。タブ = `text-lg`、ページタイトル = `text-2xl`。
+
+**変換の注意（Session 33 の反省）:**
+- カードコンポーネント（PostCard / CommentCard / AnalysisCard）は**触らない**（共通化済み）
+- 分析ツールのAIチャット（ChatBubble）・AI入力・送信ボタン・AIアシスタント h2 も同ルール適用
+- 分析ツールのテーブル内（matrix セル理由テキスト等）は `text-xs` → `text-sm` 止まりでOK（スペース都合）
+
 ### 補足（supplement）UI パターン
 - 補足がある場合: フッターの「もっと見る」右隣に `📎 補足あり ▼/▲` トグルボタン
 - トグル展開でフッター直下にテキスト表示（常時展開しない）
