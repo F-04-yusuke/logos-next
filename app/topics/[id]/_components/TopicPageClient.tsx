@@ -164,7 +164,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                             className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                           >
                             <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                            <div className="w-20 sm:w-24 text-lg text-gray-700 dark:text-g-text shrink-0">
+                            <div className="w-24 sm:w-28 text-lg text-gray-700 dark:text-g-text shrink-0">
                               {item.date ?? ""}
                             </div>
                             <div className="flex-1 text-lg text-gray-700 dark:text-g-text">
@@ -185,7 +185,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                               className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                             >
                               <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                              <div className="w-20 sm:w-24 text-lg text-gray-700 dark:text-g-text shrink-0">
+                              <div className="w-24 sm:w-28 text-lg text-gray-700 dark:text-g-text shrink-0">
                                 {item.date ?? ""}
                               </div>
                               <div className="flex-1 text-lg text-gray-700 dark:text-g-text">

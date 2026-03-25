@@ -190,7 +190,7 @@ export function PostCard({
                 <div className="mt-2 break-all">
                   <p
                     ref={commentRef}
-                    className={`text-base text-gray-800 dark:text-g-text leading-relaxed${openComment ? "" : " line-clamp-3"}`}
+                    className={`text-lg text-gray-800 dark:text-g-text leading-relaxed${openComment ? "" : " line-clamp-3"}`}
                   >
                     {post.comment}
                   </p>
