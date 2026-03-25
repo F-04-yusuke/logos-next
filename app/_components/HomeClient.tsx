@@ -73,6 +73,29 @@ function TopicSkeleton() {
 }
 
 // ────────────────────────────────────────────────
+// カテゴリタブ: 人気トピックパネル（右側）
+// ────────────────────────────────────────────────
+function FeaturedTopicPanel({ topics }: { topics: Topic[] }) {
+  const featured = [...topics].sort((a, b) => b.posts_count - a.posts_count)[0];
+  if (!featured) return null;
+  return (
+    <div className="hidden sm:flex flex-col w-48 xl:w-52 shrink-0 p-3">
+      <Link href={`/topics/${featured.id}`} className="flex flex-col group cursor-pointer">
+        <div className="w-full aspect-[4/3] rounded-md bg-gradient-to-br from-indigo-900/70 via-blue-900/50 to-indigo-800/60 border border-indigo-500/20 mb-2 flex items-center justify-center">
+          <svg className="w-10 h-10 text-indigo-300/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <p className="text-xs font-bold text-g-text group-hover:underline line-clamp-3 leading-snug">
+          {featured.title}
+        </p>
+        <p className="text-[11px] text-g-sub mt-1">{timeAgo(featured.created_at)}</p>
+      </Link>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────
 // Props
 // ────────────────────────────────────────────────
 type Props = {
@@ -130,7 +153,7 @@ export default function HomeClient({
   useEffect(() => {
     if (categories.length === 0) return;
     categories.forEach((cat) => {
-      fetch(`/api/topics?category=${cat.id}&per_page=5`)
+      fetch(`/api/topics?category=${cat.id}&per_page=8`)
         .then((r) => r.json())
         .then((data: TopicsResponse) => {
           setTabTopics((prev) => ({ ...prev, [cat.id]: data.data ?? [] }));
@@ -182,77 +205,97 @@ export default function HomeClient({
 
           {/* ── カテゴリタブ ── */}
           {categories.length > 0 && (
-            <div className="bg-[#1e1f20] rounded-xl overflow-hidden">
+            <div className="rounded-xl overflow-hidden border border-white/[0.08]">
               {/* タブヘッダー */}
-              <div className="flex overflow-x-auto border-b border-white/[0.06] scrollbar-hide">
-                {categories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setActiveTab(cat.id)}
-                    className={[
-                      "flex-1 min-w-[72px] py-3 px-3 text-base border-b-2 transition-all whitespace-nowrap cursor-pointer font-bold text-center",
-                      activeTab === cat.id
-                        ? "border-blue-500 text-blue-400 bg-blue-500/[0.06]"
-                        : "border-transparent text-g-sub hover:text-g-text hover:bg-white/[0.03]",
-                    ].join(" ")}
-                  >
-                    {cat.name}
-                  </button>
-                ))}
+              <div className="flex overflow-y-hidden bg-[#1e1f20]">
+                {categories.flatMap((cat, index) => {
+                  const isActive = activeTab === cat.id;
+                  const prevIsActive = index > 0 && activeTab === categories[index - 1].id;
+                  const els = [];
+                  if (index > 0 && !isActive && !prevIsActive) {
+                    els.push(
+                      <span key={`sep-${cat.id}`} className="self-center h-3.5 w-px bg-white/[0.15] shrink-0" />
+                    );
+                  }
+                  els.push(
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveTab(cat.id)}
+                      className={[
+                        "flex-1 py-2.5 px-2 text-sm whitespace-nowrap cursor-pointer font-bold transition-colors text-center min-w-0",
+                        isActive
+                          ? "bg-[#131314] text-white"
+                          : "bg-[#1e1f20] text-gray-500 border-b border-white/[0.08] hover:text-gray-300 hover:underline",
+                      ].join(" ")}
+                    >
+                      {cat.name}
+                    </button>
+                  );
+                  return els;
+                })}
               </div>
 
               {/* タブコンテンツ */}
+              <div className="bg-[#131314]">
               {categories.map((cat) =>
                 activeTab === cat.id ? (
                   <div key={cat.id}>
                     {!tabTopics[cat.id] ? (
                       // カテゴリ読み込み中スケルトン
-                      <div className="p-4 space-y-2 animate-pulse">
-                        {[1, 2, 3].map((i) => (
-                          <div key={i} className="h-11 rounded-lg bg-white/[0.05]" />
-                        ))}
+                      <div className="flex min-h-[260px]">
+                        <div className="flex-1 p-3 space-y-1 animate-pulse">
+                          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                            <div key={i} className="h-7 rounded bg-white/[0.05]" />
+                          ))}
+                        </div>
+                        <div className="hidden sm:block w-48 xl:w-52 shrink-0 p-3 border-l border-white/[0.06] animate-pulse">
+                          <div className="w-full aspect-[4/3] rounded-md bg-white/[0.05] mb-2" />
+                          <div className="h-3 rounded bg-white/[0.05] mb-1.5" />
+                          <div className="h-3 rounded bg-white/[0.05] w-2/3" />
+                        </div>
                       </div>
                     ) : tabTopics[cat.id].length === 0 ? (
-                      <p className="p-6 text-center text-base text-g-sub">
+                      <p className="p-6 text-center text-sm text-g-sub min-h-[260px] flex items-center justify-center">
                         このカテゴリにはまだトピックがありません。
                       </p>
                     ) : (
-                      <>
-                        <ul className="divide-y divide-white/[0.04]">
-                          {tabTopics[cat.id].map((topic) => (
-                            <li key={topic.id}>
-                              <Link
-                                href={`/topics/${topic.id}`}
-                                className="flex items-center justify-between px-5 py-3.5 hover:bg-white/[0.04] transition-colors group cursor-pointer"
-                              >
-                                <h4 className="font-bold text-g-text group-hover:text-blue-400 transition-colors line-clamp-1 text-base flex-1 mr-4">
-                                  {topic.title}
-                                </h4>
-                                <div className="flex items-center gap-2 flex-shrink-0">
-                                  <span className="w-7 text-center bg-white/[0.07] py-0.5 rounded text-[10px] tabular-nums text-g-sub">
-                                    {topic.posts_count}
+                      <div className="flex min-h-[260px] items-stretch">
+                        {/* 左: トピックリスト */}
+                        <div className="flex-1 min-w-0 flex flex-col pt-1.5 pb-2">
+                          <ul className="flex-1">
+                            {tabTopics[cat.id].map((topic) => (
+                              <li key={topic.id}>
+                                <Link
+                                  href={`/topics/${topic.id}`}
+                                  className="flex items-center px-4 py-[7px] group cursor-pointer overflow-hidden"
+                                >
+                                  <span className="text-gray-500 shrink-0 mr-1 select-none text-sm">・</span>
+                                  <span className="text-sm leading-snug truncate">
+                                    <span className="font-medium text-g-text group-hover:underline">{topic.title}</span>
+                                    <span className="ml-2 text-xs text-gray-500 tabular-nums">💬 {topic.posts_count}</span>
                                   </span>
-                                  <span className="w-14 text-right text-sm text-g-sub">
-                                    {timeAgo(topic.created_at)}
-                                  </span>
-                                </div>
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="px-5 py-2.5 border-t border-white/[0.04] text-right">
-                          <Link
-                            href={`/categories/${cat.id}`}
-                            className="text-sm text-blue-500 hover:text-blue-400 transition-colors cursor-pointer"
-                          >
-                            {cat.name}のトピックをもっと見る →
-                          </Link>
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                          <div className="px-4 pt-2">
+                            <Link
+                              href={`/categories/${cat.id}`}
+                              className="text-xs text-blue-500 hover:underline cursor-pointer"
+                            >
+                              {cat.name}のトピックをもっと見る →
+                            </Link>
+                          </div>
                         </div>
-                      </>
+
+                        {/* 右: 人気トピックパネル */}
+                        <FeaturedTopicPanel topics={tabTopics[cat.id]} />
+                      </div>
                     )}
                   </div>
                 ) : null
               )}
+              </div>
             </div>
           )}
 
