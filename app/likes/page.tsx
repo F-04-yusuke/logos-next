@@ -152,7 +152,7 @@ export default function LikesPage() {
                         onLike={() => handlePostLike(post.id)}
                       />
                       <div className="text-right px-2">
-                        <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-g-sub">
+                        <span className="text-sm sm:text-base font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
                           <Link
                             href={`/topics/${post.topic.id}`}
@@ -182,7 +182,7 @@ export default function LikesPage() {
                         onLike={() => handleCommentLike(comment.id)}
                       />
                       <div className="text-right px-2">
-                        <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-g-sub">
+                        <span className="text-sm sm:text-base font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
                           <Link
                             href={`/topics/${comment.topic.id}`}
