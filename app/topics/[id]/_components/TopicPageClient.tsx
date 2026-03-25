@@ -120,7 +120,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
             {contentExpanded && (
               <>
-                <p className="whitespace-pre-wrap text-lg text-gray-700 dark:text-g-text mb-5">
+                <p className="whitespace-pre-wrap text-xl text-gray-700 dark:text-g-text mb-5">
                   {topic.content}
                 </p>
 

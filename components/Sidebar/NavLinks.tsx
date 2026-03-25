@@ -74,7 +74,7 @@ export default function NavLinks({
     >
 
       {/* ── メインナビ（全員表示） ── */}
-      <ul className="space-y-1 text-sm">
+      <ul className="space-y-1 text-base">
         <li>
           <Link href="/" className={navClass("/")}>
             <svg className={iconClass("/")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -100,12 +100,12 @@ export default function NavLinks({
 
           {/* 保存トピック */}
           <div>
-            <h3 className="pl-2 border-l-2 border-gray-600 text-xs font-semibold text-g-sub tracking-wider mb-2">
+            <h3 className="pl-2 border-l-2 border-gray-600 text-sm font-semibold text-g-sub tracking-wider mb-2">
               保存トピック
             </h3>
             <ul className="space-y-1">
               {bookmarks.length === 0 ? (
-                <li className="px-2 text-xs text-g-sub/60 italic">まだ保存したトピックはありません</li>
+                <li className="px-2 text-sm text-g-sub/60 italic">まだ保存したトピックはありません</li>
               ) : (
                 bookmarks.map((t) => (
                   <li key={t.id}>
@@ -113,14 +113,14 @@ export default function NavLinks({
                       href={`/topics/${t.id}`}
                       className={navClass(`/topics/${t.id}`)}
                     >
-                      <span className="w-6 h-6 flex items-center justify-center text-xs font-bold text-indigo-300/80 bg-indigo-500/[0.15] rounded-md shrink-0 transition-colors duration-100">
+                      <span className="w-6 h-6 flex items-center justify-center text-sm font-bold text-indigo-300/80 bg-indigo-500/[0.15] rounded-md shrink-0 transition-colors duration-100">
                         {t.category_char ?? (
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                           </svg>
                         )}
                       </span>
-                      <span className="ml-5 text-sm truncate">{t.title}</span>
+                      <span className="ml-5 text-base truncate">{t.title}</span>
                     </Link>
                   </li>
                 ))
@@ -132,10 +132,10 @@ export default function NavLinks({
 
           {/* マイページ */}
           <div>
-            <h3 className="pl-2 border-l-2 border-gray-600 text-xs font-semibold text-g-sub tracking-wider mb-2">
+            <h3 className="pl-2 border-l-2 border-gray-600 text-sm font-semibold text-g-sub tracking-wider mb-2">
               マイページ
             </h3>
-            <ul className="space-y-1 text-sm">
+            <ul className="space-y-1 text-base">
               <li>
                 <Link href="/dashboard" className={navClass("/dashboard")}>
                   <svg className={iconClass("/dashboard")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -216,11 +216,11 @@ export default function NavLinks({
 
           {/* 分析ツール */}
           <div>
-            <h3 className="pl-2 border-l-2 border-yellow-500/60 text-xs font-semibold text-yellow-500 tracking-wider mb-2 flex items-center gap-1.5">
+            <h3 className="pl-2 border-l-2 border-yellow-500/60 text-sm font-semibold text-yellow-500 tracking-wider mb-2 flex items-center gap-1.5">
               分析ツール
               <span className="text-[9px] bg-yellow-500 text-white px-1 py-0.5 rounded font-bold tracking-wider">PRO</span>
             </h3>
-            <ul className="space-y-1 text-sm font-bold">
+            <ul className="space-y-1 text-base font-bold">
 
               {/* ロジックツリー作成 */}
               <li>
@@ -296,7 +296,7 @@ export default function NavLinks({
           <hr className="border-gray-700" />
 
           {/* 設定 */}
-          <ul className="space-y-1 text-sm">
+          <ul className="space-y-1 text-base">
             <li>
               <Link href="/profile" className={navClass("/profile")}>
                 <svg className={iconClass("/profile")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
