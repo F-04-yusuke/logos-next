@@ -21,6 +21,21 @@ export default function LikesPage() {
   const [activeTab, setActiveTab] = useState<Tab>("info");
   const [fetching, setFetching] = useState(true);
 
+  async function handlePostLike(postId: number) {
+    const res = await fetch(`${API_BASE}/api/posts/${postId}/like`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+    });
+    if (res.ok) {
+      const result = await res.json();
+      setLikedPosts((prev) =>
+        prev.map((p) =>
+          p.id === postId ? { ...p, is_liked_by_me: result.liked, likes_count: result.likes_count } : p
+        )
+      );
+    }
+  }
+
   useEffect(() => {
     if (!authLoading && !user) {
       router.replace("/login");
@@ -114,7 +129,11 @@ export default function LikesPage() {
                 ) : (
                   likedPosts.map((post) => (
                     <div key={post.id} className="flex flex-col gap-1.5">
-                      <PostCard post={post} />
+                      <PostCard
+                        post={post}
+                        currentUserId={user?.id}
+                        onLike={() => handlePostLike(post.id)}
+                      />
                       <div className="text-right px-2">
                         <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}

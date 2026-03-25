@@ -14,12 +14,14 @@ export function PostCard({
   onLike,
   onSupplement,
   onDelete,
+  isDraft = false,
 }: {
   post: Post;
   currentUserId?: number;
-  onLike: () => void;
+  onLike?: () => void;
   onSupplement?: (postId: number, supplement: string) => Promise<void>;
   onDelete?: (postId: number) => void;
+  isDraft?: boolean;
 }) {
   const isOwner = currentUserId === post.user.id;
   const [openSupplement, setOpenSupplement] = useState(false);
@@ -80,14 +82,18 @@ export function PostCard({
         </div>
       )}
 
-      <div className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col transition-colors hover:bg-gray-100 dark:hover:bg-white/[0.04]">
+      <div className={`-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col transition-colors hover:bg-gray-100 dark:hover:bg-white/[0.04]${isDraft ? " border-l-2 border-yellow-400 dark:border-yellow-600" : ""}`}>
         {/* 2カラムレイアウト */}
         <div className="flex flex-col md:flex-row gap-4 min-h-[180px]">
 
           {/* 左列: サムネイル + タイトル */}
           <div className="md:w-[35%] flex-shrink-0">
             {/* サムネイルエリア */}
-            {post.custom_thumbnail ? (
+            {isDraft && !post.custom_thumbnail && !post.thumbnail_url ? (
+              <div className="w-full aspect-video bg-gray-100 dark:bg-[#131314] rounded-md mb-2 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-yellow-300 dark:border-yellow-700">
+                <span className="text-xs font-bold text-yellow-600 dark:text-yellow-500">準備中</span>
+              </div>
+            ) : post.custom_thumbnail ? (
               <button
                 type="button"
                 onClick={() => setLightboxOpen(true)}
@@ -163,7 +169,9 @@ export function PostCard({
               className="group"
             >
               <h4 className="font-bold text-base text-gray-900 dark:text-g-text group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
-                {post.title || "タイトルを取得できませんでした"}
+                {isDraft && !post.title
+                  ? "※本投稿時にサムネイルとタイトルを自動取得します"
+                  : (post.title || "タイトルを取得できませんでした")}
               </h4>
             </a>
           </div>
@@ -239,12 +247,23 @@ export function PostCard({
 
               {/* 右: like（常に固定位置）→ | → 削除 */}
               <div className="ml-auto flex items-center gap-3 pr-2">
-                <LikeButton
-                  liked={!!post.is_liked_by_me}
-                  count={post.likes_count}
-                  size="lg"
-                  onClick={onLike}
-                />
+                {onLike ? (
+                  <LikeButton
+                    liked={!!post.is_liked_by_me}
+                    count={post.likes_count}
+                    size="lg"
+                    onClick={onLike}
+                  />
+                ) : (
+                  <div className="flex items-center space-x-1 text-gray-500 dark:text-g-sub py-1 px-2">
+                    <span className="sr-only">いいね</span>
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 1.5.58c.36.31.6.76.68 1.25.04.24.06.49.06.75 0 .76-.23 1.48-.63 2.08-.2.31-.05.73.3.88l3.126.33a2.25 2.25 0 0 1 1.954 2.65l-1.42 6.75c-.24 1.14-1.28 1.96-2.45 1.96H13.5a5.5 5.5 0 0 1-2.5-.6l-3.11-1.42a4.5 4.5 0 0 0-1.43-.24H5.9c-.83 0-1.5-.67-1.5-1.5V11.75c0-.83.67-1.5 1.5-1.5h.733Z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 10.25h1.5v9h-1.5v-9Z" />
+                    </svg>
+                    {post.likes_count > 0 && <span className="text-sm" aria-hidden="true">{post.likes_count}</span>}
+                  </div>
+                )}
                 {isOwner && onDelete ? (
                   <>
                     <span className="text-gray-300 dark:text-gray-500" aria-hidden="true">|</span>

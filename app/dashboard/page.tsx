@@ -132,6 +132,60 @@ export default function DashboardPage() {
     }
   }, [authLoading, user]);
 
+  async function handlePostLike(postId: number) {
+    const res = await fetch(`${API_BASE}/api/posts/${postId}/like`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+    });
+    if (res.ok) {
+      const result = await res.json();
+      setData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          posts: prev.posts.map((p) =>
+            p.id === postId ? { ...p, is_liked_by_me: result.liked, likes_count: result.likes_count } : p
+          ),
+        };
+      });
+    }
+  }
+
+  async function handlePostDelete(postId: number) {
+    const res = await fetch(`${API_BASE}/api/posts/${postId}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    if (res.ok) {
+      setData((prev) => {
+        if (!prev) return prev;
+        return { ...prev, posts: prev.posts.filter((p) => p.id !== postId) };
+      });
+    }
+  }
+
+  async function handlePostSupplement(postId: number, supplement: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/api/posts/${postId}/supplement`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      body: JSON.stringify({ supplement }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message ?? "補足の追加に失敗しました");
+    }
+    const result = await res.json();
+    setData((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        posts: prev.posts.map((p) =>
+          p.id === postId ? { ...p, supplement: result.supplement } : p
+        ),
+      };
+    });
+  }
+
   async function deleteDraft(postId: number) {
     if (!window.confirm("下書きを削除しますか？")) return;
     const res = await fetch(`${API_BASE}/api/posts/${postId}`, {
@@ -283,7 +337,13 @@ export default function DashboardPage() {
                 ) : (
                   posts.map((post) => (
                     <div key={post.id} className="flex flex-col gap-1.5">
-                      <PostCard post={post} />
+                      <PostCard
+                        post={post}
+                        currentUserId={user?.id}
+                        onLike={() => handlePostLike(post.id)}
+                        onDelete={handlePostDelete}
+                        onSupplement={handlePostSupplement}
+                      />
                       <div className="text-right px-2">
                         <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
