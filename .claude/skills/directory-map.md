@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-24（Session 23 / Phase 4 カテゴリ別トピックページ新設）
+最終更新: 2026-03-25（Session 31 / PostCard・CommentCard 共通コンポーネント化）
 
 ```
 logos-next/
@@ -61,8 +61,8 @@ logos-next/
 │   │           ├── TopicPageClient.tsx  # トピック詳細CSR部分（"use client"・useTopicPage呼び出し・全JSX）
 │   │           ├── UserAvatar.tsx       # → components/UserAvatar への re-export（F-7 Phase3）
 │   │           ├── LikeButton.tsx       # → components/LikeButton への re-export（F-7 Phase3）
-│   │           ├── PostCard.tsx         # エビデンスカード（補足フォーム・削除ボタン・YouTube/X SVGフォールバック・lightbox・続きを読む）
-│   │           ├── CommentCard.tsx      # コメントカード（返信フォーム・削除ボタン・返信制限制御）
+│   │           ├── PostCard.tsx         # エビデンスカード【全ページ共用】（isDraft/onLike?/onDelete?/onSupplement? optional props・lightbox・続きを読む）
+│   │           ├── CommentCard.tsx      # コメントカード【全ページ共用】（全アクション optional props・返信制限制御）
 │   │           ├── PostModal.tsx        # エビデンス投稿モーダル（OGPプレビュー・画像添付・タイトル手動入力）
 │   │           ├── AnalysisCard.tsx     # typeBadge / AnalysisPreview をエクスポート
 │   │           └── AnalysisModal.tsx    # 分析・図解投稿モーダル（オリジナル画像アップロード対応）
@@ -90,6 +90,10 @@ logos-next/
 │   │   └── NavLinks.tsx                 # メインナビ+ログイン時セクション全体（sidebarOpen props で opacity 制御）
 │   ├── SidebarAwareLayout.tsx           # サイドバー連動コンテンツ幅調整
 │   ├── UserAvatar.tsx                   # 共有アバターコンポーネント（sm/md/lg 3サイズ・F-7 Phase3）
+│   ├── mypage/                          # ダッシュボード・参考になった用 re-export + 型定義
+│   │   ├── PostCard.tsx                 # → topics/_components/PostCard への re-export + SharedPost 型
+│   │   ├── CommentCard.tsx              # → topics/_components/CommentCard への re-export + SharedComment 型
+│   │   └── AnalysisCard.tsx             # ダッシュボード専用表示カード（SharedAnalysis型・保留中）
 │   └── ui/
 │       └── button.tsx                   # shadcn/ui コンポーネント
 ├── context/
@@ -99,8 +103,7 @@ logos-next/
 │   ├── auth.ts                          # トークン管理（getToken/setToken/removeToken/getAuthHeaders）
 │   ├── proxy-fetch.ts                   # Route Handler用さくらAPIプロキシユーティリティ（サーバー専用・F-1 Phase3）
 │   ├── transforms.ts                    # boolean型変換レイヤー（transformUser/Post/Comment/Reply/Analysis/Topic）（F-3 Phase3）
-│   ├── utils.ts                         # shadcn/ui utility（cn関数）+ timeAgo（Session 22 共通化）
-│   └── proxy-fetch.ts                   # Route Handler用さくらAPIプロキシユーティリティ（サーバー専用・F-1 Phase3）
+│   └── utils.ts                         # shadcn/ui utility（cn関数）+ timeAgo（Session 22 共通化）
 ├── public/                              # SVG等の静的ファイル
 ├── .env.example
 ├── .env.local                           # ローカル環境変数（gitignore済み）
@@ -117,8 +120,8 @@ logos-next/
 │       ├── progress-phase2.md           # Phase 2 完了記録（Next.js移行・Step1〜14）
 │       ├── progress-phase3.md           # Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）
 │       ├── progress-phase4.md           # Phase 4 進行中記録（UI/UX改善・Session 12〜）
-│       ├── handoff-session20.md         # 最新引継ぎプロンプト
-│       └── handoff-archive/             # 過去セッション引継ぎ（Session 6〜19）
+│       ├── handoff-session32.md         # 最新引継ぎプロンプト
+│       └── handoff-archive/             # 過去セッション引継ぎ（Session 6〜31）
 ├── next.config.ts
 ├── package.json                         # swr@^2.4.1 など依存関係
 ├── tailwind.config.ts

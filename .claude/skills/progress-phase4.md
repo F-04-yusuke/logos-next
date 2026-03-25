@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-25（Session 29 追記）
+最終更新: 2026-03-25（Session 31 追記）
 
 ---
 
@@ -8,6 +8,78 @@
 
 Phase 3 完了後の次ステージ。ユーザー獲得・SEO・UI/UX強化・セキュリティ改善を目指す。
 Session 12 より開始。まず UI/UX の大幅改善から着手。
+
+---
+
+## Session 31: PostCard・CommentCard 真の共通コンポーネント化（2026-03-25）
+
+### F-8: PostCard 共通コンポーネント化 ✅（logos-next）
+
+**変更ファイル:**
+- `app/topics/[id]/_components/PostCard.tsx`
+- `components/mypage/PostCard.tsx`
+- `app/dashboard/page.tsx`
+- `app/likes/page.tsx`
+
+| 変更内容 | 詳細 |
+|---|---|
+| `isDraft` prop 追加 | 下書き時: 黄ボーダー・準備中サムネ・タイトル代替テキスト |
+| `onLike` optional 化 | 未渡し時は表示のみいいね数（LikeButtonなし） |
+| `onDelete?` / `onSupplement?` optional 維持 | トピックページと同じ動作を全ページで共有 |
+| mypage版を re-export に差し替え | `SharedPost = Post & { topic }` 定義のみ10行 |
+| dashboard に handlePostLike/Delete/Supplement 配線 | 投稿タブでいいね・削除・補足が使えるようになった |
+| likes に handlePostLike 配線 | 情報タブでいいねが使えるようになった |
+
+### F-9: CommentCard 共通コンポーネント化 ✅（logos-next）
+
+**変更ファイル:**
+- `app/topics/[id]/_components/CommentCard.tsx`
+- `components/mypage/CommentCard.tsx`
+- `app/dashboard/page.tsx`
+- `app/likes/page.tsx`
+
+| 変更内容 | 詳細 |
+|---|---|
+| 全 action props を optional 化 | onLike?/onReplyLike?/onReply?/onDeleteComment?/onDeleteReply? |
+| `replies ?? []` で安全化 | likes API で replies が未ロードの場合もクラッシュしない |
+| mypage版を re-export に差し替え | `SharedComment = Comment & { topic }` 定義のみ10行 |
+| dashboard に4ハンドラ配線 | コメントタブでいいね・削除・補足返信・返信削除が使えるようになった |
+| likes に handleCommentLike 配線 | コメントタブでいいねが使えるようになった |
+
+### B-API: ダッシュボード・参考になったAPI強化 ✅（logos-laravel）
+
+| 変更内容 | 詳細 |
+|---|---|
+| DashboardApiController | posts/drafts/comments に `is_liked_by_me` を追加 |
+| UserApiController（likes） | likedPosts/likedComments に `is_liked_by_me=true` を追加 |
+| UserApiController（likes） | user に `avatar` を追加、likedComments に `replies` を追加 |
+
+**技術的負債解消状況:**
+| 負債 | 状態 |
+|---|---|
+| PostCard の2系統実装 | ✅ 解消（topics版1本に統一） |
+| CommentCard の2系統実装 | ✅ 解消（topics版1本に統一） |
+| AnalysisCard の2系統実装 | 🔴 保留（次フェーズで対応予定） |
+
+---
+
+## Session 30: テキストサイズ全体ワンサイズアップ（2026-03-25）
+
+### U-25: 全テキストワンサイズアップ ✅
+
+| ページ/コンポーネント | ファイル | 主な変更 |
+|---|---|---|
+| トピックページ | `TopicPageClient.tsx`・`PostCard.tsx`・`CommentCard.tsx`・`AnalysisCard.tsx` | 全テキストワンサイズアップ |
+| トピックページ調整 | `TopicPageClient.tsx` | 概要テキスト xl→lg・タイムライン/タブ text-lg |
+| タイムライン日付列 | `TopicPageClient.tsx` | `w-20 sm:w-24` → `w-24 sm:w-28`（折り返し防止） |
+| PostCard レイアウト | `PostCard.tsx` | サムネ35%・右列65%・縦幅180px |
+| 「時系列」ラベル短縮 | `TopicPageClient.tsx` | 「前提となる時系列」→「時系列」 |
+| ホームページ | `HomeClient.tsx` | 全テキストワンサイズアップ・カスタムpxを標準スケールへ |
+| ダッシュボード | `app/dashboard/page.tsx` | ページ固有テキスト（タイトル・タブ・空メッセージ等）ワンサイズアップ |
+| 参考になった | `app/likes/page.tsx` | 同上 |
+| サイドバー | `components/Sidebar/NavLinks.tsx` | `text-xs`→sm / `text-sm`→base |
+
+**注記:** Session 30 時点でカードコンポーネント内テキストは未対応。Session 31 の共通コンポーネント化により、トピックページ版（更新済み）が自動的に全ページで共有されたため解消済み。
 
 ---
 
