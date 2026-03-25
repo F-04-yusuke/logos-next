@@ -82,10 +82,10 @@ export function PostCard({
 
       <div className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col transition-colors hover:bg-gray-100 dark:hover:bg-white/[0.04]">
         {/* 2カラムレイアウト */}
-        <div className="flex flex-col md:flex-row gap-4 min-h-[170px]">
+        <div className="flex flex-col md:flex-row gap-4 min-h-[180px]">
 
           {/* 左列: サムネイル + タイトル */}
-          <div className="md:w-[30%] flex-shrink-0">
+          <div className="md:w-[35%] flex-shrink-0">
             {/* サムネイルエリア */}
             {post.custom_thumbnail ? (
               <button
@@ -169,7 +169,7 @@ export function PostCard({
           </div>
 
           {/* 右列: ユーザー情報・概要・アクション */}
-          <div className="md:w-[70%] flex flex-col justify-between">
+          <div className="md:w-[65%] flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <div className="flex items-center gap-2 cursor-pointer">
@@ -273,7 +273,7 @@ export function PostCard({
         {/* 補足展開 or 補足追加フォーム（flex spacerで右列に揃える） */}
         {post.supplement && openSupplementView ? (
           <div className="flex md:gap-4">
-            <div className="hidden md:block md:w-[30%] flex-shrink-0" />
+            <div className="hidden md:block md:w-[35%] flex-shrink-0" />
             <div className="flex-1 pt-2 pb-1">
               <span className="text-sm text-gray-500 dark:text-g-sub block mb-1">投稿者からの補足</span>
               <p className="text-[13px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
@@ -283,7 +283,7 @@ export function PostCard({
           </div>
         ) : !post.supplement && isOwner && onSupplement && openSupplement ? (
           <div className="flex md:gap-4">
-            <div className="hidden md:block md:w-[30%] flex-shrink-0" />
+            <div className="hidden md:block md:w-[35%] flex-shrink-0" />
             <div className="flex-1 pt-2 pb-3">
               <textarea
                 ref={textareaRef}
