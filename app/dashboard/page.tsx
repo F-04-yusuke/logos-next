@@ -83,7 +83,7 @@ export default function DashboardPage() {
 
           {/* ページヘッダー */}
           <div className="px-4 sm:px-6 pt-2 mb-5">
-            <h1 className="text-xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
+            <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
               ダッシュボード
             </h1>
           </div>
@@ -92,14 +92,14 @@ export default function DashboardPage() {
           <div className="flex border-b border-gray-200 dark:border-gray-800 overflow-x-auto scrollbar-hide px-4 sm:px-6">
             <button
               onClick={() => setActiveTab("posts")}
-              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("posts")}`}
+              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("posts")}`}
             >
               投稿した情報
             </button>
 
             <button
               onClick={() => setActiveTab("drafts")}
-              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${yellowTab("drafts")}`}
+              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${yellowTab("drafts")}`}
             >
               下書き
               {draftCount > 0 && (
@@ -111,14 +111,14 @@ export default function DashboardPage() {
 
             <button
               onClick={() => setActiveTab("comments")}
-              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("comments")}`}
+              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("comments")}`}
             >
               自分のコメント
             </button>
 
             <button
               onClick={() => setActiveTab("analyses")}
-              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analyses")}`}
+              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analyses")}`}
             >
               作成した分析・図解
               <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
@@ -128,7 +128,7 @@ export default function DashboardPage() {
 
             <button
               onClick={() => setActiveTab("topics")}
-              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${indigoTab("topics")}`}
+              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${indigoTab("topics")}`}
             >
               作成したトピック
               <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">

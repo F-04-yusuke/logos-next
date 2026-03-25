@@ -106,7 +106,7 @@ export default function LikesPage() {
 
           {/* ページヘッダー */}
           <div className="px-4 sm:px-6 pt-2 mb-5">
-            <h1 className="text-xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
+            <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
               参考になった
             </h1>
           </div>
@@ -115,19 +115,19 @@ export default function LikesPage() {
           <div className="flex border-b border-gray-200 dark:border-gray-800 overflow-x-auto px-4 sm:px-6">
             <button
               onClick={() => setActiveTab("info")}
-              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("info")}`}
+              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("info")}`}
             >
               情報 ({likedPosts.length})
             </button>
             <button
               onClick={() => setActiveTab("comments")}
-              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("comments")}`}
+              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("comments")}`}
             >
               コメント ({likedComments.length})
             </button>
             <button
               onClick={() => setActiveTab("analysis")}
-              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analysis")}`}
+              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analysis")}`}
             >
               分析・図解 (0)
               <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
