@@ -174,14 +174,14 @@ export default function NotificationsPage() {
 
         {/* ページヘッダー */}
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-lg font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
+          <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
             通知
           </h1>
           {hasUnread && (
             <button
               onClick={handleReadAll}
               disabled={readingAll}
-              className="text-sm text-blue-500 hover:text-blue-400 font-bold transition-colors duration-100 disabled:opacity-50 cursor-pointer"
+              className="text-base text-blue-500 hover:text-blue-400 font-bold transition-colors duration-100 disabled:opacity-50 cursor-pointer"
             >
               すべて既読にする
             </button>
@@ -206,7 +206,7 @@ export default function NotificationsPage() {
                   d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                 />
               </svg>
-              <p className="text-base text-gray-400 dark:text-gray-500">
+              <p className="text-lg text-gray-400 dark:text-gray-500">
                 通知はありません
               </p>
             </div>
@@ -248,7 +248,7 @@ export default function NotificationsPage() {
                 {/* テキスト + 時刻 */}
                 <div className="flex-1 min-w-0">
                   <p
-                    className={`text-sm leading-snug ${
+                    className={`text-base leading-snug ${
                       notification.is_unread
                         ? "text-gray-900 dark:text-g-text font-bold"
                         : "text-gray-600 dark:text-g-sub"
@@ -256,7 +256,7 @@ export default function NotificationsPage() {
                   >
                     {notification.text}
                   </p>
-                  <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                  <p className="mt-0.5 text-sm text-gray-400 dark:text-gray-500">
                     {timeAgo(notification.created_at)}
                   </p>
                 </div>
@@ -280,17 +280,17 @@ export default function NotificationsPage() {
             <button
               onClick={() => setCurrentPage((p) => p - 1)}
               disabled={currentPage <= 1 || fetching}
-              className="px-4 py-2 text-base font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.04] disabled:opacity-40 transition-colors duration-100 cursor-pointer"
+              className="px-4 py-2 text-lg font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.04] disabled:opacity-40 transition-colors duration-100 cursor-pointer"
             >
               前へ
             </button>
-            <span className="px-4 py-2 text-base text-gray-500 dark:text-g-sub">
+            <span className="px-4 py-2 text-lg text-gray-500 dark:text-g-sub">
               {currentPage} / {lastPage}
             </span>
             <button
               onClick={() => setCurrentPage((p) => p + 1)}
               disabled={currentPage >= lastPage || fetching}
-              className="px-4 py-2 text-base font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.04] disabled:opacity-40 transition-colors duration-100 cursor-pointer"
+              className="px-4 py-2 text-lg font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.04] disabled:opacity-40 transition-colors duration-100 cursor-pointer"
             >
               次へ
             </button>

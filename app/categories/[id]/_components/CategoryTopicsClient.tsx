@@ -151,7 +151,7 @@ export default function CategoryTopicsClient({
         {/* ── ページヘッダー ── */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-xl font-bold text-g-text pl-3 border-l-4 border-indigo-500">
+            <h1 className="text-2xl font-bold text-g-text pl-3 border-l-4 border-indigo-500">
               {categoryName || <span className="inline-block w-24 h-6 rounded bg-white/[0.08] animate-pulse" />}
             </h1>
             {!loading && (
@@ -204,12 +204,12 @@ export default function CategoryTopicsClient({
                       </div>
                     )}
 
-                    <h2 className="text-base font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors duration-100 leading-snug">
+                    <h2 className="text-lg font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors duration-100 leading-snug">
                       {topic.title}
                     </h2>
 
                     {topic.content && (
-                      <p className="text-sm text-g-sub line-clamp-2 mb-2 leading-relaxed">
+                      <p className="text-base text-g-sub line-clamp-2 mb-2 leading-relaxed">
                         {topic.content}
                       </p>
                     )}
@@ -237,17 +237,17 @@ export default function CategoryTopicsClient({
                 <button
                   onClick={() => fetchTopics(currentPage - 1, sort)}
                   disabled={currentPage <= 1}
-                  className="px-4 py-2 text-sm rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="px-4 py-2 text-base rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   ← 前へ
                 </button>
-                <span className="text-sm text-g-sub px-2">
+                <span className="text-base text-g-sub px-2">
                   {currentPage} / {lastPage}
                 </span>
                 <button
                   onClick={() => fetchTopics(currentPage + 1, sort)}
                   disabled={currentPage >= lastPage}
-                  className="px-4 py-2 text-sm rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="px-4 py-2 text-base rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   次へ →
                 </button>

@@ -104,7 +104,7 @@ export default function HistoryPage() {
           <div className="p-4 sm:p-8">
 
             {/* ページヘッダー */}
-            <h1 className="text-lg font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500 mb-6">
+            <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500 mb-6">
               閲覧履歴
             </h1>
 
@@ -125,10 +125,10 @@ export default function HistoryPage() {
                     d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
                 </svg>
-                <p className="text-gray-500 dark:text-g-sub text-base font-bold">
+                <p className="text-gray-500 dark:text-g-sub text-lg font-bold">
                   まだ閲覧履歴はありません。
                 </p>
-                <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
+                <p className="text-gray-400 dark:text-gray-500 text-base mt-2">
                   トピックを見ると、ここに履歴が残ります。
                 </p>
               </div>
@@ -137,7 +137,7 @@ export default function HistoryPage() {
                 <div className="space-y-1.5">
                   {groups.map(({ label, topics: groupTopics }) => (
                     <div key={label}>
-                      <h3 className="font-bold text-base text-gray-900 dark:text-g-text mt-8 mb-3 pl-2 border-l-2 border-gray-700">
+                      <h3 className="font-bold text-lg text-gray-900 dark:text-g-text mt-8 mb-3 pl-2 border-l-2 border-gray-700">
                         {label}
                       </h3>
                       <div className="space-y-1.5">
@@ -149,7 +149,7 @@ export default function HistoryPage() {
                             <div className="flex-1 min-w-0">
                               <Link
                                 href={`/topics/${topic.id}`}
-                                className="font-bold text-base text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-100 line-clamp-1 block mb-1.5 cursor-pointer"
+                                className="font-bold text-lg text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-100 line-clamp-1 block mb-1.5 cursor-pointer"
                               >
                                 {topic.title}
                               </Link>
@@ -183,17 +183,17 @@ export default function HistoryPage() {
                     <button
                       onClick={() => fetchHistory(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="px-4 py-2 text-base font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-white/[0.04] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
+                      className="px-4 py-2 text-lg font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-white/[0.04] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
                     >
                       ← 前
                     </button>
-                    <span className="text-base text-gray-500 px-2">
+                    <span className="text-lg text-gray-500 px-2">
                       {currentPage} / {lastPage}
                     </span>
                     <button
                       onClick={() => fetchHistory(currentPage + 1)}
                       disabled={currentPage === lastPage}
-                      className="px-4 py-2 text-base font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-white/[0.04] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
+                      className="px-4 py-2 text-lg font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-white/[0.04] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
                     >
                       次 →
                     </button>
