@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-25（Session 28 / Phase 4 UI/UX改善 ロジックツリーYouTube風UI刷新完了）
+最終更新: 2026-03-25（Session 29 / 本番バグ修正・テストデータ投入・Seederルール策定）
 
 ---
 
@@ -43,6 +43,18 @@ cd ~/logos-laravel && ./vendor/bin/sail down
 **理由（2026-03-23 の教訓）:** WSL2シャットダウン時にMySQLコンテナが強制終了されDBデータが消失した。`sail down` で安全に停止してからWSL2を終了すれば防げる。さくら本番・Vercelには影響しないがローカルのテストデータが全消えする。
 - `sail down` はボリュームを削除しない（データ保持）
 - `sail down -v` は**絶対に実行しない**（ボリューム＝全データ削除）
+
+## 本番テストデータ投入ルール（Session 29 策定）
+
+本番DBにテストデータを入れる場合は **必ず Seeder を使うこと**。`/tmp/*.php` を直接流し込む方法は避ける。
+
+```bash
+# Seeder作成（ローカル）→ git push → 本番適用
+ssh gs-f04@gs-f04.sakura.ne.jp 'cd ~/www/logos && php artisan db:seed --class=TestDataSeeder --force'
+```
+
+詳細手順・さくらサーバー（csh）でのPHPスクリプト実行方法・主要テーブルのカラム名早見表は
+`~/logos-laravel/.claude/skills/infra.md` の「2026-03-25 Session 29 本番テストデータ投入の教訓」セクション参照。
 
 ## Next.js の .next キャッシュ起因の hydration エラー（Session 24 の教訓）
 **症状:** コンポーネントのクラス名変更後にブラウザコンソールで hydration mismatch エラーが出る。

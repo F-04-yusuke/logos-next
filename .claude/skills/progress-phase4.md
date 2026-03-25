@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-25（Session 28 追記）
+最終更新: 2026-03-25（Session 29 追記）
 
 ---
 
@@ -8,6 +8,24 @@
 
 Phase 3 完了後の次ステージ。ユーザー獲得・SEO・UI/UX強化・セキュリティ改善を目指す。
 Session 12 より開始。まず UI/UX の大幅改善から着手。
+
+---
+
+## Session 29: 本番バグ修正・テストデータ投入（2026-03-25）
+
+### B-1: Vercel本番で情報投稿が500エラー ✅（logos-laravel側修正）
+- マイグレーション3件未適用（`add_custom_thumbnail`・`add_notification_types`・`create_personal_access_tokens`）
+- `create_personal_access_tokens` をべき等化（`Schema::hasTable` チェック追加）→ `migrate --force` で解決
+
+### B-2: Vercel本番でOGPサムネイルが取得できない ✅（logos-laravel側修正）
+- `file_get_contents` がさくらサーバーでHTTPS取得失敗 → `curl` に切り替え
+- YouTubeはさくらIPがbot判定を受けフルHTMLが返らない → oEmbed API 対応
+- `OgpService.php` を全面書き直し（`curlGet` ヘルパー追加・YouTube分岐）
+
+### テストデータ投入（本番Vercel確認用）✅
+- トピック3（EV環境問題・admin作成）・トピック4（リモートワーク・user1作成）を新規作成
+- 全4トピックに情報タブ・コメントタブ・分析タブのデータを投入
+- 分析3種類（ロジックツリー・総合評価表・SWOT）＋ 下書きパターンも準備
 
 ---
 
