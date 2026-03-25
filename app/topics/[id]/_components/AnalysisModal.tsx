@@ -104,7 +104,7 @@ export function AnalysisModal({
           <div className="relative transform overflow-hidden bg-white dark:bg-[#1e1f20] rounded-t-2xl sm:rounded-2xl border border-gray-200 dark:border-gray-700 text-left shadow-2xl w-full sm:my-8 sm:w-full sm:max-w-2xl p-6">
             <div className="flex justify-between items-center mb-4">
               <h3
-                className="text-lg font-bold text-gray-900 dark:text-g-text"
+                className="text-xl font-bold text-gray-900 dark:text-g-text"
                 id="analysis-modal-title"
               >
                 分析・図解の投稿
@@ -134,7 +134,7 @@ export function AnalysisModal({
             <div className="flex border-b border-gray-200 dark:border-gray-700 mb-4 overflow-x-auto">
               <button
                 onClick={() => setUploadTab("select")}
-                className={`py-3 px-4 text-sm transition-colors whitespace-nowrap ${
+                className={`py-3 px-4 text-base transition-colors whitespace-nowrap ${
                   uploadTab === "select"
                     ? "border-b-2 border-blue-500 text-blue-600 dark:text-blue-400 font-bold"
                     : "text-gray-500 dark:text-g-sub"
@@ -172,15 +172,15 @@ export function AnalysisModal({
             {uploadTab === "select" && (
               <div>
                 {loadingAnalyses ? (
-                  <p className="text-center text-sm text-gray-500 py-8">読み込み中...</p>
+                  <p className="text-center text-base text-gray-500 py-8">読み込み中...</p>
                 ) : availableAnalyses.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-gray-500 dark:text-g-sub text-sm mb-4">
+                    <p className="text-gray-500 dark:text-g-sub text-base mb-4">
                       公開可能な分析データがありません。
                     </p>
                     <Link
                       href="/dashboard"
-                      className="text-blue-500 hover:underline text-sm font-bold py-2 px-4 rounded-md bg-blue-50 dark:bg-blue-900/20 inline-block"
+                      className="text-blue-500 hover:underline text-base font-bold py-2 px-4 rounded-md bg-blue-50 dark:bg-blue-900/20 inline-block"
                     >
                       マイページで新しく作成する
                     </Link>
@@ -194,7 +194,7 @@ export function AnalysisModal({
                       >
                         <div className="flex flex-col gap-1 min-w-0">
                           {typeBadge(a.type as TopicAnalysis["type"], {})}
-                          <span className="text-sm font-bold text-gray-900 dark:text-g-text truncate">{a.title}</span>
+                          <span className="text-base font-bold text-gray-900 dark:text-g-text truncate">{a.title}</span>
                           {!!a.is_published && a.topic_id !== topicId && (
                             <span className="text-[10px] text-yellow-600 dark:text-yellow-500">※ 別のトピックに公開済み</span>
                           )}
@@ -216,7 +216,7 @@ export function AnalysisModal({
             {uploadTab === "upload" && (
               <div className="bg-gray-50 dark:bg-[#131314] p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                 <div className="mb-4">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1.5">
+                  <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
                     図解のタイトル
                   </label>
                   <input
@@ -229,7 +229,7 @@ export function AnalysisModal({
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1.5">
+                  <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
                     画像ファイルを選択 (JPG, PNG)
                   </label>
                   <input
@@ -239,19 +239,19 @@ export function AnalysisModal({
                     onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
                     className="w-full text-sm text-gray-500 dark:text-g-sub file:mr-4 file:py-2.5 file:px-4 file:rounded file:border-0 file:text-sm file:font-bold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 dark:file:bg-[#1e1f20] dark:file:text-blue-400 dark:hover:file:bg-gray-800 cursor-pointer"
                   />
-                  <p className="text-[11px] sm:text-xs text-gray-400 mt-2">
+                  <p className="text-xs sm:text-sm text-gray-400 mt-2">
                     ※ファイルサイズは最大5MBまで。オリジナルで作成した図解やグラフのみアップロード可能です。
                   </p>
                 </div>
                 {uploadError && (
-                  <p className="text-sm text-red-500 mb-3">{uploadError}</p>
+                  <p className="text-base text-red-500 mb-3">{uploadError}</p>
                 )}
                 <div className="flex justify-end pt-3 border-t border-gray-200 dark:border-gray-700">
                   <button
                     type="button"
                     onClick={handleImageUpload}
                     disabled={uploading || !imageTitle.trim() || !imageFile}
-                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 sm:py-2 px-6 rounded transition-colors disabled:opacity-50"
+                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-base font-bold py-3 sm:py-2 px-6 rounded transition-colors disabled:opacity-50"
                   >
                     {uploading ? "アップロード中..." : "アップロードして公開"}
                   </button>

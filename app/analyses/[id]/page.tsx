@@ -46,7 +46,7 @@ function TreeNodeCard({ node, depth = 0 }: { node: TreeNode; depth?: number }) {
     <div className={`relative ${depth > 0 ? "mt-4 ml-8 tree-line" : "mt-4"}`}>
       <div className="bg-gray-50 dark:bg-[#131314] p-3 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm inline-block min-w-[250px] max-w-lg">
         <div className="flex items-center gap-2 mb-2">
-          <span className={`text-sm font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>
+          <span className={`text-base font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>
             {node.speaker}
           </span>
           {node.stance && (
@@ -55,7 +55,7 @@ function TreeNodeCard({ node, depth = 0 }: { node: TreeNode; depth?: number }) {
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">{node.text}</p>
+        <p className="text-base text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">{node.text}</p>
       </div>
       {node.children?.map((child, i) => (
         <TreeNodeCard key={i} node={child} depth={depth + 1} />
@@ -133,8 +133,8 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               </th>
               {patterns.map((p, i) => (
                 <th key={i} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 w-64 bg-gray-50 dark:bg-[#131314] align-top">
-                  <div className="font-bold text-blue-600 dark:text-blue-400 mb-1 text-base">{p.title}</div>
-                  <p className="text-xs text-gray-600 dark:text-g-sub whitespace-pre-wrap font-normal">{p.description}</p>
+                  <div className="font-bold text-blue-600 dark:text-blue-400 mb-1 text-lg">{p.title}</div>
+                  <p className="text-sm text-gray-600 dark:text-g-sub whitespace-pre-wrap font-normal">{p.description}</p>
                 </th>
               ))}
             </tr>
@@ -144,7 +144,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               const evals = item.evaluations ?? item.scores ?? [];
               return (
                 <tr key={ri}>
-                  <td className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] font-bold text-sm text-gray-900 dark:text-g-text">
+                  <td className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] font-bold text-base text-gray-900 dark:text-g-text">
                     {item.itemTitle}
                   </td>
                   {patterns.map((_, ci) => {
@@ -154,7 +154,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
                     return (
                       <td key={ci} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 align-top">
                         {badge && <span className={`inline-block px-2 py-0.5 text-[10px] font-bold rounded mb-2 ${badge.color}`}>{badge.text}</span>}
-                        <p className="text-xs text-gray-800 dark:text-g-text whitespace-pre-wrap">{e?.reason ?? ""}</p>
+                        <p className="text-sm text-gray-800 dark:text-g-text whitespace-pre-wrap">{e?.reason ?? ""}</p>
                       </td>
                     );
                   })}
@@ -203,7 +203,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
             </h2>
             <ul className="space-y-2 pl-1">
               {box.items.map((item, j) => (
-                <li key={j} className="text-sm text-gray-800 dark:text-g-text flex items-start">
+                <li key={j} className="text-base text-gray-800 dark:text-g-text flex items-start">
                   <span aria-hidden="true" className={`${box.bullet} mr-2 mt-0.5`}>•</span>
                   <span>{item}</span>
                 </li>
@@ -275,7 +275,7 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
   if (loading) {
     return (
       <div className="py-12 flex justify-center">
-        <p className="text-gray-500 text-sm">読み込み中...</p>
+        <p className="text-gray-500 text-base">読み込み中...</p>
       </div>
     );
   }
@@ -283,8 +283,8 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
   if (notFound || !analysis) {
     return (
       <div className="py-12 flex flex-col items-center gap-4">
-        <p className="text-gray-400 text-sm">分析データが見つかりませんでした。</p>
-        <Link href="/" className="text-blue-500 hover:underline text-sm">トップへ戻る</Link>
+        <p className="text-gray-400 text-base">分析データが見つかりませんでした。</p>
+        <Link href="/" className="text-blue-500 hover:underline text-base">トップへ戻る</Link>
       </div>
     );
   }
@@ -295,13 +295,13 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
 
         {/* ページヘッダー */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-xl text-gray-800 dark:text-g-text leading-tight flex items-center">
+          <h2 className="font-bold text-2xl text-gray-800 dark:text-g-text leading-tight flex items-center">
             {typeIcon()}
             {typeLabel()}
           </h2>
           <button
             onClick={() => window.history.back()}
-            className="text-sm font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2"
+            className="text-base font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2"
           >
             ← 戻る
           </button>
@@ -311,7 +311,7 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
         <div className="bg-white dark:bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-xl mb-6 border border-gray-200 dark:border-gray-800">
           <div className="p-4 sm:p-6">
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-g-text mb-3">{analysis.title}</h1>
-            <div className="flex flex-wrap items-center text-xs sm:text-sm text-gray-500 dark:text-g-sub gap-3 sm:gap-4">
+            <div className="flex flex-wrap items-center text-sm sm:text-base text-gray-500 dark:text-g-sub gap-3 sm:gap-4">
               <span>
                 作成者:{" "}
                 <span className="font-bold text-gray-700 dark:text-g-text">{analysis.user.name}</span>
@@ -339,7 +339,7 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
         {analysis.supplement && (
           <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-800/50">
             <span className="font-bold text-yellow-600 dark:text-yellow-500 text-[10px] block mb-1">✅ 投稿者からの補足</span>
-            <p className="text-sm text-gray-800 dark:text-g-text whitespace-pre-wrap">{analysis.supplement}</p>
+            <p className="text-base text-gray-800 dark:text-g-text whitespace-pre-wrap">{analysis.supplement}</p>
           </div>
         )}
 

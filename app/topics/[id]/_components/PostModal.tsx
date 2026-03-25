@@ -93,7 +93,7 @@ export function PostModal({
           <div className="relative transform overflow-hidden bg-white dark:bg-[#18191a] rounded-t-2xl sm:rounded-xl border-t sm:border border-gray-200 dark:border-gray-800 text-left shadow-2xl w-full h-[85vh] sm:h-auto sm:max-w-xl flex flex-col">
             <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-[#1e1f20]">
               <h3
-                className="text-lg font-bold text-gray-900 dark:text-g-text"
+                className="text-xl font-bold text-gray-900 dark:text-g-text"
                 id="modal-title"
               >
                 エビデンスを投稿
@@ -112,7 +112,7 @@ export function PostModal({
             <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-white dark:bg-[#131314]">
               {/* URL入力 */}
               <div className="mb-5">
-                <label className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1.5">
+                <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
                   参考URL (必須)
                 </label>
                 <input
@@ -126,7 +126,7 @@ export function PostModal({
 
                 {/* OGP / 添付画像プレビュー */}
                 {ogLoading && (
-                  <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">URLを取得中...</p>
+                  <p className="mt-1.5 text-sm text-gray-400 dark:text-gray-500">URLを取得中...</p>
                 )}
                 {imagePreview ? (
                   <div className="mt-2 relative">
@@ -155,7 +155,7 @@ export function PostModal({
                   <button
                     type="button"
                     onClick={() => setShowImageUpload((v) => !v)}
-                    className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                    className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                   >
                     📎 サムネが取得できない場合は画像を添付する {showImageUpload ? "▲" : "▼"}
                   </button>
@@ -168,7 +168,7 @@ export function PostModal({
                         onChange={handleImageSelect}
                         className="block w-full text-sm text-gray-500 dark:text-g-sub file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-bold file:bg-gray-100 dark:file:bg-gray-800 file:text-gray-700 dark:file:text-gray-300 hover:file:bg-gray-200 dark:hover:file:bg-gray-700 transition-colors cursor-pointer"
                       />
-                      <p className="mt-1 text-[11px] text-gray-400 dark:text-gray-500">JPG・PNG・GIF・WebP / 最大5MB / アップロード画像はスクショ等の添付として表示されます</p>
+                      <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">JPG・PNG・GIF・WebP / 最大5MB / アップロード画像はスクショ等の添付として表示されます</p>
                     </div>
                   )}
                 </div>
@@ -178,7 +178,7 @@ export function PostModal({
                   <button
                     type="button"
                     onClick={() => setShowCustomTitle((v) => !v)}
-                    className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                    className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                   >
                     ✏️ タイトルを手動入力する {showCustomTitle ? "▲" : "▼"}
                   </button>
@@ -199,7 +199,7 @@ export function PostModal({
 
               {/* メディア分類 */}
               <div className="mb-5">
-                <label className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1.5">
+                <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
                   メディア分類 (必須)
                 </label>
                 <select
@@ -220,7 +220,7 @@ export function PostModal({
 
               {/* 補足コメント */}
               <div className="mb-2">
-                <label className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1.5">
+                <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
                   補足・コメント (任意)
                 </label>
                 <textarea
@@ -237,7 +237,7 @@ export function PostModal({
               <button
                 onClick={onClose}
                 type="button"
-                className="text-gray-600 dark:text-g-sub hover:text-gray-900 dark:hover:text-gray-200 font-bold py-3 px-4 sm:py-2 rounded-md text-sm transition-colors"
+                className="text-gray-600 dark:text-g-sub hover:text-gray-900 dark:hover:text-gray-200 font-bold py-3 px-4 sm:py-2 rounded-md text-base transition-colors"
               >
                 キャンセル
               </button>
@@ -246,7 +246,7 @@ export function PostModal({
                   type="button"
                   onClick={() => handleSubmit(true)}
                   disabled={submitting || !url || !category}
-                  className="text-gray-600 dark:text-g-sub hover:text-gray-800 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 font-bold py-3 px-4 sm:py-2 rounded-md text-sm transition-colors flex items-center gap-1 disabled:opacity-50"
+                  className="text-gray-600 dark:text-g-sub hover:text-gray-800 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 font-bold py-3 px-4 sm:py-2 rounded-md text-base transition-colors flex items-center gap-1 disabled:opacity-50"
                 >
                   <svg
                     aria-hidden="true"
@@ -269,7 +269,7 @@ export function PostModal({
                   type="button"
                   onClick={() => handleSubmit(false)}
                   disabled={submitting || !url || !category}
-                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-3 px-6 sm:py-2 rounded-md text-sm transition-colors disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-3 px-6 sm:py-2 rounded-md text-base transition-colors disabled:opacity-50"
                 >
                   投稿する
                 </button>
