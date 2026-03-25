@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-24（Session 27 追記）
+最終更新: 2026-03-25（Session 28 追記）
 
 ---
 
@@ -8,6 +8,51 @@
 
 Phase 3 完了後の次ステージ。ユーザー獲得・SEO・UI/UX強化・セキュリティ改善を目指す。
 Session 12 より開始。まず UI/UX の大幅改善から着手。
+
+---
+
+## Session 28: 分析ツール AIアイコン刷新・ロジックツリー YouTube風UI全面刷新（2026-03-25）
+
+### U-22: 分析ツール3本 AIアシスタントUI刷新 ✅
+
+**ファイル:** `app/tools/tree/page.tsx`・`app/tools/matrix/page.tsx`・`app/tools/swot/page.tsx`
+
+| 改修項目 | 内容 |
+|---|---|
+| AIアイコン刷新 | Gemini風ダイヤ → シアン雷ボルト（`AiIcon` 関数・`from-cyan-300 via-cyan-500 to-teal-600` グラデーション背景） |
+| ヒントテキスト移動 | カード内初期メッセージ廃止 → 「AIアシスタント」見出し右隣に `text-[11px]` テキストとして配置 |
+| アイコン位置 | 見出しテキスト左に `w-5 h-5 rounded` グラデーション背景付きアイコンを配置 |
+| 初期チャット廃止 | `chatMsgs` 初期値を `[]`（空）に変更（3ツール共通） |
+
+### U-23: 総合評価表 テーブル角丸統一 ✅
+
+**ファイル:** `app/tools/matrix/page.tsx`
+
+| 改修項目 | 内容 |
+|---|---|
+| テーブル外枠 | `rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden` ラッパー追加 |
+| スクロール | 内側に `overflow-x-auto custom-scroll` を別divで配置（2段ネスト構成で `overflow-hidden` と競合回避） |
+
+### U-24: ロジックツリー YouTube風UI全面刷新 ✅
+
+**ファイル:** `app/tools/tree/page.tsx`
+
+| 改修項目 | 内容 |
+|---|---|
+| `NodeEditor` 全面再設計 | `flex gap-3` レイアウト（アバター列 `w-8` + コンテンツ列 `flex-1`） |
+| アバター円 | 自動採番ラベル（自1 / A1 / B2 等）を円形バッジで表示（自分: `bg-blue-600`・他: `bg-gray-800`） |
+| スタンスバッジ | `rounded-full border` 付きセレクトを見出し行に配置（色はスタンス別） |
+| 本文 | `text-[15px]` textarea（auto-resize対応） |
+| 返信ボタン | `mt-1 text-[13px]` で「＋ 返信を追加」ボタンをコンテンツ下部に配置 |
+| SPEAKERS 拡充 | 「自分 (自)」を先頭に・ユーザーA〜E・その他の7択 |
+| STANCES 拡充 | 主張/反論/賛成・補足/疑問/解決策/根拠/事実/仮説/前提 の9択 |
+| getStanceStyle 拡充 | 解決策(blue)・根拠(purple)・事実(teal)・仮説(orange)・前提(indigo) の色スタイル追加 |
+| 垂れ下がり線バグ修正 | 子ノードを親 flex row の外に出す（`children section: outside parent flex row`）ことで `flex-1` の延伸を親コンテンツ高さに限定 |
+| 線のつなぎ目修正 | 全縦線を `border-l-2 marginLeft:15px` に統一・全コネクターを `left=-29px` に統一（外端 x=15px で一致） |
+| T字コネクター | `border-l-2 height:calc(100%+16px)` + `border-b-2 width:29px` の2要素構成 |
+| L字コネクター | `border-l-2 border-b-2 rounded-bl-lg width:29px height:16px` の1要素構成 |
+
+**Gitタグ:** `v6.8-session28-start`→`v6.9-session28-ai-icon`→`v6.10-session28-tree-ux-start`→`v6.11-session28-tree-ux-complete`
 
 ---
 

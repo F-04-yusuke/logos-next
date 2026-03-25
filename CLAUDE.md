@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-24（Session 27 / Phase 4 UI/UX改善 分析ツール3本豪華化完了）
+最終更新: 2026-03-25（Session 28 / Phase 4 UI/UX改善 ロジックツリーYouTube風UI刷新完了）
 
 ---
 
@@ -134,7 +134,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v6.7-session27-tools-luxury`
+- logos-next: `v6.11-session28-tree-ux-complete`
 - logos-laravel: `v4.2-session24-bookmarks-category-char`
 
 ## /categories/[id] の実装上の注意（Session 23 技術的負債）
@@ -175,7 +175,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase2.md` | Phase 2 完了記録（Next.js移行・全17ページ・Step1〜14） |
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
 | `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 12〜） |
-| `.claude/skills/handoff-session28.md` | **最新引継ぎプロンプト** |
+| `.claude/skills/handoff-session29.md` | **最新引継ぎプロンプト** |
 | `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜23 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
