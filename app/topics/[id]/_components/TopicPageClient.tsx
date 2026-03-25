@@ -106,7 +106,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
         <div className={`flex flex-col md:flex-row justify-between items-start gap-4 ${contentExpanded ? "mb-2" : "mb-0"}`}>
 
           {/* Left: title / content / timeline */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h2 className="text-xl font-bold mb-3 pl-3 border-l-4 border-indigo-500">{topic.title}</h2>
             <button
               onClick={() => setContentExpanded(!contentExpanded)}
@@ -161,17 +161,17 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                         {timeline.slice(0, 3).map((item, i) => (
                           <div
                             key={i}
-                            className="relative flex items-start sm:items-center py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
+                            className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                           >
-                            <div className="absolute left-[-16.5px] top-2.5 sm:top-1/2 sm:-translate-y-1/2 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
+                            <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
                             <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-g-text shrink-0">
                               {item.date ?? ""}
                             </div>
-                            <div className="flex-1 text-sm text-gray-700 dark:text-g-text sm:truncate">
+                            <div className="flex-1 text-sm text-gray-700 dark:text-g-text">
                               {item.event ?? ""}
                             </div>
                             {(item.is_ai === undefined || !!item.is_ai) && (
-                              <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800">
+                              <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800 self-start mt-0.5">
                                 AI生成
                               </span>
                             )}
@@ -182,17 +182,17 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                           timeline.slice(3).map((item, i) => (
                             <div
                               key={i + 3}
-                              className="relative flex items-start sm:items-center py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
+                              className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                             >
-                              <div className="absolute left-[-16.5px] top-2.5 sm:top-1/2 sm:-translate-y-1/2 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
+                              <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
                               <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-g-text shrink-0">
                                 {item.date ?? ""}
                               </div>
-                              <div className="flex-1 text-sm text-gray-700 dark:text-g-text sm:truncate">
+                              <div className="flex-1 text-sm text-gray-700 dark:text-g-text">
                                 {item.event ?? ""}
                               </div>
                               {(item.is_ai === undefined || !!item.is_ai) && (
-                                <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800">
+                                <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800 self-start mt-0.5">
                                   AI生成
                                 </span>
                               )}
@@ -216,7 +216,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           </div>
 
           {/* Right: categories / meta / actions */}
-          <div className="flex flex-col items-end flex-shrink-0 space-y-1">
+          <div className="flex flex-col items-end flex-shrink-0 min-w-[120px] space-y-1">
             {topic.categories.length > 0 && (
               <div className="flex flex-wrap gap-1 justify-end mb-2">
                 {topic.categories.map((cat) => (
@@ -231,12 +231,11 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               </div>
             )}
 
-            <div className="flex items-center gap-2 text-xs text-g-sub justify-end">
+            <div className="flex items-center gap-1.5 text-xs text-g-sub justify-end">
               <UserAvatar user={topic.user} size="sm" />
               <span>{topic.user.name}</span>
-              <span className="text-g-sub/40">·</span>
-              <span>{formatDateTime(topic.created_at)}</span>
             </div>
+            <span className="text-xs text-g-sub">{formatDateTime(topic.created_at)}</span>
 
             <div className="pt-1 flex items-center justify-end gap-3">
               {isOwner && (
