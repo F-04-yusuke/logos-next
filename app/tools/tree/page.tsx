@@ -139,7 +139,7 @@ function NodeEditor({
       {/* === Parent row: avatar + content only (children rendered separately below) === */}
       <div className="flex gap-3">
         {/* Avatar + vertical line (flex-1 extends only to THIS node's content height) */}
-        <div className="flex flex-col items-center shrink-0 w-8">
+        <div className="flex flex-col shrink-0 w-8">
           <div
             className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${
               isSelf
@@ -149,9 +149,13 @@ function NodeEditor({
           >
             {label}
           </div>
-          {/* Line ends at bottom of THIS node's content — never extends into children */}
+          {/* border-l-2 at marginLeft=15px → outer edge x=15px (center of 32px col = 16px) */}
           {hasChildren && (
-            <div className="w-0.5 flex-1 bg-gray-300 dark:bg-gray-700 mt-1 rounded-full" />
+            <div
+              className="flex-1 border-l-2 border-gray-300 dark:border-gray-700 mt-1"
+              style={{ marginLeft: "15px" }}
+              aria-hidden="true"
+            />
           )}
         </div>
 
@@ -224,22 +228,23 @@ function NodeEditor({
               return (
                 <div key={child.id} className="relative">
                   {isLast ? (
-                    /* Last child: curved L-connector — no vertical line below */
+                    /* Last child: curved L-connector — left=-29px so border outer edge = x=15px (same as parent line) */
                     <div
-                      className="absolute pointer-events-none -left-7 top-0 w-7 h-4 border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
+                      className="absolute pointer-events-none border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
+                      style={{ left: "-29px", top: 0, width: "29px", height: "16px" }}
                       aria-hidden="true"
                     />
                   ) : (
-                    /* Non-last child: vertical line bridges to next sibling + horizontal branch */
+                    /* Non-last child: border-l-2 vertical (matches parent line rendering) + horizontal branch */
                     <>
                       <div
-                        className="absolute pointer-events-none w-0.5 bg-gray-300 dark:bg-gray-700 rounded-full"
-                        style={{ left: "-28px", top: 0, height: "calc(100% + 16px)" }}
+                        className="absolute pointer-events-none border-l-2 border-gray-300 dark:border-gray-700"
+                        style={{ left: "-29px", top: 0, height: "calc(100% + 16px)" }}
                         aria-hidden="true"
                       />
                       <div
                         className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-gray-700"
-                        style={{ left: "-28px", top: "16px", width: "28px" }}
+                        style={{ left: "-29px", top: "16px", width: "29px" }}
                         aria-hidden="true"
                       />
                     </>
