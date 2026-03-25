@@ -101,7 +101,7 @@ export function PostCard({
                   />
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="bg-black/50 text-white text-xs px-2 py-1 rounded">拡大</span>
+                  <span className="bg-black/50 text-white text-sm px-2 py-1 rounded">拡大</span>
                 </div>
               </button>
             ) : (
@@ -149,7 +149,7 @@ export function PostCard({
                         d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
                       />
                     </svg>
-                    <span className="text-xs">No Image</span>
+                    <span className="text-sm">No Image</span>
                   </div>
                 )}
               </a>
@@ -162,7 +162,7 @@ export function PostCard({
               rel="noopener noreferrer"
               className="group"
             >
-              <h4 className="font-bold text-sm text-gray-900 dark:text-g-text group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
+              <h4 className="font-bold text-base text-gray-900 dark:text-g-text group-hover:text-blue-500 dark:group-hover:text-blue-400 line-clamp-2 leading-tight transition-colors">
                 {post.title || "タイトルを取得できませんでした"}
               </h4>
             </a>
@@ -253,7 +253,7 @@ export function PostCard({
                       onClick={() => {
                         if (confirm("本当に削除しますか？")) onDelete(post.id);
                       }}
-                      className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors py-1 px-2 rounded-full"
+                      className="text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors py-1 px-2 rounded-full"
                     >
                       削除
                     </button>
@@ -261,7 +261,7 @@ export function PostCard({
                 ) : (
                   <>
                     <span className="invisible pointer-events-none text-gray-500" aria-hidden="true">|</span>
-                    <span className="invisible pointer-events-none text-xs py-1 px-2" aria-hidden="true">削除</span>
+                    <span className="invisible pointer-events-none text-sm py-1 px-2" aria-hidden="true">削除</span>
                   </>
                 )}
               </div>
@@ -275,7 +275,7 @@ export function PostCard({
           <div className="flex md:gap-4">
             <div className="hidden md:block md:w-[30%] flex-shrink-0" />
             <div className="flex-1 pt-2 pb-1">
-              <span className="text-xs text-gray-500 dark:text-g-sub block mb-1">投稿者からの補足</span>
+              <span className="text-sm text-gray-500 dark:text-g-sub block mb-1">投稿者からの補足</span>
               <p className="text-[13px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
                 {post.supplement}
               </p>
@@ -290,7 +290,7 @@ export function PostCard({
                 value={supplementBody}
                 onChange={handleTextareaInput}
                 rows={2}
-                className="w-full text-sm rounded-md border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white mb-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full text-base rounded-md border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white mb-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 required
                 placeholder="URLに対する追加の補足や、時間の経過による状況の変化などを入力してください（※後から編集はできません）"
               />
@@ -298,7 +298,7 @@ export function PostCard({
                 <button
                   type="button"
                   onClick={() => { setOpenSupplement(false); setSupplementBody(""); }}
-                  className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold py-1.5 px-2"
+                  className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold py-1.5 px-2"
                 >
                   キャンセル
                 </button>
@@ -306,7 +306,7 @@ export function PostCard({
                   type="button"
                   onClick={handleSupplementSubmit}
                   disabled={submitting || !supplementBody.trim()}
-                  className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1.5 px-4 rounded-md transition-colors disabled:opacity-50"
+                  className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold py-1.5 px-4 rounded-md transition-colors disabled:opacity-50"
                 >
                   {submitting ? "投稿中..." : "補足を投稿"}
                 </button>

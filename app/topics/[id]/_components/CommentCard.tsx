@@ -130,7 +130,7 @@ export function CommentCard({
                 <button
                   type="button"
                   onClick={() => { setOpenReply(false); setReplyBody(""); }}
-                  className="text-xs text-gray-600 hover:text-gray-900 dark:text-g-sub dark:hover:text-gray-200 font-bold px-3 py-2 sm:py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="text-sm text-gray-600 hover:text-gray-900 dark:text-g-sub dark:hover:text-gray-200 font-bold px-3 py-2 sm:py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   キャンセル
                 </button>
@@ -138,7 +138,7 @@ export function CommentCard({
                   type="button"
                   onClick={handleReplySubmit}
                   disabled={submitting || !replyBody.trim()}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 sm:py-1.5 px-4 rounded-full transition-colors disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 sm:py-1.5 px-4 rounded-full transition-colors disabled:opacity-50"
                 >
                   {submitting ? "投稿中..." : "投稿"}
                 </button>

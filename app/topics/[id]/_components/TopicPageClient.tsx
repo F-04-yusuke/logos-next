@@ -93,7 +93,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
   if (error || !topic) {
     return (
       <main className="max-w-7xl mx-auto px-4 py-10">
-        <p className="text-red-400 text-sm">トピックの取得に失敗しました</p>
+        <p className="text-red-400 text-base">トピックの取得に失敗しました</p>
       </main>
     );
   }
@@ -107,10 +107,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
           {/* Left: title / content / timeline */}
           <div className="flex-1 min-w-0">
-            <h2 className="text-xl font-bold mb-3 pl-3 border-l-4 border-indigo-500">{topic.title}</h2>
+            <h2 className="text-2xl font-bold mb-3 pl-3 border-l-4 border-indigo-500">{topic.title}</h2>
             <button
               onClick={() => setContentExpanded(!contentExpanded)}
-              className="text-xs text-g-sub hover:text-g-text hover:bg-white/[0.04] pr-2 py-1 rounded transition-colors duration-100 cursor-pointer flex items-center gap-1"
+              className="text-sm text-g-sub hover:text-g-text hover:bg-white/[0.04] pr-2 py-1 rounded transition-colors duration-100 cursor-pointer flex items-center gap-1"
             >
               <svg className={`h-3 w-3 transition-transform duration-200 ${contentExpanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -120,14 +120,14 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
             {contentExpanded && (
               <>
-                <p className="whitespace-pre-wrap text-base text-gray-700 dark:text-g-text mb-5">
+                <p className="whitespace-pre-wrap text-lg text-gray-700 dark:text-g-text mb-5">
                   {topic.content}
                 </p>
 
                 {/* Timeline */}
                 <div className="mt-1 mb-1">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                    <h3 className="text-xs font-bold text-gray-500 dark:text-g-sub flex items-center shrink-0">
+                    <h3 className="text-sm font-bold text-gray-500 dark:text-g-sub flex items-center shrink-0">
                       <span className="mr-1" aria-hidden="true">⏳</span>{" "}
                       前提となる時系列
                     </h3>
@@ -164,10 +164,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                             className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                           >
                             <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                            <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-g-text shrink-0">
+                            <div className="w-20 sm:w-24 text-base text-gray-700 dark:text-g-text shrink-0">
                               {item.date ?? ""}
                             </div>
-                            <div className="flex-1 text-sm text-gray-700 dark:text-g-text">
+                            <div className="flex-1 text-base text-gray-700 dark:text-g-text">
                               {item.event ?? ""}
                             </div>
                             {(item.is_ai === undefined || !!item.is_ai) && (
@@ -185,10 +185,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                               className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                             >
                               <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                              <div className="w-20 sm:w-24 text-sm text-gray-700 dark:text-g-text shrink-0">
+                              <div className="w-20 sm:w-24 text-base text-gray-700 dark:text-g-text shrink-0">
                                 {item.date ?? ""}
                               </div>
-                              <div className="flex-1 text-sm text-gray-700 dark:text-g-text">
+                              <div className="flex-1 text-base text-gray-700 dark:text-g-text">
                                 {item.event ?? ""}
                               </div>
                               {(item.is_ai === undefined || !!item.is_ai) && (
@@ -203,7 +203,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       {timeline.length > 3 && (
                         <button
                           onClick={() => setTimelineExpanded(!timelineExpanded)}
-                          className="mt-1 ml-3 text-xs font-bold text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-2 py-1 rounded-md transition-colors cursor-pointer"
+                          className="mt-1 ml-3 text-sm font-bold text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-2 py-1 rounded-md transition-colors cursor-pointer"
                         >
                           {timelineExpanded ? "▲ 閉じる" : "▼ もっと見る"}
                         </button>
@@ -231,18 +231,18 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               </div>
             )}
 
-            <div className="flex items-center gap-1.5 text-xs text-g-sub justify-end">
+            <div className="flex items-center gap-1.5 text-sm text-g-sub justify-end">
               <UserAvatar user={topic.user} size="sm" />
               <span>{topic.user.name}</span>
             </div>
-            <span className="text-xs text-g-sub">{formatDateTime(topic.created_at)}</span>
+            <span className="text-sm text-g-sub">{formatDateTime(topic.created_at)}</span>
 
             <div className="pt-1 flex items-center justify-end gap-3">
               {isOwner && (
                 <>
                   <Link
                     href={`/topics/${topic.id}/edit`}
-                    className="text-xs font-bold text-g-sub hover:text-blue-400 hover:bg-blue-500/10 transition-colors duration-100 flex items-center px-2 py-1.5 rounded-lg"
+                    className="text-sm font-bold text-g-sub hover:text-blue-400 hover:bg-blue-500/10 transition-colors duration-100 flex items-center px-2 py-1.5 rounded-lg"
                   >
                     <svg
                       aria-hidden="true"
@@ -267,7 +267,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
               <button
                 onClick={handleBookmark}
-                className={`text-xs transition-colors duration-100 flex items-center px-2 py-1.5 rounded-lg cursor-pointer ${
+                className={`text-sm transition-colors duration-100 flex items-center px-2 py-1.5 rounded-lg cursor-pointer ${
                   !!topic.is_bookmarked
                     ? "text-indigo-400 hover:bg-indigo-500/10"
                     : "text-g-sub hover:text-indigo-400 hover:bg-indigo-500/10"
@@ -318,7 +318,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
-                className={`py-3 px-6 border-b-2 text-sm transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${
+                className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${
                   activeTab === tab
                     ? tab === "analysis"
                       ? "border-yellow-500 text-white font-bold"
@@ -344,7 +344,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "info" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-g-text text-sm sm:text-base pl-2 border-l-2 border-gray-700">
+                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-gray-700">
                   {filteredPosts.length} 件の投稿
                 </h3>
                 <div className="flex items-center space-x-2">
@@ -352,7 +352,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                     <select
                       value={postFilter}
                       onChange={(e) => setPostFilter(e.target.value)}
-                      className="text-xs sm:text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
+                      className="text-sm sm:text-base rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                     >
                       <option value="">すべてのメディア</option>
                       <option value="YouTube">YouTube</option>
@@ -367,7 +367,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       onChange={(e) =>
                         setPostSort(e.target.value as "popular" | "newest" | "oldest")
                       }
-                      className="text-xs sm:text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
+                      className="text-sm sm:text-base rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                     >
                       <option value="popular">人気順</option>
                       <option value="newest">新着順</option>
@@ -379,7 +379,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       if (!user) { alert("投稿するにはログインが必要です"); return; }
                       setShowPostModal(true);
                     }}
-                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0 cursor-pointer"
+                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-sm sm:text-base transition-colors flex items-center shrink-0 cursor-pointer"
                   >
                     <svg
                       aria-hidden="true"
@@ -406,7 +406,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
               <div className="space-y-3">
                 {filteredPosts.length === 0 ? (
-                  <p className="text-center text-gray-500 py-10 text-sm">
+                  <p className="text-center text-gray-500 py-10 text-base">
                     投稿はありません
                   </p>
                 ) : (
@@ -429,7 +429,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "comments" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-g-text text-sm sm:text-base pl-2 border-l-2 border-gray-700">
+                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-gray-700">
                   {topic.comments.length} 件のコメント
                 </h3>
                 <select
@@ -437,7 +437,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   onChange={(e) =>
                     setCommentSort(e.target.value as "popular" | "newest" | "oldest")
                   }
-                  className="text-xs sm:text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
+                  className="text-sm sm:text-base rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                 >
                   <option value="popular">人気順</option>
                   <option value="newest">新着順</option>
@@ -452,7 +452,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       value={commentBody}
                       onChange={(e) => setCommentBody(e.target.value)}
                       rows={3}
-                      className="w-full rounded-md border-gray-300 dark:bg-[#131314] dark:border-gray-700 dark:text-white mb-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      className="w-full rounded-md border-gray-300 dark:bg-[#131314] dark:border-gray-700 dark:text-white mb-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                       required
                       placeholder="このトピックに対するあなたの意見を教えてください（※1人1件まで）"
                     />
@@ -460,7 +460,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="bg-gray-800 hover:bg-gray-900 dark:bg-[#131314] dark:text-g-text border border-transparent dark:border-gray-700 dark:hover:bg-gray-800 text-white font-bold py-2 px-4 sm:py-1.5 rounded text-sm transition-colors shadow-sm disabled:opacity-50"
+                        className="bg-gray-800 hover:bg-gray-900 dark:bg-[#131314] dark:text-g-text border border-transparent dark:border-gray-700 dark:hover:bg-gray-800 text-white font-bold py-2 px-4 sm:py-1.5 rounded text-base transition-colors shadow-sm disabled:opacity-50"
                       >
                         コメントする
                       </button>
@@ -471,7 +471,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
               <div className="space-y-2 mt-4">
                 {sortedComments.length === 0 ? (
-                  <p className="text-center text-gray-500 py-10 text-sm">
+                  <p className="text-center text-gray-500 py-10 text-base">
                     まだコメントはありません。最初のコメントを投稿しましょう！
                   </p>
                 ) : (
@@ -496,14 +496,14 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "analysis" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-g-text text-sm sm:text-base pl-2 border-l-2 border-gray-700">
+                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-gray-700">
                   {topic.analyses?.length ?? 0} 件の分析・図解
                 </h3>
                 <div className="flex items-center space-x-2">
                   <select
                     value={analysisSort}
                     onChange={(e) => setAnalysisSort(e.target.value as "popular" | "newest" | "oldest")}
-                    className="text-xs sm:text-sm rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
+                    className="text-sm sm:text-base rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                   >
                     <option value="popular">人気順</option>
                     <option value="newest">新着順</option>
@@ -514,7 +514,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       if (!user) { alert("投稿するにはログインが必要です"); return; }
                       setShowAnalysisModal(true);
                     }}
-                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-xs sm:text-sm transition-colors flex items-center shrink-0 cursor-pointer"
+                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-sm sm:text-base transition-colors flex items-center shrink-0 cursor-pointer"
                   >
                     <svg
                       aria-hidden="true"
@@ -556,10 +556,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                     />
                   </svg>
-                  <p className="text-sm text-gray-500 dark:text-g-sub font-bold mb-1">
+                  <p className="text-base text-gray-500 dark:text-g-sub font-bold mb-1">
                     まだ分析・図解は投稿されていません
                   </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 text-center max-w-sm">
+                  <p className="text-sm text-gray-400 dark:text-gray-500 text-center max-w-sm">
                     プレミアムプランに登録すると、オリジナル図解をアップロードしたり、「ロジックツリー」や「総合評価表」を作成してここに公開することができます。
                   </p>
                 </div>
@@ -616,7 +616,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
         <div className="mt-8 border-t border-gray-200 dark:border-gray-800 pt-6 pb-4">
           <Link
             href="/"
-            className="inline-flex items-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold text-sm transition-colors py-2 px-4 -ml-4 rounded-md hover:bg-gray-100 dark:hover:bg-[#1e1f20]"
+            className="inline-flex items-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold text-base transition-colors py-2 px-4 -ml-4 rounded-md hover:bg-gray-100 dark:hover:bg-[#1e1f20]"
           >
             <svg
               aria-hidden="true"
