@@ -120,7 +120,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
             {contentExpanded && (
               <>
-                <p className="whitespace-pre-wrap text-xl text-gray-700 dark:text-g-text mb-5">
+                <p className="whitespace-pre-wrap text-lg text-gray-700 dark:text-g-text mb-5">
                   {topic.content}
                 </p>
 
@@ -129,7 +129,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                     <h3 className="text-sm font-bold text-gray-500 dark:text-g-sub flex items-center shrink-0">
                       <span className="mr-1" aria-hidden="true">⏳</span>{" "}
-                      前提となる時系列
+                      時系列
                     </h3>
                     {isOwner && (
                       timeline.length === 0 ? (
@@ -164,10 +164,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                             className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                           >
                             <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                            <div className="w-20 sm:w-24 text-base text-gray-700 dark:text-g-text shrink-0">
+                            <div className="w-20 sm:w-24 text-lg text-gray-700 dark:text-g-text shrink-0">
                               {item.date ?? ""}
                             </div>
-                            <div className="flex-1 text-base text-gray-700 dark:text-g-text">
+                            <div className="flex-1 text-lg text-gray-700 dark:text-g-text">
                               {item.event ?? ""}
                             </div>
                             {(item.is_ai === undefined || !!item.is_ai) && (
@@ -185,10 +185,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                               className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
                             >
                               <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
-                              <div className="w-20 sm:w-24 text-base text-gray-700 dark:text-g-text shrink-0">
+                              <div className="w-20 sm:w-24 text-lg text-gray-700 dark:text-g-text shrink-0">
                                 {item.date ?? ""}
                               </div>
-                              <div className="flex-1 text-base text-gray-700 dark:text-g-text">
+                              <div className="flex-1 text-lg text-gray-700 dark:text-g-text">
                                 {item.event ?? ""}
                               </div>
                               {(item.is_ai === undefined || !!item.is_ai) && (
@@ -318,7 +318,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
-                className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${
+                className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${
                   activeTab === tab
                     ? tab === "analysis"
                       ? "border-yellow-500 text-white font-bold"

@@ -269,7 +269,7 @@ export function AnalysisCard({
           ? analysis.title
           : (analysis.data as Record<string, unknown>).theme as string | undefined;
         return theme ? (
-          <div className="font-bold text-base text-gray-900 dark:text-g-text -mb-1">{theme}</div>
+          <div className="font-bold text-lg text-gray-900 dark:text-g-text -mb-1">{theme}</div>
         ) : null;
       })()}
 

@@ -77,7 +77,7 @@ export function CommentCard({
           </span>
         </div>
 
-        <p className="text-[15px] text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
+        <p className="text-base text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">
           {comment.body}
         </p>
 
