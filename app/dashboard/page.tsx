@@ -1,305 +1,44 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
 import { timeAgo } from "@/lib/utils";
 import { UserAvatar } from "@/components/UserAvatar";
-import { PostCard, SharedPost } from "@/components/mypage/PostCard";
-import { CommentCard, SharedComment } from "@/components/mypage/CommentCard";
-import { AnalysisCard, SharedAnalysis } from "@/components/mypage/AnalysisCard";
-
-// ===== Types =====
-
-type DashboardTopic = {
-  id: number;
-  title: string;
-  created_at: string;
-};
-
-type DashboardData = {
-  posts: SharedPost[];
-  drafts: SharedPost[];
-  draft_count: number;
-  comments: SharedComment[];
-  analyses: SharedAnalysis[];
-  topics: DashboardTopic[];
-};
-
-type Tab = "posts" | "drafts" | "comments" | "analyses" | "topics";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
-
-// ===== Main Component =====
+import { PostCard } from "@/components/mypage/PostCard";
+import { CommentCard } from "@/components/mypage/CommentCard";
+import { AnalysisCard } from "@/components/mypage/AnalysisCard";
+import { useDashboard, Tab } from "./_hooks/useDashboard";
+import { DraftEditModal } from "./_components/DraftEditModal";
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
-
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>("posts");
-  const [fetching, setFetching] = useState(true);
-
-  // 下書き編集モーダル
-  const [editingDraft, setEditingDraft] = useState<SharedPost | null>(null);
-  const [editUrl, setEditUrl] = useState("");
-  const [editCategory, setEditCategory] = useState("");
-  const [editComment, setEditComment] = useState("");
-  const [editSubmitting, setEditSubmitting] = useState(false);
-
-  function openDraftEdit(post: SharedPost) {
-    setEditingDraft(post);
-    setEditUrl(post.url);
-    setEditCategory(post.category);
-    setEditComment(post.comment ?? "");
-  }
-
-  function closeDraftEdit() {
-    setEditingDraft(null);
-    setEditUrl("");
-    setEditCategory("");
-    setEditComment("");
-  }
-
-  async function handleDraftUpdate(isPublishing: boolean) {
-    if (!editingDraft) return;
-    setEditSubmitting(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/posts/${editingDraft.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-        body: JSON.stringify({
-          url: editUrl,
-          category: editCategory,
-          comment: editComment || null,
-          is_published: isPublishing,
-        }),
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        alert(err.message ?? "更新に失敗しました");
-        return;
-      }
-      if (isPublishing) {
-        // 本投稿: 下書きリストから削除してトピック詳細へ移動
-        if (data) {
-          setData({
-            ...data,
-            drafts: data.drafts.filter((p) => p.id !== editingDraft.id),
-            draft_count: data.draft_count - 1,
-          });
-        }
-        closeDraftEdit();
-        router.push(`/topics/${editingDraft.topic.id}`);
-      } else {
-        // 下書き保存のまま: リストを更新
-        const updated = await res.json();
-        if (data) {
-          setData({
-            ...data,
-            drafts: data.drafts.map((p) => (p.id === editingDraft.id ? { ...p, ...updated } : p)),
-          });
-        }
-        closeDraftEdit();
-      }
-    } catch {
-      alert("サーバーに接続できませんでした");
-    } finally {
-      setEditSubmitting(false);
-    }
-  }
-
-  // URL ?tab=drafts の場合は下書きタブを初期選択（下書き保存リダイレクト時）
-  useEffect(() => {
-    const tab = new URLSearchParams(window.location.search).get("tab") as Tab | null;
-    if (tab) setActiveTab(tab);
-  }, []);
-
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.replace("/login");
-      return;
-    }
-    if (!authLoading && user) {
-      setFetching(true);
-      fetch(`${API_BASE}/api/dashboard`, { headers: getAuthHeaders() })
-        .then((res) => (res.ok ? res.json() : Promise.reject()))
-        .then((d: DashboardData) => setData(d))
-        .catch(() => {})
-        .finally(() => setFetching(false));
-    }
-  }, [authLoading, user]);
-
-  async function handlePostLike(postId: number) {
-    const res = await fetch(`${API_BASE}/api/posts/${postId}/like`, {
-      method: "POST",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      const result = await res.json();
-      setData((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          posts: prev.posts.map((p) =>
-            p.id === postId ? { ...p, is_liked_by_me: result.liked, likes_count: result.likes_count } : p
-          ),
-        };
-      });
-    }
-  }
-
-  async function handlePostDelete(postId: number) {
-    const res = await fetch(`${API_BASE}/api/posts/${postId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      setData((prev) => {
-        if (!prev) return prev;
-        return { ...prev, posts: prev.posts.filter((p) => p.id !== postId) };
-      });
-    }
-  }
-
-  async function handlePostSupplement(postId: number, supplement: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/api/posts/${postId}/supplement`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-      body: JSON.stringify({ supplement }),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message ?? "補足の追加に失敗しました");
-    }
-    const result = await res.json();
-    setData((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        posts: prev.posts.map((p) =>
-          p.id === postId ? { ...p, supplement: result.supplement } : p
-        ),
-      };
-    });
-  }
-
-  async function handleCommentLike(commentId: number) {
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}/like`, {
-      method: "POST",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      const result = await res.json();
-      setData((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          comments: prev.comments.map((c) =>
-            c.id === commentId
-              ? { ...c, is_liked_by_me: result.liked, likes_count: result.likes_count }
-              : c
-          ),
-        };
-      });
-    }
-  }
-
-  async function handleCommentDelete(commentId: number) {
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      setData((prev) => {
-        if (!prev) return prev;
-        return { ...prev, comments: prev.comments.filter((c) => c.id !== commentId) };
-      });
-    }
-  }
-
-  async function handleCommentReply(commentId: number, body: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}/reply`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-      body: JSON.stringify({ body }),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message ?? "返信の投稿に失敗しました");
-    }
-    const reply = await res.json();
-    setData((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        comments: prev.comments.map((c) =>
-          c.id === commentId
-            ? { ...c, replies: [...(c.replies ?? []), reply] }
-            : c
-        ),
-      };
-    });
-  }
-
-  async function handleReplyDelete(commentId: number, replyId: number) {
-    const res = await fetch(`${API_BASE}/api/comments/${replyId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      setData((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          comments: prev.comments.map((c) =>
-            c.id === commentId
-              ? { ...c, replies: (c.replies ?? []).filter((r) => r.id !== replyId) }
-              : c
-          ),
-        };
-      });
-    }
-  }
-
-  async function deleteDraft(postId: number) {
-    if (!window.confirm("下書きを削除しますか？")) return;
-    const res = await fetch(`${API_BASE}/api/posts/${postId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok && data) {
-      setData({
-        ...data,
-        drafts: data.drafts.filter((p) => p.id !== postId),
-        draft_count: data.draft_count - 1,
-      });
-    }
-  }
-
-  async function deleteAnalysis(analysisId: number) {
-    if (!window.confirm("この分析・図解を削除しますか？")) return;
-    const res = await fetch(`${API_BASE}/api/analyses/${analysisId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok && data) {
-      setData({ ...data, analyses: data.analyses.filter((a) => a.id !== analysisId) });
-    }
-  }
-
-  async function deleteTopic(topicId: number) {
-    if (!window.confirm("本当に削除しますか？")) return;
-    const res = await fetch(`${API_BASE}/api/topics/${topicId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (res.ok && data) {
-      setData({ ...data, topics: data.topics.filter((t) => t.id !== topicId) });
-    }
-  }
+  const {
+    user,
+    authLoading,
+    data,
+    activeTab,
+    setActiveTab,
+    fetching,
+    editingDraft,
+    editUrl,
+    setEditUrl,
+    editCategory,
+    setEditCategory,
+    editComment,
+    setEditComment,
+    editSubmitting,
+    openDraftEdit,
+    closeDraftEdit,
+    handleDraftUpdate,
+    handlePostLike,
+    handlePostDelete,
+    handlePostSupplement,
+    handleCommentLike,
+    handleCommentDelete,
+    handleCommentReply,
+    handleReplyDelete,
+    deleteDraft,
+    deleteAnalysis,
+    deleteTopic,
+  } = useDashboard();
 
   if (authLoading || fetching) {
     return (
@@ -548,7 +287,6 @@ export default function DashboardPage() {
             {/* 作成した分析・図解（PRO） */}
             {activeTab === "analyses" && (
               <div className="space-y-3">
-                {/* Create buttons */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   <Link
                     href="/tools/tree"
@@ -663,110 +401,20 @@ export default function DashboardPage() {
       </div>
     </div>
 
-    {/* 下書き編集モーダル（posts/edit.blade.php 相当） */}
+    {/* 下書き編集モーダル */}
     {editingDraft && (
-      <div className="relative z-50" role="dialog" aria-modal="true" aria-labelledby="draft-edit-title">
-        <div className="fixed inset-0 bg-black/60 dark:bg-black/80" onClick={closeDraftEdit} />
-        <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-0 sm:items-center sm:p-4">
-            <div className="relative bg-white dark:bg-[#18191a] rounded-t-2xl sm:rounded-xl border-t sm:border border-gray-200 dark:border-gray-800 w-full sm:max-w-xl overflow-hidden shadow-2xl">
-              {/* ヘッダー */}
-              <div className="px-4 py-4 sm:px-6 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-[#1e1f20]">
-                <div>
-                  <h3 id="draft-edit-title" className="text-xl font-bold text-gray-900 dark:text-g-text">
-                    下書きを編集
-                  </h3>
-                  <p className="text-sm text-gray-400 mt-0.5">下書き保存中は他のユーザーには見えません。</p>
-                </div>
-                <span className="text-[10px] font-bold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 px-2 py-0.5 rounded">
-                  下書き
-                </span>
-              </div>
-              {/* フォーム */}
-              <div className="p-4 sm:p-6 bg-white dark:bg-[#131314] space-y-5">
-                <div>
-                  <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
-                    参考URL (エビデンス)
-                  </label>
-                  <input
-                    type="url"
-                    value={editUrl}
-                    onChange={(e) => setEditUrl(e.target.value)}
-                    required
-                    className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
-                    メディア分類
-                  </label>
-                  <select
-                    value={editCategory}
-                    onChange={(e) => setEditCategory(e.target.value)}
-                    required
-                    className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 cursor-pointer"
-                  >
-                    <option value="">選択してください</option>
-                    <option value="YouTube">YouTube</option>
-                    <option value="X">X</option>
-                    <option value="記事">記事</option>
-                    <option value="知恵袋">知恵袋</option>
-                    <option value="本">本</option>
-                    <option value="その他">その他</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
-                    コメント・引用部分の抜粋
-                  </label>
-                  <textarea
-                    value={editComment}
-                    onChange={(e) => setEditComment(e.target.value)}
-                    rows={4}
-                    className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2"
-                  />
-                </div>
-              </div>
-              {/* フッター */}
-              <div className="px-4 py-4 sm:px-6 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center gap-3 bg-gray-50 dark:bg-[#1e1f20]">
-                <button
-                  type="button"
-                  onClick={closeDraftEdit}
-                  className="text-gray-600 dark:text-g-sub hover:text-gray-900 dark:hover:text-gray-200 font-bold py-2 px-3 rounded-md text-base transition-colors duration-100 cursor-pointer"
-                >
-                  キャンセル
-                </button>
-                <div className="flex items-center gap-2">
-                  {/* 下書き保存のまま */}
-                  <button
-                    type="button"
-                    onClick={() => handleDraftUpdate(false)}
-                    disabled={editSubmitting || !editUrl || !editCategory}
-                    className="text-gray-600 dark:text-g-sub hover:text-gray-800 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 font-bold py-2 px-4 rounded-md text-base transition-colors duration-100 flex items-center gap-1 disabled:opacity-50 cursor-pointer"
-                  >
-                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-                    </svg>
-                    下書き保存
-                  </button>
-                  {/* 本投稿する */}
-                  <button
-                    type="button"
-                    onClick={() => handleDraftUpdate(true)}
-                    disabled={editSubmitting || !editUrl || !editCategory}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md text-base transition-colors duration-100 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
-                  >
-                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                    本投稿する
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <DraftEditModal
+        editingDraft={editingDraft}
+        editUrl={editUrl}
+        setEditUrl={setEditUrl}
+        editCategory={editCategory}
+        setEditCategory={setEditCategory}
+        editComment={editComment}
+        setEditComment={setEditComment}
+        editSubmitting={editSubmitting}
+        onClose={closeDraftEdit}
+        onSave={handleDraftUpdate}
+      />
     )}
     </>
   );
