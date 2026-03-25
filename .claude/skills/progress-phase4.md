@@ -1,6 +1,6 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-25（Session 32 追記）
+最終更新: 2026-03-26（Session 35 追記）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
 
@@ -10,6 +10,80 @@
 
 Phase 3 完了後の次ステージ。ユーザー獲得・SEO・UI/UX強化・セキュリティ改善を目指す。
 Session 12 より開始。まず UI/UX の大幅改善から着手。
+
+---
+
+## Session 35: トップページ カテゴリタブ UI 詳細改善（2026-03-26）
+
+### U-27: カテゴリタブ Yahoo!風UI 追加改善 ✅
+
+**変更ファイル:** `app/_components/HomeClient.tsx`、`app/api/categories/[id]/featured-post/route.ts`（新規）、`app/Http/Controllers/Api/CategoryApiController.php`（logos-laravel）、`routes/api.php`（logos-laravel）
+
+| 改修項目 | 内容 |
+|---|---|
+| タイトルリンク色 | `text-g-text` → `text-[#A8C7FA]`（Gemini青・視認性UP） |
+| 行パディング詰める | `py-[7px]` → `py-1`（情報密度UP） |
+| コメントアイコン | 吹き出し絵文字 → スタックSVG（トピック一覧と統一）・色を明るく |
+| タブ文字コントラスト | 非アクティブ `text-gray-300`・アクティブのみ `font-bold` |
+| タブ横幅 | 文字数比率 + `TAB_BASE=4` で均一余白を保ちながら右端まで充填 |
+| 全体幅の固定 | 左カラムに `min-w-0`・右パネルに `overflow-hidden` |
+| テキストサイズUP | カテゴリタブ内全要素ワンサイズアップ |
+| 更新日時表示 | カテゴリ内最新トピックの `created_at` を `M/D(曜) HH:MM更新` 形式で表示 |
+| 右パネル刷新 | `FeaturedTopicPanel`: トピック人気順 → **カテゴリ最多いいね投稿**に変更 |
+| 新API追加 | `GET /api/categories/{id}/featured-post`（Laravel + Next.js proxy） — 親+子カテゴリのトピックから最多いいねの公開済み投稿を返す |
+| 右パネル表示内容 | 16:9サムネ（OGP画像）・トピックタイトル・投稿日時 `M/D(曜) HH:MM` |
+| 作成者名削除 | トピック一覧の各カードから作成者名を除去 |
+
+**Gitタグ:** `v6.21-session35-category-tab-polish`
+
+---
+
+## Session 34: テキストサイズ残り2ページ・カテゴリタブ Yahoo!風UIリデザイン（2026-03-25）
+
+### U-26a: テキストサイズワンサイズアップ 残り2ページ ✅
+
+| ページ | ファイル | 主な変更 |
+|---|---|---|
+| プロフィール | `app/profile/page.tsx` | h1→text-2xl・セクションh2→text-base・フォームラベル/input→text-lg |
+| カテゴリ管理(admin) | `app/categories/page.tsx` | h1→text-2xl・フォームラベル/input/select→text-lg |
+
+**Gitタグ:** `v6.19-session34-text-size-up`
+
+### U-26b: トップページ カテゴリタブ Yahoo!風UIリデザイン ✅
+
+**変更ファイル:** `app/_components/HomeClient.tsx`
+
+| 改修項目 | 内容 |
+|---|---|
+| タブヘッダー | `flex-1` 均等幅・アクティブ `bg-[#131314]`（コンテンツと同色）・非アクティブに `border-b` |
+| タブ間区切り | `flatMap` で separator span を条件出力（アクティブ隣には非表示） |
+| コンテンツエリア | `bg-[#131314]` で接続感・`min-h-[260px]`・`items-stretch` |
+| トピックリスト | `・` バレット + タイトル（`truncate`）+ `💬 count` インライン・per_page=8 |
+| 右パネル | `FeaturedTopicPanel`（独立コンポーネント）— posts_count最大トピックを表示 |
+| 外枠 | `border border-white/[0.08] rounded-xl overflow-hidden` |
+
+**Gitタグ:** `v6.20-session34-category-tab-yahoo`
+
+---
+
+## Session 33: テキストサイズワンサイズアップ 残り11ページ（2026-03-25）
+
+### U-26: テキストサイズワンサイズアップ（Session 30 残り分） ✅
+
+| 対象 | ファイル |
+|---|---|
+| ダッシュボード | `app/dashboard/page.tsx` |
+| 参考になった | `app/likes/page.tsx` |
+| 閲覧履歴 | `app/history/page.tsx` |
+| 通知 | `app/notifications/page.tsx` |
+| カテゴリ公開一覧 | `app/category-list/page.tsx` |
+| カテゴリ別トピック一覧 | `app/categories/[id]/page.tsx` + `CategoryTopicsClient.tsx` |
+| トピック作成・編集 | `app/topics/create/page.tsx` + `app/topics/[id]/edit/page.tsx` |
+| 分析スタンドアロン | `app/analyses/[id]/page.tsx` |
+| 分析ツール3本 | `app/tools/tree/page.tsx` + `matrix/page.tsx` + `swot/page.tsx` |
+| PostModal / AnalysisModal | `components/PostModal.tsx` + `AnalysisModal.tsx` |
+
+**Gitタグ:** `v6.18-session33-text-size-up`
 
 ---
 

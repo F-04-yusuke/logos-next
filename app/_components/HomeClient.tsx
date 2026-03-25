@@ -35,6 +35,49 @@ type TopicsResponse = {
 
 type SortOption = "newest" | "popular" | "oldest";
 
+type FeaturedPost = {
+  id: number;
+  title: string;
+  topic_id: number;
+  topic_title: string | null;
+  thumbnail_url: string | null;
+  likes_count: number;
+  created_at: string;
+};
+
+// ────────────────────────────────────────────────
+// 日時フォーマット（M/D HH:MM）
+// ────────────────────────────────────────────────
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return "";
+  const days = ["日", "月", "火", "水", "木", "金", "土"];
+  const m = d.getMonth() + 1;
+  const day = d.getDate();
+  const dow = days[d.getDay()];
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  return `${m}/${day}(${dow}) ${hh}:${mm}`;
+}
+
+// ────────────────────────────────────────────────
+// カテゴリの最終更新日時フォーマット
+// ────────────────────────────────────────────────
+function formatTabUpdated(topics: Topic[]): string {
+  if (!topics || topics.length === 0) return "";
+  const latest = topics.reduce((a, b) =>
+    new Date(a.created_at) > new Date(b.created_at) ? a : b
+  );
+  const d = new Date(latest.created_at);
+  const days = ["日", "月", "火", "水", "木", "金", "土"];
+  const m = d.getMonth() + 1;
+  const date = d.getDate();
+  const day = days[d.getDay()];
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  return `${m}/${date}(${day}) ${hh}:${mm}更新`;
+}
+
 // ────────────────────────────────────────────────
 // ランクバッジ（金銀銅グラデーション）
 // ────────────────────────────────────────────────
@@ -73,23 +116,31 @@ function TopicSkeleton() {
 }
 
 // ────────────────────────────────────────────────
-// カテゴリタブ: 人気トピックパネル（右側）
+// カテゴリタブ: 最多いいね投稿パネル（右側）
 // ────────────────────────────────────────────────
-function FeaturedTopicPanel({ topics }: { topics: Topic[] }) {
-  const featured = [...topics].sort((a, b) => b.posts_count - a.posts_count)[0];
-  if (!featured) return null;
+function FeaturedTopicPanel({ post }: { post: FeaturedPost | null | undefined }) {
+  if (!post) return null;
   return (
-    <div className="hidden sm:flex flex-col w-48 xl:w-52 shrink-0 p-3">
-      <Link href={`/topics/${featured.id}`} className="flex flex-col group cursor-pointer">
-        <div className="w-full aspect-[4/3] rounded-md bg-gradient-to-br from-indigo-900/70 via-blue-900/50 to-indigo-800/60 border border-indigo-500/20 mb-2 flex items-center justify-center">
-          <svg className="w-10 h-10 text-indigo-300/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        </div>
-        <p className="text-xs font-bold text-g-text group-hover:underline line-clamp-3 leading-snug">
-          {featured.title}
+    <div className="hidden sm:flex flex-col w-48 xl:w-52 shrink-0 pt-4 pr-4 pb-3 pl-3 overflow-hidden">
+      <Link href={`/topics/${post.topic_id}`} className="flex flex-col group cursor-pointer">
+        {post.thumbnail_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={post.thumbnail_url}
+            alt={post.title ?? ""}
+            className="w-full aspect-[16/9] rounded-md object-cover mb-2"
+          />
+        ) : (
+          <div className="w-full aspect-[16/9] rounded-md bg-gradient-to-br from-indigo-900/70 via-blue-900/50 to-indigo-800/60 border border-indigo-500/20 mb-2 flex items-center justify-center">
+            <svg className="w-10 h-10 text-indigo-300/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+        )}
+        <p className="text-base font-bold text-g-text group-hover:underline line-clamp-2 leading-snug">
+          {post.topic_title}
         </p>
-        <p className="text-[11px] text-g-sub mt-1">{timeAgo(featured.created_at)}</p>
+        <p className="text-xs text-g-sub mt-1">{formatDate(post.created_at)}</p>
       </Link>
     </div>
   );
@@ -127,10 +178,12 @@ export default function HomeClient({
     categories.length > 0 ? categories[0].id : null
   );
   const [tabTopics, setTabTopics] = useState<Record<number, Topic[]>>({});
+  const [featuredPosts, setFeaturedPosts] = useState<Record<number, FeaturedPost | null>>({});
 
   const [popularTopics, setPopularTopics] = useState<Topic[]>(
     [...initialTopics].sort((a, b) => b.posts_count - a.posts_count).slice(0, 5)
   );
+
 
   // ── トピック一覧フェッチ ──
   const fetchTopics = useCallback((page: number, sortVal: SortOption) => {
@@ -159,8 +212,19 @@ export default function HomeClient({
           setTabTopics((prev) => ({ ...prev, [cat.id]: data.data ?? [] }));
         })
         .catch(() => {});
+
+      fetch(`/api/categories/${cat.id}/featured-post`)
+        .then((r) => r.json())
+        .then((data: FeaturedPost | null) => {
+          setFeaturedPosts((prev) => ({ ...prev, [cat.id]: data }));
+        })
+        .catch(() => {});
     });
   }, [categories]);
+
+  // ── タブ幅計算（文字数比率） ──
+  const TAB_BASE = 4; // 均一余白分（文字数換算）
+  const totalTabChars = categories.reduce((sum, c) => sum + c.name.length + TAB_BASE, 0);
 
   // ── ソート変更時のみ再フェッチ（初回は SSR データを使用）──
   const isFirstMount = useRef(true);
@@ -178,7 +242,7 @@ export default function HomeClient({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
 
         {/* ── 左メインカラム（2/3） ── */}
-        <div className="w-full lg:w-2/3 space-y-8">
+        <div className="w-full lg:w-2/3 min-w-0 space-y-8">
 
           {/* ── ページヘッダー ── */}
           <div className="flex justify-between items-start">
@@ -208,30 +272,23 @@ export default function HomeClient({
             <div className="rounded-xl overflow-hidden border border-white/[0.08]">
               {/* タブヘッダー */}
               <div className="flex overflow-y-hidden bg-[#1e1f20]">
-                {categories.flatMap((cat, index) => {
+                {categories.map((cat) => {
                   const isActive = activeTab === cat.id;
-                  const prevIsActive = index > 0 && activeTab === categories[index - 1].id;
-                  const els = [];
-                  if (index > 0 && !isActive && !prevIsActive) {
-                    els.push(
-                      <span key={`sep-${cat.id}`} className="self-center h-3.5 w-px bg-white/[0.15] shrink-0" />
-                    );
-                  }
-                  els.push(
+                  return (
                     <button
                       key={cat.id}
                       onClick={() => setActiveTab(cat.id)}
+                      style={{ width: `${((cat.name.length + TAB_BASE) / totalTabChars * 100).toFixed(2)}%` }}
                       className={[
-                        "flex-1 py-2.5 px-2 text-sm whitespace-nowrap cursor-pointer font-bold transition-colors text-center min-w-0",
+                        "shrink-0 py-2.5 px-1 text-base whitespace-nowrap cursor-pointer transition-colors text-center overflow-hidden",
                         isActive
-                          ? "bg-[#131314] text-white"
-                          : "bg-[#1e1f20] text-gray-500 border-b border-white/[0.08] hover:text-gray-300 hover:underline",
+                          ? "bg-[#131314] text-white font-bold"
+                          : "bg-[#1e1f20] text-gray-300 border-b border-white/[0.08] hover:text-white hover:underline font-medium",
                       ].join(" ")}
                     >
                       {cat.name}
                     </button>
                   );
-                  return els;
                 })}
               </div>
 
@@ -262,17 +319,25 @@ export default function HomeClient({
                       <div className="flex min-h-[260px] items-stretch">
                         {/* 左: トピックリスト */}
                         <div className="flex-1 min-w-0 flex flex-col pt-1.5 pb-2">
+                          {formatTabUpdated(tabTopics[cat.id]) && (
+                            <p className="px-4 pb-1 text-xs text-g-sub">{formatTabUpdated(tabTopics[cat.id])}</p>
+                          )}
                           <ul className="flex-1">
                             {tabTopics[cat.id].map((topic) => (
                               <li key={topic.id}>
                                 <Link
                                   href={`/topics/${topic.id}`}
-                                  className="flex items-center px-4 py-[7px] group cursor-pointer overflow-hidden"
+                                  className="flex items-center px-4 py-1 group cursor-pointer overflow-hidden"
                                 >
-                                  <span className="text-gray-500 shrink-0 mr-1 select-none text-sm">・</span>
-                                  <span className="text-sm leading-snug truncate">
-                                    <span className="font-medium text-g-text group-hover:underline">{topic.title}</span>
-                                    <span className="ml-2 text-xs text-gray-500 tabular-nums">💬 {topic.posts_count}</span>
+                                  <span className="text-gray-300 shrink-0 mr-1 select-none text-base">・</span>
+                                  <span className="text-base leading-snug truncate">
+                                    <span className="font-medium text-[#A8C7FA] group-hover:underline">{topic.title}</span>
+                                    <span className="ml-2 inline-flex items-center gap-0.5 text-sm text-gray-300 tabular-nums">
+                                      <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                      </svg>
+                                      {topic.posts_count}
+                                    </span>
                                   </span>
                                 </Link>
                               </li>
@@ -281,15 +346,15 @@ export default function HomeClient({
                           <div className="px-4 pt-2">
                             <Link
                               href={`/categories/${cat.id}`}
-                              className="text-xs text-blue-500 hover:underline cursor-pointer"
+                              className="text-sm text-white hover:underline cursor-pointer"
                             >
                               {cat.name}のトピックをもっと見る →
                             </Link>
                           </div>
                         </div>
 
-                        {/* 右: 人気トピックパネル */}
-                        <FeaturedTopicPanel topics={tabTopics[cat.id]} />
+                        {/* 右: 最多いいね投稿パネル */}
+                        <FeaturedTopicPanel post={featuredPosts[cat.id]} />
                       </div>
                     )}
                   </div>
@@ -352,7 +417,7 @@ export default function HomeClient({
                           </div>
                         )}
 
-                        <h4 className="text-lg font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors leading-snug">
+                        <h4 className="text-lg font-bold text-g-text mb-1.5 group-hover:text-[#A8C7FA] transition-colors leading-snug">
                           {topic.title}
                         </h4>
 
@@ -363,8 +428,6 @@ export default function HomeClient({
                         )}
 
                         <div className="flex items-center gap-2 text-sm text-g-sub">
-                          <span>{topic.user.name}</span>
-                          <span className="text-white/20">·</span>
                           <span className="flex items-center gap-1">
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -432,7 +495,7 @@ export default function HomeClient({
                         {index + 1}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-base font-bold text-g-text group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug mb-1">
+                        <h4 className="text-base font-bold text-g-text group-hover:text-[#A8C7FA] transition-colors line-clamp-2 leading-snug mb-1">
                           {topic.title}
                         </h4>
                         <div className="flex items-center gap-2 text-sm text-g-sub">
