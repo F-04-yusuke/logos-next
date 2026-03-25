@@ -186,6 +186,84 @@ export default function DashboardPage() {
     });
   }
 
+  async function handleCommentLike(commentId: number) {
+    const res = await fetch(`${API_BASE}/api/comments/${commentId}/like`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+    });
+    if (res.ok) {
+      const result = await res.json();
+      setData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          comments: prev.comments.map((c) =>
+            c.id === commentId
+              ? { ...c, is_liked_by_me: result.liked, likes_count: result.likes_count }
+              : c
+          ),
+        };
+      });
+    }
+  }
+
+  async function handleCommentDelete(commentId: number) {
+    const res = await fetch(`${API_BASE}/api/comments/${commentId}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    if (res.ok) {
+      setData((prev) => {
+        if (!prev) return prev;
+        return { ...prev, comments: prev.comments.filter((c) => c.id !== commentId) };
+      });
+    }
+  }
+
+  async function handleCommentReply(commentId: number, body: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/api/comments/${commentId}/reply`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      body: JSON.stringify({ body }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message ?? "返信の投稿に失敗しました");
+    }
+    const reply = await res.json();
+    setData((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        comments: prev.comments.map((c) =>
+          c.id === commentId
+            ? { ...c, replies: [...(c.replies ?? []), reply] }
+            : c
+        ),
+      };
+    });
+  }
+
+  async function handleReplyDelete(commentId: number, replyId: number) {
+    const res = await fetch(`${API_BASE}/api/comments/${replyId}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    if (res.ok) {
+      setData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          comments: prev.comments.map((c) =>
+            c.id === commentId
+              ? { ...c, replies: (c.replies ?? []).filter((r) => r.id !== replyId) }
+              : c
+          ),
+        };
+      });
+    }
+  }
+
   async function deleteDraft(postId: number) {
     if (!window.confirm("下書きを削除しますか？")) return;
     const res = await fetch(`${API_BASE}/api/posts/${postId}`, {
@@ -442,7 +520,14 @@ export default function DashboardPage() {
                 ) : (
                   comments.map((comment) => (
                     <div key={comment.id} className="flex flex-col gap-1.5">
-                      <CommentCard comment={comment} />
+                      <CommentCard
+                        comment={comment}
+                        currentUserId={user?.id}
+                        onLike={() => handleCommentLike(comment.id)}
+                        onReply={handleCommentReply}
+                        onDeleteComment={handleCommentDelete}
+                        onDeleteReply={handleReplyDelete}
+                      />
                       <div className="text-right px-2">
                         <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}

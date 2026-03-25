@@ -17,11 +17,11 @@ export function CommentCard({
 }: {
   comment: Comment;
   currentUserId?: number;
-  onLike: () => void;
-  onReplyLike: (replyId: number) => void;
-  onReply: (commentId: number, body: string) => Promise<void>;
-  onDeleteComment: (commentId: number) => void;
-  onDeleteReply: (commentId: number, replyId: number) => void;
+  onLike?: () => void;
+  onReplyLike?: (replyId: number) => void;
+  onReply?: (commentId: number, body: string) => Promise<void>;
+  onDeleteComment?: (commentId: number) => void;
+  onDeleteReply?: (commentId: number, replyId: number) => void;
 }) {
   const [openReplies, setOpenReplies] = useState(false);
   const [openReply, setOpenReply] = useState(false);
@@ -29,23 +29,21 @@ export function CommentCard({
   const [submitting, setSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const replies = comment.replies ?? [];
   const isOwner = currentUserId === comment.user.id;
 
   // 返信制限: 投稿主は最大5件・他ユーザーは1件のみ
   const myRepliesCount = currentUserId
-    ? comment.replies.filter((r) => r.user.id === currentUserId).length
+    ? replies.filter((r) => r.user.id === currentUserId).length
     : 0;
-  const canReply = currentUserId
-    ? isOwner
-      ? myRepliesCount < 5
-      : myRepliesCount < 1
-    : false;
+  const canReply = !!onReply && !!currentUserId
+    && (isOwner ? myRepliesCount < 5 : myRepliesCount < 1);
 
   const handleReplySubmit = async () => {
     if (!replyBody.trim()) return;
     setSubmitting(true);
     try {
-      await onReply(comment.id, replyBody);
+      await onReply?.(comment.id, replyBody);
       setReplyBody("");
       setOpenReply(false);
       setOpenReplies(true);
@@ -82,12 +80,23 @@ export function CommentCard({
         </p>
 
         <div className="mt-2 flex items-center gap-4 -ml-3">
-          <LikeButton
-            liked={!!comment.is_liked_by_me}
-            count={comment.likes_count}
-            size="md"
-            onClick={onLike}
-          />
+          {onLike ? (
+            <LikeButton
+              liked={!!comment.is_liked_by_me}
+              count={comment.likes_count}
+              size="md"
+              onClick={onLike}
+            />
+          ) : (
+            <div className="flex items-center space-x-1 text-gray-500 dark:text-g-sub py-1 px-2">
+              <span className="sr-only">いいね</span>
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 1.5.58c.36.31.6.76.68 1.25.04.24.06.49.06.75 0 .76-.23 1.48-.63 2.08-.2.31-.05.73.3.88l3.126.33a2.25 2.25 0 0 1 1.954 2.65l-1.42 6.75c-.24 1.14-1.28 1.96-2.45 1.96H13.5a5.5 5.5 0 0 1-2.5-.6l-3.11-1.42a4.5 4.5 0 0 0-1.43-.24H5.9c-.83 0-1.5-.67-1.5-1.5V11.75c0-.83.67-1.5 1.5-1.5h.733Z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 10.25h1.5v9h-1.5v-9Z" />
+              </svg>
+              {comment.likes_count > 0 && <span className="text-xs" aria-hidden="true">{comment.likes_count}</span>}
+            </div>
+          )}
 
           {canReply && (
             <button
@@ -99,7 +108,7 @@ export function CommentCard({
             </button>
           )}
 
-          {isOwner && (
+          {isOwner && onDeleteComment && (
             <button
               onClick={() => {
                 if (confirm("本当に削除しますか？\n※返信がついている場合、返信もすべて削除されます。")) {
@@ -147,7 +156,7 @@ export function CommentCard({
           </div>
         )}
 
-        {comment.replies.length > 0 && (
+        {replies.length > 0 && (
           <div className="mt-1">
             <button
               onClick={() => setOpenReplies(!openReplies)}
@@ -176,7 +185,7 @@ export function CommentCard({
 
             {openReplies && (
               <div className="mt-3 space-y-4">
-                {comment.replies.map((reply) => (
+                {replies.map((reply) => (
                   <div key={reply.id} className="flex gap-3 items-start">
                     <div className="shrink-0 mt-0.5 cursor-pointer">
                       <UserAvatar user={reply.user} size="sm" />
@@ -194,13 +203,25 @@ export function CommentCard({
                         {reply.body}
                       </p>
                       <div className="mt-1 flex items-center gap-3">
-                        <LikeButton
-                          liked={!!reply.is_liked_by_me}
-                          count={reply.likes_count}
-                          size="sm"
-                          onClick={() => onReplyLike(reply.id)}
-                        />
-                        {currentUserId === reply.user.id && (
+                        {onReplyLike ? (
+                          <LikeButton
+                            liked={!!reply.is_liked_by_me}
+                            count={reply.likes_count}
+                            size="sm"
+                            onClick={() => onReplyLike(reply.id)}
+                          />
+                        ) : (
+                          reply.likes_count > 0 && (
+                            <div className="flex items-center space-x-1 text-gray-500 dark:text-g-sub py-1 px-2">
+                              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 1.5.58c.36.31.6.76.68 1.25.04.24.06.49.06.75 0 .76-.23 1.48-.63 2.08-.2.31-.05.73.3.88l3.126.33a2.25 2.25 0 0 1 1.954 2.65l-1.42 6.75c-.24 1.14-1.28 1.96-2.45 1.96H13.5a5.5 5.5 0 0 1-2.5-.6l-3.11-1.42a4.5 4.5 0 0 0-1.43-.24H5.9c-.83 0-1.5-.67-1.5-1.5V11.75c0-.83.67-1.5 1.5-1.5h.733Z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 10.25h1.5v9h-1.5v-9Z" />
+                              </svg>
+                              <span className="text-xs">{reply.likes_count}</span>
+                            </div>
+                          )
+                        )}
+                        {currentUserId === reply.user.id && onDeleteReply && (
                           <button
                             onClick={() => {
                               if (confirm("削除しますか？")) {

@@ -21,6 +21,23 @@ export default function LikesPage() {
   const [activeTab, setActiveTab] = useState<Tab>("info");
   const [fetching, setFetching] = useState(true);
 
+  async function handleCommentLike(commentId: number) {
+    const res = await fetch(`${API_BASE}/api/comments/${commentId}/like`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+    });
+    if (res.ok) {
+      const result = await res.json();
+      setLikedComments((prev) =>
+        prev.map((c) =>
+          c.id === commentId
+            ? { ...c, is_liked_by_me: result.liked, likes_count: result.likes_count }
+            : c
+        )
+      );
+    }
+  }
+
   async function handlePostLike(postId: number) {
     const res = await fetch(`${API_BASE}/api/posts/${postId}/like`, {
       method: "POST",
@@ -159,7 +176,11 @@ export default function LikesPage() {
                 ) : (
                   likedComments.map((comment) => (
                     <div key={comment.id} className="flex flex-col gap-1.5">
-                      <CommentCard comment={comment} />
+                      <CommentCard
+                        comment={comment}
+                        currentUserId={user?.id}
+                        onLike={() => handleCommentLike(comment.id)}
+                      />
                       <div className="text-right px-2">
                         <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
