@@ -219,7 +219,7 @@ export default function TopicEditPage() {
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-[#1e1f20] shadow-sm sm:rounded-lg border border-gray-800 p-8 text-center">
             <p className="text-gray-300 mb-4">このトピックを編集する権限がありません。</p>
-            <Link href={`/topics/${topicId}`} className="text-blue-400 hover:text-blue-300 font-bold text-sm">
+            <Link href={`/topics/${topicId}`} className="text-blue-400 hover:text-blue-300 font-bold text-base">
               トピックに戻る
             </Link>
           </div>
@@ -247,22 +247,22 @@ export default function TopicEditPage() {
 
               {/* タイトル */}
               <div className="mb-4">
-                <label className="block text-base text-gray-300">トピックのタイトル</label>
+                <label className="block text-lg text-gray-300">トピックのタイトル</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
-                  className="mt-1 block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-base"
+                  className="mt-1 block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg"
                 />
-                {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title[0]}</p>}
+                {errors.title && <p className="text-red-400 text-base mt-1">{errors.title[0]}</p>}
               </div>
 
               {/* カテゴリ選択（最大2つ） */}
               <div className="mb-6 p-4 bg-[#131314] rounded-md border border-gray-800">
-                <label className="block text-base font-bold text-gray-300 mb-2">カテゴリを選択してください（最大2つまで）</label>
+                <label className="block text-lg font-bold text-gray-300 mb-2">カテゴリを選択してください（最大2つまで）</label>
                 {errors.category_ids && (
-                  <p className="text-red-400 text-sm mt-1 mb-2">{errors.category_ids[0]}</p>
+                  <p className="text-red-400 text-base mt-1 mb-2">{errors.category_ids[0]}</p>
                 )}
                 <div className="space-y-4">
                   {categories.map((parent) => (
@@ -291,7 +291,7 @@ export default function TopicEditPage() {
                               disabled={!selectedCategoryIds.includes(child.id) && selectedCategoryIds.length >= 2}
                               className="rounded border-gray-600 bg-[#131314] text-blue-600 focus:ring-blue-500"
                             />
-                            <span className="ml-2 text-base text-gray-300">📄 {child.name}</span>
+                            <span className="ml-2 text-lg text-gray-300">📄 {child.name}</span>
                           </label>
                         ))}
                       </div>
@@ -302,22 +302,22 @@ export default function TopicEditPage() {
 
               {/* 議論の内容・背景 */}
               <div className="mb-6">
-                <label className="block text-base text-gray-300">議論の内容・背景（概要）</label>
+                <label className="block text-lg text-gray-300">議論の内容・背景（概要）</label>
                 <textarea
                   ref={contentRef}
                   value={content}
                   onChange={(e) => { setContent(e.target.value); autoExpand(e.target); }}
                   rows={6}
                   required
-                  className="mt-1 block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-base overflow-hidden resize-none"
+                  className="mt-1 block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg overflow-hidden resize-none"
                 />
-                {errors.content && <p className="text-red-400 text-sm mt-1">{errors.content[0]}</p>}
+                {errors.content && <p className="text-red-400 text-base mt-1">{errors.content[0]}</p>}
               </div>
 
               {/* 時系列 */}
               <div className="mb-6">
                 <label className="block text-base text-gray-300 mb-2">前提となる時系列の編集</label>
-                <p className="text-sm text-gray-500 mb-3">※行を追加・編集すると「AI生成」バッジは外れます。</p>
+                <p className="text-base text-gray-500 mb-3">※行を追加・編集すると「AI生成」バッジは外れます。</p>
 
                 <div className="space-y-2 border-l-2 border-gray-700 pl-3 ml-2">
                   {timeline.map((item, index) => (
@@ -329,7 +329,7 @@ export default function TopicEditPage() {
                         value={item.date}
                         onChange={(e) => updateTimelineItem(index, "date", e.target.value)}
                         placeholder="202X年X月"
-                        className="w-full sm:w-1/4 rounded-md border border-gray-700 bg-[#131314] text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-1.5"
+                        className="w-full sm:w-1/4 rounded-md border border-gray-700 bg-[#131314] text-white text-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-1.5"
                       />
                       <textarea
                         value={item.event}
@@ -339,12 +339,12 @@ export default function TopicEditPage() {
                         }}
                         placeholder="出来事の要約"
                         rows={1}
-                        className="w-full sm:flex-1 rounded-md border border-gray-700 bg-[#131314] text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-1.5 overflow-hidden resize-none"
+                        className="w-full sm:flex-1 rounded-md border border-gray-700 bg-[#131314] text-white text-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-1.5 overflow-hidden resize-none"
                       />
                       <button
                         type="button"
                         onClick={() => removeTimelineItem(index)}
-                        className="text-red-500 hover:text-red-400 px-2 py-1.5 text-base shrink-0"
+                        className="text-red-500 hover:text-red-400 px-2 py-1.5 text-lg shrink-0"
                       >
                         削除
                       </button>
@@ -355,7 +355,7 @@ export default function TopicEditPage() {
                 <button
                   type="button"
                   onClick={addTimelineItem}
-                  className="mt-3 text-sm font-bold text-blue-500 hover:text-blue-400 flex items-center"
+                  className="mt-3 text-base font-bold text-blue-500 hover:text-blue-400 flex items-center"
                 >
                   ＋ 新しい行を追加する
                 </button>
@@ -365,7 +365,7 @@ export default function TopicEditPage() {
               <div className="flex items-center justify-end mt-4 border-t border-gray-800 pt-4">
                 <Link
                   href={`/topics/${topicId}`}
-                  className="mr-4 text-base text-gray-500 hover:text-gray-300"
+                  className="mr-4 text-lg text-gray-500 hover:text-gray-300"
                 >
                   キャンセル
                 </Link>
