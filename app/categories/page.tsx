@@ -166,7 +166,7 @@ export default function CategoriesPage() {
       <div className="py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
 
-          <h1 className="text-lg font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
+          <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
             カテゴリ管理（大分類・中分類）
           </h1>
 
@@ -180,41 +180,41 @@ export default function CategoriesPage() {
           {/* 1. 新しいカテゴリの追加カード */}
           <div className="p-6 sm:p-8 bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-800">
             <header>
-              <h2 className="text-sm font-bold text-g-text pl-2 border-l-2 border-gray-700">新しいカテゴリの追加</h2>
+              <h2 className="text-base font-bold text-g-text pl-2 border-l-2 border-gray-700">新しいカテゴリの追加</h2>
             </header>
             <form onSubmit={handleAdd} className="mt-6 space-y-6 max-w-xl">
               {addError && (
                 <p className="text-red-400 text-sm">{addError}</p>
               )}
               <div>
-                <label htmlFor="add-name" className="block text-sm font-bold text-gray-300 mb-1.5">カテゴリ名</label>
+                <label htmlFor="add-name" className="block text-lg font-bold text-gray-300 mb-1.5">カテゴリ名</label>
                 <input
                   id="add-name"
                   type="text"
                   value={addName}
                   onChange={(e) => setAddName(e.target.value)}
                   required
-                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm shadow-sm"
+                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg shadow-sm"
                 />
               </div>
               <div>
-                <label htmlFor="add-sort" className="block text-sm font-bold text-gray-300 mb-1.5">表示順（数字が小さいほど上に表示されます）</label>
+                <label htmlFor="add-sort" className="block text-lg font-bold text-gray-300 mb-1.5">表示順（数字が小さいほど上に表示されます）</label>
                 <input
                   id="add-sort"
                   type="number"
                   value={addSortOrder}
                   onChange={(e) => setAddSortOrder(Number(e.target.value))}
                   required
-                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm shadow-sm"
+                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg shadow-sm"
                 />
               </div>
               <div>
-                <label htmlFor="add-parent" className="block text-sm font-bold text-gray-300 mb-1.5">親カテゴリ（中分類にする場合のみ選択）</label>
+                <label htmlFor="add-parent" className="block text-lg font-bold text-gray-300 mb-1.5">親カテゴリ（中分類にする場合のみ選択）</label>
                 <select
                   id="add-parent"
                   value={addParentId}
                   onChange={(e) => setAddParentId(e.target.value)}
-                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm shadow-sm"
+                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg shadow-sm"
                 >
                   <option value="">-- なし（新しい大分類を作成する） --</option>
                   {categories.map((cat) => (
@@ -237,11 +237,11 @@ export default function CategoriesPage() {
           {/* 2. 現在のカテゴリ一覧カード */}
           <div className="p-6 sm:p-8 bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-800">
             <header className="mb-6">
-              <h2 className="text-sm font-bold text-g-text pl-2 border-l-2 border-gray-700">現在のカテゴリ一覧（数字で並び替え）</h2>
+              <h2 className="text-base font-bold text-g-text pl-2 border-l-2 border-gray-700">現在のカテゴリ一覧（数字で並び替え）</h2>
             </header>
             <div className="bg-[#131314] rounded-xl p-4 sm:p-6 border border-gray-800">
               {categories.length === 0 ? (
-                <p className="text-sm text-gray-500 text-center py-4">まだカテゴリが登録されていません。</p>
+                <p className="text-base text-gray-500 text-center py-4">まだカテゴリが登録されていません。</p>
               ) : (
                 <ul className="space-y-4">
                   {categories.map((cat) => (
@@ -316,7 +316,7 @@ export default function CategoriesPage() {
                             <li key={child.id} className="flex flex-col py-1">
                               {editingId !== child.id ? (
                                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 w-full">
-                                  <div className="text-sm font-bold text-gray-300 flex items-center">
+                                  <div className="text-base font-bold text-gray-300 flex items-center">
                                     <svg aria-hidden="true" className="h-4 w-4 text-gray-500 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>

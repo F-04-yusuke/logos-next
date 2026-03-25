@@ -95,8 +95,8 @@ function ProfileInfoSection({ profile, onSaved }: {
   return (
     <section>
       <header>
-        <h2 className="text-sm font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">プロフィール情報</h2>
-        <p className="mt-1 text-sm text-gray-600 dark:text-g-sub">
+        <h2 className="text-base font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">プロフィール情報</h2>
+        <p className="mt-1 text-base text-gray-600 dark:text-g-sub">
           プロフィール画像、アカウント名、メールアドレスを更新できます。
         </p>
       </header>
@@ -120,7 +120,7 @@ function ProfileInfoSection({ profile, onSaved }: {
             )}
           </div>
           <div className="flex-1">
-            <label htmlFor="avatar" className="block text-sm font-bold text-gray-700 dark:text-g-text mb-1">
+            <label htmlFor="avatar" className="block text-lg font-bold text-gray-700 dark:text-g-text mb-1">
               プロフィール画像
             </label>
             <input
@@ -137,7 +137,7 @@ function ProfileInfoSection({ profile, onSaved }: {
 
         {/* アカウント名 */}
         <div>
-          <label htmlFor="name" className="block text-sm font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="name" className="block text-lg font-bold text-gray-700 dark:text-g-text">
             アカウント名
           </label>
           <input
@@ -148,7 +148,7 @@ function ProfileInfoSection({ profile, onSaved }: {
             disabled={!canChangeName}
             required
             autoComplete="name"
-            className={`mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+            className={`mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
               !canChangeName ? "opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800" : ""
             }`}
           />
@@ -166,7 +166,7 @@ function ProfileInfoSection({ profile, onSaved }: {
 
         {/* メール */}
         <div>
-          <label htmlFor="email" className="block text-sm font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="email" className="block text-lg font-bold text-gray-700 dark:text-g-text">
             Email（ログイン用）
           </label>
           <input
@@ -176,7 +176,7 @@ function ProfileInfoSection({ profile, onSaved }: {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="username"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
           {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email[0]}</p>}
         </div>
@@ -248,15 +248,15 @@ function PasswordSection() {
   return (
     <section>
       <header>
-        <h2 className="text-sm font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">パスワードの更新</h2>
-        <p className="mt-1 text-sm text-gray-600 dark:text-g-sub">
+        <h2 className="text-base font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">パスワードの更新</h2>
+        <p className="mt-1 text-base text-gray-600 dark:text-g-sub">
           アカウントのセキュリティを保つため、長くランダムなパスワードを使用してください。
         </p>
       </header>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-6">
         <div>
-          <label htmlFor="current_password" className="block text-sm font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="current_password" className="block text-lg font-bold text-gray-700 dark:text-g-text">
             現在のパスワード
           </label>
           <input
@@ -266,13 +266,13 @@ function PasswordSection() {
             onChange={(e) => setCurrentPassword(e.target.value)}
             required
             autoComplete="current-password"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
           {errors.current_password && <p className="mt-1 text-xs text-red-500">{errors.current_password[0]}</p>}
         </div>
 
         <div>
-          <label htmlFor="new_password" className="block text-sm font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="new_password" className="block text-lg font-bold text-gray-700 dark:text-g-text">
             新しいパスワード
           </label>
           <input
@@ -282,13 +282,13 @@ function PasswordSection() {
             onChange={(e) => setPassword(e.target.value)}
             required
             autoComplete="new-password"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
           {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password[0]}</p>}
         </div>
 
         <div>
-          <label htmlFor="password_confirmation" className="block text-sm font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="password_confirmation" className="block text-lg font-bold text-gray-700 dark:text-g-text">
             新しいパスワード（確認用）
           </label>
           <input
@@ -298,7 +298,7 @@ function PasswordSection() {
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             required
             autoComplete="new-password"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
           {errors.password_confirmation && <p className="mt-1 text-xs text-red-500">{errors.password_confirmation[0]}</p>}
         </div>
@@ -360,8 +360,8 @@ function DeleteAccountSection() {
   return (
     <section className="space-y-6">
       <header>
-        <h2 className="text-sm font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">アカウントの削除</h2>
-        <p className="mt-1 text-sm text-gray-600 dark:text-g-sub leading-relaxed">
+        <h2 className="text-base font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">アカウントの削除</h2>
+        <p className="mt-1 text-base text-gray-600 dark:text-g-sub leading-relaxed">
           アカウントを削除すると、すべてのリソースとデータが完全に削除されます。<br />
           アカウントを削除する前に、保持しておきたいデータや情報をダウンロードしてください。
         </p>
@@ -386,7 +386,7 @@ function DeleteAccountSection() {
               <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">
                 本当にアカウントを削除しますか？
               </h2>
-              <p className="mt-1 text-sm text-gray-600 dark:text-g-sub leading-relaxed">
+              <p className="mt-1 text-base text-gray-600 dark:text-g-sub leading-relaxed">
                 アカウントを削除すると、すべてのリソースとデータが完全に削除されます。<br />
                 アカウントを完全に削除することを確認するため、パスワードを入力してください。
               </p>
@@ -400,7 +400,7 @@ function DeleteAccountSection() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="パスワード"
                   required
-                  className="mt-1 block w-full sm:w-3/4 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                  className="mt-1 block w-full sm:w-3/4 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500"
                 />
                 {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password[0]}</p>}
                 {errors._ && <p className="mt-1 text-xs text-red-500">{errors._[0]}</p>}
@@ -480,7 +480,7 @@ export default function ProfilePage() {
     <div className="py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
-        <h1 className="text-lg font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
+        <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
           プロフィール
         </h1>
 
