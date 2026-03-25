@@ -74,7 +74,7 @@ export default function LikesPage() {
 
           {/* ページヘッダー */}
           <div className="px-4 sm:px-6 pt-2 mb-5">
-            <h1 className="text-lg font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
+            <h1 className="text-xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
               参考になった
             </h1>
           </div>
@@ -83,19 +83,19 @@ export default function LikesPage() {
           <div className="flex border-b border-gray-200 dark:border-gray-800 overflow-x-auto px-4 sm:px-6">
             <button
               onClick={() => setActiveTab("info")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("info")}`}
+              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("info")}`}
             >
               情報 ({likedPosts.length})
             </button>
             <button
               onClick={() => setActiveTab("comments")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("comments")}`}
+              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("comments")}`}
             >
               コメント ({likedComments.length})
             </button>
             <button
               onClick={() => setActiveTab("analysis")}
-              className={`py-3 px-6 border-b-2 text-sm transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analysis")}`}
+              className={`py-3 px-6 border-b-2 text-base transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analysis")}`}
             >
               分析・図解 (0)
               <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
@@ -110,13 +110,13 @@ export default function LikesPage() {
             {activeTab === "info" && (
               <div className="space-y-6">
                 {likedPosts.length === 0 ? (
-                  <p className="text-center text-gray-500 py-6 text-sm">いいねした情報はありません。</p>
+                  <p className="text-center text-gray-500 py-6 text-base">いいねした情報はありません。</p>
                 ) : (
                   likedPosts.map((post) => (
                     <div key={post.id} className="flex flex-col gap-1.5">
                       <PostCard post={post} />
                       <div className="text-right px-2">
-                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-g-sub">
+                        <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
                           <Link
                             href={`/topics/${post.topic.id}`}
@@ -136,13 +136,13 @@ export default function LikesPage() {
             {activeTab === "comments" && (
               <div className="space-y-6">
                 {likedComments.length === 0 ? (
-                  <p className="text-center text-gray-500 py-6 text-sm">いいねしたコメントはありません。</p>
+                  <p className="text-center text-gray-500 py-6 text-base">いいねしたコメントはありません。</p>
                 ) : (
                   likedComments.map((comment) => (
                     <div key={comment.id} className="flex flex-col gap-1.5">
                       <CommentCard comment={comment} />
                       <div className="text-right px-2">
-                        <span className="text-[11px] sm:text-xs font-bold text-gray-500 dark:text-g-sub">
+                        <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-g-sub">
                           🔗 投稿先トピック:{" "}
                           <Link
                             href={`/topics/${comment.topic.id}`}
@@ -161,7 +161,7 @@ export default function LikesPage() {
             {/* 分析・図解タブ */}
             {activeTab === "analysis" && (
               <div className="space-y-6">
-                <p className="text-center text-gray-500 py-6 text-sm">いいねした分析・図解はありません。</p>
+                <p className="text-center text-gray-500 py-6 text-base">いいねした分析・図解はありません。</p>
               </div>
             )}
 
