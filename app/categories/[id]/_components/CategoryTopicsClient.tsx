@@ -129,7 +129,7 @@ export default function CategoryTopicsClient({
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── パンくず ── */}
-        <div className="flex items-center gap-2 text-[12px] text-g-sub mb-6 flex-wrap">
+        <div className="flex items-center gap-2 text-xs text-g-sub mb-6 flex-wrap">
           <Link href="/" className="hover:text-g-text transition-colors duration-100 cursor-pointer">
             ホーム
           </Link>
@@ -155,7 +155,7 @@ export default function CategoryTopicsClient({
               {categoryName || <span className="inline-block w-24 h-6 rounded bg-white/[0.08] animate-pulse" />}
             </h1>
             {!loading && (
-              <p className="text-[12px] text-g-sub mt-0.5">{total}件のトピック</p>
+              <p className="text-xs text-g-sub mt-0.5">{total}件のトピック</p>
             )}
           </div>
           <select
@@ -204,17 +204,17 @@ export default function CategoryTopicsClient({
                       </div>
                     )}
 
-                    <h2 className="text-[15px] font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors duration-100 leading-snug">
+                    <h2 className="text-base font-bold text-g-text mb-1.5 group-hover:text-blue-400 transition-colors duration-100 leading-snug">
                       {topic.title}
                     </h2>
 
                     {topic.content && (
-                      <p className="text-[13px] text-g-sub line-clamp-2 mb-2 leading-relaxed">
+                      <p className="text-sm text-g-sub line-clamp-2 mb-2 leading-relaxed">
                         {topic.content}
                       </p>
                     )}
 
-                    <div className="flex items-center gap-2 text-[11px] text-g-sub">
+                    <div className="flex items-center gap-2 text-xs text-g-sub">
                       <span>{topic.user.name}</span>
                       <span className="text-white/20">·</span>
                       <span className="flex items-center gap-1">
