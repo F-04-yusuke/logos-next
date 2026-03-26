@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getAuthHeaders } from "@/lib/auth";
 
@@ -32,13 +33,14 @@ type Analysis = {
   topic?: { id: number; title: string } | null;
 };
 
-// -------- ツリーノード再帰コンポーネント --------
+// -------- スタンスバッジスタイル --------
 function getStanceStyle(stance?: string) {
   switch (stance) {
     case "主張":
       return "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-400/10 dark:text-g-sub dark:border-gray-400/30";
     case "反論":
       return "bg-red-100 text-red-600 border-red-200 dark:bg-red-400/10 dark:text-red-400 dark:border-red-400/30";
+    case "賛成":
     case "賛成・補足":
       return "bg-green-100 text-green-600 border-green-200 dark:bg-green-400/10 dark:text-green-400 dark:border-green-400/30";
     case "疑問":
@@ -58,6 +60,19 @@ function getStanceStyle(stance?: string) {
   }
 }
 
+// -------- アバター配色（自が最も目立つ、A〜Eは薄い別色） --------
+function getAvatarStyle(speaker: string): string {
+  const s = speaker ?? "";
+  if (s.includes("自分") || s.includes("自")) return "bg-blue-600 text-white";
+  if (s.includes("A")) return "bg-purple-500/25 text-purple-400";
+  if (s.includes("B")) return "bg-amber-500/25 text-amber-400";
+  if (s.includes("C")) return "bg-teal-500/25 text-teal-400";
+  if (s.includes("D")) return "bg-pink-500/25 text-pink-400";
+  if (s.includes("E")) return "bg-indigo-500/25 text-indigo-400";
+  return "bg-gray-500/20 text-gray-400";
+}
+
+// -------- ラベル生成 --------
 function computeViewLabels(nodes: TreeNode[]): Map<TreeNode, string> {
   const map = new Map<TreeNode, string>();
   const counts: Record<string, number> = {};
@@ -81,84 +96,58 @@ function computeViewLabels(nodes: TreeNode[]): Map<TreeNode, string> {
   return map;
 }
 
+// -------- ツリーノード（YouTubeライクな縦線＋等間隔スレッド） --------
 function ViewTreeNode({ node, labels }: { node: TreeNode; labels: Map<TreeNode, string> }) {
   const label = labels.get(node) ?? "";
-  const isSelf = (node.speaker ?? "").includes("自");
+  const speaker = node.speaker ?? "";
+  const isSelf = speaker.includes("自分") || speaker.includes("自");
   const children = node.children ?? [];
-  const hasChildrenNodes = children.length > 0;
+  const hasChildren = children.length > 0;
+  const avatarClass = getAvatarStyle(speaker);
 
   return (
-    <div>
-      <div className="flex gap-3">
-        <div className="flex flex-col shrink-0 w-8">
-          <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${
-              isSelf
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+    <div className="flex gap-3">
+      {/* 左カラム: アバター + 縦線（子がある場合のみ） */}
+      <div className="flex flex-col items-center shrink-0 w-8">
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${avatarClass}`}
+        >
+          {label}
+        </div>
+        {hasChildren && (
+          <div className="w-0.5 flex-1 bg-gray-300 dark:bg-gray-700 mt-2" />
+        )}
+      </div>
+
+      {/* 右カラム: コンテンツ + 子ノード */}
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 mb-1.5">
+          <span
+            className={`text-sm font-bold ${
+              isSelf ? "text-blue-500 dark:text-blue-400" : "text-gray-700 dark:text-g-text"
             }`}
           >
-            {label}
-          </div>
-          {hasChildrenNodes && (
-            <div
-              className="flex-1 border-l-2 border-gray-300 dark:border-gray-700 mt-1"
-              style={{ marginLeft: "15px" }}
-              aria-hidden="true"
-            />
+            {speaker}
+          </span>
+          {node.stance && (
+            <span
+              className={`text-[11px] px-2 py-0.5 rounded-full border font-bold ${getStanceStyle(node.stance)}`}
+            >
+              {node.stance}
+            </span>
           )}
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className={`text-sm font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>
-              {node.speaker}
-            </span>
-            {node.stance && (
-              <span className={`text-[11px] px-2.5 py-0.5 rounded-full border font-bold ${getStanceStyle(node.stance)}`}>
-                {node.stance}
-              </span>
-            )}
+        <p className="text-base text-gray-900 dark:text-g-text whitespace-pre-wrap leading-relaxed pb-5">
+          {node.text}
+        </p>
+        {hasChildren && (
+          <div className="space-y-8">
+            {children.map((child, i) => (
+              <ViewTreeNode key={i} node={child} labels={labels} />
+            ))}
           </div>
-          <p className="text-base text-gray-900 dark:text-g-text whitespace-pre-wrap leading-relaxed py-1 pb-3 min-h-[2rem]">
-            {node.text}
-          </p>
-        </div>
+        )}
       </div>
-      {hasChildrenNodes && (
-        <div className="flex gap-3">
-          <div className="shrink-0 w-8" />
-          <div className="flex-1 space-y-6">
-            {children.map((child, idx) => {
-              const isLast = idx === children.length - 1;
-              return (
-                <div key={idx} className="relative">
-                  {isLast ? (
-                    <div
-                      className="absolute pointer-events-none border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
-                      style={{ left: "-29px", top: 0, width: "29px", height: "16px" }}
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <>
-                      <div
-                        className="absolute pointer-events-none border-l-2 border-gray-300 dark:border-gray-700"
-                        style={{ left: "-29px", top: 0, height: "calc(100% + 16px)" }}
-                        aria-hidden="true"
-                      />
-                      <div
-                        className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-gray-700"
-                        style={{ left: "-29px", top: "16px", width: "29px" }}
-                        aria-hidden="true"
-                      />
-                    </>
-                  )}
-                  <ViewTreeNode node={child} labels={labels} />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -340,6 +329,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
 // -------- ページ本体 --------
 export default function AnalysisShowPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const router = useRouter();
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -353,6 +343,14 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const handleBack = () => {
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("from") === "dashboard") {
+      router.push("/dashboard?tab=analyses");
+    } else {
+      router.back();
+    }
+  };
 
   const typeLabel = () => {
     if (!analysis) return "";
@@ -368,13 +366,13 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
   const typeIcon = () => {
     if (!analysis) return null;
     if (analysis.type === "tree")
-      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>;
+      return <svg aria-hidden="true" className="h-4 w-4 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>;
     if (analysis.type === "matrix")
-      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
+      return <svg aria-hidden="true" className="h-4 w-4 text-purple-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
     if (analysis.type === "swot")
-      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>;
+      return <svg aria-hidden="true" className="h-4 w-4 text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>;
     if (analysis.type === "image")
-      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
+      return <svg aria-hidden="true" className="h-4 w-4 text-orange-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
     return null;
   };
 
@@ -395,43 +393,57 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
     );
   }
 
+  const strippedTitle = analysis.title.includes(": ")
+    ? analysis.title.split(": ").slice(1).join(": ")
+    : analysis.title;
+
   return (
     <div className="py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* ページヘッダー */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-2xl text-gray-800 dark:text-g-text leading-tight flex items-center">
-            {typeIcon()}
-            {typeLabel()}
-          </h2>
-          <button
-            onClick={() => window.history.back()}
-            className="text-base font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2"
-          >
-            ← 戻る
-          </button>
-        </div>
+        {/* 情報カード: ツール種別（小）+ 戻るボタン / タイトル（大）+ メタ情報 */}
+        <div className="mb-8">
+          {/* 上段: ツール種別ラベル + 戻るボタン */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-g-sub">
+              {typeIcon()}
+              <span>{typeLabel()}</span>
+            </div>
+            <button
+              onClick={handleBack}
+              className="text-sm font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2"
+            >
+              ← 戻る
+            </button>
+          </div>
 
-        {/* タイトル＋メタ情報 */}
-        <div className="flex items-start justify-between gap-4 mb-6">
-          <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-g-text">
-            {analysis.title.includes(": ") ? analysis.title.split(": ").slice(1).join(": ") : analysis.title}
-          </h1>
-          <div className="text-xs text-gray-500 dark:text-g-sub text-right space-y-1 shrink-0">
-            <div>
-              <span className="font-bold text-gray-700 dark:text-g-text">{analysis.user.name}</span>
-            </div>
-            <div>
-              {new Date(analysis.created_at).toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" })}
-            </div>
-            {analysis.topic && (
-              <div>
-                <Link href={`/topics/${analysis.topic.id}`} className="text-blue-500 hover:underline transition-colors">
-                  {analysis.topic.title}
-                </Link>
+          {/* 下段: タイトル（大）+ メタ情報 */}
+          <div className="flex items-start justify-between gap-6">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-g-text leading-tight">
+              {strippedTitle}
+            </h1>
+            <div className="text-xs text-gray-500 dark:text-g-sub text-right shrink-0 space-y-1 mt-0.5">
+              <div className="font-bold text-sm text-gray-700 dark:text-g-text">
+                {analysis.user.name}
               </div>
-            )}
+              <div>
+                {new Date(analysis.created_at).toLocaleDateString("ja-JP", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })}
+              </div>
+              {analysis.topic && (
+                <div>
+                  <Link
+                    href={`/topics/${analysis.topic.id}`}
+                    className="text-blue-500 hover:underline transition-colors"
+                  >
+                    → {analysis.topic.title}
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

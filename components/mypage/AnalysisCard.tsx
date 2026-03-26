@@ -71,7 +71,7 @@ export function AnalysisCard({
         {/* 閲覧リンク（公開済みのみ） */}
         {!!analysis.is_published && (
           <Link
-            href={`/analyses/${analysis.id}`}
+            href={`/analyses/${analysis.id}?from=dashboard`}
             className="text-xs font-bold text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-0.5"
           >
             閲覧 <span className="text-[10px]" aria-hidden="true">▶</span>
