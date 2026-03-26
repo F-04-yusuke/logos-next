@@ -412,7 +412,7 @@ function MatrixPageInner() {
           <button
             onClick={saveMatrix}
             disabled={isSaving}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-2 sm:py-1.5 px-4 rounded text-base transition-colors shadow-sm"
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold py-2 sm:py-1.5 px-4 rounded text-base transition-colors shadow-sm cursor-pointer"
           >
             {isSaving ? "保存中..." : "保存する"}
           </button>
@@ -485,7 +485,7 @@ function MatrixPageInner() {
                           />
                           <button
                             onClick={() => removeColumn(pIdx)}
-                            className="text-gray-400 hover:text-red-500 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded text-xs ml-1 shrink-0"
+                            className="text-gray-400 hover:text-red-500 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded text-xs ml-1 shrink-0 cursor-pointer"
                           >
                             <span className="sr-only">削除</span>✕
                           </button>
@@ -509,7 +509,7 @@ function MatrixPageInner() {
                     <th className="p-3 border-b border-gray-200 dark:border-gray-700 w-24 bg-gray-100 dark:bg-[#1e1f20] align-middle text-center">
                       <button
                         onClick={addColumn}
-                        className="text-gray-500 dark:text-g-sub hover:text-gray-800 dark:hover:text-white bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-lg px-2 py-4 text-xs font-bold transition-colors w-full flex flex-col items-center gap-1"
+                        className="text-gray-500 dark:text-g-sub hover:text-gray-800 dark:hover:text-white bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-lg px-2 py-4 text-xs font-bold transition-colors w-full flex flex-col items-center gap-1 cursor-pointer"
                       >
                         <span className="text-lg leading-none">＋</span>
                         <span>列を追加</span>
@@ -526,7 +526,7 @@ function MatrixPageInner() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => removeRow(rIdx)}
-                            className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity text-xs shrink-0 p-1"
+                            className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity text-xs shrink-0 p-1 cursor-pointer"
                           >
                             ✕
                           </button>
@@ -593,7 +593,7 @@ function MatrixPageInner() {
                     <td className="p-3 border-r border-gray-200 dark:border-gray-700 text-right">
                       <button
                         onClick={addRow}
-                        className="text-xs font-bold text-gray-500 dark:text-g-sub hover:text-gray-800 dark:hover:text-white transition-colors flex items-center bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 px-3 py-1.5 rounded-full mr-auto"
+                        className="text-xs font-bold text-gray-500 dark:text-g-sub hover:text-gray-800 dark:hover:text-white transition-colors flex items-center bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 px-3 py-1.5 rounded-full mr-auto cursor-pointer"
                       >
                         <span className="text-base mr-1 leading-none">＋</span> 評価項目(行)を追加
                       </button>
@@ -669,7 +669,7 @@ function MatrixPageInner() {
                   />
                   <button
                     onClick={sendAiMessage}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg font-bold text-base transition-colors shadow-md shrink-0"
+                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg font-bold text-base transition-colors shadow-md shrink-0 cursor-pointer"
                   >
                     送信
                   </button>

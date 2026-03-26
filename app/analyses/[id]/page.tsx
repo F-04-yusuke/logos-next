@@ -435,7 +435,7 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
             </h2>
             <button
               onClick={handleBack}
-              className="text-base font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2"
+              className="text-base font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2 cursor-pointer"
             >
               ← 戻る
             </button>
