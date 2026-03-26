@@ -25,7 +25,7 @@ const API = process.env.API_BASE_URL ?? "http://localhost";
 async function fetchInitialTopics(categoryId: string): Promise<TopicsResponse | null> {
   try {
     const res = await fetch(`${API}/api/topics?category=${categoryId}&sort=newest`, {
-      cache: "no-store",
+      next: { revalidate: 30 },
     });
     if (!res.ok) return null;
     return res.json();

@@ -129,6 +129,8 @@ function FeaturedTopicPanel({ post }: { post: FeaturedPost | null | undefined })
             src={post.thumbnail_url}
             alt={post.title ?? ""}
             className="w-full aspect-[16/9] rounded-md object-cover mb-2"
+            fetchPriority="high"
+            loading="eager"
           />
         ) : (
           <div className="w-full aspect-[16/9] rounded-md bg-gradient-to-br from-indigo-900/70 via-blue-900/50 to-indigo-800/60 border border-indigo-500/20 mb-2 flex items-center justify-center">

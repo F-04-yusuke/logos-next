@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 type Category = {
   id: number;
@@ -9,38 +6,20 @@ type Category = {
   children: Category[];
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const API = process.env.API_BASE_URL ?? "http://localhost";
 
-export default function CategoryListPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [fetching, setFetching] = useState(true);
-
-  useEffect(() => {
-    fetch(`${BASE_URL}/api/categories`, {
-      headers: { Accept: "application/json" },
-    })
-      .then((res) => res.ok ? res.json() : Promise.reject())
-      .then((data) => { if (Array.isArray(data)) setCategories(data); })
-      .finally(() => setFetching(false));
-  }, []);
-
-  if (fetching) {
-    return (
-      <div className="py-8 sm:py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="animate-pulse">
-            <div className="h-7 bg-white/[0.06] rounded-md w-1/4 mb-3" />
-            <div className="h-4 bg-white/[0.04] rounded w-2/5 mb-8" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="h-40 bg-white/[0.04] rounded-xl" />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+async function fetchCategories(): Promise<Category[]> {
+  try {
+    const res = await fetch(`${API}/api/categories`, { next: { revalidate: 3600 } });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
   }
+}
+
+export default async function CategoryListPage() {
+  const categories = await fetchCategories();
 
   return (
     <div className="py-8 sm:py-12">

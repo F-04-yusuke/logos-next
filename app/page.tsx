@@ -33,7 +33,7 @@ const API = process.env.API_BASE_URL ?? "http://localhost";
 
 async function fetchInitialTopics(): Promise<TopicsResponse | null> {
   try {
-    const res = await fetch(`${API}/api/topics?sort=newest`, { cache: "no-store" });
+    const res = await fetch(`${API}/api/topics?sort=newest`, { next: { revalidate: 30 } });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -43,7 +43,7 @@ async function fetchInitialTopics(): Promise<TopicsResponse | null> {
 
 async function fetchCategories(): Promise<Category[]> {
   try {
-    const res = await fetch(`${API}/api/categories`, { cache: "no-store" });
+    const res = await fetch(`${API}/api/categories`, { next: { revalidate: 3600 } });
     if (!res.ok) return [];
     return res.json();
   } catch {
