@@ -35,7 +35,7 @@ logos-next/
 │   │       └── _components/
 │   │           └── CategoryTopicsClient.tsx  # カテゴリ別トピック一覧CSR（useEffectでカテゴリ名取得・ソート・ページネーション）
 │   ├── category-list/
-│   │   └── page.tsx                     # /category-list カテゴリ公開グリッド一覧（大分類・中分類 → /categories/[id]）
+│   │   └── page.tsx                     # /category-list カテゴリ公開グリッド一覧【SSR Server Component・Session 38】（大分類・中分類 → /categories/[id]）
 │   ├── notifications/
 │   │   └── page.tsx                     # /notifications 通知一覧（TypeBadge・既読・ページネーション）
 │   ├── likes/
@@ -143,7 +143,7 @@ logos-next/
 | `/register` | app/register/page.tsx | CSR | ✅ |
 | `/categories` | app/categories/page.tsx | CSR | ✅ |
 | `/categories/[id]` | app/categories/[id]/page.tsx | SSR初期トピック+CSRカテゴリ名 | ✅ |
-| `/category-list` | app/category-list/page.tsx | CSR | ✅ |
+| `/category-list` | app/category-list/page.tsx | SSR（Session 38） | ✅ |
 | `/notifications` | app/notifications/page.tsx | CSR | ✅ |
 | `/likes` | app/likes/page.tsx | CSR | ✅ |
 | `/dashboard` | app/dashboard/page.tsx | CSR | ✅ |

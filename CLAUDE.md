@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-26（Session 37 / 分析閲覧・ツール UI 細部改善）
+最終更新: 2026-03-26（Session 38 / 分析プレビューUI統一・Vercelパフォーマンス改善）
 
 ---
 
@@ -131,7 +131,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/register` | ユーザー登録 |
 | `/categories` | カテゴリ（admin: CRUD / 一般: 一覧） |
 | `/categories/[id]` | カテゴリ別トピック一覧（大分類・中分類対応・SSR初期データ+CSRカテゴリ名解決） |
-| `/category-list` | カテゴリ公開一覧（大分類・中分類リンク → /categories/[id]） |
+| `/category-list` | カテゴリ公開一覧（大分類・中分類リンク → /categories/[id]）【SSR・Session 38】 |
 | `/topics/create` | トピック作成（PRO限定） |
 | `/topics/[id]` | トピック詳細（3タブ・投稿・コメント・いいね・ブックマーク） |
 | `/topics/[id]/edit` | トピック編集（PRO作成者限定） |
@@ -146,7 +146,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v6.34-session37-view-spacing`
+- logos-next: `v6.37-session38-ssr-perf`
 - logos-laravel: `v4.4-session31-liked-by-me`
 
 ## /categories/[id] の実装上の注意（Session 23 技術的負債）
@@ -188,7 +188,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
 | `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 20〜） |
 | `.claude/skills/progress-phase4-s12-s19.md` | Phase 4 アーカイブ（Session 12〜19・早期UI改善記録） |
-| `.claude/skills/handoff-session38.md` | **最新引継ぎプロンプト** |
+| `.claude/skills/handoff-session39.md` | **最新引継ぎプロンプト** |
 | `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜31 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）

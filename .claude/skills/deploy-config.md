@@ -52,6 +52,13 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost
 - `/` と `/topics/[id]` が SSR Server Component に移行済み
 - **残タスク**: `/analyses/[id]` のSSR化 — `auth:sanctum` 必須のためCookie認証導入まで保留
 
+### Session 38 パフォーマンス改善（2026-03-26）
+- `vercel.json` 新規作成 — `regions: ["hnd1"]`（東京）でVercel↔さくら間RTT削減
+- SSR fetch `cache: "no-store"` → `next: { revalidate: 30 }` / カテゴリは `revalidate: 3600`
+- `/category-list` を Server Component に SSR 化（認証不要ページ）
+- LCP 画像（`FeaturedTopicPanel`）に `fetchPriority="high"` + `loading="eager"` 追加
+- **結果**: Vercel LCP 2.96s → 0.56s（Good）
+
 ### 教訓
 - Vercelのビルドログはエラーなしでもランタイムエラーになりうる
 - SSR/CSRの使い分けはVercelとバックエンドのネットワーク疎通を事前確認してから決める

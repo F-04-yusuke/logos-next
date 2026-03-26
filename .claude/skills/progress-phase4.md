@@ -1,8 +1,46 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-26（Session 37 追記）
+最終更新: 2026-03-26（Session 38 追記）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
+
+---
+
+## Session 38: 分析タブ プレビューUI統一・Vercelパフォーマンス改善（2026-03-26）
+
+### U-37: 分析タブ プレビューUI を閲覧画面と統一・縦幅拡大 ✅
+
+**変更ファイル:** `app/topics/[id]/_components/AnalysisCard.tsx`
+
+| タイプ | 変更前 | 変更後 |
+|---|---|---|
+| tree | シンプルカード積み上げ（旧スタイル） | 閲覧画面と同一のアバター丸＋コネクタ線（`PreviewTreeNode`） |
+| swot | 箇条書きのみ | 閲覧画面と同一の `bg-gray-50` パネル囲みアイテム |
+| image | `max-h-[350px]` 高さ制限のみ | 閲覧画面と同一の白カード（`rounded-xl border`）内配置 |
+| matrix | 変更なし（すでに閲覧画面と同一） | — |
+| プレビュー高さ | `h-[200px]` | `h-[400px]` |
+
+- `getAvatarStyle` / `computePreviewLabels` / `PreviewTreeNode` を新規追加（閲覧画面と同一ロジック）
+- swot: 全アイテム表示（`slice(0,3)` 廃止）・`dark:bg-{color}-900/5` カラートント追加
+
+**Gitタグ:** `v6.36-session38-analysis-preview-unified`
+
+---
+
+### P-1: Vercel パフォーマンス改善（SSRキャッシュ・リージョン・LCP）✅
+
+**LCP改善結果:** Vercel 2.96s (Bad) → **0.56s (Good)**
+
+**変更ファイル:** `vercel.json`（新規）/ `app/page.tsx` / `app/categories/[id]/page.tsx` / `app/category-list/page.tsx` / `app/_components/HomeClient.tsx`
+
+| 対応 | 内容 |
+|---|---|
+| `vercel.json` 新規作成 | `regions: ["hnd1"]`（東京）でVercel↔さくら間RTT削減 |
+| SSRフェッチキャッシュ | topics `revalidate:30` / categories `revalidate:3600`（`no-store` → ISR化） |
+| `/category-list` SSR化 | `"use client"` + `useEffect` → Server Component（スケルトン削除・即時表示） |
+| LCP画像優先読み込み | `FeaturedTopicPanel` の `<img>` に `fetchPriority="high"` + `loading="eager"` |
+
+**Gitタグ:** `v6.37-session38-ssr-perf`
 
 ---
 
