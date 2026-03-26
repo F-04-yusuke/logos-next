@@ -1,7 +1,6 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getAuthHeaders } from "@/lib/auth";
 
@@ -96,58 +95,83 @@ function computeViewLabels(nodes: TreeNode[]): Map<TreeNode, string> {
   return map;
 }
 
-// -------- ツリーノード（YouTubeライクな縦線＋等間隔スレッド） --------
+// -------- ツリーノード再帰コンポーネント（元の絶対座標コネクタ方式を維持） --------
 function ViewTreeNode({ node, labels }: { node: TreeNode; labels: Map<TreeNode, string> }) {
   const label = labels.get(node) ?? "";
   const speaker = node.speaker ?? "";
   const isSelf = speaker.includes("自分") || speaker.includes("自");
   const children = node.children ?? [];
-  const hasChildren = children.length > 0;
+  const hasChildrenNodes = children.length > 0;
   const avatarClass = getAvatarStyle(speaker);
 
   return (
-    <div className="flex gap-3">
-      {/* 左カラム: アバター + 縦線（子がある場合のみ） */}
-      <div className="flex flex-col items-center shrink-0 w-8">
-        <div
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${avatarClass}`}
-        >
-          {label}
-        </div>
-        {hasChildren && (
-          <div className="w-0.5 flex-1 bg-gray-300 dark:bg-gray-700 mt-2" />
-        )}
-      </div>
-
-      {/* 右カラム: コンテンツ + 子ノード */}
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-2 mb-1.5">
-          <span
-            className={`text-sm font-bold ${
-              isSelf ? "text-blue-500 dark:text-blue-400" : "text-gray-700 dark:text-g-text"
-            }`}
+    <div>
+      <div className="flex gap-3">
+        <div className="flex flex-col shrink-0 w-8">
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${avatarClass}`}
           >
-            {speaker}
-          </span>
-          {node.stance && (
-            <span
-              className={`text-[11px] px-2 py-0.5 rounded-full border font-bold ${getStanceStyle(node.stance)}`}
-            >
-              {node.stance}
-            </span>
+            {label}
+          </div>
+          {hasChildrenNodes && (
+            <div
+              className="flex-1 border-l-2 border-gray-300 dark:border-gray-700 mt-1"
+              style={{ marginLeft: "15px" }}
+              aria-hidden="true"
+            />
           )}
         </div>
-        <p className="text-base text-gray-900 dark:text-g-text whitespace-pre-wrap leading-relaxed pb-5">
-          {node.text}
-        </p>
-        {hasChildren && (
-          <div className="space-y-8">
-            {children.map((child, i) => (
-              <ViewTreeNode key={i} node={child} labels={labels} />
-            ))}
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className={`text-sm font-bold ${isSelf ? "text-blue-500 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>
+              {speaker}
+            </span>
+            {node.stance && (
+              <span className={`text-[11px] px-2.5 py-0.5 rounded-full border font-bold ${getStanceStyle(node.stance)}`}>
+                {node.stance}
+              </span>
+            )}
           </div>
-        )}
+          <p className="text-base text-gray-900 dark:text-g-text whitespace-pre-wrap leading-relaxed py-1 pb-3 min-h-[2rem]">
+            {node.text}
+          </p>
+        </div>
       </div>
+      {hasChildrenNodes && (
+        <div className="flex gap-3">
+          <div className="shrink-0 w-8" />
+          <div className="flex-1 space-y-6">
+            {children.map((child, idx) => {
+              const isLast = idx === children.length - 1;
+              return (
+                <div key={idx} className="relative">
+                  {isLast ? (
+                    <div
+                      className="absolute pointer-events-none border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
+                      style={{ left: "-29px", top: 0, width: "29px", height: "16px" }}
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <>
+                      <div
+                        className="absolute pointer-events-none border-l-2 border-gray-300 dark:border-gray-700"
+                        style={{ left: "-29px", top: 0, height: "calc(100% + 16px)" }}
+                        aria-hidden="true"
+                      />
+                      <div
+                        className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-gray-700"
+                        style={{ left: "-29px", top: "16px", width: "29px" }}
+                        aria-hidden="true"
+                      />
+                    </>
+                  )}
+                  <ViewTreeNode node={child} labels={labels} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -329,7 +353,6 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
 // -------- ページ本体 --------
 export default function AnalysisShowPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const router = useRouter();
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -344,11 +367,12 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
       .finally(() => setLoading(false));
   }, [id]);
 
+  // ダッシュボードから来た場合は window.location.href でフルナビゲーション（router.push だとキャッシュで tab が戻らないため）
   const handleBack = () => {
     if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("from") === "dashboard") {
-      router.push("/dashboard?tab=analyses");
+      window.location.href = "/dashboard?tab=analyses";
     } else {
-      router.back();
+      window.history.back();
     }
   };
 
@@ -366,13 +390,13 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
   const typeIcon = () => {
     if (!analysis) return null;
     if (analysis.type === "tree")
-      return <svg aria-hidden="true" className="h-4 w-4 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>;
+      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>;
     if (analysis.type === "matrix")
-      return <svg aria-hidden="true" className="h-4 w-4 text-purple-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
+      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
     if (analysis.type === "swot")
-      return <svg aria-hidden="true" className="h-4 w-4 text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>;
+      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>;
     if (analysis.type === "image")
-      return <svg aria-hidden="true" className="h-4 w-4 text-orange-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
+      return <svg aria-hidden="true" className="h-5 w-5 mr-2 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
     return null;
   };
 
@@ -401,29 +425,29 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
     <div className="py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* 情報カード: ツール種別（小）+ 戻るボタン / タイトル（大）+ メタ情報 */}
-        <div className="mb-8">
-          {/* 上段: ツール種別ラベル + 戻るボタン */}
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-g-sub">
+        {/* 情報カード */}
+        <div className="mb-4">
+          {/* 上段: ツール種別（やや大きめ）+ 戻るボタン */}
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-bold text-base text-gray-500 dark:text-g-sub leading-tight flex items-center">
               {typeIcon()}
-              <span>{typeLabel()}</span>
-            </div>
+              {typeLabel()}
+            </h2>
             <button
               onClick={handleBack}
-              className="text-sm font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2"
+              className="text-base font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2"
             >
               ← 戻る
             </button>
           </div>
 
-          {/* 下段: タイトル（大）+ メタ情報 */}
-          <div className="flex items-start justify-between gap-6">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-g-text leading-tight">
+          {/* 下段: タイトル + メタ情報 */}
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-g-text leading-tight">
               {strippedTitle}
             </h1>
-            <div className="text-xs text-gray-500 dark:text-g-sub text-right shrink-0 space-y-1 mt-0.5">
-              <div className="font-bold text-sm text-gray-700 dark:text-g-text">
+            <div className="text-xs text-gray-500 dark:text-g-sub text-right space-y-1 shrink-0 mt-0.5">
+              <div className="font-bold text-gray-700 dark:text-g-text">
                 {analysis.user.name}
               </div>
               <div>
@@ -435,11 +459,8 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
               </div>
               {analysis.topic && (
                 <div>
-                  <Link
-                    href={`/topics/${analysis.topic.id}`}
-                    className="text-blue-500 hover:underline transition-colors"
-                  >
-                    → {analysis.topic.title}
+                  <Link href={`/topics/${analysis.topic.id}`} className="text-blue-500 hover:underline transition-colors">
+                    {analysis.topic.title}
                   </Link>
                 </div>
               )}
