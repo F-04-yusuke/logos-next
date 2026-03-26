@@ -92,12 +92,23 @@ function getSpeakerColor(speaker: string) {
     : "text-gray-700 dark:text-g-text";
 }
 
+function getAvatarStyle(speaker: string): string {
+  if (speaker.includes("自分")) return "bg-blue-600 text-white";
+  if (speaker.includes("A")) return "bg-purple-500/25 text-purple-400";
+  if (speaker.includes("B")) return "bg-amber-500/25 text-amber-400";
+  if (speaker.includes("C")) return "bg-teal-500/25 text-teal-400";
+  if (speaker.includes("D")) return "bg-pink-500/25 text-pink-400";
+  if (speaker.includes("E")) return "bg-indigo-500/25 text-indigo-400";
+  return "bg-gray-500/20 text-gray-400";
+}
+
 function getStanceStyle(stance: string) {
   switch (stance) {
     case "主張":
       return "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-400/10 dark:text-g-sub dark:border-gray-400/30";
     case "反論":
       return "bg-red-100 text-red-600 border-red-200 dark:bg-red-400/10 dark:text-red-400 dark:border-red-400/30";
+    case "賛成":
     case "賛成・補足":
       return "bg-green-100 text-green-600 border-green-200 dark:bg-green-400/10 dark:text-green-400 dark:border-green-400/30";
     case "疑問":
@@ -141,11 +152,7 @@ function NodeEditor({
         {/* Avatar + vertical line (flex-1 extends only to THIS node's content height) */}
         <div className="flex flex-col shrink-0 w-8">
           <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${
-              isSelf
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-            }`}
+            className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${getAvatarStyle(node.speaker)}`}
           >
             {label}
           </div>
