@@ -192,7 +192,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
             )}
           </div>
         )}
-        <div className="bg-white dark:bg-[#131314] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800">
+        <div className="py-2">
           <div className="space-y-8">
             {nodes.length > 0
               ? nodes.map((node, i) => <ViewTreeNode key={i} node={node} labels={labels} />)
@@ -255,7 +255,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
                     const style = scoreStyle(val);
                     return (
                       <td key={ci} className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#252627] align-top">
-                        {style && <div className={`w-full border rounded px-2 py-1 text-sm font-bold mb-2 ${style.cls}`}>{style.text}</div>}
+                        {style && <span className={`inline-block px-2 py-0.5 text-[10px] font-bold rounded border mb-2 ${style.cls}`}>{style.text}</span>}
                         <p className="text-sm text-gray-800 dark:text-g-text whitespace-pre-wrap">{e?.reason ?? ""}</p>
                       </td>
                     );
@@ -413,28 +413,25 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
           </button>
         </div>
 
-        {/* 情報カード */}
-        <div className="bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-xl mb-4 border border-gray-200 dark:border-gray-800">
-          <div className="p-3 sm:p-4">
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-g-text mb-1.5">{analysis.title}</h1>
-            <div className="flex flex-wrap items-center text-sm text-gray-500 dark:text-g-sub gap-2 sm:gap-3">
-              <span>
-                作成者:{" "}
-                <span className="font-bold text-gray-700 dark:text-g-text">{analysis.user.name}</span>
-              </span>
-              <span>
-                作成日:{" "}
-                {new Date(analysis.created_at).toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" })}
-              </span>
-              {analysis.topic && (
-                <span>
-                  連携先:{" "}
-                  <Link href={`/topics/${analysis.topic.id}`} className="text-blue-500 hover:underline transition-colors">
-                    {analysis.topic.title}
-                  </Link>
-                </span>
-              )}
+        {/* タイトル＋メタ情報 */}
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-g-text">
+            {analysis.title.includes(": ") ? analysis.title.split(": ").slice(1).join(": ") : analysis.title}
+          </h1>
+          <div className="text-xs text-gray-500 dark:text-g-sub text-right space-y-1 shrink-0">
+            <div>
+              <span className="font-bold text-gray-700 dark:text-g-text">{analysis.user.name}</span>
             </div>
+            <div>
+              {new Date(analysis.created_at).toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" })}
+            </div>
+            {analysis.topic && (
+              <div>
+                <Link href={`/topics/${analysis.topic.id}`} className="text-blue-500 hover:underline transition-colors">
+                  {analysis.topic.title}
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
