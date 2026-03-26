@@ -42,49 +42,129 @@ function stanceStyle(stance?: string) {
   return "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-g-sub dark:border-gray-700";
 }
 
+// -------- tree プレビュー用（閲覧画面と同一スタイル） --------
+type PreviewTreeNode = { speaker?: string; stance?: string; text?: string; children?: PreviewTreeNode[] };
+
+function previewAvatarStyle(speaker: string): string {
+  const s = speaker ?? "";
+  if (s.includes("自分") || s.includes("自")) return "bg-blue-600 text-white";
+  if (s.includes("A")) return "bg-purple-500/25 text-purple-400";
+  if (s.includes("B")) return "bg-amber-500/25 text-amber-400";
+  if (s.includes("C")) return "bg-teal-500/25 text-teal-400";
+  if (s.includes("D")) return "bg-pink-500/25 text-pink-400";
+  if (s.includes("E")) return "bg-indigo-500/25 text-indigo-400";
+  return "bg-gray-500/20 text-gray-400";
+}
+
+function computePreviewLabels(nodes: PreviewTreeNode[]): Map<PreviewTreeNode, string> {
+  const map = new Map<PreviewTreeNode, string>();
+  const counts: Record<string, number> = {};
+  function traverse(list: PreviewTreeNode[]) {
+    for (const node of list) {
+      const s = node.speaker ?? "";
+      let p = "他";
+      if (s.includes("自分") || s.includes("自")) p = "自";
+      else if (s.includes("A")) p = "A";
+      else if (s.includes("B")) p = "B";
+      else if (s.includes("C")) p = "C";
+      else if (s.includes("D")) p = "D";
+      else if (s.includes("E")) p = "E";
+      counts[p] = (counts[p] || 0) + 1;
+      map.set(node, p + counts[p]);
+      traverse(node.children ?? []);
+    }
+  }
+  traverse(nodes);
+  return map;
+}
+
+function PreviewTreeNode({ node, labels }: { node: PreviewTreeNode; labels: Map<PreviewTreeNode, string> }) {
+  const label = labels.get(node) ?? "";
+  const speaker = node.speaker ?? "";
+  const isSelf = speaker.includes("自分") || speaker.includes("自");
+  const children = node.children ?? [];
+  const hasChildren = children.length > 0;
+  return (
+    <div>
+      <div className="flex gap-3">
+        <div className="flex flex-col shrink-0 w-8">
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${previewAvatarStyle(speaker)}`}>
+            {label}
+          </div>
+          {hasChildren && (
+            <div className="flex-1 border-l-2 border-gray-300 dark:border-gray-700 mt-1" style={{ marginLeft: "15px" }} aria-hidden="true" />
+          )}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className={`text-sm font-bold ${isSelf ? "text-blue-500 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>{speaker}</span>
+            {node.stance && (
+              <span className={`text-[11px] px-2.5 py-0.5 rounded-full border font-bold ${stanceStyle(node.stance)}`}>{node.stance}</span>
+            )}
+          </div>
+          <p className="text-base text-gray-900 dark:text-g-text whitespace-pre-wrap leading-relaxed py-1 pb-9 min-h-[2rem]">{node.text}</p>
+        </div>
+      </div>
+      {hasChildren && (
+        <div className="flex gap-3">
+          <div className="shrink-0 w-8" />
+          <div className="flex-1 space-y-4">
+            {children.map((child, idx) => {
+              const isLast = idx === children.length - 1;
+              return (
+                <div key={idx} className="relative">
+                  {isLast ? (
+                    <div className="absolute pointer-events-none border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg" style={{ left: "-29px", top: 0, width: "29px", height: "16px" }} aria-hidden="true" />
+                  ) : (
+                    <>
+                      <div className="absolute pointer-events-none border-l-2 border-gray-300 dark:border-gray-700" style={{ left: "-29px", top: 0, height: "calc(100% + 16px)" }} aria-hidden="true" />
+                      <div className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-gray-700" style={{ left: "-29px", top: "16px", width: "29px" }} aria-hidden="true" />
+                    </>
+                  )}
+                  <PreviewTreeNode node={child} labels={labels} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
   if (analysis.type === "tree") {
-    const nodes = (analysis.data.nodes ?? []) as { speaker?: string; stance?: string; text?: string; children?: { speaker?: string; stance?: string; text?: string }[] }[];
+    const nodes = (analysis.data.nodes ?? []) as PreviewTreeNode[];
     const meta = analysis.data.meta as { url?: string; description?: string } | undefined;
+    const labels = computePreviewLabels(nodes);
     return (
       <div>
         {meta && (meta.url || meta.description) && (
-          <div className="mb-3 p-3 bg-gray-50 dark:bg-[#131314] rounded border border-gray-200 dark:border-gray-700">
-            <div className="text-[10px] font-bold text-blue-600 dark:text-blue-400 mb-1">事前情報</div>
-            {meta.description && <p className="text-sm text-gray-700 dark:text-g-text mb-1">{meta.description}</p>}
-            {meta.url && <a href={meta.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline truncate block">{meta.url}</a>}
+          <div className="bg-white dark:bg-[#1e1f20] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 mb-6">
+            <h3 className="font-bold text-gray-900 dark:text-g-text flex items-center mb-3">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              事前情報
+            </h3>
+            {meta.description && <p className="text-sm text-gray-700 dark:text-g-text mb-2 whitespace-pre-wrap">{meta.description}</p>}
+            {meta.url && (
+              <a href={meta.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline flex items-start sm:items-center break-all transition-colors">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 shrink-0 mt-0.5 sm:mt-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+                {meta.url}
+              </a>
+            )}
           </div>
         )}
-        <div className="pl-4 space-y-3">
-          {nodes.slice(0, 5).map((node, i) => {
-            const isSelf = node.speaker?.includes("自") ?? false;
-            return (
-              <div key={i}>
-                <div className="bg-gray-50 dark:bg-[#131314] p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 inline-block min-w-[200px] max-w-full">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className={`text-sm font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>{node.speaker}</span>
-                    {node.stance && (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded border font-bold ${stanceStyle(node.stance)}`}>{node.stance}</span>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-800 dark:text-g-text leading-relaxed">{node.text}</p>
-                </div>
-                {node.children?.slice(0, 2).map((child, j) => (
-                  <div key={j} className="ml-8 mt-2">
-                    <div className="bg-gray-50 dark:bg-[#131314] p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 inline-block min-w-[200px] max-w-full">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className={`text-sm font-bold ${child.speaker?.includes("自") ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>{child.speaker}</span>
-                        {child.stance && (
-                          <span className={`text-[10px] px-1.5 py-0.5 rounded border font-bold ${stanceStyle(child.stance)}`}>{child.stance}</span>
-                        )}
-                      </div>
-                      <p className="text-sm text-gray-800 dark:text-g-text leading-relaxed">{child.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            );
-          })}
+        <div className="py-2">
+          <div className="space-y-8">
+            {nodes.length > 0
+              ? nodes.map((node, i) => <PreviewTreeNode key={i} node={node} labels={labels} />)
+              : <p className="text-gray-500">ツリーデータがありません。</p>
+            }
+          </div>
         </div>
       </div>
     );
@@ -145,15 +225,12 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
   if (analysis.type === "image") {
     const imagePath = analysis.data.image_path;
     return imagePath ? (
-      <div>
-        <div className="font-bold text-lg text-gray-900 dark:text-g-text mb-3">{analysis.title}</div>
-        <div className="w-full flex justify-center bg-white dark:bg-[#1e1f20] rounded p-2">
-          <img
-            src={`${API_BASE}/storage/${imagePath}`}
-            alt={analysis.title}
-            className="max-w-full max-h-[350px] object-contain rounded border border-gray-200 dark:border-gray-700 shadow-sm"
-          />
-        </div>
+      <div className="bg-white dark:bg-[#1e1f20] p-4 shadow-sm rounded-xl border border-gray-200 dark:border-gray-800 flex justify-center">
+        <img
+          src={`${API_BASE}/storage/${imagePath}`}
+          alt={analysis.title}
+          className="max-w-full object-contain rounded border border-gray-200 dark:border-gray-700 shadow-sm"
+        />
       </div>
     ) : null;
   }
@@ -164,27 +241,27 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     const b3 = (analysis.data.box3 ?? []) as string[];
     const b4 = (analysis.data.box4 ?? []) as string[];
     const boxes = [
-      { label: isPest ? "Politics" : "Strengths", sub: isPest ? "政治" : "強み", items: b1, border: "border-blue-500", title: "text-blue-600 dark:text-blue-400", bullet: "text-blue-500" },
-      { label: isPest ? "Economy" : "Weaknesses", sub: isPest ? "経済" : "弱み", items: b2, border: "border-red-500", title: "text-red-600 dark:text-red-400", bullet: "text-red-500" },
-      { label: isPest ? "Society" : "Opportunities", sub: isPest ? "社会" : "機会", items: b3, border: "border-green-500", title: "text-green-600 dark:text-green-400", bullet: "text-green-500" },
-      { label: isPest ? "Technology" : "Threats", sub: isPest ? "技術" : "脅威", items: b4, border: "border-yellow-500", title: "text-yellow-600 dark:text-yellow-400", bullet: "text-yellow-500" },
+      { label: isPest ? "Politics" : "Strengths", sub: isPest ? "政治" : "強み", items: b1, border: "border-blue-500", title: "text-blue-600 dark:text-blue-400", bullet: "text-blue-500", bg: "dark:bg-blue-900/5" },
+      { label: isPest ? "Economy" : "Weaknesses", sub: isPest ? "経済" : "弱み", items: b2, border: "border-red-500", title: "text-red-600 dark:text-red-400", bullet: "text-red-500", bg: "dark:bg-red-900/5" },
+      { label: isPest ? "Society" : "Opportunities", sub: isPest ? "社会" : "機会", items: b3, border: "border-green-500", title: "text-green-600 dark:text-green-400", bullet: "text-green-500", bg: "dark:bg-green-900/5" },
+      { label: isPest ? "Technology" : "Threats", sub: isPest ? "技術" : "脅威", items: b4, border: "border-yellow-500", title: "text-yellow-600 dark:text-yellow-400", bullet: "text-yellow-500", bg: "dark:bg-yellow-900/5" },
     ];
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {boxes.map((box, i) => (
-          <div key={i} className={`bg-white dark:bg-[#1e1f20] border-t-4 ${box.border} rounded-lg p-3 border-x border-b border-gray-200 dark:border-transparent`}>
-            <h3 className={`text-base font-bold ${box.title} mb-2 border-b border-gray-200 dark:border-gray-700 pb-1.5 flex items-center`}>
-              <span className="text-lg mr-1.5" aria-hidden="true">{box.label[0]}</span>
+          <div key={i} className={`bg-white ${box.bg} dark:bg-[#1e1f20] border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
+            <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center`}>
+              <span className="text-2xl mr-2" aria-hidden="true">{box.label[0]}</span>
               {box.label.slice(1)}
-              <span className="text-[10px] text-gray-500 dark:text-g-sub ml-1.5 font-normal">{box.sub}</span>
-            </h3>
-            <ul className="space-y-1 pl-1">
+              <span className="text-xs text-gray-500 dark:text-g-sub ml-2 font-normal">{box.sub}</span>
+            </h2>
+            <ul className="space-y-2 pl-1">
               {box.items.length === 0
                 ? <li className="text-sm text-gray-500">記載なし</li>
-                : box.items.slice(0, 3).map((item, j) => (
-                    <li key={j} className="text-sm text-gray-800 dark:text-g-text flex items-start">
-                      <span aria-hidden="true" className={`${box.bullet} mr-1.5 mt-0.5 shrink-0`}>•</span>
-                      <span className="line-clamp-2">{item}</span>
+                : box.items.map((item, j) => (
+                    <li key={j} className="bg-gray-50 dark:bg-[#131314] p-2 rounded border border-gray-200 dark:border-gray-800 text-base text-gray-800 dark:text-g-text flex items-start">
+                      <span aria-hidden="true" className={`${box.bullet} mr-2 mt-0.5 shrink-0`}>•</span>
+                      <span>{item}</span>
                     </li>
                   ))
               }
@@ -274,7 +351,7 @@ export function AnalysisCard({
       })()}
 
       {/* Preview */}
-      <div className="rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1f20] p-4 text-base overflow-hidden relative h-[200px]">
+      <div className="rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1f20] p-4 text-base overflow-hidden relative h-[400px]">
         <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent dark:from-[#1e1f20] dark:to-transparent pointer-events-none" />
         <AnalysisPreview analysis={analysis} />
       </div>
