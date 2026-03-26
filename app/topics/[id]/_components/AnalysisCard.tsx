@@ -284,9 +284,16 @@ export function AnalysisCard({
         <div className="flex items-center justify-between">
           {/* Left: もっと見る + 補足ありトグル or 補足追加ボタン */}
           <div className="flex items-center gap-1">
-            {isOwner && analysis.type !== "image" ? (
+            {isOwner && analysis.type !== "image" && !analysis.is_published ? (
               <Link
                 href={`/tools/${analysis.type}?edit=${analysis.id}`}
+                className="text-sm font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center py-1 pr-2"
+              >
+                もっと見る <span className="ml-1 text-[10px]" aria-hidden="true">▶</span>
+              </Link>
+            ) : isOwner && !!analysis.is_published ? (
+              <Link
+                href={`/analyses/${analysis.id}`}
                 className="text-sm font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center py-1 pr-2"
               >
                 もっと見る <span className="ml-1 text-[10px]" aria-hidden="true">▶</span>

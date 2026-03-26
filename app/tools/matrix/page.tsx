@@ -459,7 +459,7 @@ function MatrixPageInner() {
                 <thead>
                   <tr>
                     {/* Header: item label */}
-                    <th className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-48 bg-gray-50 dark:bg-[#252627] align-bottom">
+                    <th className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-48 bg-gray-50 dark:bg-[#1e1f20] align-bottom">
                       <div className="text-xs font-bold text-gray-500 dark:text-g-sub mb-1">
                         評価項目 ＼ 比較パターン
                       </div>
@@ -469,14 +469,19 @@ function MatrixPageInner() {
                     {patterns.map((pattern, pIdx) => (
                       <th
                         key={pIdx}
-                        className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-64 bg-gray-50 dark:bg-[#252627] align-top relative group"
+                        className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-64 bg-gray-50 dark:bg-[#1e1f20] align-top relative group"
                       >
                         <div className="flex items-start justify-between mb-2">
-                          <input
-                            type="text"
+                          <textarea
                             value={pattern.title}
                             onChange={(e) => updatePattern(pIdx, { title: e.target.value })}
-                            className="w-full bg-transparent font-bold text-blue-600 dark:text-blue-400 focus:outline-none focus:border-b border-blue-500 text-base"
+                            rows={1}
+                            className="w-full bg-transparent font-bold text-blue-600 dark:text-blue-400 focus:outline-none text-base resize-none overflow-hidden"
+                            onInput={(e) => {
+                              const t = e.target as HTMLTextAreaElement;
+                              t.style.height = "auto";
+                              t.style.height = t.scrollHeight + "px";
+                            }}
                           />
                           <button
                             onClick={() => removeColumn(pIdx)}
@@ -490,7 +495,7 @@ function MatrixPageInner() {
                           onChange={(e) => updatePattern(pIdx, { description: e.target.value })}
                           rows={1}
                           placeholder="概要や前提..."
-                          className="w-full bg-transparent text-gray-600 dark:text-g-sub text-xs focus:outline-none focus:border-b border-gray-300 dark:border-gray-500 resize-none overflow-hidden"
+                          className="w-full bg-transparent text-gray-600 dark:text-g-sub text-sm focus:outline-none resize-none overflow-hidden mt-1 placeholder-gray-500 dark:placeholder-gray-600"
                           onInput={(e) => {
                             const t = e.target as HTMLTextAreaElement;
                             t.style.height = "auto";
@@ -525,11 +530,16 @@ function MatrixPageInner() {
                           >
                             ✕
                           </button>
-                          <input
-                            type="text"
+                          <textarea
                             value={row.itemTitle}
                             onChange={(e) => updateRow(rIdx, { itemTitle: e.target.value })}
-                            className="w-full bg-transparent dark:bg-[#131314] font-bold text-gray-900 dark:text-g-text focus:outline-none focus:border-b border-gray-300 dark:border-gray-500 text-base"
+                            rows={1}
+                            className="w-full bg-transparent font-bold text-gray-900 dark:text-g-text focus:outline-none text-base resize-none overflow-hidden"
+                            onInput={(e) => {
+                              const t = e.target as HTMLTextAreaElement;
+                              t.style.height = "auto";
+                              t.style.height = t.scrollHeight + "px";
+                            }}
                           />
                         </div>
                       </td>
@@ -540,13 +550,13 @@ function MatrixPageInner() {
                         return (
                           <td
                             key={cIdx}
-                            className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1a1b1c] hover:bg-gray-50 dark:hover:bg-[#252627] transition-colors"
+                            className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#252627] hover:bg-gray-50 dark:hover:bg-[#252627] transition-colors"
                           >
                             <div className="flex flex-col gap-2">
                               <select
                                 value={cell.score}
                                 onChange={(e) => updateCell(rIdx, cIdx, { score: e.target.value })}
-                                className="w-full bg-white dark:bg-[#131314] text-gray-900 dark:text-g-text border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-base focus:outline-none focus:border-blue-500 font-bold"
+                                className={`w-full border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-base focus:outline-none focus:border-blue-500 font-bold ${getScoreStyle(cell.score)}`}
                               >
                                 <option value="3">◎ 最適</option>
                                 <option value="2">〇 良い</option>
@@ -559,7 +569,7 @@ function MatrixPageInner() {
                                 onChange={(e) => updateCell(rIdx, cIdx, { reason: e.target.value })}
                                 rows={2}
                                 placeholder="根拠やリンク..."
-                                className="w-full bg-transparent dark:bg-[#1e1f20] border-none text-gray-600 dark:text-g-text text-xs focus:outline-none focus:ring-1 focus:ring-gray-300 dark:focus:ring-gray-600 rounded p-1 resize-none overflow-hidden"
+                                className="w-full bg-transparent text-gray-600 dark:text-g-sub text-sm focus:outline-none resize-none overflow-hidden mt-1 placeholder-gray-500 dark:placeholder-gray-600"
                                 onInput={(e) => {
                                   const t = e.target as HTMLTextAreaElement;
                                   t.style.height = "auto";
@@ -572,12 +582,12 @@ function MatrixPageInner() {
                       })}
 
                       {/* Empty cell for add-column column */}
-                      <td className="border-b border-gray-200 dark:border-gray-700 dark:bg-[#1a1b1c]" />
+                      <td className="border-b border-gray-200 dark:border-gray-700 dark:bg-[#252627]" />
                     </tr>
                   ))}
                 </tbody>
 
-                <tfoot className="bg-gray-50 dark:bg-[#252627]">
+                <tfoot className="bg-gray-50 dark:bg-[#1e1f20]">
                   <tr>
                     {/* Add row button */}
                     <td className="p-3 border-r border-gray-200 dark:border-gray-700 text-right">

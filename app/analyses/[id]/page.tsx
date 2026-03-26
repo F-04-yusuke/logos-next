@@ -33,33 +33,132 @@ type Analysis = {
 };
 
 // -------- ツリーノード再帰コンポーネント --------
-function stanceStyle(stance?: string) {
-  if (stance === "反論") return "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800";
-  if (stance === "賛成・補足") return "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800";
-  if (stance === "疑問") return "bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800";
-  return "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-g-sub dark:border-gray-700";
+function getStanceStyle(stance?: string) {
+  switch (stance) {
+    case "主張":
+      return "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-400/10 dark:text-g-sub dark:border-gray-400/30";
+    case "反論":
+      return "bg-red-100 text-red-600 border-red-200 dark:bg-red-400/10 dark:text-red-400 dark:border-red-400/30";
+    case "賛成・補足":
+      return "bg-green-100 text-green-600 border-green-200 dark:bg-green-400/10 dark:text-green-400 dark:border-green-400/30";
+    case "疑問":
+      return "bg-yellow-100 text-yellow-600 border-yellow-200 dark:bg-yellow-400/10 dark:text-yellow-400 dark:border-yellow-400/30";
+    case "解決策":
+      return "bg-blue-100 text-blue-600 border-blue-200 dark:bg-blue-400/10 dark:text-blue-400 dark:border-blue-400/30";
+    case "根拠":
+      return "bg-purple-100 text-purple-600 border-purple-200 dark:bg-purple-400/10 dark:text-purple-400 dark:border-purple-400/30";
+    case "事実":
+      return "bg-teal-100 text-teal-600 border-teal-200 dark:bg-teal-400/10 dark:text-teal-400 dark:border-teal-400/30";
+    case "仮説":
+      return "bg-orange-100 text-orange-600 border-orange-200 dark:bg-orange-400/10 dark:text-orange-400 dark:border-orange-400/30";
+    case "前提":
+      return "bg-indigo-100 text-indigo-600 border-indigo-200 dark:bg-indigo-400/10 dark:text-indigo-400 dark:border-indigo-400/30";
+    default:
+      return "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-400/10 dark:text-g-sub dark:border-gray-400/30";
+  }
 }
 
-function TreeNodeCard({ node, depth = 0 }: { node: TreeNode; depth?: number }) {
-  const isSelf = node.speaker?.includes("自") ?? false;
+function computeViewLabels(nodes: TreeNode[]): Map<TreeNode, string> {
+  const map = new Map<TreeNode, string>();
+  const counts: Record<string, number> = {};
+
+  function traverse(list: TreeNode[]) {
+    for (const node of list) {
+      const s = node.speaker ?? "";
+      let p = "他";
+      if (s.includes("自分") || s.includes("自")) p = "自";
+      else if (s.includes("A")) p = "A";
+      else if (s.includes("B")) p = "B";
+      else if (s.includes("C")) p = "C";
+      else if (s.includes("D")) p = "D";
+      else if (s.includes("E")) p = "E";
+      counts[p] = (counts[p] || 0) + 1;
+      map.set(node, p + counts[p]);
+      traverse(node.children ?? []);
+    }
+  }
+  traverse(nodes);
+  return map;
+}
+
+function ViewTreeNode({ node, labels }: { node: TreeNode; labels: Map<TreeNode, string> }) {
+  const label = labels.get(node) ?? "";
+  const isSelf = (node.speaker ?? "").includes("自");
+  const children = node.children ?? [];
+  const hasChildrenNodes = children.length > 0;
+
   return (
-    <div className={`relative ${depth > 0 ? "mt-4 ml-8 tree-line" : "mt-4"}`}>
-      <div className="bg-gray-50 dark:bg-[#131314] p-3 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm inline-block min-w-[250px] max-w-lg">
-        <div className="flex items-center gap-2 mb-2">
-          <span className={`text-base font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>
-            {node.speaker}
-          </span>
-          {node.stance && (
-            <span className={`text-[10px] px-1.5 py-0.5 rounded border font-bold ${stanceStyle(node.stance)}`}>
-              {node.stance}
-            </span>
+    <div>
+      <div className="flex gap-3">
+        <div className="flex flex-col shrink-0 w-8">
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${
+              isSelf
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+            }`}
+          >
+            {label}
+          </div>
+          {hasChildrenNodes && (
+            <div
+              className="flex-1 border-l-2 border-gray-300 dark:border-gray-700 mt-1"
+              style={{ marginLeft: "15px" }}
+              aria-hidden="true"
+            />
           )}
         </div>
-        <p className="text-base text-gray-800 dark:text-g-text whitespace-pre-wrap leading-relaxed">{node.text}</p>
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className={`text-sm font-bold ${isSelf ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-g-text"}`}>
+              {node.speaker}
+            </span>
+            {node.stance && (
+              <span className={`text-[11px] px-2.5 py-0.5 rounded-full border font-bold ${getStanceStyle(node.stance)}`}>
+                {node.stance}
+              </span>
+            )}
+          </div>
+          <p className="text-base text-gray-900 dark:text-g-text whitespace-pre-wrap leading-relaxed py-1 pb-3 min-h-[2rem]">
+            {node.text}
+          </p>
+        </div>
       </div>
-      {node.children?.map((child, i) => (
-        <TreeNodeCard key={i} node={child} depth={depth + 1} />
-      ))}
+      {hasChildrenNodes && (
+        <div className="flex gap-3">
+          <div className="shrink-0 w-8" />
+          <div className="flex-1 space-y-6">
+            {children.map((child, idx) => {
+              const isLast = idx === children.length - 1;
+              return (
+                <div key={idx} className="relative">
+                  {isLast ? (
+                    <div
+                      className="absolute pointer-events-none border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
+                      style={{ left: "-29px", top: 0, width: "29px", height: "16px" }}
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <>
+                      <div
+                        className="absolute pointer-events-none border-l-2 border-gray-300 dark:border-gray-700"
+                        style={{ left: "-29px", top: 0, height: "calc(100% + 16px)" }}
+                        aria-hidden="true"
+                      />
+                      <div
+                        className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-gray-700"
+                        style={{ left: "-29px", top: "16px", width: "29px" }}
+                        aria-hidden="true"
+                      />
+                    </>
+                  )}
+                  <ViewTreeNode node={child} labels={labels} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -71,6 +170,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
   if (analysis.type === "tree") {
     const nodes: TreeNode[] = Array.isArray(d.nodes) ? d.nodes : (Array.isArray(d) ? d : []);
     const meta = d.meta as { url?: string; description?: string } | undefined;
+    const labels = computeViewLabels(nodes);
     return (
       <div>
         {meta && (meta.url || meta.description) && (
@@ -92,10 +192,10 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
             )}
           </div>
         )}
-        <div className="bg-white dark:bg-[#1e1f20] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 overflow-x-auto">
-          <div className="pl-4 pb-8">
+        <div className="bg-white dark:bg-[#131314] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800">
+          <div className="space-y-8">
             {nodes.length > 0
-              ? nodes.map((node, i) => <TreeNodeCard key={i} node={node} />)
+              ? nodes.map((node, i) => <ViewTreeNode key={i} node={node} labels={labels} />)
               : <p className="text-gray-500">ツリーデータがありません。</p>
             }
           </div>
@@ -116,23 +216,25 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
         if (val !== -1) { totals[i] += val; isCalculated[i] = true; }
       });
     });
-    const badgeInfo = (val: number) => {
-      if (val === 3) return { text: "◎ 最適 (3pt)", color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" };
-      if (val === 2) return { text: "〇 良い (2pt)", color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" };
-      if (val === 1) return { text: "△ 懸念 (1pt)", color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" };
-      if (val === 0) return { text: "× 不可 (0pt)", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" };
+    const scoreStyle = (val: number) => {
+      if (val === 3) return { text: "◎ 最適 (3pt)", cls: "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800" };
+      if (val === 2) return { text: "〇 良い (2pt)", cls: "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800" };
+      if (val === 1) return { text: "△ 懸念 (1pt)", cls: "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800" };
+      if (val === 0) return { text: "× 不可 (0pt)", cls: "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800" };
       return null;
     };
+    const maxTotal = isCalculated.reduce((max, calc, i) => calc && totals[i] > max ? totals[i] : max, -Infinity);
     return (
-      <div className="bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 overflow-x-auto custom-scroll p-4">
+      <div className="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+        <div className="overflow-x-auto custom-scroll">
         <table className="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr>
-              <th className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-48 bg-gray-50 dark:bg-[#131314] align-bottom text-xs font-bold text-gray-500 dark:text-g-sub">
+              <th className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-48 bg-gray-50 dark:bg-[#1e1f20] align-bottom text-xs font-bold text-gray-500 dark:text-g-sub">
                 評価項目 ＼ 比較パターン
               </th>
               {patterns.map((p, i) => (
-                <th key={i} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 w-64 bg-gray-50 dark:bg-[#131314] align-top">
+                <th key={i} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 w-64 bg-gray-50 dark:bg-[#1e1f20] align-top">
                   <div className="font-bold text-blue-600 dark:text-blue-400 mb-1 text-lg">{p.title}</div>
                   <p className="text-sm text-gray-600 dark:text-g-sub whitespace-pre-wrap font-normal">{p.description}</p>
                 </th>
@@ -144,16 +246,16 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               const evals = item.evaluations ?? item.scores ?? [];
               return (
                 <tr key={ri}>
-                  <td className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] font-bold text-base text-gray-900 dark:text-g-text">
+                  <td className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1e1f20] font-bold text-base text-gray-900 dark:text-g-text">
                     {item.itemTitle}
                   </td>
                   {patterns.map((_, ci) => {
                     const e = evals[ci];
                     const val = e?.score !== undefined && e?.score !== null ? Number(e.score) : -1;
-                    const badge = badgeInfo(val);
+                    const style = scoreStyle(val);
                     return (
-                      <td key={ci} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 align-top">
-                        {badge && <span className={`inline-block px-2 py-0.5 text-[10px] font-bold rounded mb-2 ${badge.color}`}>{badge.text}</span>}
+                      <td key={ci} className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#252627] align-top">
+                        {style && <div className={`w-full border rounded px-2 py-1 text-sm font-bold mb-2 ${style.cls}`}>{style.text}</div>}
                         <p className="text-sm text-gray-800 dark:text-g-text whitespace-pre-wrap">{e?.reason ?? ""}</p>
                       </td>
                     );
@@ -162,20 +264,24 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               );
             })}
           </tbody>
-          <tfoot className="bg-gray-50 dark:bg-[#131314]">
+          <tfoot className="bg-gray-50 dark:bg-[#1e1f20]">
             <tr>
-              <td className="p-3 border-r border-gray-200 dark:border-gray-700 text-right text-xs font-bold text-gray-500">総合評価</td>
-              {totals.map((total, i) => (
-                <td key={i} className="p-3 border-r border-gray-200 dark:border-gray-700 text-center">
-                  {isCalculated[i]
-                    ? <><span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{total}</span><span className="text-xs text-gray-500 ml-1">pt</span></>
-                    : <span className="text-sm text-gray-400">未評価</span>
-                  }
-                </td>
-              ))}
+              <td className="p-3 border-r border-gray-200 dark:border-gray-700 text-right text-xs font-bold text-gray-500 dark:text-g-sub">総合評価</td>
+              {totals.map((total, i) => {
+                const isMax = isCalculated[i] && total === maxTotal;
+                return (
+                  <td key={i} className={`p-3 border-r border-gray-200 dark:border-gray-700 text-center${isMax ? " ring-2 ring-inset ring-blue-500" : ""}`}>
+                    {isCalculated[i]
+                      ? <><span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{total}</span><span className="text-xs text-gray-500 ml-1">pt</span></>
+                      : <span className="text-sm text-gray-400">未評価</span>
+                    }
+                  </td>
+                );
+              })}
             </tr>
           </tfoot>
         </table>
+        </div>
       </div>
     );
   }
@@ -187,15 +293,15 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
     const b3: string[] = Array.isArray(d.box3) ? d.box3 : [];
     const b4: string[] = Array.isArray(d.box4) ? d.box4 : [];
     const boxes = [
-      { label: isPest ? "Politics" : "Strengths", sub: isPest ? "政治" : "強み", items: b1, border: "border-blue-500", title: "text-blue-600 dark:text-blue-400", bullet: "text-blue-500" },
-      { label: isPest ? "Economy" : "Weaknesses", sub: isPest ? "経済" : "弱み", items: b2, border: "border-red-500", title: "text-red-600 dark:text-red-400", bullet: "text-red-500" },
-      { label: isPest ? "Society" : "Opportunities", sub: isPest ? "社会" : "機会", items: b3, border: "border-green-500", title: "text-green-600 dark:text-green-400", bullet: "text-green-500" },
-      { label: isPest ? "Technology" : "Threats", sub: isPest ? "技術" : "脅威", items: b4, border: "border-yellow-500", title: "text-yellow-600 dark:text-yellow-400", bullet: "text-yellow-500" },
+      { label: isPest ? "Politics" : "Strengths", sub: isPest ? "政治" : "強み", items: b1, border: "border-blue-500", title: "text-blue-600 dark:text-blue-400", bullet: "text-blue-500", bg: "dark:bg-blue-900/5" },
+      { label: isPest ? "Economy" : "Weaknesses", sub: isPest ? "経済" : "弱み", items: b2, border: "border-red-500", title: "text-red-600 dark:text-red-400", bullet: "text-red-500", bg: "dark:bg-red-900/5" },
+      { label: isPest ? "Society" : "Opportunities", sub: isPest ? "社会" : "機会", items: b3, border: "border-green-500", title: "text-green-600 dark:text-green-400", bullet: "text-green-500", bg: "dark:bg-green-900/5" },
+      { label: isPest ? "Technology" : "Threats", sub: isPest ? "技術" : "脅威", items: b4, border: "border-yellow-500", title: "text-yellow-600 dark:text-yellow-400", bullet: "text-yellow-500", bg: "dark:bg-yellow-900/5" },
     ];
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {boxes.map((box, i) => (
-          <div key={i} className={`bg-white dark:bg-[#1e1f20] border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
+          <div key={i} className={`bg-white ${box.bg} dark:bg-[#1e1f20] border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
             <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center`}>
               <span className="text-2xl mr-2" aria-hidden="true">{box.label[0]}</span>
               {box.label.slice(1)}
@@ -203,8 +309,8 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
             </h2>
             <ul className="space-y-2 pl-1">
               {box.items.map((item, j) => (
-                <li key={j} className="text-base text-gray-800 dark:text-g-text flex items-start">
-                  <span aria-hidden="true" className={`${box.bullet} mr-2 mt-0.5`}>•</span>
+                <li key={j} className="bg-gray-50 dark:bg-[#131314] p-2 rounded border border-gray-200 dark:border-gray-800 text-base text-gray-800 dark:text-g-text flex items-start">
+                  <span aria-hidden="true" className={`${box.bullet} mr-2 mt-0.5 shrink-0`}>•</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -308,10 +414,10 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
         </div>
 
         {/* 情報カード */}
-        <div className="bg-white dark:bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-xl mb-6 border border-gray-200 dark:border-gray-800">
-          <div className="p-4 sm:p-6">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-g-text mb-3">{analysis.title}</h1>
-            <div className="flex flex-wrap items-center text-sm sm:text-base text-gray-500 dark:text-g-sub gap-3 sm:gap-4">
+        <div className="bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-xl mb-4 border border-gray-200 dark:border-gray-800">
+          <div className="p-3 sm:p-4">
+            <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-g-text mb-1.5">{analysis.title}</h1>
+            <div className="flex flex-wrap items-center text-sm text-gray-500 dark:text-g-sub gap-2 sm:gap-3">
               <span>
                 作成者:{" "}
                 <span className="font-bold text-gray-700 dark:text-g-text">{analysis.user.name}</span>
