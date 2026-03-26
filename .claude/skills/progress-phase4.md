@@ -1,8 +1,50 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-26（Session 36 追記）
+最終更新: 2026-03-26（Session 37 追記）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
+
+---
+
+## Session 37: 分析閲覧・ツール UI 細部改善（2026-03-26）
+
+### U-31: ダッシュボード戻りタブ修正 ✅
+
+**変更ファイル:** `components/mypage/AnalysisCard.tsx` / `app/analyses/[id]/page.tsx`
+
+- 閲覧リンクに `?from=dashboard` 付加
+- 「← 戻る」で `/dashboard?tab=analyses` へ `window.location.href` でフルナビゲーション
+  - `router.push` では App Router キャッシュで `useEffect([])` が再実行されずタブが "posts" に戻っていた
+
+### U-32: 閲覧画面 情報カード整列 ✅
+
+- ツール種別ラベル `text-base`・タイトル `text-lg sm:text-xl`・余白 `mb-4` に調整
+
+### U-33〜34: ロジックツリー アバター配色・賛成バッジ（閲覧＋編集） ✅
+
+**変更ファイル:** `app/analyses/[id]/page.tsx` / `app/tools/tree/page.tsx`
+
+- `getAvatarStyle`: 自=青(目立つ) / A=薄紫・B=薄アンバー・C=薄ティール・D=薄ピンク・E=薄インジゴ
+- `"賛成"` スタンスバッジを緑色に（`"賛成・補足"` と同ルール）
+- 閲覧・編集の両画面に同一実装
+
+### U-35: 分析ツール・閲覧画面 cursor-pointer 追加 ✅
+
+**変更ファイル:** `app/tools/matrix/page.tsx` / `app/analyses/[id]/page.tsx`
+
+- matrix: 保存・列削除・列追加・行削除・行追加・AI送信（6箇所）
+- 閲覧画面: ← 戻るボタン（1箇所）
+
+### U-36: ロジックツリー閲覧 縦線途切れ・スペーシング修正 ✅
+
+**変更ファイル:** `app/analyses/[id]/page.tsx`
+
+- `space-y-6 → space-y-4`（コネクタ線 `calc(100%+16px)` は 16px ギャップ前提）
+- `pb-3 → pb-9`（編集画面「＋返信を追加」ボタン相当の余白確保）
+
+**⚠️ 重要ルール:** コネクタ線 `+Npx` は `space-y-N`（px値）と一致させること
+
+**Gitタグ:** `v6.34-session37-view-spacing`
 
 ---
 
