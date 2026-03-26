@@ -140,7 +140,7 @@ function ViewTreeNode({ node, labels }: { node: TreeNode; labels: Map<TreeNode, 
       {hasChildrenNodes && (
         <div className="flex gap-3">
           <div className="shrink-0 w-8" />
-          <div className="flex-1 space-y-6">
+          <div className="flex-1 space-y-4">
             {children.map((child, idx) => {
               const isLast = idx === children.length - 1;
               return (
