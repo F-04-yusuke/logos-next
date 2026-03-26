@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-26（Session 35 / カテゴリタブUI詳細改善・最多いいね投稿パネル追加）
+最終更新: 2026-03-26（Session 36 / 分析ツール作成編集画面改善・閲覧画面全面UIリデザイン）
 
 ---
 
@@ -146,7 +146,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v6.21-session35-category-tab-polish`
+- logos-next: `v6.23-session36-analysis-view-redesign`
 - logos-laravel: `v4.4-session31-liked-by-me`
 
 ## /categories/[id] の実装上の注意（Session 23 技術的負債）
@@ -188,7 +188,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
 | `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 20〜） |
 | `.claude/skills/progress-phase4-s12-s19.md` | Phase 4 アーカイブ（Session 12〜19・早期UI改善記録） |
-| `.claude/skills/handoff-session36.md` | **最新引継ぎプロンプト** |
+| `.claude/skills/handoff-session37.md` | **最新引継ぎプロンプト** |
 | `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜31 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
