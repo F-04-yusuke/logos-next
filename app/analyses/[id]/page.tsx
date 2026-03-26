@@ -132,7 +132,7 @@ function ViewTreeNode({ node, labels }: { node: TreeNode; labels: Map<TreeNode, 
               </span>
             )}
           </div>
-          <p className="text-base text-gray-900 dark:text-g-text whitespace-pre-wrap leading-relaxed py-1 pb-3 min-h-[2rem]">
+          <p className="text-base text-gray-900 dark:text-g-text whitespace-pre-wrap leading-relaxed py-1 pb-9 min-h-[2rem]">
             {node.text}
           </p>
         </div>
