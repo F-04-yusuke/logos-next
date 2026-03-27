@@ -1,8 +1,50 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-26（Session 38 追記）
+最終更新: 2026-03-27（Session 39 追記）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
+
+---
+
+## Session 39: カテゴリバグ修正・On-Demand ISR・スマホサイドバー修正（2026-03-27）
+
+### B-1: カテゴリAPIの中分類 sort_order 順バグ修正 ✅
+
+**変更ファイル:** `~/logos-laravel/routes/api.php`
+
+- `children` のEager loadingに `orderBy` 指定がなく、追加順（id順）で返っていた
+- Blade版 CategoryController と同様に `orderBy('sort_order')->orderBy('id')` を追加
+- 本番デプロイ・`php artisan route:clear` 適用済み・curl動作確認済み
+
+---
+
+### B-2: カテゴリ一覧 On-Demand ISR（管理画面「今すぐ反映」ボタン）✅
+
+**変更ファイル:** `app/api/revalidate/route.ts`（新規）/ `app/categories/page.tsx`
+
+- カテゴリ追加・編集後にVercelの `/category-list` キャッシュを即時クリアするボタン
+- セキュリティ: `NEXT_PUBLIC_` シークレット不使用。BearerトークンをNext.jsルートハンドラで受け取り、`/api/profile` でLaravel側がadmin確認
+- 押し忘れでも `revalidate: 3600` により最大1時間後に自動反映
+
+**教訓:** `/api/user` は本プロジェクトでは存在しない（404）→ ユーザー情報は `/api/profile` を使う
+
+**Gitタグ:** `v6.40-session39-category-fix-revalidate-done`
+
+---
+
+### B-3: スマホ版サイドバー初期状態・開閉ボタン修正 ✅
+
+**変更ファイル:** `context/SidebarContext.tsx` / `components/Header/index.tsx`
+
+**問題:**
+1. `useState(true)` でスマホでも最初からサイドバーが開きコンテンツを隠していた
+2. ヘッダーにスマホ用サイドバー開閉ボタンがなく、閉じた後に開く手段がなかった
+
+**修正:**
+- `SidebarContext`: `useState(false)` + `useEffect` で `window.innerWidth >= 768` なら開く（Blade版と同仕様）
+- `Header`: 左端にハンバーガーボタン追加（`sm:hidden`）→ `useSidebar` で開閉
+
+**Gitタグ:** `v6.41-session39-mobile-sidebar-fix`
 
 ---
 
