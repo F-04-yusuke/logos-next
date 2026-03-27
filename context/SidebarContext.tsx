@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 
 type SidebarContextType = {
   sidebarOpen: boolean;
@@ -25,7 +25,11 @@ const SidebarContext = createContext<SidebarContextType>({
 });
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  // PCでは開く・スマホでは閉じる（Blade版と同仕様）
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  useEffect(() => {
+    setSidebarOpen(window.innerWidth >= 768);
+  }, []);
   const [bookmarkRefreshKey, setBookmarkRefreshKey] = useState(0);
   const [proModalOpen, setProModalOpen] = useState(false);
   const [proModalFeature, setProModalFeature] = useState("分析ツール");
