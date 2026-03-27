@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getAuthHeaders } from "@/lib/auth";
 
@@ -35,6 +35,28 @@ export default function CategoriesPage() {
 
   // Status message
   const [statusMsg, setStatusMsg] = useState("");
+
+  // カテゴリ一覧キャッシュクリア
+  const [revalidating, setRevalidating] = useState(false);
+
+  async function handleRevalidate() {
+    setRevalidating(true);
+    try {
+      const res = await fetch("/api/revalidate", {
+        method: "POST",
+        headers: { ...getAuthHeaders(), Accept: "application/json" },
+      });
+      if (res.ok) {
+        setStatusMsg("カテゴリ一覧ページのキャッシュを更新しました");
+      } else {
+        setStatusMsg("キャッシュ更新に失敗しました");
+      }
+    } catch {
+      setStatusMsg("キャッシュ更新に失敗しました");
+    } finally {
+      setRevalidating(false);
+    }
+  }
 
   async function fetchCategories() {
     setFetching(true);
@@ -176,6 +198,21 @@ export default function CategoriesPage() {
               {statusMsg}
             </div>
           )}
+
+          {/* カテゴリ一覧ページ 即時反映ボタン */}
+          <div className="flex items-center justify-between p-4 bg-[#1e1f20] rounded-xl border border-gray-800">
+            <div>
+              <p className="text-sm font-bold text-g-text">カテゴリ一覧ページを今すぐ反映</p>
+              <p className="text-xs text-g-sub mt-0.5">追加・変更後にクリックすると即時反映されます（通常は最大1時間後に自動反映）</p>
+            </div>
+            <button
+              onClick={handleRevalidate}
+              disabled={revalidating}
+              className="shrink-0 ml-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors duration-100 disabled:opacity-50 cursor-pointer"
+            >
+              {revalidating ? "更新中..." : "今すぐ反映"}
+            </button>
+          </div>
 
           {/* 1. 新しいカテゴリの追加カード */}
           <div className="p-6 sm:p-8 bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-800">
