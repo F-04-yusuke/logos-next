@@ -49,10 +49,11 @@ export default function CategoriesPage() {
       if (res.ok) {
         setStatusMsg("カテゴリ一覧ページのキャッシュを更新しました");
       } else {
-        setStatusMsg("キャッシュ更新に失敗しました");
+        const data = await res.json().catch(() => ({}));
+        setStatusMsg(`キャッシュ更新に失敗しました（${res.status}: ${data.error ?? "不明"}）`);
       }
-    } catch {
-      setStatusMsg("キャッシュ更新に失敗しました");
+    } catch (e) {
+      setStatusMsg(`キャッシュ更新に失敗しました（ネットワークエラー）`);
     } finally {
       setRevalidating(false);
     }
