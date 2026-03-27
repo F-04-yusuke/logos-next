@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Laravelでトークンを検証し、adminか確認
-  const userRes = await fetch(`${API}/api/user`, {
+  const userRes = await fetch(`${API}/api/profile`, {
     headers: { Authorization: authHeader, Accept: "application/json" },
   });
   if (!userRes.ok) {
