@@ -89,7 +89,8 @@ export default function DashboardPage() {
           </div>
 
           {/* タブ */}
-          <div className="flex border-b border-gray-200 dark:border-gray-800 overflow-x-auto scrollbar-hide px-4 sm:px-6">
+          <div className="px-4 sm:px-6">
+          <div className="flex border-b border-gray-200 dark:border-gray-800 overflow-x-auto scrollbar-hide">
             <button
               onClick={() => setActiveTab("posts")}
               className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("posts")}`}
@@ -135,6 +136,7 @@ export default function DashboardPage() {
                 PRO
               </span>
             </button>
+          </div>
           </div>
 
           <div className="p-4 sm:p-6">
