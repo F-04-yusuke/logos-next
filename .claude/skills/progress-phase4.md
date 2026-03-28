@@ -1,12 +1,12 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-28（Session 40 追記）
+最終更新: 2026-03-28（Session 40 完了）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
 
 ---
 
-## Session 40: アバター表示統一・アップロード制限引き上げ（2026-03-28）
+## Session 40: アバター表示統一・タブ下線修正（2026-03-28）
 
 ### B-4: アバター URL 変換を一元化 ✅
 
@@ -47,6 +47,18 @@
 - 着手時は `ProfileApiController::update()` の avatar 保存部分に処理を追加する
 
 **Gitタグ (logos-laravel):** コミット `a7cf6c1`
+
+---
+
+### B-7: ダッシュボード・参考になったページのタブ下線アイライン修正 ✅
+
+**変更ファイル (logos-next):** `app/dashboard/page.tsx` / `app/likes/page.tsx`
+
+- `border-b` がある div に `px-4 sm:px-6` も付いていたため、下線がコンテンツより左にはみ出していた
+- CSS の仕様: border は element の外縁（padding より外側）に描画される
+- 修正: タブ行を `px-4 sm:px-6` の外側 div でラップ、`border-b` は内側 div に移動
+
+**Gitタグ:** `v6.49-session40-tab-border-fix`
 
 ---
 
