@@ -9,6 +9,20 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RawObj = Record<string, any>;
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+
+/**
+ * Laravel の avatar 相対パスを完全 URL に変換する。
+ * - null / undefined → null
+ * - "http..." → そのまま返す（外部URL）
+ * - "avatars/xxx.jpg" → "${API_BASE}/storage/avatars/xxx.jpg"
+ */
+export function buildAvatarUrl(avatar: string | null | undefined): string | null {
+  if (!avatar) return null;
+  if (avatar.startsWith("http")) return avatar;
+  return `${API_BASE}/storage/${avatar}`;
+}
+
 export function transformUser(raw: RawObj) {
   return {
     ...raw,

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { RefObject } from "react";
+import { buildAvatarUrl } from "@/lib/transforms";
 
 type MenuUser = {
   name: string;
@@ -22,11 +23,12 @@ export function Avatar({
   size?: string;
   iconSize?: string;
 }) {
-  if (avatar) {
+  const avatarSrc = buildAvatarUrl(avatar);
+  if (avatarSrc) {
     return (
       <img
         className={`${size} rounded-full object-cover border border-gray-700`}
-        src={avatar}
+        src={avatarSrc}
         alt={name ? `${name}のアイコン` : "アイコン"}
       />
     );

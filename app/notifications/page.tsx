@@ -6,6 +6,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { useAuth } from "@/context/AuthContext";
 import { getAuthHeaders } from "@/lib/auth";
+import { buildAvatarUrl } from "@/lib/transforms";
 
 type NotificationItem = {
   id: number;
@@ -223,18 +224,27 @@ export default function NotificationsPage() {
               >
                 {/* アクターアバター + 種別バッジ */}
                 <div className="relative shrink-0 mt-0.5">
-                  {notification.actor ? (
-                    <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700">
-                      <svg
-                        aria-hidden="true"
-                        className="h-5 w-5 text-gray-400"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                      </svg>
-                    </div>
-                  ) : (
+                  {notification.actor ? (() => {
+                    const actorAvatarSrc = buildAvatarUrl(notification.actor.avatar);
+                    return actorAvatarSrc ? (
+                      <img
+                        src={actorAvatarSrc}
+                        alt={`${notification.actor.name}のアイコン`}
+                        className="h-9 w-9 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+                      />
+                    ) : (
+                      <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700">
+                        <svg
+                          aria-hidden="true"
+                          className="h-5 w-5 text-gray-400"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
+                    );
+                  })() : (
                     // system通知はLOGOSロゴ
                     <div className="h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center">
                       <span className="text-white text-xs font-bold">

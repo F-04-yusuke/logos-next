@@ -1,5 +1,7 @@
 "use client";
 
+import { buildAvatarUrl } from "@/lib/transforms";
+
 export function UserAvatar({
   user,
   size = "md",
@@ -9,10 +11,11 @@ export function UserAvatar({
 }) {
   const dim = size === "lg" ? "h-10 w-10" : size === "md" ? "h-8 w-8" : "h-7 w-7";
   const icon = size === "lg" ? "h-6 w-6" : size === "md" ? "h-5 w-5" : "h-4 w-4";
-  return user.avatar ? (
+  const avatarSrc = buildAvatarUrl(user.avatar);
+  return avatarSrc ? (
     <img
       className={`${dim} rounded-full object-cover border border-gray-200 dark:border-gray-700`}
-      src={user.avatar}
+      src={avatarSrc}
       alt={`${user.name}のアイコン`}
     />
   ) : (
