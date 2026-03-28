@@ -1,8 +1,52 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-27（Session 39 追記）
+最終更新: 2026-03-28（Session 40 追記）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
+
+---
+
+## Session 40: アバター表示統一・アップロード制限引き上げ（2026-03-28）
+
+### B-4: アバター URL 変換を一元化 ✅
+
+**変更ファイル (logos-next):** `lib/transforms.ts` / `components/UserAvatar.tsx` / `components/Header/UserMenu.tsx` / `app/notifications/page.tsx`
+
+- LaravelのAPIは `avatar` を相対パス（`avatars/xxx.jpg`）で返すが、各コンポーネントが `src` にそのまま渡していた
+- `lib/transforms.ts` に `buildAvatarUrl()` ヘルパーを追加し、`${API_BASE}/storage/${avatar}` へ変換
+- `UserAvatar`・`Avatar`（ヘッダー）・通知ページのactorアバターに適用
+- `app/profile/page.tsx`: 保存成功後に `refetch()` を呼び、AuthContextを即時更新するよう修正
+
+**Gitタグ:** `v6.43-session40-avatar-url-fix` / `v6.44-session40-profile-refetch`
+
+---
+
+### B-5: TopicApiController に avatar フィールドを追加 ✅
+
+**変更ファイル (logos-laravel):** `app/Http/Controllers/Api/TopicApiController.php`
+
+- `user:id,name` が7箇所あり、すべて `avatar` が漏れていた（posts・comments・replies・topic作成者）
+- `user:id,name,avatar` に統一。Dashboard・参考になった・通知は元から正しかった
+
+**Gitタグ (logos-laravel):** コミット `90846e8`
+
+---
+
+### B-6: アバターアップロード上限 2MB → 5MB に引き上げ ✅
+
+**変更ファイル (logos-laravel):** `app/Http/Requests/Api/UpdateProfileRequest.php`
+
+- `max:2048`（2MB）が原因で freepik 等の画像（~2MB超）がアップロード不可だった
+- さくら本番の `upload_max_filesize: 5M` に合わせて `max:5120`（5MB）に引き上げ
+- エラーが「通信エラー」と表示されていた原因：バリデーション失敗時のJSONが正しく処理されなかった
+
+**将来的な改善（Phase 5候補）: 自動リサイズ・圧縮の実装**
+- ライブラリ: [intervention/image](https://image.intervention.io/)（Laravel向け）
+- アップロード時に最大 400×400px にリサイズ、JPEG圧縮率 85% で保存
+- ストレージ効率向上・表示速度改善・制限を実質的に撤廃できる
+- 着手時は `ProfileApiController::update()` の avatar 保存部分に処理を追加する
+
+**Gitタグ (logos-laravel):** コミット `a7cf6c1`
 
 ---
 
