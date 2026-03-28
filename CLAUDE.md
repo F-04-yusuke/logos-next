@@ -26,6 +26,20 @@
 - **ホームページ（トピック一覧）・カテゴリ一覧の背景色はヘッダーに合わせる必要なし**（現状満足済み・変更不要）
 - ダッシュボード・その他ページを改修する際は design-spec.md のルールに従って順次統一していく
 
+## Git タグ付けルール（厳守）
+
+**コードを変更する回答の着手前に必ず1回タグを打つこと。**
+
+```bash
+# 形式: v{major}.{minor}-session{N}-before-{作業内容}
+git tag v6.50-session41-before-xxx && git push origin v6.50-session41-before-xxx
+```
+
+- タグを打つタイミング: **コード編集・ファイル変更を始める前**（ユーザーに指示されなくても自律的に実行する）
+- 1回答につき1タグ（コミットごとにタグを打たない）
+- `docs:` のみのコミット（引継ぎ・CLAUDE.md更新）はタグ不要
+- タグ名は作業内容が分かる英語で（例: `before-avatar-fix`・`before-tab-border-fix`）
+
 ## コーディング必須ルール
 - LaravelのAPIはboolean値を `0/1` で返す → JSXでは必ず `!!` 変換すること
   - 正しい: `{!!user.is_admin && <Link>}`

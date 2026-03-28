@@ -1,16 +1,2 @@
 {
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 /home/tasaki/logos-next/.claude/auto-tag.py 2>/dev/null || true",
-            "async": true
-          }
-        ]
-      }
-    ]
-  }
 }
