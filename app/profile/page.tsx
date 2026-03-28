@@ -434,7 +434,7 @@ function DeleteAccountSection() {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, refetch } = useAuth();
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [fetching, setFetching] = useState(true);
@@ -457,6 +457,7 @@ export default function ProfilePage() {
 
   function handleProfileSaved(updated: Partial<ProfileData>) {
     setProfile((prev) => prev ? { ...prev, ...updated } : prev);
+    refetch(); // ヘッダーのアバターを即時更新
   }
 
   if (authLoading || fetching) {
