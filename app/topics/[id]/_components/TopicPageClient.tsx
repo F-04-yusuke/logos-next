@@ -103,14 +103,83 @@ export function TopicPageClient({ id, initialTopic }: Props) {
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4 sm:py-6 text-gray-900 dark:text-g-text">
 
         {/* ===== Topic Header ===== */}
+
+        {/* ── モバイル専用 Row 1: カテゴリ + アイコンアクション ── */}
+        <div className="flex md:hidden items-start justify-between gap-3 mb-3">
+          <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
+            {topic.categories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/categories/${cat.id}`}
+                className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors duration-100"
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </div>
+          <div className="flex items-center gap-0.5 shrink-0">
+            {isOwner && (
+              <Link
+                href={`/topics/${topic.id}/edit`}
+                className="p-2 rounded-lg text-g-sub hover:text-blue-400 hover:bg-blue-500/10 transition-colors duration-100"
+                aria-label="編集する"
+              >
+                <svg aria-hidden="true" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </Link>
+            )}
+            <button
+              onClick={handleBookmark}
+              className={`p-2 rounded-lg transition-colors duration-100 cursor-pointer ${
+                !!topic.is_bookmarked
+                  ? "text-indigo-400 bg-indigo-500/10"
+                  : "text-g-sub hover:text-indigo-400 hover:bg-indigo-500/10"
+              }`}
+              aria-label={!!topic.is_bookmarked ? "保存済み（クリックで解除）" : "保存する"}
+            >
+              {!!topic.is_bookmarked ? (
+                <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                </svg>
+              ) : (
+                <svg aria-hidden="true" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+
         <div className={`flex flex-col md:flex-row justify-between items-start gap-4 ${contentExpanded ? "mb-2" : "mb-0"}`}>
 
           {/* Left: title / content / timeline */}
           <div className="flex-1 min-w-0">
             <h2 className="text-2xl font-bold mb-3 pl-3 border-l-4 border-indigo-500">{topic.title}</h2>
+
+            {/* ── モバイル専用 Row 2: 著者・日付 + 概要ボタン ── */}
+            <div className="flex md:hidden items-center justify-between gap-2 pt-2.5 border-t border-gray-800 mb-1">
+              <div className="flex items-center gap-1.5 text-sm text-g-sub min-w-0">
+                <UserAvatar user={topic.user} size="sm" />
+                <span className="font-medium text-g-text truncate">{topic.user.name}</span>
+                <span className="shrink-0 select-none opacity-40">·</span>
+                <span className="shrink-0 text-xs">{formatDateTime(topic.created_at)}</span>
+              </div>
+              <button
+                onClick={() => setContentExpanded(!contentExpanded)}
+                className="text-xs text-g-sub hover:text-g-text transition-colors duration-100 cursor-pointer flex items-center gap-1 shrink-0 px-2.5 py-1.5 rounded-lg border border-gray-800 hover:border-gray-700 hover:bg-white/[0.04]"
+              >
+                <svg className={`h-3 w-3 transition-transform duration-200 ${contentExpanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+                概要
+              </button>
+            </div>
+
+            {/* ── PC専用: 概要展開ボタン ── */}
             <button
               onClick={() => setContentExpanded(!contentExpanded)}
-              className="text-sm text-g-sub hover:text-g-text hover:bg-white/[0.04] pr-2 py-1 rounded transition-colors duration-100 cursor-pointer flex items-center gap-1"
+              className="hidden md:flex text-sm text-g-sub hover:text-g-text hover:bg-white/[0.04] pr-2 py-1 rounded transition-colors duration-100 cursor-pointer items-center gap-1"
             >
               <svg className={`h-3 w-3 transition-transform duration-200 ${contentExpanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -215,8 +284,8 @@ export function TopicPageClient({ id, initialTopic }: Props) {
             )}
           </div>
 
-          {/* Right: categories / meta / actions */}
-          <div className="flex flex-col items-end flex-shrink-0 min-w-[120px] space-y-1">
+          {/* Right: categories / meta / actions (PC only) */}
+          <div className="hidden md:flex flex-col items-end flex-shrink-0 min-w-[120px] space-y-1">
             {topic.categories.length > 0 && (
               <div className="flex flex-wrap gap-1 justify-end mb-2">
                 {topic.categories.map((cat) => (
