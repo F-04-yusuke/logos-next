@@ -501,7 +501,7 @@ function MatrixPageInner() {
                           </button>
                         </div>
                         <textarea
-                          value={pattern.description}
+                          value={pattern.description ?? ""}
                           onChange={(e) => updatePattern(pIdx, { description: e.target.value })}
                           rows={1}
                           placeholder="概要や前提..."
@@ -575,7 +575,7 @@ function MatrixPageInner() {
                                 <option value="-1">-- 評価 --</option>
                               </select>
                               <textarea
-                                value={cell.reason}
+                                value={cell.reason ?? ""}
                                 onChange={(e) => updateCell(rIdx, cIdx, { reason: e.target.value })}
                                 rows={2}
                                 placeholder="根拠やリンク..."
