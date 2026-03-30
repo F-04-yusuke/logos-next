@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import SidebarAwareLayout from "./SidebarAwareLayout";
+import MobileBottomNav from "./MobileBottomNav";
 import { ProModal } from "./ProModal";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -25,6 +26,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
           <SidebarAwareLayout>{children}</SidebarAwareLayout>
         </div>
         <ProModal />
+        <MobileBottomNav />
       </div>
     </TooltipProvider>
   );

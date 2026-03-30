@@ -8,6 +8,7 @@ import { useSidebar } from "@/context/SidebarContext";
 import NotificationBell from "./NotificationBell";
 import SearchBar from "./SearchBar";
 import UserMenu, { Avatar } from "./UserMenu";
+import AppLogo from "@/components/AppLogo";
 
 export default function Header() {
   const router = useRouter();
@@ -54,17 +55,11 @@ export default function Header() {
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-14">
 
-          {/* ── 左: スマホ用サイドバートグル ── */}
+          {/* ── 左: スマホ用 LOGOS ロゴ ── */}
           <div className="flex items-center sm:hidden">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 rounded-md text-gray-500 hover:text-gray-400 hover:bg-[#222222] focus:outline-none transition"
-              aria-label="メニューを開く"
-            >
-              <svg aria-hidden="true" className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+            <a href="/" className="flex items-center hover:opacity-80 transition-opacity">
+              <AppLogo />
+            </a>
           </div>
 
           {/* ── 中央: 検索バー（PC） ── */}
