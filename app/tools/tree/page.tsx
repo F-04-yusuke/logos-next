@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
@@ -144,6 +144,14 @@ function NodeEditor({
   const label = labels.get(node.id) || "";
   const isSelf = node.speaker.includes("自分");
   const hasChildren = node.children.length > 0;
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }, [node.text]);
 
   return (
     <div>
@@ -203,16 +211,12 @@ function NodeEditor({
             </button>
           </div>
           <textarea
+            ref={textareaRef}
             value={node.text}
             onChange={(e) => onChange({ ...node, text: e.target.value })}
             rows={1}
             placeholder="意見を入力..."
             className="w-full bg-transparent text-gray-900 dark:text-g-text text-base py-1 focus:outline-none placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed resize-none overflow-hidden"
-            onInput={(e) => {
-              const t = e.target as HTMLTextAreaElement;
-              t.style.height = "auto";
-              t.style.height = t.scrollHeight + "px";
-            }}
           />
           <button
             type="button"
