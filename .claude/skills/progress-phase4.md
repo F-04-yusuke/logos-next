@@ -1,8 +1,36 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-28（Session 40 完了）
+最終更新: 2026-03-30（Session 41 完了）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
+
+---
+
+## Session 41: スマホ UI/UX 改善・ツール textarea 自動リサイズ（2026-03-30）
+
+### ロジックツリー: textarea 自動リサイズ ✅
+`useRef` + `useLayoutEffect([node.text])` でノード入力欄をテキスト量に合わせて自動伸長。AI自動生成直後も即時リサイズ。
+**Gitタグ:** `v6.50-session41-before-tree-textarea-autoresize`
+
+### 総合評価表: textarea 自動リサイズ + null エラー修正 ✅
+`tableRef` + `useLayoutEffect([patterns, rows])` で一括リサイズ。`description ?? ""` / `reason ?? ""` で null フォールバック追加。
+**Gitタグ:** `v6.51-session41-before-matrix-textarea-autoresize` / `v6.52-session41-before-matrix-null-fix`
+
+### スマホ用ボトムナビゲーション追加 ✅
+`MobileBottomNav.tsx` 新規作成。ホーム・カテゴリ・通知（バッジ）・マイページ・メニューの5タブ（`sm:hidden`）。モバイルヘッダー左をLOGOSロゴに変更。`pb-14 sm:pb-0` でコンテンツ隠れ対策。
+**Gitタグ:** `v6.53-session41-before-mobile-nav`
+
+### トピックページ: モバイルヘッダーのリデザイン ✅
+PC（`md:`）は完全に維持。`md:hidden` でモバイル専用Row追加: カテゴリバッジ左寄せ＋アイコンボタン右端 / 著者・日付＋概要ボタン1行。
+**Gitタグ:** `v6.55-session41-before-topic-header-mobile`
+
+### トピック概要・タイムライン: 書体階層整理 ✅
+概要本文: `text-lg` → `text-base + leading-relaxed`。タイムライン日付: `text-lg text-g-text` → `text-sm text-g-sub`。タイムライン内容: `text-sm text-g-text`。展開行も統一。
+**Gitタグ:** `v6.56-session41-before-topic-typography`
+
+### トップページ: カテゴリタブをピル型・横スクロールにリデザイン ✅
+文字数比率固定幅 → `shrink-0` 自然幅ピル型。`overflow-x-auto` + `scrollbarWidth:"none"` でスマホ横スクロール対応。アクティブ: `bg-indigo-600` 塗りつぶし。
+**Gitタグ:** `v6.57-session41-before-home-category-tabs` / **完了タグ:** `v6.57-session41-home-category-tabs`
 
 ---
 
