@@ -224,10 +224,6 @@ export default function HomeClient({
     });
   }, [categories]);
 
-  // ── タブ幅計算（文字数比率） ──
-  const TAB_BASE = 4; // 均一余白分（文字数換算）
-  const totalTabChars = categories.reduce((sum, c) => sum + c.name.length + TAB_BASE, 0);
-
   // ── ソート変更時のみ再フェッチ（初回は SSR データを使用）──
   const isFirstMount = useRef(true);
   useEffect(() => {
@@ -272,20 +268,22 @@ export default function HomeClient({
           {/* ── カテゴリタブ ── */}
           {categories.length > 0 && (
             <div className="rounded-xl overflow-hidden border border-white/[0.08]">
-              {/* タブヘッダー */}
-              <div className="flex overflow-y-hidden bg-[#1e1f20]">
+              {/* タブヘッダー: ピル型 + 横スクロール */}
+              <div
+                className="flex gap-1.5 px-2 py-2 bg-[#1e1f20] overflow-x-auto border-b border-white/[0.06]"
+                style={{ scrollbarWidth: "none" }}
+              >
                 {categories.map((cat) => {
                   const isActive = activeTab === cat.id;
                   return (
                     <button
                       key={cat.id}
                       onClick={() => setActiveTab(cat.id)}
-                      style={{ width: `${((cat.name.length + TAB_BASE) / totalTabChars * 100).toFixed(2)}%` }}
                       className={[
-                        "shrink-0 py-2.5 px-1 text-base whitespace-nowrap cursor-pointer transition-colors text-center overflow-hidden",
+                        "shrink-0 px-4 py-1.5 text-sm font-bold rounded-full whitespace-nowrap cursor-pointer transition-all duration-150",
                         isActive
-                          ? "bg-[#131314] text-white font-bold"
-                          : "bg-[#1e1f20] text-gray-300 border-b border-white/[0.08] hover:text-white hover:underline font-medium",
+                          ? "bg-indigo-600 text-white shadow-sm shadow-indigo-900/50"
+                          : "text-g-sub hover:text-g-text hover:bg-white/[0.06]",
                       ].join(" ")}
                     >
                       {cat.name}
