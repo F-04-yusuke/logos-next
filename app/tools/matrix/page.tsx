@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
@@ -160,6 +160,16 @@ function MatrixPageInner() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const tableRef = useRef<HTMLDivElement>(null);
+
+  // patterns/rows が変わるたびにテーブル内の全 textarea を自動リサイズ
+  useLayoutEffect(() => {
+    if (!tableRef.current) return;
+    tableRef.current.querySelectorAll("textarea").forEach((el) => {
+      el.style.height = "auto";
+      el.style.height = el.scrollHeight + "px";
+    });
+  }, [patterns, rows]);
 
   function showToast(message: string, type: "success" | "error") {
     setToast({ message, type });
@@ -453,7 +463,7 @@ function MatrixPageInner() {
           </div>
 
           {/* Matrix Table */}
-          <div className="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+          <div ref={tableRef} className="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
           <div className="overflow-x-auto custom-scroll">
             <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
