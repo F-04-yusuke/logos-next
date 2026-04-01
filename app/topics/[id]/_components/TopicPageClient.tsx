@@ -103,7 +103,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4 sm:py-6 text-logos-text">
 
         {/* ===== Topic Header Card ===== */}
-        <div className="bg-logos-hover rounded-2xl border border-logos-border px-5 py-5 sm:px-7 sm:py-6 mb-4">
+        <div className="mb-4">
 
         {/* ── モバイル専用 Row 1: カテゴリ + アイコンアクション ── */}
         <div className="flex md:hidden items-start justify-between gap-3 mb-3">
@@ -385,15 +385,15 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
         {/* ===== Tabs ===== */}
         <div className="mt-4">
-          <div className="flex items-center gap-1 bg-logos-hover rounded-xl p-1 mb-5 w-fit overflow-x-auto">
+          <div className="flex border-b border-logos-border mb-5 overflow-x-auto">
             {(["info", "comments", "analysis"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
-                className={`py-2 px-4 sm:px-5 rounded-lg text-sm font-bold transition-all duration-150 focus:outline-none whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+                className={`py-2.5 px-5 text-sm font-semibold transition-all duration-150 focus:outline-none whitespace-nowrap flex items-center gap-1.5 cursor-pointer -mb-px border-b-2 ${
                   activeTab === tab
-                    ? "bg-white dark:bg-logos-elevated shadow-sm text-indigo-600 dark:text-white"
-                    : "text-logos-sub hover:text-logos-text"
+                    ? "border-indigo-500 text-logos-text"
+                    : "border-transparent text-logos-sub hover:text-logos-text hover:border-logos-border"
                 }`}
               >
                 {tab === "info" && "情報"}
