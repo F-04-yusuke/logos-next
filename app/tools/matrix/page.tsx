@@ -105,7 +105,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
   if (msg.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="bg-logos-surface border border-logos-border rounded-2xl rounded-tr-sm px-4 py-3 text-base dark:text-g-text max-w-[85%] whitespace-pre-wrap leading-relaxed">
+        <div className="bg-logos-surface border border-logos-border rounded-2xl rounded-tr-sm px-4 py-3 text-base text-logos-text max-w-[85%] whitespace-pre-wrap leading-relaxed">
           {msg.text}
         </div>
       </div>
@@ -117,7 +117,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
         <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-cyan-500/30">
           <AiIcon className="h-3.5 w-3.5 text-logos-text animate-pulse" />
         </div>
-        <p className="text-base dark:text-g-sub animate-pulse pt-1">生成中...</p>
+        <p className="text-base text-logos-sub animate-pulse pt-1">生成中...</p>
       </div>
     );
   }
@@ -126,7 +126,7 @@ function ChatBubble({ msg }: { msg: ChatMsg }) {
       <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-cyan-500/30">
         <AiIcon className="h-3.5 w-3.5 text-logos-text" />
       </div>
-      <div className="text-base dark:text-g-text whitespace-pre-wrap leading-relaxed flex-1 pt-0.5">
+      <div className="text-base text-logos-text whitespace-pre-wrap leading-relaxed flex-1 pt-0.5">
         {msg.text}
       </div>
     </div>
@@ -233,7 +233,7 @@ function MatrixPageInner() {
   if (!user.is_pro) {
     return (
       <div className="py-20 text-center">
-        <p className="text-gray-600 dark:text-g-sub mb-4">このページはPRO会員限定です。</p>
+        <p className="text-logos-sub mb-4">このページはPRO会員限定です。</p>
         <Link href="/" className="text-blue-500 hover:underline">
           トップへ戻る
         </Link>
@@ -412,7 +412,7 @@ function MatrixPageInner() {
         )}
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-bold text-2xl dark:text-g-text flex items-center gap-2">
+          <h1 className="font-bold text-2xl text-logos-text flex items-center gap-2">
             <svg aria-hidden="true" className="h-5 w-5 text-purple-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
@@ -422,7 +422,7 @@ function MatrixPageInner() {
           <button
             onClick={saveMatrix}
             disabled={isSaving}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-logos-text font-bold py-2 sm:py-1.5 px-4 rounded text-base transition-colors shadow-sm cursor-pointer"
+            className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-1.5 px-5 rounded-full text-sm shadow-sm hover:shadow-orange-500/25 hover:shadow-md transition-all disabled:opacity-50 cursor-pointer"
           >
             {isSaving ? "保存中..." : "保存する"}
           </button>
@@ -431,8 +431,8 @@ function MatrixPageInner() {
         <div className="flex flex-col gap-8">
           {/* Theme + AI Generate */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 bg-white dark:bg-logos-surface border border-gray-200 dark:border-logos-border rounded-lg px-3 py-2 shadow-sm">
-              <div className="text-xs font-bold text-gray-500 dark:text-g-sub mb-0.5">
+            <div className="flex-1 bg-logos-surface border border-logos-border rounded-lg px-3 py-2 shadow-sm">
+              <div className="text-xs font-bold text-logos-sub mb-0.5">
                 テーマ（主題）
               </div>
               <input
@@ -440,13 +440,13 @@ function MatrixPageInner() {
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
                 placeholder="例：AIの普及が社会に与える影響について"
-                className="w-full bg-transparent font-bold text-base text-gray-900 dark:text-g-text focus:outline-none placeholder-gray-400 dark:placeholder-gray-600"
+                className="w-full bg-transparent font-bold text-base text-logos-text focus:outline-none placeholder-gray-400 dark:placeholder-gray-600"
               />
             </div>
             <button
               onClick={generateWithAI}
               disabled={isGenerating}
-              className="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-logos-text font-bold py-2 px-4 rounded text-base transition-colors shadow-sm shrink-0 flex items-center gap-1.5 cursor-pointer"
+              className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-1.5 px-4 rounded-full text-sm shadow-sm hover:shadow-orange-500/25 hover:shadow-md transition-all disabled:opacity-50 shrink-0 flex items-center gap-1.5 cursor-pointer"
             >
               <svg aria-hidden="true" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -456,21 +456,21 @@ function MatrixPageInner() {
           </div>
 
           {/* Description */}
-          <div className="border-b border-gray-200 dark:border-logos-border pb-4">
-            <p className="text-base text-gray-600 dark:text-g-sub">
+          <div className="border-b border-logos-border pb-4">
+            <p className="text-base text-logos-sub">
               行（評価項目）と列（パターン）を自由に追加・削除できます。◎=3点, 〇=2点, △=1点, ×=0点で下部に自動集計されます。
             </p>
           </div>
 
           {/* Matrix Table */}
-          <div ref={tableRef} className="rounded-xl border border-gray-200 dark:border-logos-border overflow-hidden">
+          <div ref={tableRef} className="rounded-xl border border-logos-border overflow-hidden">
           <div className="overflow-x-auto custom-scroll">
             <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr>
                     {/* Header: item label */}
-                    <th className="p-3 border-b border-r border-gray-200 dark:border-logos-border w-48 bg-gray-50 dark:bg-logos-surface align-bottom">
-                      <div className="text-xs font-bold text-gray-500 dark:text-g-sub mb-1">
+                    <th className="p-3 border-b border-r border-logos-border w-48 bg-logos-hover align-bottom">
+                      <div className="text-xs font-bold text-logos-sub mb-1">
                         評価項目 ＼ 比較パターン
                       </div>
                     </th>
@@ -479,7 +479,7 @@ function MatrixPageInner() {
                     {patterns.map((pattern, pIdx) => (
                       <th
                         key={pIdx}
-                        className="p-3 border-b border-r border-gray-200 dark:border-logos-border w-64 bg-gray-50 dark:bg-logos-surface align-top relative group"
+                        className="p-3 border-b border-r border-logos-border w-64 bg-logos-hover align-top relative group"
                       >
                         <div className="flex items-start justify-between mb-2">
                           <textarea
@@ -505,7 +505,7 @@ function MatrixPageInner() {
                           onChange={(e) => updatePattern(pIdx, { description: e.target.value })}
                           rows={1}
                           placeholder="概要や前提..."
-                          className="w-full bg-transparent text-gray-600 dark:text-g-sub text-sm focus:outline-none resize-none overflow-hidden mt-1 placeholder-gray-500 dark:placeholder-gray-600"
+                          className="w-full bg-transparent text-logos-sub text-sm focus:outline-none resize-none overflow-hidden mt-1 placeholder-gray-500 dark:placeholder-gray-600"
                           onInput={(e) => {
                             const t = e.target as HTMLTextAreaElement;
                             t.style.height = "auto";
@@ -516,10 +516,10 @@ function MatrixPageInner() {
                     ))}
 
                     {/* Add column button */}
-                    <th className="p-3 border-b border-gray-200 dark:border-logos-border w-24 bg-gray-100 dark:bg-logos-surface align-middle text-center">
+                    <th className="p-3 border-b border-logos-border w-24 bg-logos-hover align-middle text-center">
                       <button
                         onClick={addColumn}
-                        className="text-gray-500 dark:text-g-sub hover:text-gray-800 dark:hover:text-white bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-lg px-2 py-4 text-xs font-bold transition-colors w-full flex flex-col items-center gap-1 cursor-pointer"
+                        className="text-logos-sub hover:text-logos-text bg-logos-elevated hover:bg-logos-border rounded-lg px-2 py-4 text-xs font-bold transition-colors w-full flex flex-col items-center gap-1 cursor-pointer"
                       >
                         <span className="text-lg leading-none">＋</span>
                         <span>列を追加</span>
@@ -532,7 +532,7 @@ function MatrixPageInner() {
                   {rows.map((row, rIdx) => (
                     <tr key={rIdx} className="group row-item">
                       {/* Item title */}
-                      <td className="p-3 border-b border-r border-gray-200 dark:border-logos-border bg-gray-50 dark:bg-logos-surface">
+                      <td className="p-3 border-b border-r border-logos-border bg-logos-hover">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => removeRow(rIdx)}
@@ -544,7 +544,7 @@ function MatrixPageInner() {
                             value={row.itemTitle}
                             onChange={(e) => updateRow(rIdx, { itemTitle: e.target.value })}
                             rows={1}
-                            className="w-full bg-transparent font-bold text-gray-900 dark:text-g-text focus:outline-none text-base resize-none overflow-hidden"
+                            className="w-full bg-transparent font-bold text-logos-text focus:outline-none text-base resize-none overflow-hidden"
                             onInput={(e) => {
                               const t = e.target as HTMLTextAreaElement;
                               t.style.height = "auto";
@@ -560,13 +560,13 @@ function MatrixPageInner() {
                         return (
                           <td
                             key={cIdx}
-                            className="p-3 border-b border-r border-gray-200 dark:border-logos-border bg-white dark:bg-logos-surface hover:bg-gray-50 dark:hover:bg-logos-surface transition-colors"
+                            className="p-3 border-b border-r border-logos-border bg-logos-surface hover:bg-logos-hover transition-colors"
                           >
                             <div className="flex flex-col gap-2">
                               <select
                                 value={cell.score}
                                 onChange={(e) => updateCell(rIdx, cIdx, { score: e.target.value })}
-                                className={`w-full border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-base focus:outline-none focus:border-blue-500 font-bold ${getScoreStyle(cell.score)}`}
+                                className={`w-full border border-logos-border rounded px-2 py-1 text-base focus:outline-none focus:border-blue-500 font-bold ${getScoreStyle(cell.score)}`}
                               >
                                 <option value="3">◎ 最適</option>
                                 <option value="2">〇 良い</option>
@@ -579,7 +579,7 @@ function MatrixPageInner() {
                                 onChange={(e) => updateCell(rIdx, cIdx, { reason: e.target.value })}
                                 rows={2}
                                 placeholder="根拠やリンク..."
-                                className="w-full bg-transparent text-gray-600 dark:text-g-sub text-sm focus:outline-none resize-none overflow-hidden mt-1 placeholder-gray-500 dark:placeholder-gray-600"
+                                className="w-full bg-transparent text-logos-sub text-sm focus:outline-none resize-none overflow-hidden mt-1 placeholder-gray-500 dark:placeholder-gray-600"
                                 onInput={(e) => {
                                   const t = e.target as HTMLTextAreaElement;
                                   t.style.height = "auto";
@@ -592,18 +592,18 @@ function MatrixPageInner() {
                       })}
 
                       {/* Empty cell for add-column column */}
-                      <td className="border-b border-gray-200 dark:border-logos-border dark:bg-logos-surface" />
+                      <td className="border-b border-logos-border bg-logos-surface" />
                     </tr>
                   ))}
                 </tbody>
 
-                <tfoot className="bg-gray-50 dark:bg-logos-surface">
+                <tfoot className="bg-logos-hover">
                   <tr>
                     {/* Add row button */}
-                    <td className="p-3 border-r border-gray-200 dark:border-logos-border text-right">
+                    <td className="p-3 border-r border-logos-border text-right">
                       <button
                         onClick={addRow}
-                        className="text-xs font-bold text-gray-500 dark:text-g-sub hover:text-gray-800 dark:hover:text-white transition-colors flex items-center bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 px-3 py-1.5 rounded-full mr-auto cursor-pointer"
+                        className="text-xs font-bold text-logos-sub hover:text-logos-text transition-colors flex items-center bg-logos-elevated hover:bg-logos-border px-3 py-1.5 rounded-full mr-auto cursor-pointer"
                       >
                         <span className="text-base mr-1 leading-none">＋</span> 評価項目(行)を追加
                       </button>
@@ -616,18 +616,18 @@ function MatrixPageInner() {
                       return (
                         <td
                           key={cIdx}
-                          className={`p-3 border-r border-gray-200 dark:border-logos-border text-center${isMax ? " ring-2 ring-blue-500 rounded" : ""}`}
+                          className={`p-3 border-r border-logos-border text-center${isMax ? " ring-2 ring-blue-500 rounded" : ""}`}
                         >
-                          <div className="text-xs text-gray-500 mb-1 font-bold">総合評価</div>
+                          <div className="text-xs text-logos-sub mb-1 font-bold">総合評価</div>
                           {hasValue ? (
                             <div>
                               <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                                 {total}
                               </span>
-                              <span className="text-xs text-gray-500 ml-1">pt</span>
+                              <span className="text-xs text-logos-sub ml-1">pt</span>
                             </div>
                           ) : (
-                            <span className="text-sm text-gray-400">未評価</span>
+                            <span className="text-sm text-logos-sub">未評価</span>
                           )}
                         </td>
                       );
@@ -641,13 +641,13 @@ function MatrixPageInner() {
           </div>
 
           {/* AI Chat */}
-          <div className="mt-4 border-t border-gray-200 dark:border-logos-border pt-8">
+          <div className="mt-4 border-t border-logos-border pt-8">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-5 h-5 rounded bg-gradient-to-br from-cyan-300 via-cyan-500 to-teal-600 flex items-center justify-center shadow-sm shadow-cyan-500/30">
                 <AiIcon className="h-3 w-3 text-logos-text" />
               </div>
-              <h2 className="text-base font-bold text-gray-900 dark:text-g-text">AIアシスタント</h2>
-              <span className="text-xs dark:text-g-sub">「評価項目に不足はないか」「パターンAのセルを埋める情報を調べて」など指示してみてください。</span>
+              <h2 className="text-base font-bold text-logos-text">AIアシスタント</h2>
+              <span className="text-xs text-logos-sub">「評価項目に不足はないか」「パターンAのセルを埋める情報を調べて」など指示してみてください。</span>
             </div>
 
             <div className="bg-logos-bg border border-logos-border rounded-xl flex flex-col h-[350px] overflow-hidden">
@@ -670,7 +670,7 @@ function MatrixPageInner() {
                     }}
                     rows={1}
                     placeholder="AIに項目出しや評価のサポートを依頼..."
-                    className="flex-1 bg-white dark:bg-logos-bg border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-g-text text-base p-2.5 focus:outline-none focus:border-blue-500 max-h-32 resize-none overflow-hidden"
+                    className="flex-1 bg-logos-bg border border-logos-border rounded-lg text-logos-text text-base p-2.5 focus:outline-none focus:border-blue-500 max-h-32 resize-none overflow-hidden"
                     onInput={(e) => {
                       const t = e.target as HTMLTextAreaElement;
                       t.style.height = "auto";
@@ -679,7 +679,7 @@ function MatrixPageInner() {
                   />
                   <button
                     onClick={sendAiMessage}
-                    className="bg-blue-600 hover:bg-blue-500 text-logos-text px-5 py-2.5 rounded-lg font-bold text-base transition-colors shadow-md shrink-0 cursor-pointer"
+                    className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold py-2.5 px-5 rounded-full text-base shadow-sm hover:shadow-indigo-500/25 hover:shadow-md transition-all shrink-0 cursor-pointer"
                   >
                     送信
                   </button>
