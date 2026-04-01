@@ -80,7 +80,7 @@ export default function HistoryPage() {
 
   if (authLoading || fetching) {
     return (
-      <div className="py-8 sm:py-12">
+      <div className="py-6 sm:py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse">
             <div className="h-7 bg-logos-skeleton rounded-md w-1/4 mb-8" />
@@ -98,111 +98,115 @@ export default function HistoryPage() {
   const groups = groupByDate(topics);
 
   return (
-    <div className="py-8 sm:py-12">
+    <div className="py-6 sm:py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="sm:rounded-xl overflow-hidden">
-          <div className="p-4 sm:p-8">
 
-            {/* ページヘッダー */}
-            <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500 mb-6">
-              閲覧履歴
-            </h1>
+        {/* ページヘッダー */}
+        <h1 className="text-2xl font-bold text-logos-text flex items-center gap-2.5 mb-6">
+          <span
+            className="inline-block w-1 h-6 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0"
+            aria-hidden="true"
+          />
+          閲覧履歴
+        </h1>
 
-            {topics.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 px-4">
-                <svg
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-12 w-12 text-gray-300 dark:text-gray-600 mb-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-                <p className="text-gray-500 dark:text-g-sub text-lg font-bold">
-                  まだ閲覧履歴はありません。
-                </p>
-                <p className="text-gray-400 dark:text-gray-500 text-base mt-2">
-                  トピックを見ると、ここに履歴が残ります。
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="space-y-1.5">
-                  {groups.map(({ label, topics: groupTopics }) => (
-                    <div key={label}>
-                      <h3 className="font-bold text-lg text-gray-900 dark:text-g-text mt-8 mb-3 pl-2 border-l-2 border-logos-border">
-                        {label}
-                      </h3>
-                      <div className="space-y-1.5">
-                        {groupTopics.map((topic) => (
-                          <div
-                            key={topic.id}
-                            className="-ml-3 pl-3 py-3 sm:py-4 pr-4 bg-gray-50 dark:bg-logos-bg rounded-lg flex justify-between items-center hover:bg-gray-100 dark:hover:bg-logos-hover transition-colors duration-100 cursor-pointer"
-                          >
-                            <div className="flex-1 min-w-0">
-                              <Link
-                                href={`/topics/${topic.id}`}
-                                className="font-bold text-lg text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-100 line-clamp-1 block mb-1.5 cursor-pointer"
-                              >
-                                {topic.title}
-                              </Link>
-                              <div className="flex flex-wrap gap-1.5">
-                                {topic.categories.length > 0 ? (
-                                  topic.categories.map((cat) => (
-                                    <span
-                                      key={cat.id}
-                                      className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20"
-                                    >
-                                      {cat.name}
-                                    </span>
-                                  ))
-                                ) : (
-                                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                                    未分類
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* ページネーション */}
-                {lastPage > 1 && (
-                  <div className="mt-8 flex justify-center items-center gap-2">
-                    <button
-                      onClick={() => fetchHistory(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="px-4 py-2 text-lg font-bold rounded-md border border-gray-300 dark:border-logos-border text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-logos-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
-                    >
-                      ← 前
-                    </button>
-                    <span className="text-lg text-gray-500 px-2">
-                      {currentPage} / {lastPage}
-                    </span>
-                    <button
-                      onClick={() => fetchHistory(currentPage + 1)}
-                      disabled={currentPage === lastPage}
-                      className="px-4 py-2 text-lg font-bold rounded-md border border-gray-300 dark:border-logos-border text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-logos-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
-                    >
-                      次 →
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
+        {topics.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 px-4">
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-12 w-12 text-logos-border mb-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+            <p className="text-logos-sub text-lg font-bold">
+              まだ閲覧履歴はありません。
+            </p>
+            <p className="text-logos-sub opacity-60 text-base mt-2">
+              トピックを見ると、ここに履歴が残ります。
+            </p>
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="space-y-1.5">
+              {groups.map(({ label, topics: groupTopics }) => (
+                <div key={label}>
+                  <h3 className="font-bold text-base sm:text-lg text-logos-text flex items-center gap-2 mt-8 mb-3">
+                    <span
+                      className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0"
+                      aria-hidden="true"
+                    />
+                    {label}
+                  </h3>
+                  <div className="space-y-1.5">
+                    {groupTopics.map((topic) => (
+                      <div
+                        key={topic.id}
+                        className="-ml-3 pl-3 py-3 sm:py-4 pr-4 rounded-xl flex justify-between items-center hover:bg-logos-hover transition-colors duration-100 cursor-pointer"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <Link
+                            href={`/topics/${topic.id}`}
+                            className="font-bold text-lg text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-100 line-clamp-1 block mb-1.5 cursor-pointer"
+                          >
+                            {topic.title}
+                          </Link>
+                          <div className="flex flex-wrap gap-1.5">
+                            {topic.categories.length > 0 ? (
+                              topic.categories.map((cat) => (
+                                <span
+                                  key={cat.id}
+                                  className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:border-indigo-500/20"
+                                >
+                                  {cat.name}
+                                </span>
+                              ))
+                            ) : (
+                              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:border-indigo-500/20">
+                                未分類
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ページネーション */}
+            {lastPage > 1 && (
+              <div className="mt-8 flex justify-center items-center gap-2">
+                <button
+                  onClick={() => fetchHistory(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 text-base font-bold rounded-full border border-logos-border text-logos-text hover:bg-logos-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
+                >
+                  ← 前
+                </button>
+                <span className="text-base text-logos-sub px-2">
+                  {currentPage} / {lastPage}
+                </span>
+                <button
+                  onClick={() => fetchHistory(currentPage + 1)}
+                  disabled={currentPage === lastPage}
+                  className="px-4 py-2 text-base font-bold rounded-full border border-logos-border text-logos-text hover:bg-logos-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
+                >
+                  次 →
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
