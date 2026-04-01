@@ -255,7 +255,7 @@ export default function HomeClient({
             {!!user?.is_pro && (
               <Link
                 href="/topics/create"
-                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500  text-logos-text font-bold py-2 px-4 rounded-lg text-base transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-2 px-5 rounded-full text-sm shadow-md shadow-blue-500/30 hover:shadow-lg hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -267,10 +267,10 @@ export default function HomeClient({
 
           {/* ── カテゴリタブ ── */}
           {categories.length > 0 && (
-            <div className="rounded-xl overflow-hidden border border-white/[0.08]">
+            <div className="rounded-xl overflow-hidden border border-logos-border shadow-sm">
               {/* タブヘッダー: ピル型 + 横スクロール */}
               <div
-                className="flex gap-1.5 px-2 py-2 bg-logos-surface overflow-x-auto border-b border-logos-border"
+                className="flex gap-1 px-2 py-2 bg-gray-100 dark:bg-logos-surface overflow-x-auto border-b border-logos-border"
                 style={{ scrollbarWidth: "none" }}
               >
                 {categories.map((cat) => {
@@ -280,10 +280,10 @@ export default function HomeClient({
                       key={cat.id}
                       onClick={() => setActiveTab(cat.id)}
                       className={[
-                        "shrink-0 px-4 py-1.5 text-sm font-bold rounded-full whitespace-nowrap cursor-pointer transition-all duration-150",
+                        "shrink-0 px-4 py-1.5 text-sm font-semibold rounded-full whitespace-nowrap cursor-pointer transition-all duration-150",
                         isActive
-                          ? "bg-indigo-600  text-logos-text shadow-sm shadow-indigo-900/50"
-                          : "text-g-sub hover:text-g-text hover:bg-logos-skeleton",
+                          ? "bg-white dark:bg-logos-hover text-indigo-600 dark:text-logos-text shadow-sm border border-gray-200/80 dark:border-transparent"
+                          : "text-logos-sub hover:text-logos-text hover:bg-white/70 dark:hover:bg-logos-skeleton",
                       ].join(" ")}
                     >
                       {cat.name}

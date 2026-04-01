@@ -15,7 +15,7 @@ export default function AppLogo() {
         <path d="M 40 30 L 55 15 V 50 L 40 65 Z" className="fill-blue-700" />
         <path d="M 80 65 L 95 50 V 75 L 80 90 Z" className="fill-blue-700" />
       </svg>
-      <span className="text-lg font-black tracking-tight text-white">LOGOS</span>
+      <span className="text-lg font-black tracking-tight text-logos-text">LOGOS</span>
     </div>
   );
 }
