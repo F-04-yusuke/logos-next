@@ -266,7 +266,7 @@ export function PostCard({
                 )}
                 {isOwner && onDelete ? (
                   <>
-                    <span className="text-gray-300 dark:text-gray-500" aria-hidden="true">|</span>
+                    <span className="text-logos-border" aria-hidden="true">|</span>
                     <button
                       type="button"
                       onClick={() => {

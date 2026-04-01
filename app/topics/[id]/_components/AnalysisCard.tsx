@@ -352,7 +352,7 @@ export function AnalysisCard({
 
       {/* Preview */}
       <div className="rounded-md border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-surface p-4 text-base overflow-hidden relative h-[400px]">
-        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent dark:from-[#1e1f20] dark:to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent dark:from-logos-surface dark:to-transparent pointer-events-none" />
         <AnalysisPreview analysis={analysis} />
       </div>
 
@@ -420,7 +420,7 @@ export function AnalysisCard({
                 >
                   削除
                 </button>
-                <span className="text-gray-300 dark:text-gray-700" aria-hidden="true">|</span>
+                <span className="text-logos-border" aria-hidden="true">|</span>
               </>
             )}
             <button

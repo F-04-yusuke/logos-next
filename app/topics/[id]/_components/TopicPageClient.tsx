@@ -111,7 +111,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               <Link
                 key={cat.id}
                 href={`/categories/${cat.id}`}
-                className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors duration-100"
+                className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:border-indigo-500/20 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors duration-100"
               >
                 {cat.name}
               </Link>
@@ -292,7 +292,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   <Link
                     key={cat.id}
                     href={`/categories/${cat.id}`}
-                    className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors duration-100"
+                    className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:border-indigo-500/20 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors duration-100"
                   >
                     {cat.name}
                   </Link>
@@ -330,7 +330,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                     </svg>
                     編集する
                   </Link>
-                  <span className="text-gray-300 dark:text-gray-700">|</span>
+                  <span className="text-logos-border">|</span>
                 </>
               )}
 
@@ -390,8 +390,8 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                 className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${
                   activeTab === tab
                     ? tab === "analysis"
-                      ? "border-yellow-500 text-white font-bold"
-                      : "border-indigo-500 text-white font-bold"
+                      ? "border-yellow-500 text-yellow-600 dark:text-white font-bold"
+                      : "border-indigo-500 text-indigo-600 dark:text-white font-bold"
                     : "border-transparent text-g-sub hover:text-g-text hover:bg-logos-hover"
                 }`}
               >
