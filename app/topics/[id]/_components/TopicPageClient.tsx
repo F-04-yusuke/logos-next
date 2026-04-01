@@ -423,7 +423,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                     <select
                       value={postFilter}
                       onChange={(e) => setPostFilter(e.target.value)}
-                      className="text-sm sm:text-base rounded border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-bg dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
+                      className="text-sm rounded-full border border-logos-border bg-logos-surface text-logos-text px-3 py-1.5 cursor-pointer hover:bg-logos-hover transition-colors focus:outline-none focus:ring-1 focus:ring-indigo-400/30 focus:border-indigo-400"
                     >
                       <option value="">すべてのメディア</option>
                       <option value="YouTube">YouTube</option>
