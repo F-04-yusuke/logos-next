@@ -34,9 +34,9 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} h-full antialiased dark`}
+      className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} h-full antialiased`}
     >
-      <body className="bg-[#131314] text-g-text">
+      <body className="bg-logos-bg text-logos-text">
         <AuthProvider>
           <SidebarProvider>
             <LayoutShell>{children}</LayoutShell>

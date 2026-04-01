@@ -27,7 +27,7 @@ export function Avatar({
   if (avatarSrc) {
     return (
       <img
-        className={`${size} rounded-full object-cover border border-gray-700`}
+        className={`${size} rounded-full object-cover border border-logos-border`}
         src={avatarSrc}
         alt={name ? `${name}のアイコン` : "アイコン"}
       />
@@ -35,7 +35,7 @@ export function Avatar({
   }
   return (
     <div
-      className={`${size} rounded-full bg-gray-800 flex items-center justify-center border border-gray-700`}
+      className={`${size} rounded-full bg-logos-hover flex items-center justify-center border border-logos-border`}
     >
       <svg
         aria-hidden="true"
@@ -77,25 +77,25 @@ export default function UserMenu({
       </button>
 
       {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-[#1e1f20] border border-gray-700 rounded-xl shadow-lg py-1 z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-logos-surface border border-logos-border rounded-xl shadow-lg py-1 z-50">
           <Link
             href="/profile"
-            className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+            className="block px-4 py-2 text-sm text-logos-sub hover:bg-logos-hover hover:text-logos-text transition-colors"
             onClick={() => setDropdownOpen(false)}
           >
             Profile
           </Link>
           <Link
             href="/history"
-            className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+            className="block px-4 py-2 text-sm text-logos-sub hover:bg-logos-hover hover:text-logos-text transition-colors"
             onClick={() => setDropdownOpen(false)}
           >
             閲覧履歴
           </Link>
-          <div className="border-t border-gray-700 my-1" />
+          <div className="border-t border-logos-border my-1" />
           <button
             onClick={onLogout}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+            className="block w-full text-left px-4 py-2 text-sm text-logos-sub hover:bg-logos-hover hover:text-logos-text transition-colors"
           >
             Log Out
           </button>

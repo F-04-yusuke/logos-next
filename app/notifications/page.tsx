@@ -43,12 +43,12 @@ function timeAgo(dateStr: string): string {
 
 function TypeBadge({ type }: { type: string }) {
   const base =
-    "absolute -bottom-0.5 -right-0.5 flex items-center justify-center h-4 w-4 rounded-full border-2 border-white dark:border-[#131314]";
+    "absolute -bottom-0.5 -right-0.5 flex items-center justify-center h-4 w-4 rounded-full border-2 border-white dark:border-logos-bg";
 
   if (type === "new_post") {
     return (
       <span className={`${base} bg-blue-500`}>
-        <svg aria-hidden="true" className="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+        <svg aria-hidden="true" className="h-2 w-2 text-logos-text" fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
         </svg>
       </span>
@@ -57,7 +57,7 @@ function TypeBadge({ type }: { type: string }) {
   if (type === "comment_reply") {
     return (
       <span className={`${base} bg-green-500`}>
-        <svg aria-hidden="true" className="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+        <svg aria-hidden="true" className="h-2 w-2 text-logos-text" fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
         </svg>
       </span>
@@ -66,7 +66,7 @@ function TypeBadge({ type }: { type: string }) {
   if (type === "post_like") {
     return (
       <span className={`${base} bg-red-500`}>
-        <svg aria-hidden="true" className="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+        <svg aria-hidden="true" className="h-2 w-2 text-logos-text" fill="currentColor" viewBox="0 0 20 20">
           <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
         </svg>
       </span>
@@ -74,7 +74,7 @@ function TypeBadge({ type }: { type: string }) {
   }
   return (
     <span className={`${base} bg-yellow-500`}>
-      <svg aria-hidden="true" className="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+      <svg aria-hidden="true" className="h-2 w-2 text-logos-text" fill="currentColor" viewBox="0 0 20 20">
         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
       </svg>
     </span>
@@ -219,7 +219,7 @@ export default function NotificationsPage() {
                 className={`w-full text-left flex items-start gap-3 px-4 py-4 transition-colors duration-100 cursor-pointer ${
                   notification.is_unread
                     ? "bg-blue-50/60 dark:bg-blue-950/20 hover:bg-blue-50 dark:hover:bg-blue-950/30"
-                    : "hover:bg-gray-100 dark:hover:bg-white/[0.04]"
+                    : "hover:bg-gray-100 dark:hover:bg-logos-hover"
                 }`}
               >
                 {/* アクターアバター + 種別バッジ */}
@@ -230,10 +230,10 @@ export default function NotificationsPage() {
                       <img
                         src={actorAvatarSrc}
                         alt={`${notification.actor.name}のアイコン`}
-                        className="h-9 w-9 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+                        className="h-9 w-9 rounded-full object-cover border border-gray-200 dark:border-logos-border"
                       />
                     ) : (
-                      <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700">
+                      <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-logos-border">
                         <svg
                           aria-hidden="true"
                           className="h-5 w-5 text-gray-400"
@@ -290,7 +290,7 @@ export default function NotificationsPage() {
             <button
               onClick={() => setCurrentPage((p) => p - 1)}
               disabled={currentPage <= 1 || fetching}
-              className="px-4 py-2 text-lg font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.04] disabled:opacity-40 transition-colors duration-100 cursor-pointer"
+              className="px-4 py-2 text-lg font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-logos-border rounded-md hover:bg-gray-100 dark:hover:bg-logos-hover disabled:opacity-40 transition-colors duration-100 cursor-pointer"
             >
               前へ
             </button>
@@ -300,7 +300,7 @@ export default function NotificationsPage() {
             <button
               onClick={() => setCurrentPage((p) => p + 1)}
               disabled={currentPage >= lastPage || fetching}
-              className="px-4 py-2 text-lg font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.04] disabled:opacity-40 transition-colors duration-100 cursor-pointer"
+              className="px-4 py-2 text-lg font-bold text-gray-600 dark:text-g-sub border border-gray-300 dark:border-logos-border rounded-md hover:bg-gray-100 dark:hover:bg-logos-hover disabled:opacity-40 transition-colors duration-100 cursor-pointer"
             >
               次へ
             </button>

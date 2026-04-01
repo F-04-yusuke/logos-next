@@ -43,14 +43,14 @@ export function AnalysisCard({
   const typeInfo = TYPE_INFO[analysis.type];
 
   return (
-    <div className={`-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors border-l-2 ${typeInfo.accent}`}>
+    <div className={`-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-logos-bg rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors border-l-2 ${typeInfo.accent}`}>
       {/* ヘッダー: バッジ・公開状態・時刻 */}
       <div className="flex items-center gap-2 mb-2 flex-wrap">
         <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${typeInfo.badgeColor}`}>
           {typeInfo.label}
         </span>
         {!!analysis.is_published ? (
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded border bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500">
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded border bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-logos-border text-gray-500">
             公開済み
           </span>
         ) : (
@@ -67,7 +67,7 @@ export function AnalysisCard({
       </p>
 
       {/* アクション行 */}
-      <div className="flex items-center gap-3 border-t border-gray-100 dark:border-gray-800 pt-3">
+      <div className="flex items-center gap-3 border-t border-gray-100 dark:border-logos-border pt-3">
         {/* 閲覧リンク（公開済みのみ） */}
         {!!analysis.is_published && (
           <Link

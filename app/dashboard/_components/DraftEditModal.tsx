@@ -32,9 +32,9 @@ export function DraftEditModal({
       <div className="fixed inset-0 bg-black/60 dark:bg-black/80" onClick={onClose} />
       <div className="fixed inset-0 z-10 overflow-y-auto">
         <div className="flex min-h-full items-end justify-center p-0 sm:items-center sm:p-4">
-          <div className="relative bg-white dark:bg-[#18191a] rounded-t-2xl sm:rounded-xl border-t sm:border border-gray-200 dark:border-gray-800 w-full sm:max-w-xl overflow-hidden shadow-2xl">
+          <div className="relative bg-white dark:bg-logos-surface rounded-t-2xl sm:rounded-xl border-t sm:border border-gray-200 dark:border-gray-800 w-full sm:max-w-xl overflow-hidden shadow-2xl">
             {/* ヘッダー */}
-            <div className="px-4 py-4 sm:px-6 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-[#1e1f20]">
+            <div className="px-4 py-4 sm:px-6 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-logos-surface">
               <div>
                 <h3 id="draft-edit-title" className="text-xl font-bold text-gray-900 dark:text-g-text">
                   下書きを編集
@@ -46,7 +46,7 @@ export function DraftEditModal({
               </span>
             </div>
             {/* フォーム */}
-            <div className="p-4 sm:p-6 bg-white dark:bg-[#131314] space-y-5">
+            <div className="p-4 sm:p-6 bg-white dark:bg-logos-bg space-y-5">
               <div>
                 <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
                   参考URL (エビデンス)
@@ -56,7 +56,7 @@ export function DraftEditModal({
                   value={editUrl}
                   onChange={(e) => setEditUrl(e.target.value)}
                   required
-                  className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2"
+                  className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-logos-surface dark:border-gray-700 dark:text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2"
                 />
               </div>
               <div>
@@ -67,7 +67,7 @@ export function DraftEditModal({
                   value={editCategory}
                   onChange={(e) => setEditCategory(e.target.value)}
                   required
-                  className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 cursor-pointer"
+                  className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-logos-surface dark:border-gray-700 dark:text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 cursor-pointer"
                 >
                   <option value="">選択してください</option>
                   <option value="YouTube">YouTube</option>
@@ -86,12 +86,12 @@ export function DraftEditModal({
                   value={editComment}
                   onChange={(e) => setEditComment(e.target.value)}
                   rows={4}
-                  className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2"
+                  className="w-full rounded-md bg-gray-50 border border-gray-300 dark:bg-logos-surface dark:border-gray-700 dark:text-white text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2"
                 />
               </div>
             </div>
             {/* フッター */}
-            <div className="px-4 py-4 sm:px-6 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center gap-3 bg-gray-50 dark:bg-[#1e1f20]">
+            <div className="px-4 py-4 sm:px-6 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center gap-3 bg-gray-50 dark:bg-logos-surface">
               <button
                 type="button"
                 onClick={onClose}
@@ -117,7 +117,7 @@ export function DraftEditModal({
                   type="button"
                   onClick={() => onSave(true)}
                   disabled={editSubmitting || !editUrl || !editCategory}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md text-base transition-colors duration-100 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                  className="bg-blue-600 hover:bg-blue-700 text-logos-text font-bold py-2 px-6 rounded-md text-base transition-colors duration-100 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
                 >
                   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

@@ -161,7 +161,7 @@ export default function CategoryTopicsClient({
           <select
             value={sort}
             onChange={(e) => handleSort(e.target.value as SortOption)}
-            className="text-xs sm:text-sm rounded border border-gray-700 bg-[#131314] text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-500"
+            className="text-xs sm:text-sm rounded border border-logos-border bg-logos-bg text-logos-text px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-500"
           >
             <option value="newest">新着順</option>
             <option value="popular">エビデンスが多い順</option>
@@ -237,7 +237,7 @@ export default function CategoryTopicsClient({
                 <button
                   onClick={() => fetchTopics(currentPage - 1, sort)}
                   disabled={currentPage <= 1}
-                  className="px-4 py-2 text-base rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="px-4 py-2 text-base rounded-lg bg-logos-surface text-g-sub hover:bg-logos-hover hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   ← 前へ
                 </button>
@@ -247,7 +247,7 @@ export default function CategoryTopicsClient({
                 <button
                   onClick={() => fetchTopics(currentPage + 1, sort)}
                   disabled={currentPage >= lastPage}
-                  className="px-4 py-2 text-base rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="px-4 py-2 text-base rounded-lg bg-logos-surface text-g-sub hover:bg-logos-hover hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 >
                   次へ →
                 </button>

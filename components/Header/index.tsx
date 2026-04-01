@@ -51,7 +51,7 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-[#131314] border-b border-transparent">
+    <header className="sticky top-0 z-50 bg-logos-bg border-b border-logos-border">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-14">
 
@@ -77,7 +77,7 @@ export default function Header() {
                 {!!user.is_admin && (
                   <Link
                     href="/categories"
-                    className="text-sm text-gray-300 hover:text-white transition-colors mr-2"
+                    className="text-sm text-logos-sub hover:text-logos-text transition-colors mr-2"
                   >
                     カテゴリ管理
                   </Link>
@@ -101,12 +101,12 @@ export default function Header() {
               </>
             ) : (
               <>
-                <Link href="/login" className="text-sm text-gray-300 hover:text-white transition-colors">
+                <Link href="/login" className="text-sm text-logos-sub hover:text-logos-text transition-colors">
                   ログイン
                 </Link>
                 <Link
                   href="/register"
-                  className="text-sm bg-white text-black font-bold rounded-full px-4 py-1.5 hover:bg-gray-200 transition-colors"
+                  className="text-sm bg-logos-text text-logos-bg font-bold rounded-full px-4 py-1.5 hover:opacity-80 transition-opacity"
                 >
                   登録
                 </Link>
@@ -120,7 +120,7 @@ export default function Header() {
               /* 通知ベル（スマホ） */
               <NotificationBell
                 unreadCount={unreadCount}
-                linkClassName="relative p-2 rounded-md text-gray-500 hover:text-gray-400 hover:bg-[#222222] focus:outline-none transition"
+                linkClassName="relative p-2 rounded-md text-logos-sub hover:text-logos-text hover:bg-logos-hover focus:outline-none transition"
                 iconClassName="h-6 w-6"
               />
             )}
@@ -128,7 +128,7 @@ export default function Header() {
             {/* 検索トグル（虫眼鏡） */}
             <button
               onClick={() => setSearchOpen((prev) => !prev)}
-              className="p-2 rounded-md text-gray-500 hover:text-gray-400 hover:bg-[#222222] focus:outline-none transition"
+              className="p-2 rounded-md text-logos-sub hover:text-logos-text hover:bg-logos-hover focus:outline-none transition"
               aria-label="検索を開く"
             >
               <span className="sr-only">検索を開く</span>
@@ -140,7 +140,7 @@ export default function Header() {
             {/* ハンバーガー（アカウントメニュー） */}
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-400 hover:bg-[#222222] focus:outline-none transition"
+              className="inline-flex items-center justify-center p-2 rounded-md text-logos-sub hover:text-logos-text hover:bg-logos-hover focus:outline-none transition"
               aria-label="アカウントメニューを開く"
             >
               <span className="sr-only">アカウントメニューを開く</span>
@@ -160,13 +160,13 @@ export default function Header() {
 
       {/* ── スマホ: 検索スライドダウン ── */}
       {searchOpen && (
-        <div className="sm:hidden px-4 pb-3 pt-3 bg-[#131314] shadow-sm">
+        <div className="sm:hidden px-4 pb-3 pt-3 bg-logos-bg shadow-sm border-b border-logos-border">
           <SearchBar
             query={query}
             setQuery={setQuery}
             onSearch={handleSearch}
-            inputClassName="w-full bg-[#121212] border border-gray-700 rounded-l-full px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-white text-sm transition-colors"
-            buttonClassName="bg-[#222222] border border-l-0 border-gray-700 rounded-r-full px-4 py-2 text-gray-400 hover:bg-[#303030] transition-colors flex items-center justify-center"
+            inputClassName="w-full bg-logos-input border border-logos-border rounded-l-full px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-logos-text text-sm transition-colors"
+            buttonClassName="bg-logos-hover border border-l-0 border-logos-border rounded-r-full px-4 py-2 text-logos-sub hover:bg-logos-elevated transition-colors flex items-center justify-center"
             autoFocus
           />
         </div>
@@ -174,7 +174,7 @@ export default function Header() {
 
       {/* ── スマホ: アカウントメニュー展開 ── */}
       {menuOpen && (
-        <div className="sm:hidden border-t border-gray-800 bg-[#131314]">
+        <div className="sm:hidden border-t border-logos-border bg-logos-bg">
           {user ? (
             <>
               {/* カテゴリ管理（is_admin のみ） */}
@@ -191,34 +191,34 @@ export default function Header() {
               )}
 
               {/* ユーザー情報 */}
-              <div className="pt-4 pb-1 border-t border-gray-700">
+              <div className="pt-4 pb-1 border-t border-logos-border">
                 <div className="px-4 flex items-center">
                   <div className="shrink-0 mr-3">
                     <Avatar avatar={user.avatar} name={user.name} size="h-10 w-10" iconSize="h-6 w-6" />
                   </div>
                   <div>
-                    <div className="text-base text-gray-200">{user.name}</div>
-                    <div className="text-sm text-gray-500">{user.email}</div>
+                    <div className="text-base text-logos-text">{user.name}</div>
+                    <div className="text-sm text-logos-sub">{user.email}</div>
                   </div>
                 </div>
                 <div className="mt-3 space-y-1 pb-3">
                   <Link
                     href="/profile"
-                    className="block px-4 py-2 text-sm text-gray-300 hover:bg-[#222222] hover:text-white transition-colors"
+                    className="block px-4 py-2 text-sm text-logos-sub hover:bg-logos-hover hover:text-logos-text transition-colors"
                     onClick={() => setMenuOpen(false)}
                   >
                     Profile
                   </Link>
                   <Link
                     href="/history"
-                    className="block px-4 py-2 text-sm text-gray-300 hover:bg-[#222222] hover:text-white transition-colors"
+                    className="block px-4 py-2 text-sm text-logos-sub hover:bg-logos-hover hover:text-logos-text transition-colors"
                     onClick={() => setMenuOpen(false)}
                   >
                     閲覧履歴
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-[#222222] hover:text-white transition-colors"
+                    className="block w-full text-left px-4 py-2 text-sm text-logos-sub hover:bg-logos-hover hover:text-logos-text transition-colors"
                   >
                     Log Out
                   </button>
@@ -230,14 +230,14 @@ export default function Header() {
             <div className="px-4 py-4 flex flex-col gap-3">
               <Link
                 href="/login"
-                className="text-sm text-gray-300 hover:text-white py-1"
+                className="text-sm text-logos-sub hover:text-logos-text py-1"
                 onClick={() => setMenuOpen(false)}
               >
                 ログイン
               </Link>
               <Link
                 href="/register"
-                className="text-sm bg-white text-black font-bold rounded-full px-4 py-2 text-center hover:bg-gray-200 transition-colors"
+                className="text-sm bg-logos-text text-logos-bg font-bold rounded-full px-4 py-2 text-center hover:opacity-80 transition-opacity"
                 onClick={() => setMenuOpen(false)}
               >
                 登録

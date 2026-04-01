@@ -109,10 +109,10 @@ function ProfileInfoSection({ profile, onSaved }: {
               <img
                 src={previewSrc}
                 alt="Avatar"
-                className="h-16 w-16 object-cover rounded-full border border-gray-200 dark:border-gray-700"
+                className="h-16 w-16 object-cover rounded-full border border-gray-200 dark:border-logos-border"
               />
             ) : (
-              <div className="h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700">
+              <div className="h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-logos-border">
                 <svg aria-hidden="true" className="h-8 w-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
@@ -148,7 +148,7 @@ function ProfileInfoSection({ profile, onSaved }: {
             disabled={!canChangeName}
             required
             autoComplete="name"
-            className={`mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+            className={`mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
               !canChangeName ? "opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800" : ""
             }`}
           />
@@ -176,7 +176,7 @@ function ProfileInfoSection({ profile, onSaved }: {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="username"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
           {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email[0]}</p>}
         </div>
@@ -266,7 +266,7 @@ function PasswordSection() {
             onChange={(e) => setCurrentPassword(e.target.value)}
             required
             autoComplete="current-password"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
           {errors.current_password && <p className="mt-1 text-xs text-red-500">{errors.current_password[0]}</p>}
         </div>
@@ -282,7 +282,7 @@ function PasswordSection() {
             onChange={(e) => setPassword(e.target.value)}
             required
             autoComplete="new-password"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
           {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password[0]}</p>}
         </div>
@@ -298,7 +298,7 @@ function PasswordSection() {
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             required
             autoComplete="new-password"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           />
           {errors.password_confirmation && <p className="mt-1 text-xs text-red-500">{errors.password_confirmation[0]}</p>}
         </div>
@@ -381,7 +381,7 @@ function DeleteAccountSection() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           onClick={(e) => { if (e.target === e.currentTarget) setShowModal(false); }}
         >
-          <div className="bg-white dark:bg-[#1e1f20] rounded-xl shadow-xl w-full max-w-md mx-4">
+          <div className="bg-white dark:bg-logos-surface rounded-xl shadow-xl w-full max-w-md mx-4">
             <form onSubmit={handleDelete} className="p-6">
               <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">
                 本当にアカウントを削除しますか？
@@ -400,13 +400,13 @@ function DeleteAccountSection() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="パスワード"
                   required
-                  className="mt-1 block w-full sm:w-3/4 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#131314] text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                  className="mt-1 block w-full sm:w-3/4 rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500"
                 />
                 {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password[0]}</p>}
                 {errors._ && <p className="mt-1 text-xs text-red-500">{errors._[0]}</p>}
               </div>
 
-              <div className="mt-6 flex justify-end gap-3 border-t border-gray-200 dark:border-gray-800 pt-4">
+              <div className="mt-6 flex justify-end gap-3 border-t border-gray-200 dark:border-logos-border pt-4">
                 <button
                   type="button"
                   onClick={() => { setShowModal(false); setPassword(""); setErrors({}); }}
@@ -465,10 +465,10 @@ export default function ProfilePage() {
       <div className="py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="animate-pulse">
-            <div className="h-7 bg-white/[0.06] rounded-md w-1/4 mb-6" />
-            <div className="h-48 bg-white/[0.04] rounded-xl mb-6" />
-            <div className="h-48 bg-white/[0.04] rounded-xl mb-6" />
-            <div className="h-32 bg-white/[0.04] rounded-xl" />
+            <div className="h-7 bg-logos-skeleton rounded-md w-1/4 mb-6" />
+            <div className="h-48 bg-logos-skeleton-light rounded-xl mb-6" />
+            <div className="h-48 bg-logos-skeleton-light rounded-xl mb-6" />
+            <div className="h-32 bg-logos-skeleton-light rounded-xl" />
           </div>
         </div>
       </div>
@@ -485,19 +485,19 @@ export default function ProfilePage() {
           プロフィール
         </h1>
 
-        <div className="p-4 sm:p-8 bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800">
+        <div className="p-4 sm:p-8 bg-white dark:bg-logos-surface shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border">
           <div className="max-w-xl">
             <ProfileInfoSection profile={profile} onSaved={handleProfileSaved} />
           </div>
         </div>
 
-        <div className="p-4 sm:p-8 bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800">
+        <div className="p-4 sm:p-8 bg-white dark:bg-logos-surface shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border">
           <div className="max-w-xl">
             <PasswordSection />
           </div>
         </div>
 
-        <div className="p-4 sm:p-8 bg-white dark:bg-[#1e1f20] shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800">
+        <div className="p-4 sm:p-8 bg-white dark:bg-logos-surface shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border">
           <div className="max-w-xl">
             <DeleteAccountSection />
           </div>

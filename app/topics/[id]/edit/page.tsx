@@ -171,11 +171,11 @@ export default function TopicEditPage() {
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="animate-pulse p-6">
-            <div className="h-7 bg-white/[0.06] rounded-md w-1/3 mb-6" />
+            <div className="h-7 bg-logos-skeleton rounded-md w-1/3 mb-6" />
             <div className="space-y-4">
-              <div className="h-10 bg-white/[0.04] rounded-md" />
-              <div className="h-40 bg-white/[0.04] rounded-md" />
-              <div className="h-24 bg-white/[0.04] rounded-md" />
+              <div className="h-10 bg-logos-skeleton-light rounded-md" />
+              <div className="h-40 bg-logos-skeleton-light rounded-md" />
+              <div className="h-24 bg-logos-skeleton-light rounded-md" />
             </div>
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function TopicEditPage() {
     return (
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-[#1e1f20] shadow-sm sm:rounded-lg border border-gray-800 p-8 text-center">
+          <div className="bg-logos-surface shadow-sm sm:rounded-lg border border-logos-border p-8 text-center">
             <p className="text-gray-300 mb-4">ログインが必要です。</p>
             <Link href="/login" className="text-blue-400 hover:text-blue-300 font-bold">
               ログインページへ
@@ -204,7 +204,7 @@ export default function TopicEditPage() {
     return (
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-[#1e1f20] shadow-sm sm:rounded-lg border border-gray-800 p-8 text-center">
+          <div className="bg-logos-surface shadow-sm sm:rounded-lg border border-logos-border p-8 text-center">
             <p className="text-gray-300">トピックが見つかりません。</p>
           </div>
         </div>
@@ -217,7 +217,7 @@ export default function TopicEditPage() {
     return (
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-[#1e1f20] shadow-sm sm:rounded-lg border border-gray-800 p-8 text-center">
+          <div className="bg-logos-surface shadow-sm sm:rounded-lg border border-logos-border p-8 text-center">
             <p className="text-gray-300 mb-4">このトピックを編集する権限がありません。</p>
             <Link href={`/topics/${topicId}`} className="text-blue-400 hover:text-blue-300 font-bold text-base">
               トピックに戻る
@@ -232,7 +232,7 @@ export default function TopicEditPage() {
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div className="bg-[#1e1f20] overflow-hidden shadow-sm sm:rounded-lg border border-gray-800">
+        <div className="bg-logos-surface overflow-hidden shadow-sm sm:rounded-lg border border-logos-border">
           <div className="p-6 text-gray-100">
 
             <h2 className="font-bold text-2xl dark:text-g-text leading-tight mb-6 pl-3 border-l-4 border-indigo-500">
@@ -253,20 +253,20 @@ export default function TopicEditPage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
-                  className="mt-1 block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg"
+                  className="mt-1 block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg"
                 />
                 {errors.title && <p className="text-red-400 text-base mt-1">{errors.title[0]}</p>}
               </div>
 
               {/* カテゴリ選択（最大2つ） */}
-              <div className="mb-6 p-4 bg-[#131314] rounded-md border border-gray-800">
+              <div className="mb-6 p-4 bg-logos-bg rounded-md border border-logos-border">
                 <label className="block text-lg font-bold text-gray-300 mb-2">カテゴリを選択してください（最大2つまで）</label>
                 {errors.category_ids && (
                   <p className="text-red-400 text-base mt-1 mb-2">{errors.category_ids[0]}</p>
                 )}
                 <div className="space-y-4">
                   {categories.map((parent) => (
-                    <div key={parent.id} className="bg-[#1e1f20] p-3 rounded border border-gray-700">
+                    <div key={parent.id} className="bg-logos-surface p-3 rounded border border-logos-border">
                       {/* 大分類 */}
                       <div className="font-bold text-blue-400 border-b border-gray-700 pb-2 mb-3">
                         <label className="inline-flex items-center cursor-pointer">
@@ -275,7 +275,7 @@ export default function TopicEditPage() {
                             checked={selectedCategoryIds.includes(parent.id)}
                             onChange={(e) => handleCategoryChange(parent.id, e.target.checked)}
                             disabled={!selectedCategoryIds.includes(parent.id) && selectedCategoryIds.length >= 2}
-                            className="rounded border-gray-600 bg-[#131314] text-blue-600 focus:ring-blue-500"
+                            className="rounded border-gray-600 bg-logos-bg text-blue-600 focus:ring-blue-500"
                           />
                           <span className="ml-2">📁 {parent.name}</span>
                         </label>
@@ -289,7 +289,7 @@ export default function TopicEditPage() {
                               checked={selectedCategoryIds.includes(child.id)}
                               onChange={(e) => handleCategoryChange(child.id, e.target.checked)}
                               disabled={!selectedCategoryIds.includes(child.id) && selectedCategoryIds.length >= 2}
-                              className="rounded border-gray-600 bg-[#131314] text-blue-600 focus:ring-blue-500"
+                              className="rounded border-gray-600 bg-logos-bg text-blue-600 focus:ring-blue-500"
                             />
                             <span className="ml-2 text-lg text-gray-300">📄 {child.name}</span>
                           </label>
@@ -309,7 +309,7 @@ export default function TopicEditPage() {
                   onChange={(e) => { setContent(e.target.value); autoExpand(e.target); }}
                   rows={6}
                   required
-                  className="mt-1 block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg overflow-hidden resize-none"
+                  className="mt-1 block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg overflow-hidden resize-none"
                 />
                 {errors.content && <p className="text-red-400 text-base mt-1">{errors.content[0]}</p>}
               </div>
@@ -329,7 +329,7 @@ export default function TopicEditPage() {
                         value={item.date}
                         onChange={(e) => updateTimelineItem(index, "date", e.target.value)}
                         placeholder="202X年X月"
-                        className="w-full sm:w-1/4 rounded-md border border-gray-700 bg-[#131314] text-white text-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-1.5"
+                        className="w-full sm:w-1/4 rounded-md border border-logos-border bg-logos-bg text-logos-text text-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-1.5"
                       />
                       <textarea
                         value={item.event}
@@ -339,7 +339,7 @@ export default function TopicEditPage() {
                         }}
                         placeholder="出来事の要約"
                         rows={1}
-                        className="w-full sm:flex-1 rounded-md border border-gray-700 bg-[#131314] text-white text-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-1.5 overflow-hidden resize-none"
+                        className="w-full sm:flex-1 rounded-md border border-logos-border bg-logos-bg text-logos-text text-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-1.5 overflow-hidden resize-none"
                       />
                       <button
                         type="button"
@@ -372,7 +372,7 @@ export default function TopicEditPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-colors duration-100 disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 text-logos-text font-bold py-2 px-6 rounded-md transition-colors duration-100 disabled:opacity-50"
                 >
                   {submitting ? "保存中..." : "変更を保存する"}
                 </button>

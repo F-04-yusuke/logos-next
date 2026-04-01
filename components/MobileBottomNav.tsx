@@ -23,7 +23,7 @@ export default function MobileBottomNav() {
     `${itemBase} ${isActive(href, exact) ? activeColor : inactiveColor}`;
 
   return (
-    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1e1f20] border-t border-gray-800 flex h-14">
+    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-logos-surface border-t border-logos-border flex h-14">
       {/* ホーム */}
       <Link href="/" className={cls("/")}>
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

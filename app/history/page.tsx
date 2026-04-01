@@ -83,10 +83,10 @@ export default function HistoryPage() {
       <div className="py-8 sm:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse">
-            <div className="h-7 bg-white/[0.06] rounded-md w-1/4 mb-8" />
+            <div className="h-7 bg-logos-skeleton rounded-md w-1/4 mb-8" />
             <div className="space-y-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-16 bg-white/[0.04] rounded-lg" />
+                <div key={i} className="h-16 bg-logos-skeleton-light rounded-lg" />
               ))}
             </div>
           </div>
@@ -137,14 +137,14 @@ export default function HistoryPage() {
                 <div className="space-y-1.5">
                   {groups.map(({ label, topics: groupTopics }) => (
                     <div key={label}>
-                      <h3 className="font-bold text-lg text-gray-900 dark:text-g-text mt-8 mb-3 pl-2 border-l-2 border-gray-700">
+                      <h3 className="font-bold text-lg text-gray-900 dark:text-g-text mt-8 mb-3 pl-2 border-l-2 border-logos-border">
                         {label}
                       </h3>
                       <div className="space-y-1.5">
                         {groupTopics.map((topic) => (
                           <div
                             key={topic.id}
-                            className="-ml-3 pl-3 py-3 sm:py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex justify-between items-center hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors duration-100 cursor-pointer"
+                            className="-ml-3 pl-3 py-3 sm:py-4 pr-4 bg-gray-50 dark:bg-logos-bg rounded-lg flex justify-between items-center hover:bg-gray-100 dark:hover:bg-logos-hover transition-colors duration-100 cursor-pointer"
                           >
                             <div className="flex-1 min-w-0">
                               <Link
@@ -183,7 +183,7 @@ export default function HistoryPage() {
                     <button
                       onClick={() => fetchHistory(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="px-4 py-2 text-lg font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-white/[0.04] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
+                      className="px-4 py-2 text-lg font-bold rounded-md border border-gray-300 dark:border-logos-border text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-logos-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
                     >
                       ← 前
                     </button>
@@ -193,7 +193,7 @@ export default function HistoryPage() {
                     <button
                       onClick={() => fetchHistory(currentPage + 1)}
                       disabled={currentPage === lastPage}
-                      className="px-4 py-2 text-lg font-bold rounded-md border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-white/[0.04] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
+                      className="px-4 py-2 text-lg font-bold rounded-md border border-gray-300 dark:border-logos-border text-gray-700 dark:text-g-text hover:bg-gray-50 dark:hover:bg-logos-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
                     >
                       次 →
                     </button>

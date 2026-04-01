@@ -91,7 +91,7 @@ export function PostModal({
       <div className="fixed inset-0 z-10 overflow-y-auto">
         <div className="flex min-h-full items-end justify-center p-0 sm:items-center sm:p-4">
           <div className="relative transform overflow-hidden bg-white dark:bg-[#18191a] rounded-t-2xl sm:rounded-xl border-t sm:border border-gray-200 dark:border-gray-800 text-left shadow-2xl w-full h-[85vh] sm:h-auto sm:max-w-xl flex flex-col">
-            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-[#1e1f20]">
+            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-logos-surface">
               <h3
                 className="text-xl font-bold text-gray-900 dark:text-g-text"
                 id="modal-title"
@@ -109,7 +109,7 @@ export function PostModal({
               </button>
             </div>
 
-            <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-white dark:bg-[#131314]">
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-white dark:bg-logos-bg">
               {/* URL入力 */}
               <div className="mb-5">
                 <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
@@ -119,7 +119,7 @@ export function PostModal({
                   type="url"
                   value={url}
                   onChange={(e) => onUrlChange(e.target.value)}
-                  className="w-full rounded-md bg-gray-50 border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-3 sm:py-2"
+                  className="w-full rounded-md bg-gray-50 border-gray-300 dark:bg-logos-surface dark:border-gray-700 dark:text-white text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-3 sm:py-2"
                   required
                   placeholder="https://..."
                 />
@@ -130,17 +130,17 @@ export function PostModal({
                 )}
                 {imagePreview ? (
                   <div className="mt-2 relative">
-                    <img src={imagePreview} alt="添付プレビュー" className="w-full max-h-48 object-contain rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1e1f20]" />
+                    <img src={imagePreview} alt="添付プレビュー" className="w-full max-h-48 object-contain rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-logos-surface" />
                     <button
                       type="button"
                       onClick={clearImage}
-                      className="absolute top-1 right-1 bg-black/50 text-white text-xs px-2 py-0.5 rounded hover:bg-black/70 transition-colors"
+                      className="absolute top-1 right-1 bg-black/50 text-logos-text text-xs px-2 py-0.5 rounded hover:bg-black/70 transition-colors"
                     >
                       ✕ 削除
                     </button>
                   </div>
                 ) : !ogLoading && ogPreview && (ogPreview.title || ogPreview.thumbnail) ? (
-                  <div className="mt-2 p-2 bg-gray-50 dark:bg-[#1e1f20] rounded-md border border-gray-200 dark:border-gray-700 flex gap-2 items-start">
+                  <div className="mt-2 p-2 bg-gray-50 dark:bg-logos-surface rounded-md border border-gray-200 dark:border-gray-700 flex gap-2 items-start">
                     {ogPreview.thumbnail && (
                       <img src={ogPreview.thumbnail} alt="" className="w-20 h-14 object-cover rounded flex-shrink-0" />
                     )}
@@ -189,7 +189,7 @@ export function PostModal({
                         value={customTitle}
                         onChange={(e) => setCustomTitle(e.target.value)}
                         maxLength={255}
-                        className="w-full rounded-md bg-gray-50 border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-2"
+                        className="w-full rounded-md bg-gray-50 border-gray-300 dark:bg-logos-surface dark:border-gray-700 dark:text-white text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-2"
                         placeholder="タイトルを入力（自動取得より優先されます）"
                       />
                     </div>
@@ -205,7 +205,7 @@ export function PostModal({
                 <select
                   value={category}
                   onChange={(e) => onCategoryChange(e.target.value)}
-                  className="w-full rounded-md bg-gray-50 border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-3 sm:py-2"
+                  className="w-full rounded-md bg-gray-50 border-gray-300 dark:bg-logos-surface dark:border-gray-700 dark:text-white text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-3 sm:py-2"
                   required
                 >
                   <option value="">選択してください</option>
@@ -227,13 +227,13 @@ export function PostModal({
                   value={comment}
                   onChange={(e) => onCommentChange(e.target.value)}
                   rows={4}
-                  className="w-full rounded-md bg-gray-50 border-gray-300 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-3 sm:py-2"
+                  className="w-full rounded-md bg-gray-50 border-gray-300 dark:bg-logos-surface dark:border-gray-700 dark:text-white text-base sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-3 sm:py-2"
                   placeholder="URLに対する補足や、どの部分が参考になるかなどを記入"
                 />
               </div>
             </div>
 
-            <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center gap-3 bg-gray-50 dark:bg-[#1e1f20]">
+            <div className="px-4 py-3 sm:px-6 sm:py-4 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center gap-3 bg-gray-50 dark:bg-logos-surface">
               <button
                 onClick={onClose}
                 type="button"
@@ -269,7 +269,7 @@ export function PostModal({
                   type="button"
                   onClick={() => handleSubmit(false)}
                   disabled={submitting || !url || !category}
-                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-3 px-6 sm:py-2 rounded-md text-base transition-colors disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-logos-text font-bold py-3 px-6 sm:py-2 rounded-md text-base transition-colors disabled:opacity-50"
                 >
                   投稿する
                 </button>

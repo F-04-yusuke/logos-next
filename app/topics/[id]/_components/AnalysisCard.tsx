@@ -39,7 +39,7 @@ function stanceStyle(stance?: string) {
   if (stance === "反論") return "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800";
   if (stance === "賛成・補足") return "bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800";
   if (stance === "疑問") return "bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800";
-  return "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-g-sub dark:border-gray-700";
+  return "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-g-sub dark:border-logos-border";
 }
 
 // -------- tree プレビュー用（閲覧画面と同一スタイル） --------
@@ -92,7 +92,7 @@ function PreviewTreeNode({ node, labels }: { node: PreviewTreeNode; labels: Map<
             {label}
           </div>
           {hasChildren && (
-            <div className="flex-1 border-l-2 border-gray-300 dark:border-gray-700 mt-1" style={{ marginLeft: "15px" }} aria-hidden="true" />
+            <div className="flex-1 border-l-2 border-gray-300 dark:border-logos-border mt-1" style={{ marginLeft: "15px" }} aria-hidden="true" />
           )}
         </div>
         <div className="flex-1 min-w-0">
@@ -114,11 +114,11 @@ function PreviewTreeNode({ node, labels }: { node: PreviewTreeNode; labels: Map<
               return (
                 <div key={idx} className="relative">
                   {isLast ? (
-                    <div className="absolute pointer-events-none border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg" style={{ left: "-29px", top: 0, width: "29px", height: "16px" }} aria-hidden="true" />
+                    <div className="absolute pointer-events-none border-l-2 border-b-2 border-gray-300 dark:border-logos-border rounded-bl-lg" style={{ left: "-29px", top: 0, width: "29px", height: "16px" }} aria-hidden="true" />
                   ) : (
                     <>
-                      <div className="absolute pointer-events-none border-l-2 border-gray-300 dark:border-gray-700" style={{ left: "-29px", top: 0, height: "calc(100% + 16px)" }} aria-hidden="true" />
-                      <div className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-gray-700" style={{ left: "-29px", top: "16px", width: "29px" }} aria-hidden="true" />
+                      <div className="absolute pointer-events-none border-l-2 border-gray-300 dark:border-logos-border" style={{ left: "-29px", top: 0, height: "calc(100% + 16px)" }} aria-hidden="true" />
+                      <div className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-logos-border" style={{ left: "-29px", top: "16px", width: "29px" }} aria-hidden="true" />
                     </>
                   )}
                   <PreviewTreeNode node={child} labels={labels} />
@@ -140,7 +140,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     return (
       <div>
         {meta && (meta.url || meta.description) && (
-          <div className="bg-white dark:bg-[#1e1f20] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 mb-6">
+          <div className="bg-white dark:bg-logos-surface p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border mb-6">
             <h3 className="font-bold text-gray-900 dark:text-g-text flex items-center mb-3">
               <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -185,11 +185,11 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
         <table className="w-full text-left border-collapse min-w-[500px]">
           <thead>
             <tr>
-              <th className="p-2 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] text-[10px] font-bold text-gray-500 dark:text-g-sub w-28 align-bottom">
+              <th className="p-2 border-b border-r border-gray-200 dark:border-logos-border bg-gray-50 dark:bg-logos-bg text-[10px] font-bold text-gray-500 dark:text-g-sub w-28 align-bottom">
                 評価項目 ＼ 比較パターン
               </th>
               {patterns.map((p, i) => (
-                <th key={i} className="p-2 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] align-top">
+                <th key={i} className="p-2 border-b border-r border-gray-200 dark:border-logos-border bg-gray-50 dark:bg-logos-bg align-top">
                   <div className="font-bold text-blue-600 dark:text-blue-400 mb-0.5 text-sm">{p.title}</div>
                   <p className="text-[10px] text-gray-500 dark:text-g-sub font-normal line-clamp-2">{p.description}</p>
                 </th>
@@ -201,14 +201,14 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
               const evals = item.evaluations ?? item.scores ?? [];
               return (
                 <tr key={ri}>
-                  <td className="p-2 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314] font-bold text-sm text-gray-900 dark:text-g-text">
+                  <td className="p-2 border-b border-r border-gray-200 dark:border-logos-border bg-gray-50 dark:bg-logos-bg font-bold text-sm text-gray-900 dark:text-g-text">
                     {item.itemTitle}
                   </td>
                   {patterns.map((_, ci) => {
                     const e = evals[ci];
                     const badge = badgeInfo(e?.score ?? -1);
                     return (
-                      <td key={ci} className="p-2 border-b border-r border-gray-200 dark:border-gray-700 align-top">
+                      <td key={ci} className="p-2 border-b border-r border-gray-200 dark:border-logos-border align-top">
                         {badge && <span className={`inline-block px-1.5 py-0.5 text-[10px] font-bold rounded mb-1 ${badge.color}`}>{badge.text}</span>}
                         <p className="text-[10px] text-gray-700 dark:text-g-text line-clamp-2">{e?.reason ?? ""}</p>
                       </td>
@@ -225,11 +225,11 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
   if (analysis.type === "image") {
     const imagePath = analysis.data.image_path;
     return imagePath ? (
-      <div className="bg-white dark:bg-[#1e1f20] p-4 shadow-sm rounded-xl border border-gray-200 dark:border-gray-800 flex justify-center">
+      <div className="bg-white dark:bg-logos-surface p-4 shadow-sm rounded-xl border border-gray-200 dark:border-logos-border flex justify-center">
         <img
           src={`${API_BASE}/storage/${imagePath}`}
           alt={analysis.title}
-          className="max-w-full object-contain rounded border border-gray-200 dark:border-gray-700 shadow-sm"
+          className="max-w-full object-contain rounded border border-gray-200 dark:border-logos-border shadow-sm"
         />
       </div>
     ) : null;
@@ -249,8 +249,8 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {boxes.map((box, i) => (
-          <div key={i} className={`bg-white ${box.bg} dark:bg-[#1e1f20] border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
-            <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center`}>
+          <div key={i} className={`bg-white ${box.bg} dark:bg-logos-surface border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
+            <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-logos-border pb-2 flex items-center`}>
               <span className="text-2xl mr-2" aria-hidden="true">{box.label[0]}</span>
               {box.label.slice(1)}
               <span className="text-xs text-gray-500 dark:text-g-sub ml-2 font-normal">{box.sub}</span>
@@ -259,7 +259,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
               {box.items.length === 0
                 ? <li className="text-sm text-gray-500">記載なし</li>
                 : box.items.map((item, j) => (
-                    <li key={j} className="bg-gray-50 dark:bg-[#131314] p-2 rounded border border-gray-200 dark:border-gray-800 text-base text-gray-800 dark:text-g-text flex items-start">
+                    <li key={j} className="bg-gray-50 dark:bg-logos-bg p-2 rounded border border-gray-200 dark:border-logos-border text-base text-gray-800 dark:text-g-text flex items-start">
                       <span aria-hidden="true" className={`${box.bullet} mr-2 mt-0.5 shrink-0`}>•</span>
                       <span>{item}</span>
                     </li>
@@ -319,14 +319,14 @@ export function AnalysisCard({
     : null;
 
   return (
-    <div className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col gap-3 hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors">
+    <div className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-logos-bg rounded-lg flex flex-col gap-3 hover:bg-gray-100 dark:hover:bg-logos-hover transition-colors">
       {/* Header */}
       <div className="flex items-center gap-3 cursor-pointer">
         <div className="shrink-0 mt-0.5">
           {avatarSrc ? (
-            <img className="h-8 w-8 rounded-full object-cover border border-gray-200 dark:border-gray-700" src={avatarSrc} alt={analysis.user.name} />
+            <img className="h-8 w-8 rounded-full object-cover border border-gray-200 dark:border-logos-border" src={avatarSrc} alt={analysis.user.name} />
           ) : (
-            <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700">
+            <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-logos-border">
               <svg aria-hidden="true" className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
@@ -351,13 +351,13 @@ export function AnalysisCard({
       })()}
 
       {/* Preview */}
-      <div className="rounded-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1f20] p-4 text-base overflow-hidden relative h-[400px]">
+      <div className="rounded-md border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-surface p-4 text-base overflow-hidden relative h-[400px]">
         <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent dark:from-[#1e1f20] dark:to-transparent pointer-events-none" />
         <AnalysisPreview analysis={analysis} />
       </div>
 
       {/* Footer */}
-      <div className="border-t border-gray-100 dark:border-gray-800 pt-3">
+      <div className="border-t border-gray-100 dark:border-logos-border pt-3">
         <div className="flex items-center justify-between">
           {/* Left: もっと見る + 補足ありトグル or 補足追加ボタン */}
           <div className="flex items-center gap-1">
@@ -395,7 +395,7 @@ export function AnalysisCard({
               <button
                 type="button"
                 onClick={() => setOpenSupplementView((v) => !v)}
-                className="text-[13px] text-gray-500 hover:text-gray-300 hover:bg-white/[0.07] transition-colors py-1 px-2 rounded-full cursor-pointer"
+                className="text-[13px] text-gray-500 hover:text-gray-300 hover:bg-logos-hover transition-colors py-1 px-2 rounded-full cursor-pointer"
               >
                 📎 補足あり {openSupplementView ? "▲" : "▼"}
               </button>
@@ -457,7 +457,7 @@ export function AnalysisCard({
               value={supplementBody}
               onChange={handleTextareaInput}
               rows={2}
-              className="w-full text-base rounded-md border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white mb-2 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500"
+              className="w-full text-base rounded-md border-gray-300 dark:border-logos-border dark:bg-logos-surface dark:text-white mb-2 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500"
               required
               placeholder="この分析に対する追加の考察や結論などを入力してください（※後から編集はできません）"
             />

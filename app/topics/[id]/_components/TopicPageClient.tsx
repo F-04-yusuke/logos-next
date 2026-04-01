@@ -78,13 +78,13 @@ export function TopicPageClient({ id, initialTopic }: Props) {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4 sm:py-6 animate-pulse">
-        <div className="h-7 bg-white/[0.06] rounded-md w-2/3 mb-3" />
-        <div className="h-4 bg-white/[0.04] rounded w-1/4 mb-8" />
-        <div className="flex border-b border-gray-800 gap-1 mb-4">
-          {[1, 2, 3].map((i) => <div key={i} className="h-10 bg-white/[0.04] rounded-t w-24" />)}
+        <div className="h-7 bg-logos-skeleton rounded-md w-2/3 mb-3" />
+        <div className="h-4 bg-logos-skeleton-light rounded w-1/4 mb-8" />
+        <div className="flex border-b border-logos-border gap-1 mb-4">
+          {[1, 2, 3].map((i) => <div key={i} className="h-10 bg-logos-skeleton-light rounded-t w-24" />)}
         </div>
         <div className="space-y-3">
-          {[1, 2, 3].map((i) => <div key={i} className="h-32 bg-white/[0.04] rounded-lg" />)}
+          {[1, 2, 3].map((i) => <div key={i} className="h-32 bg-logos-skeleton-light rounded-lg" />)}
         </div>
       </div>
     );
@@ -158,7 +158,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
             <h2 className="text-2xl font-bold mb-3 pl-3 border-l-4 border-indigo-500">{topic.title}</h2>
 
             {/* ── モバイル専用 Row 2: 著者・日付 + 概要ボタン ── */}
-            <div className="flex md:hidden items-center justify-between gap-2 pt-2.5 border-t border-gray-800 mb-1">
+            <div className="flex md:hidden items-center justify-between gap-2 pt-2.5 border-t border-logos-border mb-1">
               <div className="flex items-center gap-1.5 text-sm text-g-sub min-w-0">
                 <UserAvatar user={topic.user} size="sm" />
                 <span className="font-medium text-g-text truncate">{topic.user.name}</span>
@@ -167,7 +167,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               </div>
               <button
                 onClick={() => setContentExpanded(!contentExpanded)}
-                className="text-xs text-g-sub hover:text-g-text transition-colors duration-100 cursor-pointer flex items-center gap-1 shrink-0 px-2.5 py-1.5 rounded-lg border border-gray-800 hover:border-gray-700 hover:bg-white/[0.04]"
+                className="text-xs text-g-sub hover:text-g-text transition-colors duration-100 cursor-pointer flex items-center gap-1 shrink-0 px-2.5 py-1.5 rounded-lg border border-logos-border hover:border-logos-border hover:bg-logos-hover"
               >
                 <svg className={`h-3 w-3 transition-transform duration-200 ${contentExpanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -179,7 +179,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
             {/* ── PC専用: 概要展開ボタン ── */}
             <button
               onClick={() => setContentExpanded(!contentExpanded)}
-              className="hidden md:flex text-sm text-g-sub hover:text-g-text hover:bg-white/[0.04] pr-2 py-1 rounded transition-colors duration-100 cursor-pointer items-center gap-1"
+              className="hidden md:flex text-sm text-g-sub hover:text-g-text hover:bg-logos-hover pr-2 py-1 rounded transition-colors duration-100 cursor-pointer items-center gap-1"
             >
               <svg className={`h-3 w-3 transition-transform duration-200 ${contentExpanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -226,11 +226,11 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
                   {timeline.length > 0 && (
                     <>
-                      <div className="border-l-[1.5px] border-gray-300 dark:border-gray-700 ml-1.5 pl-3">
+                      <div className="border-l-[1.5px] border-gray-300 dark:border-logos-border ml-1.5 pl-3">
                         {timeline.slice(0, 3).map((item, i) => (
                           <div
                             key={i}
-                            className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
+                            className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-logos-surface px-1 transition-colors"
                           >
                             <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
                             <div className="w-24 sm:w-28 text-sm text-gray-500 dark:text-g-sub shrink-0">
@@ -240,7 +240,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                               {item.event ?? ""}
                             </div>
                             {(item.is_ai === undefined || !!item.is_ai) && (
-                              <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800 self-start mt-0.5">
+                              <span className="ml-2 text-[9px] bg-gray-100 dark:bg-logos-surface text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-logos-border self-start mt-0.5">
                                 AI生成
                               </span>
                             )}
@@ -251,7 +251,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                           timeline.slice(3).map((item, i) => (
                             <div
                               key={i + 3}
-                              className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-1 transition-colors"
+                              className="relative flex items-start py-0.5 sm:py-1 rounded hover:bg-gray-100 dark:hover:bg-logos-surface px-1 transition-colors"
                             >
                               <div className="absolute left-[-16.5px] top-2.5 w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full" />
                               <div className="w-24 sm:w-28 text-sm text-gray-500 dark:text-g-sub shrink-0">
@@ -261,7 +261,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                                 {item.event ?? ""}
                               </div>
                               {(item.is_ai === undefined || !!item.is_ai) && (
-                                <span className="ml-2 text-[9px] bg-gray-100 dark:bg-[#1e1f20] text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-gray-800 self-start mt-0.5">
+                                <span className="ml-2 text-[9px] bg-gray-100 dark:bg-logos-surface text-gray-400 px-1 py-0.5 rounded whitespace-nowrap shrink-0 border border-gray-200 dark:border-logos-border self-start mt-0.5">
                                   AI生成
                                 </span>
                               )}
@@ -272,7 +272,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       {timeline.length > 3 && (
                         <button
                           onClick={() => setTimelineExpanded(!timelineExpanded)}
-                          className="mt-1 ml-3 text-sm font-bold text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1f20] px-2 py-1 rounded-md transition-colors cursor-pointer"
+                          className="mt-1 ml-3 text-sm font-bold text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-logos-surface px-2 py-1 rounded-md transition-colors cursor-pointer"
                         >
                           {timelineExpanded ? "▲ 閉じる" : "▼ もっと見る"}
                         </button>
@@ -382,7 +382,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
         {/* ===== Tabs ===== */}
         <div className={contentExpanded ? "mt-4" : "mt-0"}>
-          <div className="flex border-b border-gray-300 dark:border-gray-800 mb-4 overflow-x-auto">
+          <div className="flex border-b border-gray-300 dark:border-logos-border mb-4 overflow-x-auto">
             {(["info", "comments", "analysis"] as const).map((tab) => (
               <button
                 key={tab}
@@ -392,7 +392,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                     ? tab === "analysis"
                       ? "border-yellow-500 text-white font-bold"
                       : "border-indigo-500 text-white font-bold"
-                    : "border-transparent text-g-sub hover:text-g-text hover:bg-white/[0.04]"
+                    : "border-transparent text-g-sub hover:text-g-text hover:bg-logos-hover"
                 }`}
               >
                 {tab === "info" && "情報"}
@@ -413,7 +413,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "info" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-gray-700">
+                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-logos-border">
                   {filteredPosts.length} 件の投稿
                 </h3>
                 <div className="flex items-center space-x-2">
@@ -421,7 +421,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                     <select
                       value={postFilter}
                       onChange={(e) => setPostFilter(e.target.value)}
-                      className="text-sm sm:text-base rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
+                      className="text-sm sm:text-base rounded border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-bg dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                     >
                       <option value="">すべてのメディア</option>
                       <option value="YouTube">YouTube</option>
@@ -436,7 +436,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       onChange={(e) =>
                         setPostSort(e.target.value as "popular" | "newest" | "oldest")
                       }
-                      className="text-sm sm:text-base rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
+                      className="text-sm sm:text-base rounded border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-bg dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                     >
                       <option value="popular">人気順</option>
                       <option value="newest">新着順</option>
@@ -448,7 +448,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       if (!user) { alert("投稿するにはログインが必要です"); return; }
                       setShowPostModal(true);
                     }}
-                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-sm sm:text-base transition-colors flex items-center shrink-0 cursor-pointer"
+                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-logos-surface dark:border-logos-border dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-sm sm:text-base transition-colors flex items-center shrink-0 cursor-pointer"
                   >
                     <svg
                       aria-hidden="true"
@@ -498,7 +498,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "comments" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-gray-700">
+                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-logos-border">
                   {topic.comments.length} 件のコメント
                 </h3>
                 <select
@@ -506,7 +506,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   onChange={(e) =>
                     setCommentSort(e.target.value as "popular" | "newest" | "oldest")
                   }
-                  className="text-sm sm:text-base rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
+                  className="text-sm sm:text-base rounded border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-bg dark:text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                 >
                   <option value="popular">人気順</option>
                   <option value="newest">新着順</option>
@@ -515,13 +515,13 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               </div>
 
               {user && !topic.user_has_commented && (
-                <div className="p-4 bg-gray-50 dark:bg-[#1e1f20] rounded-lg border border-gray-200 dark:border-transparent mb-6">
+                <div className="p-4 bg-gray-50 dark:bg-logos-surface rounded-lg border border-gray-200 dark:border-transparent mb-6">
                   <form onSubmit={handleCommentSubmit}>
                     <textarea
                       value={commentBody}
                       onChange={(e) => setCommentBody(e.target.value)}
                       rows={3}
-                      className="w-full rounded-md border-gray-300 dark:bg-[#131314] dark:border-gray-700 dark:text-white mb-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      className="w-full rounded-md border-gray-300 dark:bg-logos-bg dark:border-logos-border dark:text-white mb-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                       required
                       placeholder="このトピックに対するあなたの意見を教えてください（※1人1件まで）"
                     />
@@ -529,7 +529,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="bg-gray-800 hover:bg-gray-900 dark:bg-[#131314] dark:text-g-text border border-transparent dark:border-gray-700 dark:hover:bg-gray-800 text-white font-bold py-2 px-4 sm:py-1.5 rounded text-base transition-colors shadow-sm disabled:opacity-50"
+                        className="bg-gray-800 hover:bg-gray-900 dark:bg-logos-bg dark:text-g-text border border-transparent dark:border-logos-border dark:hover:bg-gray-800 text-white font-bold py-2 px-4 sm:py-1.5 rounded text-base transition-colors shadow-sm disabled:opacity-50"
                       >
                         コメントする
                       </button>
@@ -565,14 +565,14 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "analysis" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-gray-700">
+                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-logos-border">
                   {topic.analyses?.length ?? 0} 件の分析・図解
                 </h3>
                 <div className="flex items-center space-x-2">
                   <select
                     value={analysisSort}
                     onChange={(e) => setAnalysisSort(e.target.value as "popular" | "newest" | "oldest")}
-                    className="text-sm sm:text-base rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#131314] dark:text-white px-2 sm:px-3 py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
+                    className="text-sm sm:text-base rounded border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-bg dark:text-white px-2 sm:px-3 py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
                   >
                     <option value="popular">人気順</option>
                     <option value="newest">新着順</option>
@@ -583,7 +583,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       if (!user) { alert("投稿するにはログインが必要です"); return; }
                       setShowAnalysisModal(true);
                     }}
-                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-[#1e1f20] dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-sm sm:text-base transition-colors flex items-center shrink-0 cursor-pointer"
+                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-logos-surface dark:border-logos-border dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-sm sm:text-base transition-colors flex items-center shrink-0 cursor-pointer"
                   >
                     <svg
                       aria-hidden="true"
@@ -609,7 +609,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               </div>
 
               {(topic.analyses?.length ?? 0) === 0 ? (
-                <div className="flex flex-col items-center justify-center py-12 px-4 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-[#131314]/50">
+                <div className="flex flex-col items-center justify-center py-12 px-4 border-2 border-dashed border-gray-300 dark:border-logos-border rounded-lg bg-gray-50 dark:bg-logos-bg/50">
                   <svg
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
@@ -682,10 +682,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
         )}
 
         {/* ===== Back Link ===== */}
-        <div className="mt-8 border-t border-gray-200 dark:border-gray-800 pt-6 pb-4">
+        <div className="mt-8 border-t border-gray-200 dark:border-logos-border pt-6 pb-4">
           <Link
             href="/"
-            className="inline-flex items-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold text-base transition-colors py-2 px-4 -ml-4 rounded-md hover:bg-gray-100 dark:hover:bg-[#1e1f20]"
+            className="inline-flex items-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold text-base transition-colors py-2 px-4 -ml-4 rounded-md hover:bg-gray-100 dark:hover:bg-logos-surface"
           >
             <svg
               aria-hidden="true"

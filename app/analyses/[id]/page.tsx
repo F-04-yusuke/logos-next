@@ -62,7 +62,7 @@ function getStanceStyle(stance?: string) {
 // -------- アバター配色（自が最も目立つ、A〜Eは薄い別色） --------
 function getAvatarStyle(speaker: string): string {
   const s = speaker ?? "";
-  if (s.includes("自分") || s.includes("自")) return "bg-blue-600 text-white";
+  if (s.includes("自分") || s.includes("自")) return "bg-blue-600 text-logos-text";
   if (s.includes("A")) return "bg-purple-500/25 text-purple-400";
   if (s.includes("B")) return "bg-amber-500/25 text-amber-400";
   if (s.includes("C")) return "bg-teal-500/25 text-teal-400";
@@ -115,7 +115,7 @@ function ViewTreeNode({ node, labels }: { node: TreeNode; labels: Map<TreeNode, 
           </div>
           {hasChildrenNodes && (
             <div
-              className="flex-1 border-l-2 border-gray-300 dark:border-gray-700 mt-1"
+              className="flex-1 border-l-2 border-gray-300 dark:border-logos-border mt-1"
               style={{ marginLeft: "15px" }}
               aria-hidden="true"
             />
@@ -147,19 +147,19 @@ function ViewTreeNode({ node, labels }: { node: TreeNode; labels: Map<TreeNode, 
                 <div key={idx} className="relative">
                   {isLast ? (
                     <div
-                      className="absolute pointer-events-none border-l-2 border-b-2 border-gray-300 dark:border-gray-700 rounded-bl-lg"
+                      className="absolute pointer-events-none border-l-2 border-b-2 border-gray-300 dark:border-logos-border rounded-bl-lg"
                       style={{ left: "-29px", top: 0, width: "29px", height: "16px" }}
                       aria-hidden="true"
                     />
                   ) : (
                     <>
                       <div
-                        className="absolute pointer-events-none border-l-2 border-gray-300 dark:border-gray-700"
+                        className="absolute pointer-events-none border-l-2 border-gray-300 dark:border-logos-border"
                         style={{ left: "-29px", top: 0, height: "calc(100% + 16px)" }}
                         aria-hidden="true"
                       />
                       <div
-                        className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-gray-700"
+                        className="absolute pointer-events-none border-b-2 border-gray-300 dark:border-logos-border"
                         style={{ left: "-29px", top: "16px", width: "29px" }}
                         aria-hidden="true"
                       />
@@ -187,7 +187,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
     return (
       <div>
         {meta && (meta.url || meta.description) && (
-          <div className="bg-white dark:bg-[#1e1f20] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 mb-6">
+          <div className="bg-white dark:bg-logos-surface p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border mb-6">
             <h3 className="font-bold text-gray-900 dark:text-g-text flex items-center mb-3">
               <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -238,16 +238,16 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
     };
     const maxTotal = isCalculated.reduce((max, calc, i) => calc && totals[i] > max ? totals[i] : max, -Infinity);
     return (
-      <div className="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+      <div className="rounded-xl border border-gray-200 dark:border-logos-border overflow-hidden">
         <div className="overflow-x-auto custom-scroll">
         <table className="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr>
-              <th className="p-3 border-b border-r border-gray-200 dark:border-gray-700 w-48 bg-gray-50 dark:bg-[#1e1f20] align-bottom text-xs font-bold text-gray-500 dark:text-g-sub">
+              <th className="p-3 border-b border-r border-gray-200 dark:border-logos-border w-48 bg-gray-50 dark:bg-logos-surface align-bottom text-xs font-bold text-gray-500 dark:text-g-sub">
                 評価項目 ＼ 比較パターン
               </th>
               {patterns.map((p, i) => (
-                <th key={i} className="p-4 border-b border-r border-gray-200 dark:border-gray-700 w-64 bg-gray-50 dark:bg-[#1e1f20] align-top">
+                <th key={i} className="p-4 border-b border-r border-gray-200 dark:border-logos-border w-64 bg-gray-50 dark:bg-logos-surface align-top">
                   <div className="font-bold text-blue-600 dark:text-blue-400 mb-1 text-lg">{p.title}</div>
                   <p className="text-sm text-gray-600 dark:text-g-sub whitespace-pre-wrap font-normal">{p.description}</p>
                 </th>
@@ -259,7 +259,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               const evals = item.evaluations ?? item.scores ?? [];
               return (
                 <tr key={ri}>
-                  <td className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1e1f20] font-bold text-base text-gray-900 dark:text-g-text">
+                  <td className="p-3 border-b border-r border-gray-200 dark:border-logos-border bg-gray-50 dark:bg-logos-surface font-bold text-base text-gray-900 dark:text-g-text">
                     {item.itemTitle}
                   </td>
                   {patterns.map((_, ci) => {
@@ -267,7 +267,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
                     const val = e?.score !== undefined && e?.score !== null ? Number(e.score) : -1;
                     const style = scoreStyle(val);
                     return (
-                      <td key={ci} className="p-3 border-b border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#252627] align-top">
+                      <td key={ci} className="p-3 border-b border-r border-gray-200 dark:border-logos-border bg-white dark:bg-logos-surface align-top">
                         {style && <span className={`inline-block px-2 py-0.5 text-[10px] font-bold rounded border mb-2 ${style.cls}`}>{style.text}</span>}
                         <p className="text-sm text-gray-800 dark:text-g-text whitespace-pre-wrap">{e?.reason ?? ""}</p>
                       </td>
@@ -277,13 +277,13 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               );
             })}
           </tbody>
-          <tfoot className="bg-gray-50 dark:bg-[#1e1f20]">
+          <tfoot className="bg-gray-50 dark:bg-logos-surface">
             <tr>
-              <td className="p-3 border-r border-gray-200 dark:border-gray-700 text-right text-xs font-bold text-gray-500 dark:text-g-sub">総合評価</td>
+              <td className="p-3 border-r border-gray-200 dark:border-logos-border text-right text-xs font-bold text-gray-500 dark:text-g-sub">総合評価</td>
               {totals.map((total, i) => {
                 const isMax = isCalculated[i] && total === maxTotal;
                 return (
-                  <td key={i} className={`p-3 border-r border-gray-200 dark:border-gray-700 text-center${isMax ? " ring-2 ring-inset ring-blue-500" : ""}`}>
+                  <td key={i} className={`p-3 border-r border-gray-200 dark:border-logos-border text-center${isMax ? " ring-2 ring-inset ring-blue-500" : ""}`}>
                     {isCalculated[i]
                       ? <><span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{total}</span><span className="text-xs text-gray-500 ml-1">pt</span></>
                       : <span className="text-sm text-gray-400">未評価</span>
@@ -314,15 +314,15 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {boxes.map((box, i) => (
-          <div key={i} className={`bg-white ${box.bg} dark:bg-[#1e1f20] border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
-            <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center`}>
+          <div key={i} className={`bg-white ${box.bg} dark:bg-logos-surface border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
+            <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-logos-border pb-2 flex items-center`}>
               <span className="text-2xl mr-2" aria-hidden="true">{box.label[0]}</span>
               {box.label.slice(1)}
               <span className="text-xs text-gray-500 dark:text-g-sub ml-2 font-normal">{box.sub}</span>
             </h2>
             <ul className="space-y-2 pl-1">
               {box.items.map((item, j) => (
-                <li key={j} className="bg-gray-50 dark:bg-[#131314] p-2 rounded border border-gray-200 dark:border-gray-800 text-base text-gray-800 dark:text-g-text flex items-start">
+                <li key={j} className="bg-gray-50 dark:bg-logos-bg p-2 rounded border border-gray-200 dark:border-logos-border text-base text-gray-800 dark:text-g-text flex items-start">
                   <span aria-hidden="true" className={`${box.bullet} mr-2 mt-0.5 shrink-0`}>•</span>
                   <span>{item}</span>
                 </li>
@@ -337,11 +337,11 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
   if (analysis.type === "image") {
     const imagePath = d.image_path as string | undefined;
     return imagePath ? (
-      <div className="bg-white dark:bg-[#1e1f20] p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-gray-800 flex justify-center">
+      <div className="bg-white dark:bg-logos-surface p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border flex justify-center">
         <img
           src={`${API_BASE}/storage/${imagePath}`}
           alt={analysis.title}
-          className="max-w-full object-contain rounded border border-gray-200 dark:border-gray-700 shadow-sm"
+          className="max-w-full object-contain rounded border border-gray-200 dark:border-logos-border shadow-sm"
         />
       </div>
     ) : null;

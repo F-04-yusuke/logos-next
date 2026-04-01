@@ -91,7 +91,7 @@ export default function LikesPage() {
 
   const indigoTab = (tab: Tab) =>
     activeTab === tab
-      ? "border-indigo-500 text-white font-bold"
+      ? "border-indigo-500 text-logos-text font-bold"
       : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300";
 
   const yellowTab = (tab: Tab) =>
@@ -113,7 +113,7 @@ export default function LikesPage() {
 
           {/* タブ */}
           <div className="px-4 sm:px-6">
-          <div className="flex border-b border-gray-200 dark:border-gray-800 overflow-x-auto">
+          <div className="flex border-b border-gray-200 dark:border-logos-border overflow-x-auto">
             <button
               onClick={() => setActiveTab("info")}
               className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("info")}`}
@@ -131,7 +131,7 @@ export default function LikesPage() {
               className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analysis")}`}
             >
               分析・図解 (0)
-              <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
+              <span className="ml-1 text-[9px] bg-yellow-500 text-logos-text dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
                 PRO
               </span>
             </button>

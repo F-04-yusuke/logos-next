@@ -101,7 +101,7 @@ export function AnalysisModal({
       />
       <div className="fixed inset-0 z-10 overflow-y-auto">
         <div className="flex min-h-full items-end justify-center p-0 sm:items-center sm:p-4">
-          <div className="relative transform overflow-hidden bg-white dark:bg-[#1e1f20] rounded-t-2xl sm:rounded-2xl border border-gray-200 dark:border-gray-700 text-left shadow-2xl w-full sm:my-8 sm:w-full sm:max-w-2xl p-6">
+          <div className="relative transform overflow-hidden bg-white dark:bg-logos-surface rounded-t-2xl sm:rounded-2xl border border-gray-200 dark:border-gray-700 text-left shadow-2xl w-full sm:my-8 sm:w-full sm:max-w-2xl p-6">
             <div className="flex justify-between items-center mb-4">
               <h3
                 className="text-xl font-bold text-gray-900 dark:text-g-text"
@@ -190,7 +190,7 @@ export function AnalysisModal({
                     {availableAnalyses.map((a) => (
                       <div
                         key={a.id}
-                        className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#131314]"
+                        className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-logos-bg"
                       >
                         <div className="flex flex-col gap-1 min-w-0">
                           {typeBadge(a.type as TopicAnalysis["type"], {})}
@@ -202,7 +202,7 @@ export function AnalysisModal({
                         <button
                           onClick={() => handlePublish(a.id)}
                           disabled={publishingId === a.id}
-                          className="ml-3 shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded transition-colors disabled:opacity-50"
+                          className="ml-3 shrink-0 bg-blue-600 hover:bg-blue-700 text-logos-text text-xs font-bold py-1.5 px-3 rounded transition-colors disabled:opacity-50"
                         >
                           {publishingId === a.id ? "公開中..." : "このトピックに公開"}
                         </button>
@@ -214,7 +214,7 @@ export function AnalysisModal({
             )}
 
             {uploadTab === "upload" && (
-              <div className="bg-gray-50 dark:bg-[#131314] p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="bg-gray-50 dark:bg-logos-bg p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                 <div className="mb-4">
                   <label className="block text-base font-bold text-gray-700 dark:text-g-text mb-1.5">
                     図解のタイトル
@@ -224,7 +224,7 @@ export function AnalysisModal({
                     required
                     value={imageTitle}
                     onChange={(e) => setImageTitle(e.target.value)}
-                    className="w-full text-base sm:text-sm rounded border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white py-3 sm:py-2"
+                    className="w-full text-base sm:text-sm rounded border-gray-300 dark:border-gray-700 dark:bg-logos-surface dark:text-white py-3 sm:py-2"
                     placeholder="例：〇〇問題のステークホルダーマップ"
                   />
                 </div>
@@ -237,7 +237,7 @@ export function AnalysisModal({
                     accept="image/*"
                     required
                     onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
-                    className="w-full text-sm text-gray-500 dark:text-g-sub file:mr-4 file:py-2.5 file:px-4 file:rounded file:border-0 file:text-sm file:font-bold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 dark:file:bg-[#1e1f20] dark:file:text-blue-400 dark:hover:file:bg-gray-800 cursor-pointer"
+                    className="w-full text-sm text-gray-500 dark:text-g-sub file:mr-4 file:py-2.5 file:px-4 file:rounded file:border-0 file:text-sm file:font-bold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 dark:file:bg-logos-surface dark:file:text-blue-400 dark:hover:file:bg-gray-800 cursor-pointer"
                   />
                   <p className="text-xs sm:text-sm text-gray-400 mt-2">
                     ※ファイルサイズは最大5MBまで。オリジナルで作成した図解やグラフのみアップロード可能です。
@@ -251,7 +251,7 @@ export function AnalysisModal({
                     type="button"
                     onClick={handleImageUpload}
                     disabled={uploading || !imageTitle.trim() || !imageFile}
-                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-base font-bold py-3 sm:py-2 px-6 rounded transition-colors disabled:opacity-50"
+                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-logos-text text-base font-bold py-3 sm:py-2 px-6 rounded transition-colors disabled:opacity-50"
                   >
                     {uploading ? "アップロード中..." : "アップロードして公開"}
                   </button>

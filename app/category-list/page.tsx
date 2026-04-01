@@ -35,7 +35,7 @@ export default async function CategoryListPage() {
         </div>
 
         {categories.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-[#131314]/50 text-center">
+          <div className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-logos-bg/50 text-center">
             <svg
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
@@ -63,10 +63,10 @@ export default async function CategoryListPage() {
             {categories.map((parent) => (
               <div
                 key={parent.id}
-                className="bg-white dark:bg-[#1e1f20] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-colors duration-100"
+                className="bg-white dark:bg-logos-surface rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-colors duration-100"
               >
                 {/* 大分類ヘッダー */}
-                <div className="bg-gray-50 dark:bg-[#131314] border-b border-gray-200 dark:border-gray-800 px-4 sm:px-5 py-4">
+                <div className="bg-gray-50 dark:bg-logos-bg border-b border-gray-200 dark:border-gray-800 px-4 sm:px-5 py-4">
                   <Link
                     href={`/categories/${parent.id}`}
                     className="flex items-center group cursor-pointer"

@@ -9,7 +9,7 @@
 - **目的**: 感情的な「レスバ（不毛な論争）」を防ぎ、エビデンスに基づいた俯瞰的・建設的な議論を促進する。
 - **課題感**: ネット上の二重基準、カオスな世論誘導、一喜一憂するだけのニュース消費を是正する。
 - **ターゲット**: 知的で論理的な議論を好み、情報を体系的に整理したい層。
-- **企画書**: https://docs.google.com/presentation/d/1-VJg89C2BWsBFwfAj1EYvgCATzrD6pj95m9shFSN17c/edit
+- **企画書**: https://drive.google.com/file/d/1pAIJl_2i70py_H3gTF0BthXi46ccvudk/view?usp=sharing
 
 ---
 

@@ -83,12 +83,12 @@ function formatTabUpdated(topics: Topic[]): string {
 // ────────────────────────────────────────────────
 function rankBadgeClass(index: number): string {
   if (index === 0)
-    return "bg-gradient-to-br from-yellow-400 to-amber-500 text-white shadow-sm shadow-yellow-900/30";
+    return "bg-gradient-to-br from-yellow-400 to-amber-500  text-logos-text shadow-sm shadow-yellow-900/30";
   if (index === 1)
     return "bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 shadow-sm";
   if (index === 2)
-    return "bg-gradient-to-br from-amber-600 to-orange-700 text-white shadow-sm shadow-amber-900/30";
-  return "bg-[#2a2b2c] text-gray-500";
+    return "bg-gradient-to-br from-amber-600 to-orange-700  text-logos-text shadow-sm shadow-amber-900/30";
+  return "bg-logos-hover text-gray-500";
 }
 
 // ────────────────────────────────────────────────
@@ -100,14 +100,14 @@ function TopicSkeleton() {
       {[1, 2, 3, 4, 5].map((i) => (
         <div key={i} className="-ml-3 pl-3 pr-4 py-4 animate-pulse">
           <div className="flex gap-1.5 mb-2">
-            <div className="h-4 w-14 rounded-full bg-white/[0.06]" />
+            <div className="h-4 w-14 rounded-full bg-logos-skeleton" />
           </div>
-          <div className="h-5 w-3/4 rounded bg-white/[0.08] mb-2" />
-          <div className="h-3 w-full rounded bg-white/[0.05] mb-1.5" />
-          <div className="h-3 w-2/3 rounded bg-white/[0.05] mb-3" />
+          <div className="h-5 w-3/4 rounded bg-logos-skeleton mb-2" />
+          <div className="h-3 w-full rounded bg-logos-skeleton-light mb-1.5" />
+          <div className="h-3 w-2/3 rounded bg-logos-skeleton-light mb-3" />
           <div className="flex gap-3">
-            <div className="h-3 w-16 rounded bg-white/[0.04]" />
-            <div className="h-3 w-20 rounded bg-white/[0.04]" />
+            <div className="h-3 w-16 rounded bg-logos-skeleton-light" />
+            <div className="h-3 w-20 rounded bg-logos-skeleton-light" />
           </div>
         </div>
       ))}
@@ -255,7 +255,7 @@ export default function HomeClient({
             {!!user?.is_pro && (
               <Link
                 href="/topics/create"
-                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-base transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500  text-logos-text font-bold py-2 px-4 rounded-lg text-base transition-colors cursor-pointer"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -270,7 +270,7 @@ export default function HomeClient({
             <div className="rounded-xl overflow-hidden border border-white/[0.08]">
               {/* タブヘッダー: ピル型 + 横スクロール */}
               <div
-                className="flex gap-1.5 px-2 py-2 bg-[#1e1f20] overflow-x-auto border-b border-white/[0.06]"
+                className="flex gap-1.5 px-2 py-2 bg-logos-surface overflow-x-auto border-b border-logos-border"
                 style={{ scrollbarWidth: "none" }}
               >
                 {categories.map((cat) => {
@@ -282,8 +282,8 @@ export default function HomeClient({
                       className={[
                         "shrink-0 px-4 py-1.5 text-sm font-bold rounded-full whitespace-nowrap cursor-pointer transition-all duration-150",
                         isActive
-                          ? "bg-indigo-600 text-white shadow-sm shadow-indigo-900/50"
-                          : "text-g-sub hover:text-g-text hover:bg-white/[0.06]",
+                          ? "bg-indigo-600  text-logos-text shadow-sm shadow-indigo-900/50"
+                          : "text-g-sub hover:text-g-text hover:bg-logos-skeleton",
                       ].join(" ")}
                     >
                       {cat.name}
@@ -293,7 +293,7 @@ export default function HomeClient({
               </div>
 
               {/* タブコンテンツ */}
-              <div className="bg-[#131314]">
+              <div className="bg-logos-bg">
               {categories.map((cat) =>
                 activeTab === cat.id ? (
                   <div key={cat.id}>
@@ -302,13 +302,13 @@ export default function HomeClient({
                       <div className="flex min-h-[260px]">
                         <div className="flex-1 p-3 space-y-1 animate-pulse">
                           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                            <div key={i} className="h-7 rounded bg-white/[0.05]" />
+                            <div key={i} className="h-7 rounded bg-logos-skeleton-light" />
                           ))}
                         </div>
                         <div className="hidden sm:block w-48 xl:w-52 shrink-0 p-3 border-l border-white/[0.06] animate-pulse">
-                          <div className="w-full aspect-[4/3] rounded-md bg-white/[0.05] mb-2" />
-                          <div className="h-3 rounded bg-white/[0.05] mb-1.5" />
-                          <div className="h-3 rounded bg-white/[0.05] w-2/3" />
+                          <div className="w-full aspect-[4/3] rounded-md bg-logos-skeleton-light mb-2" />
+                          <div className="h-3 rounded bg-logos-skeleton-light mb-1.5" />
+                          <div className="h-3 rounded bg-logos-skeleton-light w-2/3" />
                         </div>
                       </div>
                     ) : tabTopics[cat.id].length === 0 ? (
@@ -331,7 +331,7 @@ export default function HomeClient({
                                 >
                                   <span className="text-gray-300 shrink-0 mr-1 select-none text-base">・</span>
                                   <span className="text-base leading-snug truncate">
-                                    <span className="font-medium text-[#A8C7FA] group-hover:underline">{topic.title}</span>
+                                    <span className="font-medium text-logos-link group-hover:underline">{topic.title}</span>
                                     <span className="ml-2 inline-flex items-center gap-0.5 text-sm text-gray-300 tabular-nums">
                                       <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -346,7 +346,7 @@ export default function HomeClient({
                           <div className="px-4 pt-2">
                             <Link
                               href={`/categories/${cat.id}`}
-                              className="text-sm text-white hover:underline cursor-pointer"
+                              className="text-sm  text-logos-text hover:underline cursor-pointer"
                             >
                               {cat.name}のトピックをもっと見る →
                             </Link>
@@ -374,7 +374,7 @@ export default function HomeClient({
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
-                className="text-sm sm:text-base rounded border border-gray-700 bg-[#131314] text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-[#1e1f20] transition-colors focus:outline-none focus:border-gray-500"
+                className="text-sm sm:text-base rounded border border-logos-border bg-logos-bg  text-logos-text px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-500"
               >
                 <option value="newest">新着順</option>
                 <option value="popular">エビデンスが多い順</option>
@@ -401,7 +401,7 @@ export default function HomeClient({
                       <Link
                         key={topic.id}
                         href={`/topics/${topic.id}`}
-                        className="block -ml-3 pl-3 pr-4 py-4 hover:bg-white/[0.04] transition-colors group cursor-pointer"
+                        className="block -ml-3 pl-3 pr-4 py-4 hover:bg-logos-skeleton-light transition-colors group cursor-pointer"
                       >
                         {/* カテゴリバッジ */}
                         {topic.categories.length > 0 && (
@@ -417,7 +417,7 @@ export default function HomeClient({
                           </div>
                         )}
 
-                        <h4 className="text-lg font-bold text-g-text mb-1.5 group-hover:text-[#A8C7FA] transition-colors leading-snug">
+                        <h4 className="text-lg font-bold text-g-text mb-1.5 group-hover:text-logos-link transition-colors leading-snug">
                           {topic.title}
                         </h4>
 
@@ -448,7 +448,7 @@ export default function HomeClient({
                     <button
                       onClick={() => fetchTopics(currentPage - 1, sort)}
                       disabled={currentPage <= 1}
-                      className="px-4 py-2 text-base rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                      className="px-4 py-2 text-base rounded-lg bg-logos-surface text-g-sub hover:bg-logos-hover hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                     >
                       ← 前へ
                     </button>
@@ -458,7 +458,7 @@ export default function HomeClient({
                     <button
                       onClick={() => fetchTopics(currentPage + 1, sort)}
                       disabled={currentPage >= lastPage}
-                      className="px-4 py-2 text-base rounded-lg bg-[#1e1f20] text-g-sub hover:bg-white/[0.08] hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                      className="px-4 py-2 text-base rounded-lg bg-logos-surface text-g-sub hover:bg-logos-hover hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                     >
                       次へ →
                     </button>
@@ -487,7 +487,7 @@ export default function HomeClient({
                   <li key={topic.id}>
                     <Link
                       href={`/topics/${topic.id}`}
-                      className="flex items-start gap-3 -ml-2 pl-2 pr-3 py-3 hover:bg-white/[0.04] rounded-xl transition-colors group cursor-pointer"
+                      className="flex items-start gap-3 -ml-2 pl-2 pr-3 py-3 hover:bg-logos-skeleton-light rounded-xl transition-colors group cursor-pointer"
                     >
                       <div
                         className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-sm font-bold mt-0.5 ${rankBadgeClass(index)}`}
@@ -495,7 +495,7 @@ export default function HomeClient({
                         {index + 1}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-base font-bold text-g-text group-hover:text-[#A8C7FA] transition-colors line-clamp-2 leading-snug mb-1">
+                        <h4 className="text-base font-bold text-g-text group-hover:text-logos-link transition-colors line-clamp-2 leading-snug mb-1">
                           {topic.title}
                         </h4>
                         <div className="flex items-center gap-2 text-sm text-g-sub">

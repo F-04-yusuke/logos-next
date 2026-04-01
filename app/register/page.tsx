@@ -54,7 +54,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center pt-6 sm:pt-0 bg-[#131314] px-4">
+    <main className="min-h-screen flex flex-col items-center justify-center pt-6 sm:pt-0 bg-logos-bg px-4">
       {/* ロゴ */}
       <div className="mb-4">
         <Link
@@ -67,12 +67,12 @@ export default function RegisterPage() {
       </div>
 
       {/* カード */}
-      <div className="w-full sm:max-w-md mt-6 px-6 py-6 bg-[#1e1f20] shadow-md overflow-hidden sm:rounded-2xl border border-gray-800">
+      <div className="w-full sm:max-w-md mt-6 px-6 py-6 bg-logos-surface shadow-md overflow-hidden sm:rounded-2xl border border-logos-border">
 
         {/* ─── メインビュー（coming soon） ─── */}
         {!showDevForm && (
           <div>
-            <h2 className="text-lg font-bold text-gray-100 mb-6 text-center">新規アカウント作成</h2>
+            <h2 className="text-lg font-bold text-logos-text mb-6 text-center">新規アカウント作成</h2>
 
             {/* eKYC ボタン群 */}
             <div className="space-y-3">
@@ -194,7 +194,7 @@ export default function RegisterPage() {
               戻る
             </button>
 
-            <h2 className="text-xl font-bold text-gray-100 mb-6 mt-2 pl-3 border-l-4 border-indigo-500">
+            <h2 className="text-xl font-bold text-logos-text mb-6 mt-2 pl-3 border-l-4 border-indigo-500">
               新規アカウント作成
             </h2>
 
@@ -205,7 +205,7 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit}>
               {/* アカウント名 */}
               <div className="mb-4">
-                <label htmlFor="name" className="block font-bold text-sm text-gray-300 mb-1">
+                <label htmlFor="name" className="block font-bold text-sm text-logos-sub mb-1">
                   アカウント名
                 </label>
                 <input
@@ -216,14 +216,14 @@ export default function RegisterPage() {
                   required
                   autoFocus
                   autoComplete="name"
-                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
+                  className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
                 {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name[0]}</p>}
               </div>
 
               {/* Email */}
               <div className="mb-4">
-                <label htmlFor="email" className="block font-bold text-sm text-gray-300 mb-1">
+                <label htmlFor="email" className="block font-bold text-sm text-logos-sub mb-1">
                   Email
                 </label>
                 <input
@@ -233,14 +233,14 @@ export default function RegisterPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="username"
-                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
+                  className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
                 {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email[0]}</p>}
               </div>
 
               {/* パスワード */}
               <div className="mb-4">
-                <label htmlFor="password" className="block font-bold text-sm text-gray-300 mb-1">
+                <label htmlFor="password" className="block font-bold text-sm text-logos-sub mb-1">
                   パスワード
                 </label>
                 <input
@@ -250,14 +250,14 @@ export default function RegisterPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="new-password"
-                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
+                  className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
                 {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password[0]}</p>}
               </div>
 
               {/* パスワード（確認用） */}
               <div className="mb-5">
-                <label htmlFor="password_confirmation" className="block font-bold text-sm text-gray-300 mb-1">
+                <label htmlFor="password_confirmation" className="block font-bold text-sm text-logos-sub mb-1">
                   パスワード（確認用）
                 </label>
                 <input
@@ -267,7 +267,7 @@ export default function RegisterPage() {
                   onChange={(e) => setPasswordConfirmation(e.target.value)}
                   required
                   autoComplete="new-password"
-                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
+                  className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
               </div>
 

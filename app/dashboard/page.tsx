@@ -45,11 +45,11 @@ export default function DashboardPage() {
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 px-4">
           <div className="animate-pulse">
-            <div className="h-7 bg-white/[0.06] rounded-md w-1/4 mb-6" />
-            <div className="h-10 bg-white/[0.04] rounded-md w-full mb-6" />
+            <div className="h-7 bg-logos-skeleton rounded-md w-1/4 mb-6" />
+            <div className="h-10 bg-logos-skeleton-light rounded-md w-full mb-6" />
             <div className="space-y-3">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-32 bg-white/[0.04] rounded-lg" />
+                <div key={i} className="h-32 bg-logos-skeleton-light rounded-lg" />
               ))}
             </div>
           </div>
@@ -67,7 +67,7 @@ export default function DashboardPage() {
 
   const indigoTab = (tab: Tab) =>
     activeTab === tab
-      ? "border-indigo-500 text-white font-bold"
+      ? "border-indigo-500 text-logos-text font-bold"
       : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300";
 
   const yellowTab = (tab: Tab) =>
@@ -90,7 +90,7 @@ export default function DashboardPage() {
 
           {/* タブ */}
           <div className="px-4 sm:px-6">
-          <div className="flex border-b border-gray-200 dark:border-gray-800 overflow-x-auto scrollbar-hide">
+          <div className="flex border-b border-gray-200 dark:border-logos-border overflow-x-auto scrollbar-hide">
             <button
               onClick={() => setActiveTab("posts")}
               className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("posts")}`}
@@ -104,7 +104,7 @@ export default function DashboardPage() {
             >
               下書き
               {draftCount > 0 && (
-                <span className="text-[10px] font-bold bg-yellow-500 text-white px-1.5 py-0.5 rounded-full leading-none">
+                <span className="text-[10px] font-bold bg-yellow-500 text-logos-text px-1.5 py-0.5 rounded-full leading-none">
                   {draftCount}
                 </span>
               )}
@@ -122,7 +122,7 @@ export default function DashboardPage() {
               className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analyses")}`}
             >
               作成した分析・図解
-              <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
+              <span className="ml-1 text-[9px] bg-yellow-500 text-logos-text dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
                 PRO
               </span>
             </button>
@@ -132,7 +132,7 @@ export default function DashboardPage() {
               className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${indigoTab("topics")}`}
             >
               作成したトピック
-              <span className="ml-1 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
+              <span className="ml-1 text-[9px] bg-yellow-500 text-logos-text dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
                 PRO
               </span>
             </button>
@@ -145,7 +145,7 @@ export default function DashboardPage() {
             {activeTab === "posts" && (
               <div className="space-y-6">
                 {posts.length > 0 && (
-                  <p className="text-base text-g-sub pl-2 border-l-2 border-gray-700">
+                  <p className="text-base text-g-sub pl-2 border-l-2 border-logos-border">
                     {posts.length}件の投稿
                   </p>
                 )}
@@ -250,7 +250,7 @@ export default function DashboardPage() {
             {activeTab === "comments" && (
               <div className="space-y-6">
                 {comments.length > 0 && (
-                  <p className="text-base text-g-sub pl-2 border-l-2 border-gray-700">
+                  <p className="text-base text-g-sub pl-2 border-l-2 border-logos-border">
                     {comments.length}件のコメント
                   </p>
                 )}
@@ -292,7 +292,7 @@ export default function DashboardPage() {
                 <div className="flex flex-wrap gap-2 mb-4">
                   <Link
                     href="/tools/tree"
-                    className="inline-flex items-center text-base font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-md transition-colors duration-100 shadow-sm cursor-pointer"
+                    className="inline-flex items-center text-base font-bold text-logos-text bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-md transition-colors duration-100 shadow-sm cursor-pointer"
                   >
                     <svg aria-hidden="true" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -301,7 +301,7 @@ export default function DashboardPage() {
                   </Link>
                   <Link
                     href="/tools/matrix"
-                    className="inline-flex items-center text-base font-bold text-white bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-md transition-colors duration-100 shadow-sm cursor-pointer"
+                    className="inline-flex items-center text-base font-bold text-logos-text bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-md transition-colors duration-100 shadow-sm cursor-pointer"
                   >
                     <svg aria-hidden="true" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -310,7 +310,7 @@ export default function DashboardPage() {
                   </Link>
                   <Link
                     href="/tools/swot"
-                    className="inline-flex items-center text-base font-bold text-white bg-green-600 hover:bg-green-700 px-3 py-1.5 rounded-md transition-colors duration-100 shadow-sm cursor-pointer"
+                    className="inline-flex items-center text-base font-bold text-logos-text bg-green-600 hover:bg-green-700 px-3 py-1.5 rounded-md transition-colors duration-100 shadow-sm cursor-pointer"
                   >
                     <svg aria-hidden="true" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -325,7 +325,7 @@ export default function DashboardPage() {
                   </p>
                 ) : (
                   <>
-                    <p className="text-base text-g-sub pl-2 border-l-2 border-gray-700 mb-1">
+                    <p className="text-base text-g-sub pl-2 border-l-2 border-logos-border mb-1">
                       {analyses.length}件の分析・図解
                     </p>
                     {analyses.map((analysis) => (
@@ -344,7 +344,7 @@ export default function DashboardPage() {
             {activeTab === "topics" && (
               <div className="space-y-3">
                 {topics.length > 0 && (
-                  <p className="text-base text-g-sub pl-2 border-l-2 border-gray-700">
+                  <p className="text-base text-g-sub pl-2 border-l-2 border-logos-border">
                     {topics.length}件のトピック
                   </p>
                 )}
@@ -356,7 +356,7 @@ export default function DashboardPage() {
                   topics.map((topic) => (
                     <div
                       key={topic.id}
-                      className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex justify-between items-center hover:bg-gray-100 dark:hover:bg-white/[0.04] transition-colors duration-100"
+                      className="-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-logos-bg rounded-lg flex justify-between items-center hover:bg-gray-100 dark:hover:bg-logos-hover transition-colors duration-100"
                     >
                       <div>
                         <div className="flex items-center gap-2 mb-1">

@@ -41,7 +41,7 @@ export default function Sidebar() {
           "fixed md:relative",
           "top-0 bottom-0 left-0 md:top-auto md:bottom-auto md:left-auto",
           "h-full z-30",
-          "bg-[#1e1f20] border-r border-gray-800",
+          "bg-logos-surface border-r border-logos-border",
           "flex flex-col overflow-hidden",
           "transform transition-all duration-300 ease-in-out",
           // 幅: PC は sidebarOpen で w-72↔w-14、モバイルは常に w-72

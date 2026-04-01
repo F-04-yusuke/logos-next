@@ -43,7 +43,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center pt-6 sm:pt-0 bg-[#131314] px-4">
+    <main className="min-h-screen flex flex-col items-center justify-center pt-6 sm:pt-0 bg-logos-bg px-4">
       {/* ロゴ */}
       <div className="mb-4">
         <Link href="/" className="hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg p-1 inline-block">
@@ -53,12 +53,12 @@ export default function LoginPage() {
       </div>
 
       {/* カード */}
-      <div className="w-full sm:max-w-md mt-6 px-6 py-6 bg-[#1e1f20] shadow-md overflow-hidden sm:rounded-2xl border border-gray-800">
+      <div className="w-full sm:max-w-md mt-6 px-6 py-6 bg-logos-surface shadow-md overflow-hidden sm:rounded-2xl border border-logos-border">
 
         {/* ─── メインビュー ─── */}
         {!showDevLogin && (
           <div>
-            <h2 className="text-lg font-bold text-gray-100 mb-6 text-center">LOGOSを始める</h2>
+            <h2 className="text-lg font-bold text-logos-text mb-6 text-center">LOGOSを始める</h2>
 
             {/* eKYC ボタン群 */}
             <div className="space-y-3">
@@ -173,7 +173,7 @@ export default function LoginPage() {
               戻る
             </button>
 
-            <h2 className="text-xl font-bold text-gray-100 mb-6 mt-2 pl-3 border-l-4 border-indigo-500">
+            <h2 className="text-xl font-bold text-logos-text mb-6 mt-2 pl-3 border-l-4 border-indigo-500">
               テスト環境ログイン
             </h2>
 
@@ -183,7 +183,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="email" className="block font-bold text-sm text-gray-300 mb-1">
+                <label htmlFor="email" className="block font-bold text-sm text-logos-sub mb-1">
                   Email
                 </label>
                 <input
@@ -194,12 +194,12 @@ export default function LoginPage() {
                   required
                   autoFocus
                   autoComplete="username"
-                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
+                  className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
               </div>
 
               <div className="mt-5">
-                <label htmlFor="password" className="block font-bold text-sm text-gray-300 mb-1">
+                <label htmlFor="password" className="block font-bold text-sm text-logos-sub mb-1">
                   Password
                 </label>
                 <input
@@ -209,7 +209,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
-                  className="block w-full rounded-md border border-gray-700 bg-[#131314] text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
+                  className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
               </div>
 

@@ -82,7 +82,7 @@ export function PostCard({
         </div>
       )}
 
-      <div className={`-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-[#131314] rounded-lg flex flex-col transition-colors hover:bg-gray-100 dark:hover:bg-white/[0.04]${isDraft ? " border-l-2 border-yellow-400 dark:border-yellow-600" : ""}`}>
+      <div className={`-ml-3 pl-3 py-4 pr-4 bg-gray-50 dark:bg-logos-bg rounded-lg flex flex-col transition-colors hover:bg-gray-100 dark:hover:bg-logos-hover${isDraft ? " border-l-2 border-yellow-400 dark:border-yellow-600" : ""}`}>
         {/* 2カラムレイアウト */}
         <div className="flex flex-col md:flex-row gap-4 min-h-[180px]">
 
@@ -90,7 +90,7 @@ export function PostCard({
           <div className="md:w-[35%] flex-shrink-0">
             {/* サムネイルエリア */}
             {isDraft && !post.custom_thumbnail && !post.thumbnail_url ? (
-              <div className="w-full aspect-video bg-gray-100 dark:bg-[#131314] rounded-md mb-2 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-yellow-300 dark:border-yellow-700">
+              <div className="w-full aspect-video bg-gray-100 dark:bg-logos-bg rounded-md mb-2 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-yellow-300 dark:border-yellow-700">
                 <span className="text-xs font-bold text-yellow-600 dark:text-yellow-500">準備中</span>
               </div>
             ) : post.custom_thumbnail ? (
@@ -126,20 +126,20 @@ export function PostCard({
                     />
                   </div>
                 ) : isYoutube ? (
-                  <div className="w-full aspect-video bg-white rounded-md flex items-center justify-center border border-gray-200 dark:border-gray-700 group-hover:border-gray-400 transition-colors">
+                  <div className="w-full aspect-video bg-white rounded-md flex items-center justify-center border border-gray-200 dark:border-logos-border group-hover:border-gray-400 transition-colors">
                     <svg viewBox="0 0 90 20" xmlns="http://www.w3.org/2000/svg" className="w-24" aria-label="YouTube">
                       <path d="M27.97 3.06S27.68 1.1 26.84.24C25.78-.89 24.59-.9 24.04-.84 20.1-.56 14.54-.56 14.54-.56h-.01s-5.56 0-9.5-.28C4.48-.9 3.3-.89 2.23.24 1.39 1.1 1.1 3.06 1.1 3.06S.8 5.35.8 7.64v2.14c0 2.29.3 4.58.3 4.58s.29 1.96 1.13 2.82c1.07 1.13 2.48 1.1 3.11 1.21 2.26.22 9.6.29 9.6.29s5.57-.01 9.51-.29c.55-.07 1.74-.07 2.8-1.21.84-.86 1.13-2.82 1.13-2.82s.3-2.29.3-4.58V7.64c0-2.29-.3-4.58-.3-4.58zM11.52 13.27V5.87l7.56 3.71-7.56 3.69z" fill="#FF0000"/>
                       <path d="M35.4 12.69V4.94h1.82l2.44 5.37 2.43-5.37h1.81v7.75H42.4V7.25l-2.14 5.44h-1.2L36.9 7.25v5.44H35.4zm13.25.14c-.81 0-1.49-.22-2.04-.67-.55-.45-.82-1.12-.82-2.02V8.66c0-.85.27-1.52.81-2.01.54-.49 1.22-.73 2.05-.73.83 0 1.51.24 2.04.72.53.48.8 1.15.8 2.02v1.48h-4.16v.4c0 .39.1.69.3.92.2.22.5.33.88.33.3 0 .55-.07.73-.21.18-.14.3-.33.36-.58l1.8.19c-.13.56-.42 1-.87 1.32-.45.32-1.03.49-1.75.49zm-.01-6.44c-.34 0-.61.1-.82.31-.2.2-.31.49-.31.87v.36h2.26V7.53c0-.38-.1-.67-.31-.87-.21-.21-.48-.31-.82-.31zm5.25 6.3V6.06h1.54v.77c.36-.56.87-.85 1.53-.85.52 0 .93.16 1.23.49.3.33.45.79.45 1.39v4.83H56.1V8.07c0-.29-.07-.52-.2-.68-.13-.16-.32-.24-.57-.24-.26 0-.5.1-.71.31-.21.21-.31.49-.31.84v4.43H53.9zm8.17-7.75v1.7h1.1v1.24h-1.1v3.46c0 .24.05.41.15.5.1.09.28.14.55.14h.4v1.3h-.78c-.63 0-1.1-.14-1.4-.43-.3-.28-.46-.73-.46-1.35V7.88H59.6V6.64h.92V4.94h1.54zm4.7 7.89c-.81 0-1.49-.22-2.04-.67-.55-.45-.82-1.12-.82-2.02V8.66c0-.85.27-1.52.81-2.01.54-.49 1.22-.73 2.05-.73.83 0 1.51.24 2.04.72.53.48.8 1.15.8 2.02v1.48h-4.16v.4c0 .39.1.69.3.92.2.22.5.33.88.33.3 0 .55-.07.73-.21.18-.14.3-.33.36-.58l1.8.19c-.13.56-.42 1-.87 1.32-.45.32-1.03.49-1.75.49zm-.01-6.44c-.34 0-.61.1-.82.31-.2.2-.31.49-.31.87v.36h2.26V7.53c0-.38-.1-.67-.31-.87-.21-.21-.48-.31-.82-.31zm4.17 6.3V6.06h1.54v.85c.16-.3.4-.54.71-.7.31-.16.65-.24 1.01-.24.1 0 .19.01.27.02v1.6c-.14-.04-.28-.06-.42-.06-.42 0-.77.14-1.04.41-.27.27-.41.62-.41 1.05v3.7H70.93zm5.67 0V6.06h1.54v6.63H76.6zm0-7.64v-1.5h1.54v1.5H76.6zm5.29 7.78c-.81 0-1.49-.22-2.04-.67-.55-.45-.82-1.12-.82-2.02V8.66c0-.85.27-1.52.81-2.01.54-.49 1.22-.73 2.05-.73.83 0 1.51.24 2.04.72.53.48.8 1.15.8 2.02v1.48h-4.16v.4c0 .39.1.69.3.92.2.22.5.33.88.33.3 0 .55-.07.73-.21.18-.14.3-.33.36-.58l1.8.19c-.13.56-.42 1-.87 1.32-.45.32-1.03.49-1.75.49zm-.01-6.44c-.34 0-.61.1-.82.31-.2.2-.31.49-.31.87v.36h2.26V7.53c0-.38-.1-.67-.31-.87-.21-.21-.48-.31-.82-.31z" fill="#282828"/>
                     </svg>
                   </div>
                 ) : isX ? (
-                  <div className="w-full aspect-video bg-black rounded-md flex items-center justify-center border border-gray-700 group-hover:border-gray-500 transition-colors">
+                  <div className="w-full aspect-video bg-black rounded-md flex items-center justify-center border border-logos-border group-hover:border-gray-500 transition-colors">
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 text-white" aria-label="X" fill="currentColor">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                     </svg>
                   </div>
                 ) : (
-                  <div className="w-full aspect-video bg-gray-100 dark:bg-[#131314] rounded-md flex flex-col items-center justify-center text-gray-400 border border-gray-200 dark:border-gray-700 group-hover:border-gray-500 transition-colors">
+                  <div className="w-full aspect-video bg-gray-100 dark:bg-logos-bg rounded-md flex flex-col items-center justify-center text-gray-400 border border-gray-200 dark:border-logos-border group-hover:border-gray-500 transition-colors">
                     <svg
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +189,7 @@ export function PostCard({
                 <span className="text-[11px] text-gray-500 dark:text-g-sub">
                   {timeAgo(post.created_at)}
                 </span>
-                <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-g-sub">
+                <span className="ml-2 inline-block px-2 py-0.5 text-[10px] font-bold rounded border border-gray-200 text-gray-600 dark:border-logos-border dark:text-g-sub">
                   {post.category}
                 </span>
               </div>
@@ -206,7 +206,7 @@ export function PostCard({
                     <button
                       type="button"
                       onClick={() => setOpenComment(true)}
-                      className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full cursor-pointer"
+                      className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-logos-hover transition-colors mt-1 px-2 py-1.5 rounded-full cursor-pointer"
                     >
                       続きを読む
                     </button>
@@ -215,7 +215,7 @@ export function PostCard({
                     <button
                       type="button"
                       onClick={() => setOpenComment(false)}
-                      className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/[0.05] transition-colors mt-1 px-2 py-1.5 rounded-full cursor-pointer"
+                      className="text-[13px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-logos-hover transition-colors mt-1 px-2 py-1.5 rounded-full cursor-pointer"
                     >
                       閉じる
                     </button>
@@ -231,7 +231,7 @@ export function PostCard({
                 <button
                   type="button"
                   onClick={() => setOpenSupplementView((v) => !v)}
-                  className="text-[13px] text-gray-500 hover:text-gray-300 hover:bg-white/[0.07] transition-colors py-1 px-2 rounded-full"
+                  className="text-[13px] text-gray-500 hover:text-gray-300 hover:bg-logos-hover transition-colors py-1 px-2 rounded-full"
                 >
                   📎 補足あり {openSupplementView ? "▲" : "▼"}
                 </button>
@@ -309,7 +309,7 @@ export function PostCard({
                 value={supplementBody}
                 onChange={handleTextareaInput}
                 rows={2}
-                className="w-full text-base rounded-md border-gray-300 dark:border-gray-700 dark:bg-[#1e1f20] dark:text-white mb-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full text-base rounded-md border-gray-300 dark:border-logos-border dark:bg-logos-surface dark:text-white mb-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 required
                 placeholder="URLに対する追加の補足や、時間の経過による状況の変化などを入力してください（※後から編集はできません）"
               />
