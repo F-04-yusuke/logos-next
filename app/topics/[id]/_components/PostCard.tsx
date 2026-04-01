@@ -82,7 +82,7 @@ export function PostCard({
         </div>
       )}
 
-      <div className={`-ml-3 pl-3 py-4 pr-4 bg-logos-surface rounded-xl border border-logos-border shadow-sm flex flex-col transition-all hover:shadow-md hover:bg-logos-hover${isDraft ? " border-l-2 border-yellow-400 dark:border-yellow-600" : ""}`}>
+      <div className={`-ml-3 pl-3 py-4 pr-4 rounded-xl flex flex-col transition-colors hover:bg-logos-hover${isDraft ? " border-l-2 border-yellow-400 dark:border-yellow-600" : ""}`}>
         {/* 2カラムレイアウト */}
         <div className="flex flex-col md:flex-row gap-4 min-h-[180px]">
 
