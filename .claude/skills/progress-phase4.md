@@ -1,8 +1,55 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-03-30（Session 41 完了）
+最終更新: 2026-04-02（Session 45 完了）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
+
+---
+
+## Session 45: デザインシステム全ページ適用・フォームスタイル確立（2026-04-02）
+
+Session 44 で確立したデザインシステム（アンダーラインタブ・グラデーントアクセントバー・グラデーションpill・セマンティック変数）を複数ページへ適用した。
+
+### ダッシュボード（`app/dashboard/page.tsx`）✅
+- タブを `-mb-px border-b-2` アンダーライン型に統一
+- ページヘッダーをグラデーントアクセントバー（h-6）に変更
+- セクションヘッダーをグラデーントアクセントバー（h-4）に変更
+- 分析ツールボタン・下書き編集ボタンをグラデーション pill に統一
+- `text-gray-*` / `border-gray-*` / `bg-gray-50` → セマンティック変数統一
+- `max-w-4xl` + `py-6 sm:py-8` レイアウトに統一（背景はページと同色・枠なし）
+**Gitタグ:** `v6.70-session45-before-dashboard-redesign`
+
+### 参考になった（`app/likes/page.tsx`）✅
+- タブ・ヘッダー・セマンティック変数をダッシュボードと同一スタイルに統一
+- スケルトン `bg-white/[0.06]` → `bg-logos-skeleton` 系に変更
+**Gitタグ:** `v6.71-session45-before-likes-redesign`
+
+### 閲覧履歴（`app/history/page.tsx`）✅
+- 日付グループヘッダーをグラデーントアクセントバー（h-4）に変更
+- トピック行の `bg-gray-50 rounded-lg` を除去 → `rounded-xl hover:bg-logos-hover` に統一
+- カテゴリバッジをライト/ダーク両対応スタイルに統一
+- ページネーションを `rounded-full + border-logos-border` に統一
+**Gitタグ:** `v6.72-session45-before-history-redesign`
+
+### 通知（`app/notifications/page.tsx`）✅
+- 未読ハイライトを `bg-indigo-50 dark:bg-indigo-500/10` に統一
+- `divide-gray-*` → `divide-logos-border`、アバター・テキスト・ページネーション統一
+- TypeBadge のアイコン色を `text-white` に修正
+**Gitタグ:** `v6.73-session45-before-notifications-redesign`
+
+### トピック作成・編集（`app/topics/create/page.tsx`, `app/topics/[id]/edit/page.tsx`）✅
+- **視認性修正:** コンテナの `text-gray-100` 継承を除去 → ラベルが `text-logos-text`（ライトモード対応）
+- ヘッダーを yellow-orange グラデーントアクセントバー（PRO系）に変更
+- フォームスタイルを `bg-logos-surface rounded-lg border-logos-border focus:border-indigo-500` に統一
+- カテゴリセクションを `bg-logos-hover rounded-xl` に変更
+- 送信ボタンをグラデーション pill（indigo）に変更
+**Gitタグ:** `v6.74-session45-before-topic-create-edit-redesign`
+
+### Session 45 で確立した追加ルール
+- **フォームラベル:** `text-base font-bold text-logos-text`
+- **フォーム入力:** `bg-logos-surface rounded-lg border-logos-border focus:border-indigo-500 focus:ring-indigo-500`
+- **カテゴリ選択エリア:** `bg-logos-hover rounded-xl border-logos-border`
+- **PRO系ページヘッダー:** `from-yellow-400 to-orange-500`（通常は `from-blue-500 to-indigo-600`）
 
 ---
 

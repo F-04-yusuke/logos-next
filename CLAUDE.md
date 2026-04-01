@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-04-01（Session 44 / トピックページ全面UIリデザイン・デザインシステム確立）
+最終更新: 2026-04-02（Session 45 / デザインシステム全ページ適用・フォームスタイル確立）
 
 ---
 
@@ -162,8 +162,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v6.69-session44-before-tab-text-scroll`（Session 44 最終タグ、実装はその先）
-- logos-laravel: `v4.4-session31-liked-by-me`（Session 44 は変更なし）
+- logos-next: `v6.74-session45-before-topic-create-edit-redesign`（Session 45 最終タグ、実装はその先）
+- logos-laravel: `v4.4-session31-liked-by-me`（Session 45 は変更なし）
 
 ## /categories/[id] の実装上の注意（Session 23 技術的負債）
 
@@ -204,7 +204,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
 | `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 20〜） |
 | `.claude/skills/progress-phase4-s12-s19.md` | Phase 4 アーカイブ（Session 12〜19・早期UI改善記録） |
-| `.claude/skills/handoff-session44.md` | **最新引継ぎプロンプト**（Session 44→45） |
+| `.claude/skills/handoff-session45.md` | **最新引継ぎプロンプト**（Session 45→46） |
 | `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜42 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
