@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-03-30（Session 41 / スマホ UI/UX 改善・ツール textarea 自動リサイズ）
+最終更新: 2026-04-01（Session 42 / 構成図見直し・PRO昇格・企画書URL更新・ダークモード調査）
 
 ---
 
@@ -162,8 +162,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v6.57-session41-home-category-tabs`
-- logos-laravel: `v4.4-session31-liked-by-me`
+- logos-next: `v6.57-session41-home-category-tabs`（Session 42 はコード変更なし）
+- logos-laravel: `v4.4-session31-liked-by-me`（Session 42 は変更なし）
 
 ## /categories/[id] の実装上の注意（Session 23 技術的負債）
 
@@ -204,7 +204,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase3.md` | Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）・技術的負債 |
 | `.claude/skills/progress-phase4.md` | Phase 4 進行中記録（UI/UX改善・Session 20〜） |
 | `.claude/skills/progress-phase4-s12-s19.md` | Phase 4 アーカイブ（Session 12〜19・早期UI改善記録） |
-| `.claude/skills/handoff-session41.md` | **最新引継ぎプロンプト**（Session 41→42） |
+| `.claude/skills/handoff-session42.md` | **最新引継ぎプロンプト**（Session 42→43） |
 | `.claude/skills/handoff-archive/` | 過去セッション引継ぎ（Session 6〜31 アーカイブ） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
