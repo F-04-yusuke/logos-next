@@ -385,12 +385,12 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
         {/* ===== Tabs ===== */}
         <div className="mt-4">
-          <div className="flex border-b border-logos-border mb-5 overflow-x-auto">
+          <div className="flex border-b border-logos-border mb-5 overflow-x-auto overflow-y-hidden">
             {(["info", "comments", "analysis"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
-                className={`py-2.5 px-5 text-sm font-semibold transition-all duration-150 focus:outline-none whitespace-nowrap flex items-center gap-1.5 cursor-pointer -mb-px border-b-2 ${
+                className={`py-2.5 px-5 text-base font-semibold transition-all duration-150 focus:outline-none whitespace-nowrap flex items-center gap-1.5 cursor-pointer -mb-px border-b-2 ${
                   activeTab === tab
                     ? "border-indigo-500 text-logos-text"
                     : "border-transparent text-logos-sub hover:text-logos-text hover:border-logos-border"
