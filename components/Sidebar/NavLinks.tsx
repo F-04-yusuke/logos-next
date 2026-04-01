@@ -53,15 +53,14 @@ export default function NavLinks({
     return [
       "flex items-center p-2 rounded-lg transition-colors duration-100 group relative",
       active
-        ? "bg-logos-hover text-g-text before:absolute before:left-0 before:top-1 before:bottom-1 before:w-0.5 before:rounded-r before:bg-indigo-500"
-        : "text-g-text hover:bg-logos-hover",
+        ? "bg-indigo-50 dark:bg-logos-hover text-indigo-700 dark:text-g-text before:absolute before:left-0 before:top-1 before:bottom-1 before:w-0.5 before:rounded-r before:bg-indigo-500"
+        : "text-logos-text dark:text-g-text hover:bg-logos-hover",
     ].join(" ");
   };
 
-  // アクティブ時のアイコン色（通常は text-gray-400、アクティブ時は text-white）
   const iconClass = (href: string, exact = true) => {
     const active = exact ? pathname === href : pathname.startsWith(href);
-    return `w-6 h-6 transition-colors duration-100 ${active ? "text-g-text" : "text-g-sub group-hover:text-g-text"}`;
+    return `w-6 h-6 transition-colors duration-100 ${active ? "text-indigo-600 dark:text-g-text" : "text-logos-sub dark:text-g-sub group-hover:text-logos-text dark:group-hover:text-g-text"}`;
   };
 
   return (
@@ -100,7 +99,7 @@ export default function NavLinks({
 
           {/* 保存トピック */}
           <div>
-            <h3 className="pl-2 border-l-2 border-logos-border text-sm font-semibold text-g-sub tracking-wider mb-2">
+            <h3 className="pl-2 border-l-2 border-indigo-300 dark:border-logos-border text-xs font-bold text-logos-sub dark:text-g-sub uppercase tracking-widest mb-2">
               保存トピック
             </h3>
             <ul className="space-y-1">
@@ -132,7 +131,7 @@ export default function NavLinks({
 
           {/* マイページ */}
           <div>
-            <h3 className="pl-2 border-l-2 border-logos-border text-sm font-semibold text-g-sub tracking-wider mb-2">
+            <h3 className="pl-2 border-l-2 border-indigo-300 dark:border-logos-border text-xs font-bold text-logos-sub dark:text-g-sub uppercase tracking-widest mb-2">
               マイページ
             </h3>
             <ul className="space-y-1 text-base">
@@ -199,7 +198,7 @@ export default function NavLinks({
                 ) : (
                   <button
                     onClick={() => openProModal("トピックの作成")}
-                    className="w-full flex items-center p-2 rounded-lg hover:bg-logos-hover text-logos-sub transition-colors duration-100 group cursor-pointer"
+                    className="w-full flex items-center p-2 rounded-lg hover:bg-logos-hover text-logos-sub dark:text-gray-500 transition-colors duration-100 group cursor-pointer"
                   >
                     <svg className="w-6 h-6 text-gray-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
@@ -234,7 +233,7 @@ export default function NavLinks({
                 ) : (
                   <button
                     onClick={() => openProModal("ロジックツリー作成")}
-                    className="w-full flex items-center p-2 rounded-lg hover:bg-logos-hover text-logos-sub transition-colors duration-100 group cursor-pointer"
+                    className="w-full flex items-center p-2 rounded-lg hover:bg-logos-hover text-logos-sub dark:text-gray-500 transition-colors duration-100 group cursor-pointer"
                   >
                     <svg className="w-6 h-6 text-yellow-500/50 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -257,7 +256,7 @@ export default function NavLinks({
                 ) : (
                   <button
                     onClick={() => openProModal("総合評価表作成")}
-                    className="w-full flex items-center p-2 rounded-lg hover:bg-logos-hover text-logos-sub transition-colors duration-100 group cursor-pointer"
+                    className="w-full flex items-center p-2 rounded-lg hover:bg-logos-hover text-logos-sub dark:text-gray-500 transition-colors duration-100 group cursor-pointer"
                   >
                     <svg className="w-6 h-6 text-purple-500/50 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -280,7 +279,7 @@ export default function NavLinks({
                 ) : (
                   <button
                     onClick={() => openProModal("SWOT分析作成")}
-                    className="w-full flex items-center p-2 rounded-lg hover:bg-logos-hover text-logos-sub transition-colors duration-100 group cursor-pointer"
+                    className="w-full flex items-center p-2 rounded-lg hover:bg-logos-hover text-logos-sub dark:text-gray-500 transition-colors duration-100 group cursor-pointer"
                   >
                     <svg className="w-6 h-6 text-green-500/50 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />

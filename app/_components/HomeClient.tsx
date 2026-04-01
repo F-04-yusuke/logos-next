@@ -83,12 +83,12 @@ function formatTabUpdated(topics: Topic[]): string {
 // ────────────────────────────────────────────────
 function rankBadgeClass(index: number): string {
   if (index === 0)
-    return "bg-gradient-to-br from-yellow-400 to-amber-500  text-logos-text shadow-sm shadow-yellow-900/30";
+    return "bg-gradient-to-br from-yellow-400 to-amber-500 text-white shadow-sm shadow-yellow-500/40";
   if (index === 1)
-    return "bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 shadow-sm";
+    return "bg-gradient-to-br from-slate-300 to-slate-400 text-white shadow-sm shadow-slate-400/30";
   if (index === 2)
-    return "bg-gradient-to-br from-amber-600 to-orange-700  text-logos-text shadow-sm shadow-amber-900/30";
-  return "bg-logos-hover text-gray-500";
+    return "bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-sm shadow-amber-500/40";
+  return "bg-logos-elevated text-logos-sub";
 }
 
 // ────────────────────────────────────────────────
@@ -133,8 +133,8 @@ function FeaturedTopicPanel({ post }: { post: FeaturedPost | null | undefined })
             loading="eager"
           />
         ) : (
-          <div className="w-full aspect-[16/9] rounded-md bg-gradient-to-br from-indigo-900/70 via-blue-900/50 to-indigo-800/60 border border-indigo-500/20 mb-2 flex items-center justify-center">
-            <svg className="w-10 h-10 text-indigo-300/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-full aspect-[16/9] rounded-md bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-indigo-900/70 dark:via-blue-900/50 dark:to-indigo-800/60 border border-indigo-100 dark:border-indigo-500/20 mb-2 flex items-center justify-center">
+            <svg className="w-10 h-10 text-indigo-300 dark:text-indigo-300/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
@@ -305,7 +305,7 @@ export default function HomeClient({
                             <div key={i} className="h-7 rounded bg-logos-skeleton-light" />
                           ))}
                         </div>
-                        <div className="hidden sm:block w-48 xl:w-52 shrink-0 p-3 border-l border-white/[0.06] animate-pulse">
+                        <div className="hidden sm:block w-48 xl:w-52 shrink-0 p-3 border-l border-logos-border animate-pulse">
                           <div className="w-full aspect-[4/3] rounded-md bg-logos-skeleton-light mb-2" />
                           <div className="h-3 rounded bg-logos-skeleton-light mb-1.5" />
                           <div className="h-3 rounded bg-logos-skeleton-light w-2/3" />
@@ -327,12 +327,12 @@ export default function HomeClient({
                               <li key={topic.id}>
                                 <Link
                                   href={`/topics/${topic.id}`}
-                                  className="flex items-center px-4 py-1 group cursor-pointer overflow-hidden"
+                                  className="flex items-center px-4 py-1.5 hover:bg-logos-hover transition-colors group cursor-pointer overflow-hidden"
                                 >
-                                  <span className="text-gray-300 shrink-0 mr-1 select-none text-base">・</span>
+                                  <span className="text-logos-border shrink-0 mr-1 select-none text-base">·</span>
                                   <span className="text-base leading-snug truncate">
                                     <span className="font-medium text-logos-link group-hover:underline">{topic.title}</span>
-                                    <span className="ml-2 inline-flex items-center gap-0.5 text-sm text-gray-300 tabular-nums">
+                                    <span className="ml-2 inline-flex items-center gap-0.5 text-sm text-logos-sub tabular-nums">
                                       <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                       </svg>
@@ -346,7 +346,7 @@ export default function HomeClient({
                           <div className="px-4 pt-2">
                             <Link
                               href={`/categories/${cat.id}`}
-                              className="text-sm  text-logos-text hover:underline cursor-pointer"
+                              className="text-sm font-medium text-indigo-600 dark:text-logos-link hover:underline cursor-pointer inline-flex items-center gap-0.5"
                             >
                               {cat.name}のトピックをもっと見る →
                             </Link>
@@ -366,15 +366,15 @@ export default function HomeClient({
 
           {/* ── トピック一覧 ── */}
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-lg font-bold text-g-text flex items-center gap-2">
-                <span className="w-1 h-5 rounded-full bg-blue-500 inline-block" />
+            <div className="flex justify-between items-center mb-1 pb-3 border-b border-logos-border">
+              <h3 className="text-base font-bold text-logos-text flex items-center gap-2">
+                <span className="w-1 h-4 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 inline-block" />
                 トピック一覧
               </h3>
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
-                className="text-sm sm:text-base rounded border border-logos-border bg-logos-bg  text-logos-text px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-500"
+                className="text-sm rounded-lg border border-logos-border bg-logos-surface text-logos-text px-3 py-1.5 cursor-pointer hover:bg-logos-hover transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 shadow-sm"
               >
                 <option value="newest">新着順</option>
                 <option value="popular">エビデンスが多い順</option>
@@ -401,7 +401,7 @@ export default function HomeClient({
                       <Link
                         key={topic.id}
                         href={`/topics/${topic.id}`}
-                        className="block -ml-3 pl-3 pr-4 py-4 hover:bg-logos-skeleton-light transition-colors group cursor-pointer"
+                        className="block py-4 border-b border-logos-border last:border-b-0 hover:bg-logos-surface dark:hover:bg-logos-hover transition-colors group cursor-pointer -mx-1 px-1 rounded-lg"
                       >
                         {/* カテゴリバッジ */}
                         {topic.categories.length > 0 && (
@@ -409,7 +409,7 @@ export default function HomeClient({
                             {topic.categories.map((cat) => (
                               <span
                                 key={cat.id}
-                                className="inline-block px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20"
+                                className="inline-block px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:border-indigo-500/20"
                               >
                                 {cat.name}
                               </span>
@@ -434,7 +434,7 @@ export default function HomeClient({
                             </svg>
                             エビデンス {topic.posts_count}件
                           </span>
-                          <span className="text-white/20">·</span>
+                          <span className="text-logos-border">·</span>
                           <span>{timeAgo(topic.created_at)}</span>
                         </div>
                       </Link>
@@ -448,7 +448,7 @@ export default function HomeClient({
                     <button
                       onClick={() => fetchTopics(currentPage - 1, sort)}
                       disabled={currentPage <= 1}
-                      className="px-4 py-2 text-base rounded-lg bg-logos-surface text-g-sub hover:bg-logos-hover hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                      className="px-5 py-2 text-sm font-medium rounded-full border border-logos-border bg-logos-surface text-logos-sub hover:bg-logos-hover hover:text-logos-text hover:border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shadow-sm"
                     >
                       ← 前へ
                     </button>
@@ -458,7 +458,7 @@ export default function HomeClient({
                     <button
                       onClick={() => fetchTopics(currentPage + 1, sort)}
                       disabled={currentPage >= lastPage}
-                      className="px-4 py-2 text-base rounded-lg bg-logos-surface text-g-sub hover:bg-logos-hover hover:text-g-text disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                      className="px-5 py-2 text-sm font-medium rounded-full border border-logos-border bg-logos-surface text-logos-sub hover:bg-logos-hover hover:text-logos-text hover:border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shadow-sm"
                     >
                       次へ →
                     </button>
@@ -471,49 +471,52 @@ export default function HomeClient({
 
         {/* ── 右サイドバー（1/3）sticky ── */}
         <div className="w-full lg:w-1/3">
-          <div className="lg:sticky lg:top-6">
-            <h3 className="text-lg font-bold text-g-text mb-4 flex items-center gap-2">
-              <span className="w-1 h-5 rounded-full bg-orange-500 inline-block" />
-              人気トピック
-            </h3>
+          <div className="lg:sticky lg:top-6 space-y-4">
+            <div className="bg-logos-surface rounded-2xl border border-logos-border shadow-sm overflow-hidden">
+              {/* カードヘッダー */}
+              <div className="px-4 py-3 border-b border-logos-border bg-logos-bg/60">
+                <h3 className="text-sm font-bold text-logos-text flex items-center gap-2 uppercase tracking-wider">
+                  <span className="w-1 h-4 rounded-full bg-gradient-to-b from-orange-400 to-red-500 inline-block" />
+                  人気トピック
+                </h3>
+              </div>
 
-            {popularTopics.length === 0 ? (
-              <p className="text-base text-g-sub text-center py-4">
-                まだトピックがありません。
-              </p>
-            ) : (
-              <ul className="space-y-1">
-                {popularTopics.map((topic, index) => (
-                  <li key={topic.id}>
-                    <Link
-                      href={`/topics/${topic.id}`}
-                      className="flex items-start gap-3 -ml-2 pl-2 pr-3 py-3 hover:bg-logos-skeleton-light rounded-xl transition-colors group cursor-pointer"
-                    >
-                      <div
-                        className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-sm font-bold mt-0.5 ${rankBadgeClass(index)}`}
+              {popularTopics.length === 0 ? (
+                <p className="text-sm text-logos-sub text-center py-8">
+                  まだトピックがありません。
+                </p>
+              ) : (
+                <ul>
+                  {popularTopics.map((topic, index) => (
+                    <li key={topic.id} className="border-b border-logos-border last:border-b-0">
+                      <Link
+                        href={`/topics/${topic.id}`}
+                        className="flex items-start gap-3 px-4 py-3.5 hover:bg-logos-hover transition-colors group cursor-pointer"
                       >
-                        {index + 1}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-base font-bold text-g-text group-hover:text-logos-link transition-colors line-clamp-2 leading-snug mb-1">
-                          {topic.title}
-                        </h4>
-                        <div className="flex items-center gap-2 text-sm text-g-sub">
-                          <span className="flex items-center gap-1">
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div
+                          className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold mt-0.5 ${rankBadgeClass(index)}`}
+                        >
+                          {index + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-semibold text-logos-text group-hover:text-logos-link transition-colors line-clamp-2 leading-snug mb-1">
+                            {topic.title}
+                          </h4>
+                          <div className="flex items-center gap-1.5 text-xs text-logos-sub">
+                            <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                             </svg>
-                            {topic.posts_count}件
-                          </span>
-                          <span>·</span>
-                          <span>{timeAgo(topic.created_at)}</span>
+                            <span>{topic.posts_count}件</span>
+                            <span className="text-logos-border">·</span>
+                            <span>{timeAgo(topic.created_at)}</span>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
 
