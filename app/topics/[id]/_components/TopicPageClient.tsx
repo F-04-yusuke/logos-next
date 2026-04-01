@@ -100,9 +100,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
 
   return (
     <div className="w-full">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4 sm:py-6 text-gray-900 dark:text-g-text">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4 sm:py-6 text-logos-text">
 
-        {/* ===== Topic Header ===== */}
+        {/* ===== Topic Header Card ===== */}
+        <div className="bg-logos-surface rounded-2xl border border-logos-border shadow-sm px-5 py-5 sm:px-7 sm:py-6 mb-4">
 
         {/* ── モバイル専用 Row 1: カテゴリ + アイコンアクション ── */}
         <div className="flex md:hidden items-start justify-between gap-3 mb-3">
@@ -380,19 +381,19 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           </div>
         </div>
 
+        </div>{/* End Topic Header Card */}
+
         {/* ===== Tabs ===== */}
-        <div className={contentExpanded ? "mt-4" : "mt-0"}>
-          <div className="flex border-b border-gray-300 dark:border-logos-border mb-4 overflow-x-auto">
+        <div className="mt-4">
+          <div className="flex items-center gap-1 bg-logos-hover rounded-xl p-1 mb-5 w-fit overflow-x-auto">
             {(["info", "comments", "analysis"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
-                className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${
+                className={`py-2 px-4 sm:px-5 rounded-lg text-sm font-bold transition-all duration-150 focus:outline-none whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
                   activeTab === tab
-                    ? tab === "analysis"
-                      ? "border-yellow-500 text-yellow-600 dark:text-white font-bold"
-                      : "border-indigo-500 text-indigo-600 dark:text-white font-bold"
-                    : "border-transparent text-g-sub hover:text-g-text hover:bg-logos-hover"
+                    ? "bg-white dark:bg-logos-elevated shadow-sm text-indigo-600 dark:text-white"
+                    : "text-logos-sub hover:text-logos-text"
                 }`}
               >
                 {tab === "info" && "情報"}
@@ -400,7 +401,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                 {tab === "analysis" && (
                   <>
                     分析・図解
-                    <span className="ml-1.5 text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-500 px-1.5 py-0.5 rounded font-bold tracking-wider">
+                    <span className="text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-400 px-1.5 py-0.5 rounded font-bold tracking-wider">
                       PRO
                     </span>
                   </>
@@ -413,7 +414,8 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "info" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-logos-border">
+                <h3 className="font-bold text-logos-text text-base sm:text-lg flex items-center gap-2">
+                  <span className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
                   {filteredPosts.length} 件の投稿
                 </h3>
                 <div className="flex items-center space-x-2">
@@ -448,12 +450,12 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       if (!user) { alert("投稿するにはログインが必要です"); return; }
                       setShowPostModal(true);
                     }}
-                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-logos-surface dark:border-logos-border dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-sm sm:text-base transition-colors flex items-center shrink-0 cursor-pointer"
+                    className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold py-1.5 px-4 rounded-full text-sm shadow-sm hover:shadow-indigo-500/25 hover:shadow-md transition-all flex items-center shrink-0 cursor-pointer"
                   >
                     <svg
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 sm:mr-1"
+                      className="h-4 w-4 sm:mr-1.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -498,7 +500,8 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "comments" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-logos-border">
+                <h3 className="font-bold text-logos-text text-base sm:text-lg flex items-center gap-2">
+                  <span className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
                   {topic.comments.length} 件のコメント
                 </h3>
                 <select
@@ -515,7 +518,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
               </div>
 
               {user && !topic.user_has_commented && (
-                <div className="p-4 bg-gray-50 dark:bg-logos-surface rounded-lg border border-gray-200 dark:border-transparent mb-6">
+                <div className="p-4 bg-logos-surface rounded-xl border border-logos-border mb-6">
                   <form onSubmit={handleCommentSubmit}>
                     <textarea
                       value={commentBody}
@@ -529,7 +532,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="bg-gray-800 hover:bg-gray-900 dark:bg-logos-bg dark:text-g-text border border-transparent dark:border-logos-border dark:hover:bg-gray-800 text-white font-bold py-2 px-4 sm:py-1.5 rounded text-base transition-colors shadow-sm disabled:opacity-50"
+                        className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold py-2 px-6 rounded-full text-sm shadow-sm transition-all disabled:opacity-50"
                       >
                         コメントする
                       </button>
@@ -565,7 +568,8 @@ export function TopicPageClient({ id, initialTopic }: Props) {
           {activeTab === "analysis" && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-g-text text-base sm:text-lg pl-2 border-l-2 border-logos-border">
+                <h3 className="font-bold text-logos-text text-base sm:text-lg flex items-center gap-2">
+                  <span className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-yellow-400 to-orange-500 flex-shrink-0" aria-hidden="true" />
                   {topic.analyses?.length ?? 0} 件の分析・図解
                 </h3>
                 <div className="flex items-center space-x-2">
@@ -583,12 +587,12 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                       if (!user) { alert("投稿するにはログインが必要です"); return; }
                       setShowAnalysisModal(true);
                     }}
-                    className="bg-white border border-gray-300 hover:bg-gray-50 dark:bg-logos-surface dark:border-logos-border dark:text-white dark:hover:bg-gray-800 font-bold py-1.5 px-3 sm:py-1.5 sm:px-4 rounded text-sm sm:text-base transition-colors flex items-center shrink-0 cursor-pointer"
+                    className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-1.5 px-4 rounded-full text-sm shadow-sm hover:shadow-orange-500/25 hover:shadow-md transition-all flex items-center shrink-0 cursor-pointer"
                   >
                     <svg
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 sm:mr-1"
+                      className="h-4 w-4 sm:mr-1.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -682,10 +686,10 @@ export function TopicPageClient({ id, initialTopic }: Props) {
         )}
 
         {/* ===== Back Link ===== */}
-        <div className="mt-8 border-t border-gray-200 dark:border-logos-border pt-6 pb-4">
+        <div className="mt-8 border-t border-logos-border pt-6 pb-4">
           <Link
             href="/"
-            className="inline-flex items-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 font-bold text-base transition-colors py-2 px-4 -ml-4 rounded-md hover:bg-gray-100 dark:hover:bg-logos-surface"
+            className="inline-flex items-center text-logos-sub hover:text-logos-text font-bold text-sm transition-colors py-2 px-4 -ml-4 rounded-full hover:bg-logos-hover"
           >
             <svg
               aria-hidden="true"

@@ -231,7 +231,7 @@ export function PostCard({
                 <button
                   type="button"
                   onClick={() => setOpenSupplementView((v) => !v)}
-                  className="text-[13px] text-gray-500 hover:text-gray-300 hover:bg-logos-hover transition-colors py-1 px-2 rounded-full"
+                  className="text-[13px] text-logos-sub hover:text-logos-text hover:bg-logos-hover transition-colors py-1 px-2 rounded-full"
                 >
                   📎 補足あり {openSupplementView ? "▲" : "▼"}
                 </button>

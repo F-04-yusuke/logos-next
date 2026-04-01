@@ -160,7 +160,7 @@ export function CommentCard({
           <div className="mt-1">
             <button
               onClick={() => setOpenReplies(!openReplies)}
-              className="flex items-center gap-2 text-[13px] font-bold text-[#3ea6ff] hover:bg-blue-50 dark:hover:bg-[#263850] px-3 py-2 sm:py-1.5 -ml-3 rounded-full transition-colors"
+              className="flex items-center gap-2 text-[13px] font-bold text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-3 py-2 sm:py-1.5 -ml-3 rounded-full transition-colors"
             >
               <svg
                 aria-hidden="true"
