@@ -73,14 +73,14 @@ export default function LikesPage() {
 
   if (authLoading || fetching) {
     return (
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 px-4">
+      <div className="py-6 sm:py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse">
-            <div className="h-7 bg-white/[0.06] rounded-md w-1/4 mb-6" />
-            <div className="h-10 bg-white/[0.04] rounded-md w-full mb-6" />
+            <div className="h-7 bg-logos-skeleton rounded-md w-1/4 mb-6" />
+            <div className="h-10 bg-logos-skeleton-light rounded-md w-full mb-6" />
             <div className="space-y-3">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-32 bg-white/[0.04] rounded-lg" />
+                <div key={i} className="h-32 bg-logos-skeleton-light rounded-lg" />
               ))}
             </div>
           </div>
@@ -89,125 +89,125 @@ export default function LikesPage() {
     );
   }
 
-  const indigoTab = (tab: Tab) =>
-    activeTab === tab
-      ? "border-indigo-500 text-logos-text font-bold"
-      : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300";
-
-  const yellowTab = (tab: Tab) =>
-    activeTab === tab
-      ? "border-yellow-500 text-yellow-600 dark:text-yellow-400 font-bold"
-      : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300";
+  const tabClass = (tab: Tab, color: "indigo" | "yellow" = "indigo") => {
+    const base =
+      "py-2.5 px-4 sm:px-5 text-base font-semibold transition-all duration-150 focus:outline-none whitespace-nowrap flex items-center gap-1.5 cursor-pointer -mb-px border-b-2";
+    if (activeTab === tab) {
+      return `${base} ${color === "yellow" ? "border-yellow-500" : "border-indigo-500"} text-logos-text`;
+    }
+    return `${base} border-transparent text-logos-sub hover:text-logos-text hover:border-logos-border`;
+  };
 
   return (
-    <div className="py-12">
-      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div className="sm:rounded-lg overflow-hidden">
+    <div className="py-6 sm:py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* ページヘッダー */}
-          <div className="px-4 sm:px-6 pt-2 mb-5">
-            <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
-              参考になった
-            </h1>
-          </div>
+        {/* ページヘッダー */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-logos-text flex items-center gap-2.5">
+            <span
+              className="inline-block w-1 h-6 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0"
+              aria-hidden="true"
+            />
+            参考になった
+          </h1>
+        </div>
 
-          {/* タブ */}
-          <div className="px-4 sm:px-6">
-          <div className="flex border-b border-gray-200 dark:border-logos-border overflow-x-auto">
-            <button
-              onClick={() => setActiveTab("info")}
-              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("info")}`}
-            >
-              情報 ({likedPosts.length})
-            </button>
-            <button
-              onClick={() => setActiveTab("comments")}
-              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap cursor-pointer ${indigoTab("comments")}`}
-            >
-              コメント ({likedComments.length})
-            </button>
-            <button
-              onClick={() => setActiveTab("analysis")}
-              className={`py-3 px-6 border-b-2 text-lg transition-colors duration-100 focus:outline-none whitespace-nowrap flex items-center cursor-pointer ${yellowTab("analysis")}`}
-            >
-              分析・図解 (0)
-              <span className="ml-1 text-[9px] bg-yellow-500 text-logos-text dark:bg-yellow-500/20 dark:text-yellow-500 px-1 py-0.5 rounded font-bold tracking-wider">
-                PRO
-              </span>
-            </button>
-          </div>
-          </div>
+        {/* タブ */}
+        <div className="flex border-b border-logos-border overflow-x-auto overflow-y-hidden">
+          <button
+            onClick={() => setActiveTab("info")}
+            className={tabClass("info")}
+          >
+            情報 ({likedPosts.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("comments")}
+            className={tabClass("comments")}
+          >
+            コメント ({likedComments.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("analysis")}
+            className={tabClass("analysis", "yellow")}
+          >
+            分析・図解 (0)
+            <span className="text-[9px] bg-yellow-500 text-white dark:bg-yellow-500/20 dark:text-yellow-400 px-1 py-0.5 rounded font-bold tracking-wider">
+              PRO
+            </span>
+          </button>
+        </div>
 
-          <div className="p-4 sm:p-6">
+        {/* タブコンテンツ */}
+        <div className="pt-4 sm:pt-6">
 
-            {/* 情報タブ */}
-            {activeTab === "info" && (
-              <div className="space-y-6">
-                {likedPosts.length === 0 ? (
-                  <p className="text-center text-gray-500 py-6 text-base">いいねした情報はありません。</p>
-                ) : (
-                  likedPosts.map((post) => (
-                    <div key={post.id} className="flex flex-col gap-1.5">
-                      <PostCard
-                        post={post}
-                        currentUserId={user?.id}
-                        onLike={() => handlePostLike(post.id)}
-                      />
-                      <div className="text-right px-2">
-                        <span className="text-sm sm:text-base font-bold text-gray-500 dark:text-g-sub">
-                          🔗 投稿先トピック:{" "}
-                          <Link
-                            href={`/topics/${post.topic.id}`}
-                            className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-100"
-                          >
-                            {post.topic.title}
-                          </Link>
-                        </span>
-                      </div>
+          {/* 情報タブ */}
+          {activeTab === "info" && (
+            <div className="space-y-6">
+              {likedPosts.length === 0 ? (
+                <p className="text-center text-logos-sub py-6 text-base">いいねした情報はありません。</p>
+              ) : (
+                likedPosts.map((post) => (
+                  <div key={post.id} className="flex flex-col gap-1.5">
+                    <PostCard
+                      post={post}
+                      currentUserId={user?.id}
+                      onLike={() => handlePostLike(post.id)}
+                    />
+                    <div className="text-right px-2">
+                      <span className="text-sm sm:text-base font-bold text-logos-sub">
+                        🔗 投稿先トピック:{" "}
+                        <Link
+                          href={`/topics/${post.topic.id}`}
+                          className="text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-100"
+                        >
+                          {post.topic.title}
+                        </Link>
+                      </span>
                     </div>
-                  ))
-                )}
-              </div>
-            )}
+                  </div>
+                ))
+              )}
+            </div>
+          )}
 
-            {/* コメントタブ */}
-            {activeTab === "comments" && (
-              <div className="space-y-6">
-                {likedComments.length === 0 ? (
-                  <p className="text-center text-gray-500 py-6 text-base">いいねしたコメントはありません。</p>
-                ) : (
-                  likedComments.map((comment) => (
-                    <div key={comment.id} className="flex flex-col gap-1.5">
-                      <CommentCard
-                        comment={comment}
-                        currentUserId={user?.id}
-                        onLike={() => handleCommentLike(comment.id)}
-                      />
-                      <div className="text-right px-2">
-                        <span className="text-sm sm:text-base font-bold text-gray-500 dark:text-g-sub">
-                          🔗 投稿先トピック:{" "}
-                          <Link
-                            href={`/topics/${comment.topic.id}`}
-                            className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-100"
-                          >
-                            {comment.topic.title}
-                          </Link>
-                        </span>
-                      </div>
+          {/* コメントタブ */}
+          {activeTab === "comments" && (
+            <div className="space-y-6">
+              {likedComments.length === 0 ? (
+                <p className="text-center text-logos-sub py-6 text-base">いいねしたコメントはありません。</p>
+              ) : (
+                likedComments.map((comment) => (
+                  <div key={comment.id} className="flex flex-col gap-1.5">
+                    <CommentCard
+                      comment={comment}
+                      currentUserId={user?.id}
+                      onLike={() => handleCommentLike(comment.id)}
+                    />
+                    <div className="text-right px-2">
+                      <span className="text-sm sm:text-base font-bold text-logos-sub">
+                        🔗 投稿先トピック:{" "}
+                        <Link
+                          href={`/topics/${comment.topic.id}`}
+                          className="text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-100"
+                        >
+                          {comment.topic.title}
+                        </Link>
+                      </span>
                     </div>
-                  ))
-                )}
-              </div>
-            )}
+                  </div>
+                ))
+              )}
+            </div>
+          )}
 
-            {/* 分析・図解タブ */}
-            {activeTab === "analysis" && (
-              <div className="space-y-6">
-                <p className="text-center text-gray-500 py-6 text-base">いいねした分析・図解はありません。</p>
-              </div>
-            )}
+          {/* 分析・図解タブ */}
+          {activeTab === "analysis" && (
+            <div className="space-y-6">
+              <p className="text-center text-logos-sub py-6 text-base">いいねした分析・図解はありません。</p>
+            </div>
+          )}
 
-          </div>
         </div>
       </div>
     </div>
