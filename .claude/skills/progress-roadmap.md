@@ -130,6 +130,11 @@
 | v3.7-f6-header-sidebar-split | F-6完了・Header/Sidebar を各4/2サブコンポーネントに分割・後方互換re-export維持 | 2026-03-23 |
 | v3.8-session9-docs-complete | Session9ドキュメント総仕上げ | 2026-03-23 |
 | v4.1-session12-ui-postcard | Phase4開始・PostCard UI改修（YouTube/X SVGフォールバック・lightbox・続きを読む）・PostModal画像添付・タイトル手動入力 | 2026-03-23 |
+| v6.57-session41-home-category-tabs | Session41完了・ホームカテゴリタブをピル型横スクロール対応にリデザイン | 2026-04-01 |
+| v6.58-session43-before-lightmode | Session43開始・OS追従ダーク/ライトモード実装前 | 2026-04-01 |
+| v6.59-session43-before-ui-polish | Session43・ロゴ/タブ/ボタンpolish前 | 2026-04-01 |
+| v6.60-session43-before-full-ui-redesign | Session43・全体UIリデザイン前 | 2026-04-01 |
+| v6.61-session43-before-topic-redesign | Session43完了・トピックページリデザイン前（次セッション課題） | 2026-04-01 |
 
 ### logos-laravel
 
