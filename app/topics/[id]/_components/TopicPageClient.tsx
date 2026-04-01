@@ -103,7 +103,7 @@ export function TopicPageClient({ id, initialTopic }: Props) {
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4 sm:py-6 text-logos-text">
 
         {/* ===== Topic Header Card ===== */}
-        <div className="bg-logos-surface rounded-2xl border border-logos-border shadow-sm px-5 py-5 sm:px-7 sm:py-6 mb-4">
+        <div className="bg-logos-hover rounded-2xl border border-logos-border px-5 py-5 sm:px-7 sm:py-6 mb-4">
 
         {/* ── モバイル専用 Row 1: カテゴリ + アイコンアクション ── */}
         <div className="flex md:hidden items-start justify-between gap-3 mb-3">
@@ -420,30 +420,36 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                 </h3>
                 <div className="flex items-center space-x-2">
                   <div className="flex space-x-2">
-                    <select
-                      value={postFilter}
-                      onChange={(e) => setPostFilter(e.target.value)}
-                      className="text-sm rounded-full bg-logos-hover text-logos-text px-3 py-1.5 cursor-pointer hover:bg-logos-elevated transition-colors focus:outline-none border-0"
-                    >
-                      <option value="">すべてのメディア</option>
-                      <option value="YouTube">YouTube</option>
-                      <option value="X">X</option>
-                      <option value="記事">記事</option>
-                      <option value="知恵袋">知恵袋</option>
-                      <option value="本">本</option>
-                      <option value="その他">その他</option>
-                    </select>
-                    <select
-                      value={postSort}
-                      onChange={(e) =>
-                        setPostSort(e.target.value as "popular" | "newest" | "oldest")
-                      }
-                      className="text-sm sm:text-base rounded border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-bg dark:text-white px-2 sm:px-3 py-1.5 sm:py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
-                    >
-                      <option value="popular">人気順</option>
-                      <option value="newest">新着順</option>
-                      <option value="oldest">古い順</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        value={postFilter}
+                        onChange={(e) => setPostFilter(e.target.value)}
+                        className="text-sm rounded-full bg-logos-hover text-logos-text pl-3 pr-8 py-1.5 cursor-pointer hover:bg-logos-elevated transition-colors focus:outline-none appearance-none"
+                      >
+                        <option value="">すべてのメディア</option>
+                        <option value="YouTube">YouTube</option>
+                        <option value="X">X</option>
+                        <option value="記事">記事</option>
+                        <option value="知恵袋">知恵袋</option>
+                        <option value="本">本</option>
+                        <option value="その他">その他</option>
+                      </select>
+                      <svg className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-logos-sub pointer-events-none" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                    </div>
+                    <div className="relative hidden sm:block">
+                      <select
+                        value={postSort}
+                        onChange={(e) =>
+                          setPostSort(e.target.value as "popular" | "newest" | "oldest")
+                        }
+                        className="text-sm rounded-full bg-logos-hover text-logos-text pl-3 pr-8 py-1.5 cursor-pointer hover:bg-logos-elevated transition-colors focus:outline-none appearance-none"
+                      >
+                        <option value="popular">人気順</option>
+                        <option value="newest">新着順</option>
+                        <option value="oldest">古い順</option>
+                      </select>
+                      <svg className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-logos-sub pointer-events-none" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                    </div>
                   </div>
                   <button
                     onClick={() => {
@@ -504,17 +510,20 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   <span className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
                   {topic.comments.length} 件のコメント
                 </h3>
-                <select
-                  value={commentSort}
-                  onChange={(e) =>
-                    setCommentSort(e.target.value as "popular" | "newest" | "oldest")
-                  }
-                  className="text-sm sm:text-base rounded border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-bg dark:text-white px-2 sm:px-3 py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
-                >
-                  <option value="popular">人気順</option>
-                  <option value="newest">新着順</option>
-                  <option value="oldest">古い順</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={commentSort}
+                    onChange={(e) =>
+                      setCommentSort(e.target.value as "popular" | "newest" | "oldest")
+                    }
+                    className="text-sm rounded-full bg-logos-hover text-logos-text pl-3 pr-8 py-1.5 cursor-pointer hover:bg-logos-elevated transition-colors focus:outline-none appearance-none"
+                  >
+                    <option value="popular">人気順</option>
+                    <option value="newest">新着順</option>
+                    <option value="oldest">古い順</option>
+                  </select>
+                  <svg className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-logos-sub pointer-events-none" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </div>
               </div>
 
               {user && !topic.user_has_commented && (
@@ -573,15 +582,18 @@ export function TopicPageClient({ id, initialTopic }: Props) {
                   {topic.analyses?.length ?? 0} 件の分析・図解
                 </h3>
                 <div className="flex items-center space-x-2">
-                  <select
-                    value={analysisSort}
-                    onChange={(e) => setAnalysisSort(e.target.value as "popular" | "newest" | "oldest")}
-                    className="text-sm sm:text-base rounded border border-gray-200 dark:border-logos-border bg-white dark:bg-logos-bg dark:text-white px-2 sm:px-3 py-1.5 hidden sm:block cursor-pointer hover:bg-gray-100 dark:hover:bg-logos-surface transition-colors focus:outline-none focus:border-gray-400 dark:focus:border-gray-500"
-                  >
-                    <option value="popular">人気順</option>
-                    <option value="newest">新着順</option>
-                    <option value="oldest">古い順</option>
-                  </select>
+                  <div className="relative hidden sm:block">
+                    <select
+                      value={analysisSort}
+                      onChange={(e) => setAnalysisSort(e.target.value as "popular" | "newest" | "oldest")}
+                      className="text-sm rounded-full bg-logos-hover text-logos-text pl-3 pr-8 py-1.5 cursor-pointer hover:bg-logos-elevated transition-colors focus:outline-none appearance-none"
+                    >
+                      <option value="popular">人気順</option>
+                      <option value="newest">新着順</option>
+                      <option value="oldest">古い順</option>
+                    </select>
+                    <svg className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-logos-sub pointer-events-none" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                  </div>
                   <button
                     onClick={() => {
                       if (!user) { alert("投稿するにはログインが必要です"); return; }
