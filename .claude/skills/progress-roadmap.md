@@ -21,7 +21,7 @@
 | Phase 2 | フロントエンドのモダン化（Next.js移行） | 2026-03-19〜2026-03-22 | ✅ 完了 |
 | Phase 3 | 技術的負債解消・コード品質改善 | 2026-03-22〜2026-03-23 | ✅ 完了 |
 | Phase 4 | UI/UX全面改善・デザインシステム確立 | 2026-03-23〜2026-04-02 | ✅ 完了 |
-| Phase 5 | 集客・マーケティング基盤・スケール | 2026-04-02〜 | 🔲 未着手 |
+| Phase 5 | 集客・マーケティング基盤・スケール | 2026-04-02〜 | 🔄 進行中（Session 50〜） |
 
 ※ 旧ドキュメントでは「Phase 3」が「集客・マーケティング」として定義されていたが、実際には技術改善（B-1〜B-6・F-1〜F-7）を Phase 3 として実施した。集客・マーケティングは Phase 4 に繰り下げ。
 
@@ -74,25 +74,27 @@
 **当初計画だった以下の項目は Phase 5 に移行:**
 - SEO対策・表示速度最適化・LP作成・KPI設定・Stripe Webhook・httpOnly Cookie化
 
-### Phase 5：集客・マーケティング基盤・スケール（未着手 2026-04-02〜）
+### Phase 5：集客・マーケティング基盤・スケール（進行中 2026-04-02〜）
 
-#### 最優先（Phase 4 持越し・技術的負債解消）
-- **httpOnly Cookie 化**: localStorage → httpOnly Cookie（Phase 2 から持越しのセキュリティ課題）
-- **表示速度最適化**: 画像の圧縮（intervention/image によるアバター自動リサイズ含む）・不要なコードの削減
-- **AnalysisCard 抜本的改革**: tree/matrix/SWOT 描画コードの共通コンポーネント化（AnalysisCard と analyses/[id] の重複解消）
+#### ✅ Step 1 完了（Session 50 / 2026-04-03）
+- **httpOnly Cookie 化**: localStorage 廃止 → Route Handler プロキシ + httpOnly Cookie（logos_token）
+  - `app/api/auth/` 4エンドポイント + `app/api/proxy/[...path]` catch-all プロキシ新規作成
+  - 全クライアントページを PROXY_BASE 経由に移行（17ファイル変更）
+- **React Hook Form + Zod 導入**: login・register フォームをリライト
+- **lib/auth.ts deprecated スタブ削除**（Session 51 冒頭で再確認要）
+- 詳細 → `progress-phase5.md`
 
-#### 優先度高（集客・マーケティング）
-- SEO対策: 適切な h1/h2 整備・メタデータ（OGP設定）
-- LP作成: LOGOSの魅力を伝える登録用ページ（welcome.blade.php は未実装）
-- KPI設定: 新規登録者数・トピック投稿数・継続率などの計測
-
-#### 優先度中
-- Stripe Webhook 受け口のみ実装（決済コードの作り込みはしない）
-- パスワードリセット機能: SMTP設定（さくら or SendGrid）と合わせて実装
-- /analyses/[id] SSR 化: httpOnly Cookie 導入後に対応（F-1 残タスク）
-- /categories/[id] SSR 化: httpOnly Cookie 導入後に再試行
-- Sonner（トーストライブラリ）導入: 自作トーストを shadcn/ui 標準実装に置き換え
-- React Hook Form + Zod 導入: ログイン・登録・トピック作成等フォームのバリデーション一元化
+#### 未着手（Step 2〜）
+- **表示速度最適化**: 画像の圧縮（intervention/image によるアバター自動リサイズ含む）・`<Image>` 移行・dead code 削減
+- **Sonner 導入**: 自作トーストを shadcn/ui 標準実装に置き換え
+- **AnalysisCard 抜本的改革**: tree/matrix/SWOT 描画コードの共通コンポーネント化
+- **SEO対策**: 適切な h1/h2 整備・メタデータ（OGP設定）
+- **LP作成**: LOGOSの魅力を伝える登録用ページ
+- **KPI設定**: 新規登録者数・トピック投稿数・継続率などの計測
+- Stripe Webhook 受け口のみ実装
+- パスワードリセット機能: SMTP設定と合わせて実装
+- /analyses/[id] SSR 化（httpOnly Cookie 解禁済み）
+- /categories/[id] SSR 化（同上）
 
 #### 優先度低
 - メール認証（MustVerifyEmail 有効化）
@@ -168,6 +170,15 @@
 | v6.83-session48-before-analysiscard-matrix-fix | Session48完了・Phase4最終タグ（SWOT色チント・Matrixヘッダー修正） | 2026-04-02 |
 | v6.84-session49-before-phase4-docs | Session49・Phase4ドキュメント整理前 | 2026-04-02 |
 | v6.85-session49-before-phase5-prep | Session49・Phase5準備前 | 2026-04-02 |
+| v6.86-session50-before-phase5-start | Session50・Phase5開始前 | 2026-04-03 |
+| v6.87-session50-before-httpcookie-impl | Session50・httpOnly Cookie Route Handler作成前 | 2026-04-03 |
+| v6.88-session50-before-core-auth-migration | Session50・コア認証移行前（AuthContext/login/register） | 2026-04-03 |
+| v6.89-session50-before-client-pages-migration | Session50・クライアントページ移行batch1前 | 2026-04-03 |
+| v6.90-session50-before-client-pages-batch2 | Session50・クライアントページ移行batch2前 | 2026-04-03 |
+| v6.91-session50-before-client-pages-batch3 | Session50・クライアントページ移行batch3前 | 2026-04-03 |
+| v6.92-session50-before-final-migration | Session50・最終batch移行前（useTopicPage/AnalysisModal） | 2026-04-03 |
+| v6.93-session50-before-auth-cleanup | Session50・lib/auth.ts スタブ削除前 | 2026-04-03 |
+| v6.94-session50-after-httpcookie-complete | Session50完了・Phase5 Step1（httpOnly Cookie+RHF+Zod）完了 | 2026-04-03 |
 
 ### logos-laravel
 
