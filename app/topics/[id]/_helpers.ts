@@ -1,4 +1,8 @@
+/** @deprecated Phase 5 移行済み。認証済みAPI呼び出しは PROXY_BASE を使用すること */
 export const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+
+/** 認証済みAPIプロキシのベースURL（httpOnly Cookie対応） */
+export const PROXY_BASE = "/api/proxy";
 
 export function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();

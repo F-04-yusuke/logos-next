@@ -2,54 +2,62 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, FormEvent } from "react";
-import { setToken } from "@/lib/auth";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useAuth } from "@/context/AuthContext";
 import AppLogo from "@/components/AppLogo";
+
+const registerSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, "アカウント名を入力してください")
+      .max(255, "アカウント名は255文字以内で入力してください"),
+    email: z.string().email("有効なメールアドレスを入力してください"),
+    password: z.string().min(8, "パスワードは8文字以上で入力してください"),
+    password_confirmation: z.string().min(1, "パスワード（確認用）を入力してください"),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    message: "パスワードが一致しません",
+    path: ["password_confirmation"],
+  });
+type RegisterValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const router = useRouter();
   const { refetch } = useAuth();
   const [showDevForm, setShowDevForm] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [errors, setErrors] = useState<Record<string, string[]>>({});
-  const [loading, setLoading] = useState(false);
+  const [serverErrors, setServerErrors] = useState<Record<string, string[]>>({});
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    setErrors({});
-    setLoading(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterValues>({ resolver: zodResolver(registerSchema) });
+
+  async function onSubmit(values: RegisterValues) {
+    setServerErrors({});
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
-      const res = await fetch(`${baseUrl}/api/register`, {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          password_confirmation: passwordConfirmation,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
       });
       const data = await res.json();
       if (!res.ok) {
         if (data.errors) {
-          setErrors(data.errors);
+          setServerErrors(data.errors);
         } else {
-          setErrors({ _: [data.message ?? "登録に失敗しました"] });
+          setServerErrors({ _: [data.message ?? "登録に失敗しました"] });
         }
         return;
       }
-      setToken(data.token);
       await refetch();
       router.push("/");
     } catch {
-      setErrors({ _: ["サーバーに接続できませんでした"] });
-    } finally {
-      setLoading(false);
+      setServerErrors({ _: ["サーバーに接続できませんでした"] });
     }
   }
 
@@ -185,7 +193,7 @@ export default function RegisterPage() {
           <div className="relative text-left">
             {/* 戻るボタン */}
             <button
-              onClick={() => { setShowDevForm(false); setErrors({}); }}
+              onClick={() => { setShowDevForm(false); setServerErrors({}); }}
               className="absolute -top-2 right-0 text-gray-400 hover:text-gray-200 font-bold text-sm flex items-center gap-1"
             >
               <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -198,11 +206,11 @@ export default function RegisterPage() {
               新規アカウント作成
             </h2>
 
-            {errors._ && (
-              <p className="text-red-400 text-sm mb-4 text-center">{errors._[0]}</p>
+            {serverErrors._ && (
+              <p className="text-red-400 text-sm mb-4 text-center">{serverErrors._[0]}</p>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               {/* アカウント名 */}
               <div className="mb-4">
                 <label htmlFor="name" className="block font-bold text-sm text-logos-sub mb-1">
@@ -211,14 +219,13 @@ export default function RegisterPage() {
                 <input
                   id="name"
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
                   autoFocus
                   autoComplete="name"
+                  {...register("name")}
                   className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
-                {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name[0]}</p>}
+                {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
+                {serverErrors.name && <p className="text-red-400 text-xs mt-1">{serverErrors.name[0]}</p>}
               </div>
 
               {/* Email */}
@@ -229,13 +236,12 @@ export default function RegisterPage() {
                 <input
                   id="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
                   autoComplete="username"
+                  {...register("email")}
                   className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
-                {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email[0]}</p>}
+                {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>}
+                {serverErrors.email && <p className="text-red-400 text-xs mt-1">{serverErrors.email[0]}</p>}
               </div>
 
               {/* パスワード */}
@@ -246,13 +252,12 @@ export default function RegisterPage() {
                 <input
                   id="password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
                   autoComplete="new-password"
+                  {...register("password")}
                   className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
-                {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password[0]}</p>}
+                {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>}
+                {serverErrors.password && <p className="text-red-400 text-xs mt-1">{serverErrors.password[0]}</p>}
               </div>
 
               {/* パスワード（確認用） */}
@@ -263,12 +268,13 @@ export default function RegisterPage() {
                 <input
                   id="password_confirmation"
                   type="password"
-                  value={passwordConfirmation}
-                  onChange={(e) => setPasswordConfirmation(e.target.value)}
-                  required
                   autoComplete="new-password"
+                  {...register("password_confirmation")}
                   className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
+                {errors.password_confirmation && (
+                  <p className="text-red-400 text-xs mt-1">{errors.password_confirmation.message}</p>
+                )}
               </div>
 
               <div className="flex items-center justify-between mt-8 pt-2 border-t border-gray-800">
@@ -280,10 +286,10 @@ export default function RegisterPage() {
                 </Link>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={isSubmitting}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-md transition-colors duration-100 shadow-sm disabled:opacity-50"
                 >
-                  {loading ? "登録中..." : "登録する"}
+                  {isSubmitting ? "登録中..." : "登録する"}
                 </button>
               </div>
             </form>

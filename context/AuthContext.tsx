@@ -2,8 +2,6 @@
 
 import { createContext, useContext, useCallback, ReactNode } from "react";
 import useSWR from "swr";
-import { getToken, removeToken, getAuthHeaders } from "@/lib/auth";
-import { transformUser } from "@/lib/transforms";
 
 type AuthUser = {
   id: number;
@@ -29,16 +27,11 @@ const AuthContext = createContext<AuthContextType>({
   refetch: async () => {},
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
-
+/** httpOnly Cookie経由でユーザー情報を取得（トークンはサーバー側で処理） */
 async function fetchUser(): Promise<AuthUser | null> {
-  const token = getToken();
-  if (!token) return null;
   try {
-    const res = await fetch(`${baseUrl}/api/user/me`, {
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) return transformUser(await res.json()) as AuthUser;
+    const res = await fetch("/api/auth/me");
+    if (res.ok) return res.json();
     return null;
   } catch {
     return null;
@@ -51,9 +44,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     shouldRetryOnError: false, // 401/403 はリトライしない
   });
 
-  const logout = useCallback(() => {
-    removeToken();
-    mutate(null, { revalidate: false }); // キャッシュを即クリア・再フェッチなし
+  const logout = useCallback(async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    mutate(null, { revalidate: false }); // キャッシュを即クリア
   }, [mutate]);
 
   const refetch = useCallback(async () => {

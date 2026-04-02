@@ -2,43 +2,48 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, FormEvent } from "react";
-import { setToken } from "@/lib/auth";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useAuth } from "@/context/AuthContext";
 import AppLogo from "@/components/AppLogo";
+
+const loginSchema = z.object({
+  email: z.string().email("有効なメールアドレスを入力してください"),
+  password: z.string().min(1, "パスワードを入力してください"),
+});
+type LoginValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
   const { refetch } = useAuth();
   const [showDevLogin, setShowDevLogin] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginValues>({ resolver: zodResolver(loginSchema) });
+
+  async function onSubmit(values: LoginValues) {
+    setServerError("");
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
-      const res = await fetch(`${baseUrl}/api/login`, {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ email, password }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.message ?? "ログインに失敗しました");
+        setServerError(data.message ?? "ログインに失敗しました");
         return;
       }
-      setToken(data.token);
       await refetch();
       router.push("/");
     } catch {
-      setError("サーバーに接続できませんでした");
-    } finally {
-      setLoading(false);
+      setServerError("サーバーに接続できませんでした");
     }
   }
 
@@ -164,7 +169,7 @@ export default function LoginPage() {
           <div className="relative text-left">
             {/* 戻るボタン */}
             <button
-              onClick={() => { setShowDevLogin(false); setError(""); }}
+              onClick={() => { setShowDevLogin(false); setServerError(""); }}
               className="absolute -top-2 right-0 text-gray-400 hover:text-gray-200 font-bold text-sm flex items-center gap-1"
             >
               <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -177,11 +182,11 @@ export default function LoginPage() {
               テスト環境ログイン
             </h2>
 
-            {error && (
-              <p className="text-red-400 text-sm mb-4 text-center">{error}</p>
+            {serverError && (
+              <p className="text-red-400 text-sm mb-4 text-center">{serverError}</p>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <label htmlFor="email" className="block font-bold text-sm text-logos-sub mb-1">
                   Email
@@ -189,13 +194,12 @@ export default function LoginPage() {
                 <input
                   id="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
                   autoFocus
                   autoComplete="username"
+                  {...register("email")}
                   className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
+                {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>}
               </div>
 
               <div className="mt-5">
@@ -205,21 +209,20 @@ export default function LoginPage() {
                 <input
                   id="password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
                   autoComplete="current-password"
+                  {...register("password")}
                   className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-sm"
                 />
+                {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>}
               </div>
 
               <div className="mt-8">
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={isSubmitting}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors duration-100 disabled:opacity-50"
                 >
-                  {loading ? "ログイン中..." : "ログイン"}
+                  {isSubmitting ? "ログイン中..." : "ログイン"}
                 </button>
               </div>
             </form>
