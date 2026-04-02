@@ -26,20 +26,21 @@ export default async function CategoryListPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500 mb-2">
+          <h1 className="text-2xl font-bold text-logos-text flex items-center gap-2.5 mb-2">
+            <span className="inline-block w-1 h-6 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
             カテゴリ一覧
           </h1>
-          <p className="text-lg text-gray-600 dark:text-g-sub">
+          <p className="text-lg text-logos-sub">
             興味のあるカテゴリを選択すると、関連するトピックを絞り込んで表示します。
           </p>
         </div>
 
         {categories.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-logos-bg/50 text-center">
+          <div className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-logos-border rounded-xl bg-logos-hover text-center">
             <svg
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
-              className="h-12 w-12 text-gray-400 dark:text-gray-600 mb-3"
+              className="h-12 w-12 text-logos-sub mb-3"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -51,10 +52,10 @@ export default async function CategoryListPage() {
                 d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
               />
             </svg>
-            <p className="text-lg text-gray-500 dark:text-g-sub font-bold mb-1">
+            <p className="text-lg text-logos-sub font-bold mb-1">
               カテゴリがありません
             </p>
-            <p className="text-base text-gray-400 dark:text-gray-500">
+            <p className="text-base text-logos-sub">
               現在、登録されているカテゴリはまだありません。
             </p>
           </div>
@@ -63,10 +64,10 @@ export default async function CategoryListPage() {
             {categories.map((parent) => (
               <div
                 key={parent.id}
-                className="bg-white dark:bg-logos-surface rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-colors duration-100"
+                className="bg-logos-surface rounded-xl border border-logos-border overflow-hidden hover:bg-logos-hover transition-colors duration-100"
               >
                 {/* 大分類ヘッダー */}
-                <div className="bg-gray-50 dark:bg-logos-bg border-b border-gray-200 dark:border-gray-800 px-4 sm:px-5 py-4">
+                <div className="bg-logos-hover border-b border-logos-border px-4 sm:px-5 py-4">
                   <Link
                     href={`/categories/${parent.id}`}
                     className="flex items-center group cursor-pointer"
@@ -74,7 +75,7 @@ export default async function CategoryListPage() {
                     <svg
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400 dark:text-gray-500 group-hover:text-indigo-400 mr-3 transition-colors duration-100 shrink-0"
+                      className="h-5 w-5 text-logos-sub group-hover:text-indigo-400 mr-3 transition-colors duration-100 shrink-0"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -86,7 +87,7 @@ export default async function CategoryListPage() {
                         d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
                       />
                     </svg>
-                    <h3 className="font-bold text-xl sm:text-2xl text-gray-900 dark:text-g-text group-hover:text-indigo-400 transition-colors duration-100 line-clamp-1">
+                    <h3 className="font-bold text-xl sm:text-2xl text-logos-text group-hover:text-indigo-400 transition-colors duration-100 line-clamp-1">
                       {parent.name}
                     </h3>
                   </Link>
@@ -100,11 +101,11 @@ export default async function CategoryListPage() {
                         <li key={child.id}>
                           <Link
                             href={`/categories/${child.id}`}
-                            className="flex items-center px-3 py-2.5 sm:py-2 rounded-lg text-lg text-gray-700 dark:text-g-text hover:bg-gray-100 dark:hover:bg-white/[0.04] hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-100 group cursor-pointer"
+                            className="flex items-center px-3 py-2.5 sm:py-2 rounded-lg text-lg text-logos-text hover:bg-logos-hover hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-100 group cursor-pointer"
                           >
                             <svg
                               aria-hidden="true"
-                              className="h-4 w-4 text-gray-300 dark:text-gray-600 group-hover:text-indigo-400 mr-2 transition-colors duration-100 shrink-0"
+                              className="h-4 w-4 text-logos-sub group-hover:text-indigo-400 mr-2 transition-colors duration-100 shrink-0"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -122,7 +123,7 @@ export default async function CategoryListPage() {
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-base text-gray-500 dark:text-gray-500 italic px-3 py-2">
+                    <p className="text-base text-logos-sub italic px-3 py-2">
                       中分類はありません
                     </p>
                   )}
