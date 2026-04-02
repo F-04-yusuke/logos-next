@@ -4,6 +4,7 @@ import { useState, useEffect, useLayoutEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 const PROXY_BASE = "/api/proxy";
 
 // ===== Types =====
@@ -157,7 +158,6 @@ function MatrixPageInner() {
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const tableRef = useRef<HTMLDivElement>(null);
 
   // patterns/rows が変わるたびにテーブル内の全 textarea を自動リサイズ
@@ -168,11 +168,6 @@ function MatrixPageInner() {
       el.style.height = el.scrollHeight + "px";
     });
   }, [patterns, rows]);
-
-  function showToast(message: string, type: "success" | "error") {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  }
 
   // Auth check
   useEffect(() => {
@@ -298,10 +293,10 @@ function MatrixPageInner() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "保存に失敗しました");
-      showToast(data.message, "success");
+      toast.success(data.message);
       if (!editId && data.id) setEditId(data.id);
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "保存に失敗しました", "error");
+      toast.error(e instanceof Error ? e.message : "保存に失敗しました");
     } finally {
       setIsSaving(false);
     }
@@ -311,7 +306,7 @@ function MatrixPageInner() {
 
   async function generateWithAI() {
     if (!theme.trim()) {
-      showToast("テーマを入力してください", "error");
+      toast.error("テーマを入力してください");
       return;
     }
     setIsGenerating(true);
@@ -345,7 +340,7 @@ function MatrixPageInner() {
         );
       }
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "AI自動生成に失敗しました", "error");
+      toast.error(e instanceof Error ? e.message : "AI自動生成に失敗しました");
     } finally {
       setIsGenerating(false);
     }
@@ -397,17 +392,6 @@ function MatrixPageInner() {
   return (
     <div className="py-6">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {toast && (
-          <div
-            role="alert"
-            aria-live="polite"
-            className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg text-sm font-bold text-logos-text ${
-              toast.type === "success" ? "bg-green-600" : "bg-red-600"
-            }`}
-          >
-            {toast.message}
-          </div>
-        )}
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="font-bold text-2xl text-logos-text flex items-center gap-2">

@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 const PROXY_BASE = "/api/proxy";
 
 // ===== Types =====
@@ -191,13 +192,6 @@ function SwotPageInner() {
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
-
-  function showToast(message: string, type: "success" | "error") {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  }
-
   // Auth check
   useEffect(() => {
     if (!isLoading && !user) router.replace("/login");
@@ -302,10 +296,10 @@ function SwotPageInner() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "保存に失敗しました");
-      showToast(data.message, "success");
+      toast.success(data.message);
       if (!editId && data.id) setEditId(data.id);
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "保存に失敗しました", "error");
+      toast.error(e instanceof Error ? e.message : "保存に失敗しました");
     } finally {
       setIsSaving(false);
     }
@@ -315,7 +309,7 @@ function SwotPageInner() {
 
   async function generateWithAI() {
     if (!theme.trim()) {
-      showToast("AIに分析させるテーマ（主題）を入力してください。", "error");
+      toast.error("AIに分析させるテーマ（主題）を入力してください。");
       return;
     }
     setIsGenerating(true);
@@ -345,7 +339,7 @@ function SwotPageInner() {
       if (parsed.box3) setBox3(parsed.box3);
       if (parsed.box4) setBox4(parsed.box4);
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : "AIの分析に失敗しました。もう一度お試しください。", "error");
+      toast.error(e instanceof Error ? e.message : "AIの分析に失敗しました。もう一度お試しください。");
     } finally {
       setIsGenerating(false);
     }
@@ -398,17 +392,6 @@ function SwotPageInner() {
   return (
     <div className="py-6">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {toast && (
-          <div
-            role="alert"
-            aria-live="polite"
-            className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg text-sm font-bold text-logos-text ${
-              toast.type === "success" ? "bg-green-600" : "bg-red-600"
-            }`}
-          >
-            {toast.message}
-          </div>
-        )}
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="font-bold text-2xl text-logos-text flex items-center gap-2">
