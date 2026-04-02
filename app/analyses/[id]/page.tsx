@@ -403,7 +403,7 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
   if (loading) {
     return (
       <div className="py-12 flex justify-center">
-        <p className="text-gray-500 text-base">読み込み中...</p>
+        <p className="text-g-sub text-base">読み込み中...</p>
       </div>
     );
   }
@@ -411,7 +411,7 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
   if (notFound || !analysis) {
     return (
       <div className="py-12 flex flex-col items-center gap-4">
-        <p className="text-gray-400 text-base">分析データが見つかりませんでした。</p>
+        <p className="text-g-sub text-base">分析データが見つかりませんでした。</p>
         <Link href="/" className="text-blue-500 hover:underline text-base">トップへ戻る</Link>
       </div>
     );
@@ -435,7 +435,7 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
             </h2>
             <button
               onClick={handleBack}
-              className="text-base font-bold text-gray-500 hover:text-gray-700 dark:text-g-sub dark:hover:text-gray-200 transition-colors py-1 pl-2 cursor-pointer"
+              className="text-base font-bold text-g-sub hover:text-g-text transition-colors duration-100 py-1 pl-2 cursor-pointer"
             >
               ← 戻る
             </button>
