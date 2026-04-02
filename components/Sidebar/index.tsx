@@ -5,10 +5,9 @@ import Link from "next/link";
 import AppLogo from "@/components/AppLogo";
 import { useSidebar } from "@/context/SidebarContext";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
 import NavLinks from "./NavLinks";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 export default function Sidebar() {
   const { sidebarOpen, setSidebarOpen, bookmarkRefreshKey, openProModal } = useSidebar();
@@ -18,7 +17,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (!user) { setBookmarks([]); return; }
-    fetch(`${API_BASE}/api/user/bookmarks`, { headers: getAuthHeaders() })
+    fetch(`${PROXY_BASE}/user/bookmarks`)
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => setBookmarks(Array.isArray(data) ? data : []))
       .catch(() => {});

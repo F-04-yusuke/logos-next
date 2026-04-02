@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
 import { PostCard, SharedPost } from "@/components/mypage/PostCard";
 import { CommentCard, SharedComment } from "@/components/mypage/CommentCard";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 type Tab = "info" | "comments" | "analysis";
 
@@ -22,9 +21,8 @@ export default function LikesPage() {
   const [fetching, setFetching] = useState(true);
 
   async function handleCommentLike(commentId: number) {
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}/like`, {
+    const res = await fetch(`${PROXY_BASE}/comments/${commentId}/like`, {
       method: "POST",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       const result = await res.json();
@@ -39,9 +37,8 @@ export default function LikesPage() {
   }
 
   async function handlePostLike(postId: number) {
-    const res = await fetch(`${API_BASE}/api/posts/${postId}/like`, {
+    const res = await fetch(`${PROXY_BASE}/posts/${postId}/like`, {
       method: "POST",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       const result = await res.json();
@@ -60,7 +57,7 @@ export default function LikesPage() {
     }
     if (!authLoading && user) {
       setFetching(true);
-      fetch(`${API_BASE}/api/user/likes`, { headers: getAuthHeaders() })
+      fetch(`${PROXY_BASE}/user/likes`)
         .then((res) => (res.ok ? res.json() : Promise.reject()))
         .then((data) => {
           setLikedPosts(Array.isArray(data.posts) ? data.posts : []);

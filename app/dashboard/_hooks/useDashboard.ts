@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
 import { SharedPost } from "@/components/mypage/PostCard";
 import { SharedComment } from "@/components/mypage/CommentCard";
 import { SharedAnalysis } from "@/components/mypage/AnalysisCard";
@@ -27,7 +26,7 @@ export type DashboardData = {
 
 export type Tab = "posts" | "drafts" | "comments" | "analyses" | "topics";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 // ===== Hook =====
 
@@ -64,9 +63,9 @@ export function useDashboard() {
     if (!editingDraft) return;
     setEditSubmitting(true);
     try {
-      const res = await fetch(`${API_BASE}/api/posts/${editingDraft.id}`, {
+      const res = await fetch(`${PROXY_BASE}/posts/${editingDraft.id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           url: editUrl,
           category: editCategory,
@@ -121,7 +120,7 @@ export function useDashboard() {
     }
     if (!authLoading && user) {
       setFetching(true);
-      fetch(`${API_BASE}/api/dashboard`, { headers: getAuthHeaders() })
+      fetch(`${PROXY_BASE}/dashboard`)
         .then((res) => (res.ok ? res.json() : Promise.reject()))
         .then((d: DashboardData) => setData(d))
         .catch(() => {})
@@ -130,9 +129,8 @@ export function useDashboard() {
   }, [authLoading, user]);
 
   async function handlePostLike(postId: number) {
-    const res = await fetch(`${API_BASE}/api/posts/${postId}/like`, {
+    const res = await fetch(`${PROXY_BASE}/posts/${postId}/like`, {
       method: "POST",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       const result = await res.json();
@@ -151,9 +149,8 @@ export function useDashboard() {
   }
 
   async function handlePostDelete(postId: number) {
-    const res = await fetch(`${API_BASE}/api/posts/${postId}`, {
+    const res = await fetch(`${PROXY_BASE}/posts/${postId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       setData((prev) => {
@@ -164,9 +161,9 @@ export function useDashboard() {
   }
 
   async function handlePostSupplement(postId: number, supplement: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/api/posts/${postId}/supplement`, {
+    const res = await fetch(`${PROXY_BASE}/posts/${postId}/supplement`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ supplement }),
     });
     if (!res.ok) {
@@ -186,9 +183,8 @@ export function useDashboard() {
   }
 
   async function handleCommentLike(commentId: number) {
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}/like`, {
+    const res = await fetch(`${PROXY_BASE}/comments/${commentId}/like`, {
       method: "POST",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       const result = await res.json();
@@ -207,9 +203,8 @@ export function useDashboard() {
   }
 
   async function handleCommentDelete(commentId: number) {
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}`, {
+    const res = await fetch(`${PROXY_BASE}/comments/${commentId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       setData((prev) => {
@@ -220,9 +215,9 @@ export function useDashboard() {
   }
 
   async function handleCommentReply(commentId: number, body: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}/reply`, {
+    const res = await fetch(`${PROXY_BASE}/comments/${commentId}/reply`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ body }),
     });
     if (!res.ok) {
@@ -244,9 +239,8 @@ export function useDashboard() {
   }
 
   async function handleReplyDelete(commentId: number, replyId: number) {
-    const res = await fetch(`${API_BASE}/api/comments/${replyId}`, {
+    const res = await fetch(`${PROXY_BASE}/comments/${replyId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       setData((prev) => {
@@ -265,9 +259,8 @@ export function useDashboard() {
 
   async function deleteDraft(postId: number) {
     if (!window.confirm("下書きを削除しますか？")) return;
-    const res = await fetch(`${API_BASE}/api/posts/${postId}`, {
+    const res = await fetch(`${PROXY_BASE}/posts/${postId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     if (res.ok && data) {
       setData({
@@ -280,9 +273,8 @@ export function useDashboard() {
 
   async function deleteAnalysis(analysisId: number) {
     if (!window.confirm("この分析・図解を削除しますか？")) return;
-    const res = await fetch(`${API_BASE}/api/analyses/${analysisId}`, {
+    const res = await fetch(`${PROXY_BASE}/analyses/${analysisId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     if (res.ok && data) {
       setData({ ...data, analyses: data.analyses.filter((a) => a.id !== analysisId) });
@@ -291,9 +283,8 @@ export function useDashboard() {
 
   async function deleteTopic(topicId: number) {
     if (!window.confirm("本当に削除しますか？")) return;
-    const res = await fetch(`${API_BASE}/api/topics/${topicId}`, {
+    const res = await fetch(`${PROXY_BASE}/topics/${topicId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     if (res.ok && data) {
       setData({ ...data, topics: data.topics.filter((t) => t.id !== topicId) });

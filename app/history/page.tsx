@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
 
 type HistoryTopic = {
   id: number;
@@ -19,7 +18,7 @@ type HistoryResponse = {
   last_page: number;
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 const DAY_NAMES = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
 
@@ -57,7 +56,7 @@ export default function HistoryPage() {
 
   function fetchHistory(page: number) {
     setFetching(true);
-    fetch(`${API_BASE}/api/history?page=${page}`, { headers: getAuthHeaders() })
+    fetch(`${PROXY_BASE}/history?page=${page}`)
       .then((res) => (res.ok ? res.json() : Promise.reject()))
       .then((data: HistoryResponse) => {
         setTopics(data.data);

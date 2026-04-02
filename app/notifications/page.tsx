@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useSWR from "swr";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
 import { buildAvatarUrl } from "@/lib/transforms";
 
 type NotificationItem = {
@@ -18,7 +17,7 @@ type NotificationItem = {
   actor: { id: number; name: string; avatar?: string | null } | null;
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 type NotificationsResponse = {
   data: NotificationItem[];
@@ -89,9 +88,9 @@ export default function NotificationsPage() {
   const [readingAll, setReadingAll] = useState(false);
 
   const { data: notifData, isLoading: fetching, mutate } = useSWR(
-    user ? `${API_BASE}/api/notifications?page=${currentPage}` : null,
+    user ? `${PROXY_BASE}/notifications?page=${currentPage}` : null,
     async (url) => {
-      const res = await fetch(url, { headers: getAuthHeaders() });
+      const res = await fetch(url);
       if (!res.ok) throw new Error();
       return res.json() as Promise<NotificationsResponse>;
     },
@@ -111,10 +110,7 @@ export default function NotificationsPage() {
   async function handleReadAll() {
     setReadingAll(true);
     try {
-      await fetch(`${API_BASE}/api/notifications/read-all`, {
-        method: "PATCH",
-        headers: getAuthHeaders(),
-      });
+      await fetch(`${PROXY_BASE}/notifications/read-all`, { method: "PATCH" });
       mutate(
         (prev) =>
           prev
@@ -129,10 +125,7 @@ export default function NotificationsPage() {
 
   async function handleClick(notification: NotificationItem) {
     if (notification.is_unread) {
-      await fetch(`${API_BASE}/api/notifications/${notification.id}/read`, {
-        method: "PATCH",
-        headers: getAuthHeaders(),
-      });
+      await fetch(`${PROXY_BASE}/notifications/${notification.id}/read`, { method: "PATCH" });
       mutate(
         (prev) => {
           if (!prev) return prev;
