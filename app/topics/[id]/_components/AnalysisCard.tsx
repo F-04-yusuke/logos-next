@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { TopicAnalysis } from "../_types";
 import { API_BASE, timeAgo } from "../_helpers";
@@ -226,10 +227,14 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     const imagePath = analysis.data.image_path;
     return imagePath ? (
       <div className="bg-white dark:bg-logos-surface p-4 shadow-sm rounded-xl border border-gray-200 dark:border-logos-border flex justify-center">
-        <img
+        <Image
           src={`${API_BASE}/storage/${imagePath}`}
           alt={analysis.title}
+          width={0}
+          height={0}
+          sizes="(max-width: 768px) 100vw, 700px"
           className="max-w-full object-contain rounded border border-gray-200 dark:border-logos-border shadow-sm"
+          style={{ width: "100%", height: "auto" }}
         />
       </div>
     ) : null;
@@ -324,7 +329,9 @@ export function AnalysisCard({
       <div className="flex items-center gap-3 cursor-pointer">
         <div className="shrink-0 mt-0.5">
           {avatarSrc ? (
-            <img className="h-8 w-8 rounded-full object-cover border border-gray-200 dark:border-logos-border" src={avatarSrc} alt={analysis.user.name} />
+            <div className="h-8 w-8 rounded-full overflow-hidden border border-gray-200 dark:border-logos-border relative">
+              <Image src={avatarSrc} alt={analysis.user.name} fill className="object-cover" />
+            </div>
           ) : (
             <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-logos-border">
               <svg aria-hidden="true" className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">

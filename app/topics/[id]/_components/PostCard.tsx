@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import type { Post } from "../_types";
 import { timeAgo } from "../_helpers";
 import { UserAvatar } from "./UserAvatar";
@@ -73,10 +74,14 @@ export function PostCard({
           className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
           onClick={() => setLightboxOpen(false)}
         >
-          <img
+          <Image
             src={`${API_BASE}/storage/${post.custom_thumbnail}`}
             alt="添付画像"
-            className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
+            width={0}
+            height={0}
+            sizes="90vw"
+            className="object-contain rounded-lg"
+            style={{ width: "auto", height: "auto", maxWidth: "90vw", maxHeight: "90vh" }}
             onClick={(e) => e.stopPropagation()}
           />
         </div>
@@ -99,11 +104,12 @@ export function PostCard({
                 onClick={() => setLightboxOpen(true)}
                 className="block w-full group relative mb-2"
               >
-                <div className="w-full aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
-                  <img
+                <div className="w-full aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 relative">
+                  <Image
                     src={`${API_BASE}/storage/${post.custom_thumbnail}`}
                     alt="添付画像"
-                    className="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-200"
+                    fill
+                    className="object-cover group-hover:opacity-90 transition-opacity duration-200"
                   />
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { RefObject } from "react";
 import { buildAvatarUrl } from "@/lib/transforms";
@@ -26,11 +27,9 @@ export function Avatar({
   const avatarSrc = buildAvatarUrl(avatar);
   if (avatarSrc) {
     return (
-      <img
-        className={`${size} rounded-full object-cover border border-logos-border`}
-        src={avatarSrc}
-        alt={name ? `${name}のアイコン` : "アイコン"}
-      />
+      <div className={`${size} rounded-full overflow-hidden border border-logos-border relative`}>
+        <Image src={avatarSrc} alt={name ? `${name}のアイコン` : "アイコン"} fill className="object-cover" />
+      </div>
     );
   }
   return (

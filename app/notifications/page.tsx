@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useSWR from "swr";
@@ -221,11 +222,9 @@ export default function NotificationsPage() {
                   {notification.actor ? (() => {
                     const actorAvatarSrc = buildAvatarUrl(notification.actor.avatar);
                     return actorAvatarSrc ? (
-                      <img
-                        src={actorAvatarSrc}
-                        alt={`${notification.actor.name}のアイコン`}
-                        className="h-9 w-9 rounded-full object-cover border border-logos-border"
-                      />
+                      <div className="h-9 w-9 rounded-full overflow-hidden border border-logos-border relative">
+                        <Image src={actorAvatarSrc} alt={`${notification.actor.name}のアイコン`} fill className="object-cover" />
+                      </div>
                     ) : (
                       <div className="h-9 w-9 rounded-full bg-logos-hover flex items-center justify-center border border-logos-border">
                         <svg

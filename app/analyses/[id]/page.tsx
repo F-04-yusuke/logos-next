@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? ""; // storage URL 用
 const PROXY_BASE = "/api/proxy";
@@ -337,10 +338,14 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
     const imagePath = d.image_path as string | undefined;
     return imagePath ? (
       <div className="bg-white dark:bg-logos-surface p-4 sm:p-6 shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border flex justify-center">
-        <img
+        <Image
           src={`${API_BASE}/storage/${imagePath}`}
           alt={analysis.title}
+          width={0}
+          height={0}
+          sizes="(max-width: 768px) 100vw, 700px"
           className="max-w-full object-contain rounded border border-gray-200 dark:border-logos-border shadow-sm"
+          style={{ width: "100%", height: "auto" }}
         />
       </div>
     ) : null;
