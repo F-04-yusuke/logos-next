@@ -86,7 +86,7 @@ export default function Header() {
                 {/* 通知ベル（PC） */}
                 <NotificationBell
                   unreadCount={unreadCount}
-                  linkClassName="relative p-2 rounded-full text-gray-400 hover:bg-gray-800 transition-colors"
+                  linkClassName="relative p-2 rounded-full text-logos-sub hover:text-logos-text hover:bg-logos-hover focus:outline-none transition"
                   iconClassName="h-6 w-6"
                 />
 
