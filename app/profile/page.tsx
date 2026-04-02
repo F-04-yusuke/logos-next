@@ -95,8 +95,11 @@ function ProfileInfoSection({ profile, onSaved }: {
   return (
     <section>
       <header>
-        <h2 className="text-base font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">プロフィール情報</h2>
-        <p className="mt-1 text-base text-gray-600 dark:text-g-sub">
+        <h2 className="text-base sm:text-lg font-bold text-logos-text flex items-center gap-2">
+          <span className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
+          プロフィール情報
+        </h2>
+        <p className="mt-1 text-base text-logos-sub">
           プロフィール画像、アカウント名、メールアドレスを更新できます。
         </p>
       </header>
@@ -109,18 +112,18 @@ function ProfileInfoSection({ profile, onSaved }: {
               <img
                 src={previewSrc}
                 alt="Avatar"
-                className="h-16 w-16 object-cover rounded-full border border-gray-200 dark:border-logos-border"
+                className="h-16 w-16 object-cover rounded-full border border-logos-border"
               />
             ) : (
-              <div className="h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-logos-border">
-                <svg aria-hidden="true" className="h-8 w-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+              <div className="h-16 w-16 rounded-full bg-logos-hover flex items-center justify-center border border-logos-border">
+                <svg aria-hidden="true" className="h-8 w-8 text-logos-sub" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </div>
             )}
           </div>
           <div className="flex-1">
-            <label htmlFor="avatar" className="block text-lg font-bold text-gray-700 dark:text-g-text mb-1">
+            <label htmlFor="avatar" className="block text-base font-bold text-logos-text mb-1">
               プロフィール画像
             </label>
             <input
@@ -129,7 +132,7 @@ function ProfileInfoSection({ profile, onSaved }: {
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="block w-full text-sm text-gray-500 dark:text-g-sub file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900/30 dark:file:text-blue-400 transition-colors cursor-pointer"
+              className="block w-full text-sm text-logos-sub file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900/30 dark:file:text-blue-400 transition-colors cursor-pointer"
             />
             {errors.avatar && <p className="mt-1 text-xs text-red-500">{errors.avatar[0]}</p>}
           </div>
@@ -137,7 +140,7 @@ function ProfileInfoSection({ profile, onSaved }: {
 
         {/* アカウント名 */}
         <div>
-          <label htmlFor="name" className="block text-lg font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="name" className="block text-base font-bold text-logos-text mb-1">
             アカウント名
           </label>
           <input
@@ -148,8 +151,8 @@ function ProfileInfoSection({ profile, onSaved }: {
             disabled={!canChangeName}
             required
             autoComplete="name"
-            className={`mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
-              !canChangeName ? "opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800" : ""
+            className={`block w-full rounded-lg border border-logos-border bg-logos-surface text-logos-text focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none px-3 py-2 text-base ${
+              !canChangeName ? "opacity-50 cursor-not-allowed bg-logos-hover" : ""
             }`}
           />
           {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name[0]}</p>}
@@ -158,7 +161,7 @@ function ProfileInfoSection({ profile, onSaved }: {
               ※アカウント名は前回の変更から7日間変更できません。（残り約{daysLeft}日）
             </p>
           ) : (
-            <p className="mt-2 text-xs text-gray-500 dark:text-g-sub">
+            <p className="mt-2 text-xs text-logos-sub">
               ※一度変更すると、その後7日間は再変更できなくなります。
             </p>
           )}
@@ -166,7 +169,7 @@ function ProfileInfoSection({ profile, onSaved }: {
 
         {/* メール */}
         <div>
-          <label htmlFor="email" className="block text-lg font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="email" className="block text-base font-bold text-logos-text mb-1">
             Email（ログイン用）
           </label>
           <input
@@ -176,7 +179,7 @@ function ProfileInfoSection({ profile, onSaved }: {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="username"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="block w-full rounded-lg border border-logos-border bg-logos-surface text-logos-text focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none px-3 py-2 text-base"
           />
           {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email[0]}</p>}
         </div>
@@ -187,12 +190,12 @@ function ProfileInfoSection({ profile, onSaved }: {
           <button
             type="submit"
             disabled={saving}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors duration-100 shadow-sm cursor-pointer"
+            className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold py-2 px-6 rounded-full text-base shadow-sm hover:shadow-indigo-500/25 hover:shadow-md transition-all disabled:opacity-50 cursor-pointer"
           >
             {saving ? "保存中..." : "保存する"}
           </button>
           {success && (
-            <p className="text-sm text-gray-600 dark:text-g-sub font-bold animate-fade-in">
+            <p className="text-sm text-logos-sub font-bold animate-fade-in">
               保存しました。
             </p>
           )}
@@ -248,15 +251,18 @@ function PasswordSection() {
   return (
     <section>
       <header>
-        <h2 className="text-base font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">パスワードの更新</h2>
-        <p className="mt-1 text-base text-gray-600 dark:text-g-sub">
+        <h2 className="text-base sm:text-lg font-bold text-logos-text flex items-center gap-2">
+          <span className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
+          パスワードの更新
+        </h2>
+        <p className="mt-1 text-base text-logos-sub">
           アカウントのセキュリティを保つため、長くランダムなパスワードを使用してください。
         </p>
       </header>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-6">
         <div>
-          <label htmlFor="current_password" className="block text-lg font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="current_password" className="block text-base font-bold text-logos-text mb-1">
             現在のパスワード
           </label>
           <input
@@ -266,13 +272,13 @@ function PasswordSection() {
             onChange={(e) => setCurrentPassword(e.target.value)}
             required
             autoComplete="current-password"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="block w-full rounded-lg border border-logos-border bg-logos-surface text-logos-text focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none px-3 py-2 text-base"
           />
           {errors.current_password && <p className="mt-1 text-xs text-red-500">{errors.current_password[0]}</p>}
         </div>
 
         <div>
-          <label htmlFor="new_password" className="block text-lg font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="new_password" className="block text-base font-bold text-logos-text mb-1">
             新しいパスワード
           </label>
           <input
@@ -282,13 +288,13 @@ function PasswordSection() {
             onChange={(e) => setPassword(e.target.value)}
             required
             autoComplete="new-password"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="block w-full rounded-lg border border-logos-border bg-logos-surface text-logos-text focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none px-3 py-2 text-base"
           />
           {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password[0]}</p>}
         </div>
 
         <div>
-          <label htmlFor="password_confirmation" className="block text-lg font-bold text-gray-700 dark:text-g-text">
+          <label htmlFor="password_confirmation" className="block text-base font-bold text-logos-text mb-1">
             新しいパスワード（確認用）
           </label>
           <input
@@ -298,7 +304,7 @@ function PasswordSection() {
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             required
             autoComplete="new-password"
-            className="mt-1 block w-full rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="block w-full rounded-lg border border-logos-border bg-logos-surface text-logos-text focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none px-3 py-2 text-base"
           />
           {errors.password_confirmation && <p className="mt-1 text-xs text-red-500">{errors.password_confirmation[0]}</p>}
         </div>
@@ -309,12 +315,12 @@ function PasswordSection() {
           <button
             type="submit"
             disabled={saving}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors duration-100 shadow-sm cursor-pointer"
+            className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold py-2 px-6 rounded-full text-base shadow-sm hover:shadow-indigo-500/25 hover:shadow-md transition-all disabled:opacity-50 cursor-pointer"
           >
             {saving ? "更新中..." : "保存する"}
           </button>
           {success && (
-            <p className="text-sm text-gray-600 dark:text-g-sub font-bold">保存しました。</p>
+            <p className="text-sm text-logos-sub font-bold">保存しました。</p>
           )}
         </div>
       </form>
@@ -360,8 +366,11 @@ function DeleteAccountSection() {
   return (
     <section className="space-y-6">
       <header>
-        <h2 className="text-base font-bold dark:text-g-text pl-2 border-l-2 border-gray-700">アカウントの削除</h2>
-        <p className="mt-1 text-base text-gray-600 dark:text-g-sub leading-relaxed">
+        <h2 className="text-base sm:text-lg font-bold text-logos-text flex items-center gap-2">
+          <span className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-red-400 to-red-600 flex-shrink-0" aria-hidden="true" />
+          アカウントの削除
+        </h2>
+        <p className="mt-1 text-base text-logos-sub leading-relaxed">
           アカウントを削除すると、すべてのリソースとデータが完全に削除されます。<br />
           アカウントを削除する前に、保持しておきたいデータや情報をダウンロードしてください。
         </p>
@@ -370,7 +379,7 @@ function DeleteAccountSection() {
       <button
         type="button"
         onClick={() => setShowModal(true)}
-        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors duration-100 shadow-sm cursor-pointer"
+        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full text-base transition-colors shadow-sm cursor-pointer"
       >
         アカウントを削除
       </button>
@@ -381,12 +390,12 @@ function DeleteAccountSection() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           onClick={(e) => { if (e.target === e.currentTarget) setShowModal(false); }}
         >
-          <div className="bg-white dark:bg-logos-surface rounded-xl shadow-xl w-full max-w-md mx-4">
+          <div className="bg-logos-surface rounded-xl shadow-xl w-full max-w-md mx-4">
             <form onSubmit={handleDelete} className="p-6">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-g-text">
+              <h2 className="text-lg font-bold text-logos-text">
                 本当にアカウントを削除しますか？
               </h2>
-              <p className="mt-1 text-base text-gray-600 dark:text-g-sub leading-relaxed">
+              <p className="mt-1 text-base text-logos-sub leading-relaxed">
                 アカウントを削除すると、すべてのリソースとデータが完全に削除されます。<br />
                 アカウントを完全に削除することを確認するため、パスワードを入力してください。
               </p>
@@ -400,24 +409,24 @@ function DeleteAccountSection() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="パスワード"
                   required
-                  className="mt-1 block w-full sm:w-3/4 rounded-md border border-gray-300 dark:border-logos-border bg-white dark:bg-logos-bg text-gray-900 dark:text-white px-3 py-2 text-lg shadow-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                  className="block w-full sm:w-3/4 rounded-lg border border-logos-border bg-logos-surface text-logos-text focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none px-3 py-2 text-base"
                 />
                 {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password[0]}</p>}
                 {errors._ && <p className="mt-1 text-xs text-red-500">{errors._[0]}</p>}
               </div>
 
-              <div className="mt-6 flex justify-end gap-3 border-t border-gray-200 dark:border-logos-border pt-4">
+              <div className="mt-6 flex justify-end gap-3 border-t border-logos-border pt-4">
                 <button
                   type="button"
                   onClick={() => { setShowModal(false); setPassword(""); setErrors({}); }}
-                  className="text-gray-600 dark:text-g-sub hover:text-gray-900 dark:hover:text-gray-200 font-bold py-2 px-4 rounded-md text-sm transition-colors duration-100 cursor-pointer"
+                  className="text-logos-sub hover:text-logos-text font-bold py-2 px-4 rounded-full text-sm transition-colors cursor-pointer"
                 >
                   キャンセル
                 </button>
                 <button
                   type="submit"
                   disabled={deleting}
-                  className="bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-md text-sm transition-colors duration-100 shadow-sm cursor-pointer"
+                  className="bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-full text-sm transition-colors shadow-sm cursor-pointer"
                 >
                   {deleting ? "削除中..." : "完全に削除する"}
                 </button>
@@ -481,23 +490,24 @@ export default function ProfilePage() {
     <div className="py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
-        <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
+        <h1 className="text-2xl font-bold text-logos-text flex items-center gap-2.5">
+          <span className="inline-block w-1 h-6 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
           プロフィール
         </h1>
 
-        <div className="p-4 sm:p-8 bg-white dark:bg-logos-surface shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border">
+        <div className="p-4 sm:p-8 bg-logos-surface shadow-sm sm:rounded-xl border border-logos-border">
           <div className="max-w-xl">
             <ProfileInfoSection profile={profile} onSaved={handleProfileSaved} />
           </div>
         </div>
 
-        <div className="p-4 sm:p-8 bg-white dark:bg-logos-surface shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border">
+        <div className="p-4 sm:p-8 bg-logos-surface shadow-sm sm:rounded-xl border border-logos-border">
           <div className="max-w-xl">
             <PasswordSection />
           </div>
         </div>
 
-        <div className="p-4 sm:p-8 bg-white dark:bg-logos-surface shadow-sm sm:rounded-xl border border-gray-200 dark:border-logos-border">
+        <div className="p-4 sm:p-8 bg-logos-surface shadow-sm sm:rounded-xl border border-logos-border">
           <div className="max-w-xl">
             <DeleteAccountSection />
           </div>
