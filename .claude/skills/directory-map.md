@@ -118,7 +118,7 @@ logos-next/
 │   └── ui/
 │       └── button.tsx                   # shadcn/ui コンポーネント
 ├── context/
-│   ├── AuthContext.tsx                  # 認証コンテキスト（Sanctumトークン・useSWR・useAuthフック・unread_notifications_count）
+│   ├── AuthContext.tsx                  # 認証コンテキスト（httpOnly Cookie + SWR + /api/auth/me・useAuthフック・unread_notifications_count）
 │   └── SidebarContext.tsx               # サイドバー開閉・bookmarkRefreshKey・openProModal を管理
 ├── lib/
 │   ├── auth.ts                          # httpOnly Cookie 移行済みコメントのみ（Phase 5 Step 1・スタブ削除済み）
@@ -133,19 +133,21 @@ logos-next/
 │   ├── settings.local.json
 │   └── skills/                          # 詳細仕様ファイル群
 │       ├── api-spec.md                  # API仕様・認証・boolean注意・型定義
-│       ├── design-spec.md               # デザイン・カラー・a11y・Blade参照表（全ページ）
+│       ├── design-spec.md               # デザインシステム全定義（Session 49 大幅改修・セマンティックカラー・没デザイン記録含む）
 │       ├── directory-map.md             # このファイル
 │       ├── deploy-config.md             # Vercel設定・環境変数ルール・CSR/SSR障害記録
 │       ├── progress-roadmap.md          # プロジェクト理念・フェーズ定義・全ロードマップ・Gitタグ履歴
 │       ├── progress-phase1.md           # Phase 1 完了記録（Laravel Blade版MVP）
 │       ├── progress-phase2.md           # Phase 2 完了記録（Next.js移行・Step1〜14）
 │       ├── progress-phase3.md           # Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）
-│       ├── progress-phase4.md           # Phase 4 完了記録（UI/UX改善・Session 12〜48 概要）
+│       ├── progress-phase4.md           # Phase 4 完了記録（Session 12〜48 overview/index）
+│       ├── progress-phase4-s12-s19.md   # Phase 4 記録（Session 12〜19・早期UI改善）
+│       ├── progress-phase4-s20-s31.md   # Phase 4 記録（Session 20〜31・UI基準確立・共通コンポーネント化）
+│       ├── progress-phase4-s32-s41.md   # Phase 4 記録（Session 32〜41・テキストサイズ・分析UI・スマホ対応）
 │       ├── progress-phase4-s42-s48.md   # Phase 4 記録（Session 42〜48・ライトモード・デザインシステム全適用）
 │       ├── progress-phase5.md           # Phase 5 進行中記録（Session 50〜）
-│       ├── handoff-session49.md         # Session 49 引継ぎ（アーカイブ）
-│       ├── handoff-session50.md         # Session 50 引継ぎ（アーカイブ）
-│       └── handoff-session51.md         # 最新引継ぎプロンプト（Session 51用）
+│       ├── handoff-session51.md         # 最新引継ぎプロンプト（Session 51用）
+│       └── handoff-archive/             # 過去セッション引継ぎ（Session 49・50）
 ├── next.config.ts
 ├── package.json                         # swr@^2.4.1 など依存関係
 ├── tailwind.config.ts
