@@ -4,9 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 // ===== Types =====
 
@@ -212,7 +210,7 @@ function SwotPageInner() {
     const id = parseInt(editParam);
     if (isNaN(id)) return;
 
-    fetch(`${API_BASE}/api/analyses/${id}`, { headers: getAuthHeaders() })
+    fetch(`${PROXY_BASE}/analyses/${id}`, )
       .then((r) => r.json())
       .then((data) => {
         if (data.type !== "swot") return;
@@ -296,10 +294,10 @@ function SwotPageInner() {
       : `${framework}分析 (${new Date().toLocaleDateString()})`;
 
     try {
-      const url = editId ? `${API_BASE}/api/analyses/${editId}` : `${API_BASE}/api/analyses`;
+      const url = editId ? `${PROXY_BASE}/analyses/${editId}` : `${PROXY_BASE}/analyses`;
       const res = await fetch(url, {
         method: editId ? "PUT" : "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, type: "swot", data: payloadData }),
       });
       const data = await res.json();
@@ -332,9 +330,9 @@ function SwotPageInner() {
         : `テーマ: 「${theme}」\nこのテーマについてSWOT分析を行ってください。\n出力は必ず以下のJSON形式のみとし、他のテキストは一切含めないでください。\n{"box1":["強み1","強み2"],"box2":["弱み1","弱み2"],"box3":["機会1","機会2"],"box4":["脅威1","脅威2"]}`;
 
     try {
-      const res = await fetch(`${API_BASE}/api/tools/ai-assist`, {
+      const res = await fetch(`${PROXY_BASE}/tools/ai-assist`, {
         method: "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: promptText, context: "JSONのみ出力" }),
       });
       const data = await res.json();
@@ -378,9 +376,9 @@ function SwotPageInner() {
     const contextText = `【現在の${framework}分析データ】\n` + JSON.stringify(swotData, null, 2);
 
     try {
-      const res = await fetch(`${API_BASE}/api/tools/ai-assist`, {
+      const res = await fetch(`${PROXY_BASE}/tools/ai-assist`, {
         method: "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: text, context: contextText }),
       });
       const data = await res.json();

@@ -4,9 +4,7 @@ import { useState, useEffect, useLayoutEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 // ===== Types =====
 
@@ -188,7 +186,7 @@ function MatrixPageInner() {
     const id = parseInt(editParam);
     if (isNaN(id)) return;
 
-    fetch(`${API_BASE}/api/analyses/${id}`, { headers: getAuthHeaders() })
+    fetch(`${PROXY_BASE}/analyses/${id}`, )
       .then((r) => r.json())
       .then((data) => {
         if (data.type !== "matrix") return;
@@ -292,10 +290,10 @@ function MatrixPageInner() {
       : `総合評価表 (${new Date().toLocaleDateString()})`;
 
     try {
-      const url = editId ? `${API_BASE}/api/analyses/${editId}` : `${API_BASE}/api/analyses`;
+      const url = editId ? `${PROXY_BASE}/analyses/${editId}` : `${PROXY_BASE}/analyses`;
       const res = await fetch(url, {
         method: editId ? "PUT" : "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, type: "matrix", data: payloadData }),
       });
       const data = await res.json();
@@ -324,9 +322,9 @@ function MatrixPageInner() {
 {"patterns":[{"title":"パターン名","description":"概要"}],"items":[{"itemTitle":"評価項目名","evaluations":[{"score":3,"reason":"理由"}]}]}`;
 
     try {
-      const res = await fetch(`${API_BASE}/api/tools/ai-assist`, {
+      const res = await fetch(`${PROXY_BASE}/tools/ai-assist`, {
         method: "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt, context: "JSONのみ出力" }),
       });
       const data = await res.json();
@@ -372,9 +370,9 @@ function MatrixPageInner() {
       JSON.stringify({ theme, patterns, items: rows }, null, 2);
 
     try {
-      const res = await fetch(`${API_BASE}/api/tools/ai-assist`, {
+      const res = await fetch(`${PROXY_BASE}/tools/ai-assist`, {
         method: "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: text, context: contextText }),
       });
       const data = await res.json();

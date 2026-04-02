@@ -4,9 +4,7 @@ import { useState, useEffect, useLayoutEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 // ===== Types =====
 
@@ -368,7 +366,7 @@ function TreePageInner() {
     const id = parseInt(editParam);
     if (isNaN(id)) return;
 
-    fetch(`${API_BASE}/api/analyses/${id}`, { headers: getAuthHeaders() })
+    fetch(`${PROXY_BASE}/analyses/${id}`, )
       .then((r) => r.json())
       .then((data) => {
         if (data.type !== "tree") return;
@@ -421,10 +419,10 @@ function TreePageInner() {
       : `ロジックツリー (${new Date().toLocaleDateString()})`;
 
     try {
-      const url = editId ? `${API_BASE}/api/analyses/${editId}` : `${API_BASE}/api/analyses`;
+      const url = editId ? `${PROXY_BASE}/analyses/${editId}` : `${PROXY_BASE}/analyses`;
       const res = await fetch(url, {
         method: editId ? "PUT" : "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, type: "tree", data: payloadData }),
       });
       const data = await res.json();
@@ -452,9 +450,9 @@ function TreePageInner() {
 [{"speaker":"自分 (自)","stance":"主張","text":"テーマに対するメインの主張","children":[{"speaker":"ユーザーA","stance":"反論","text":"反論","children":[]}]}]`;
 
     try {
-      const res = await fetch(`${API_BASE}/api/tools/ai-assist`, {
+      const res = await fetch(`${PROXY_BASE}/tools/ai-assist`, {
         method: "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt, context: "JSON配列のみ出力" }),
       });
       const data = await res.json();
@@ -490,9 +488,9 @@ function TreePageInner() {
     const promptText = (aiTarget !== "指定なし" ? `対象: 【${aiTarget}】\n` : "") + text;
 
     try {
-      const res = await fetch(`${API_BASE}/api/tools/ai-assist`, {
+      const res = await fetch(`${PROXY_BASE}/tools/ai-assist`, {
         method: "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: promptText, context: contextText }),
       });
       const data = await res.json();
