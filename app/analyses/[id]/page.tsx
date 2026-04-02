@@ -243,11 +243,11 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
         <table className="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr>
-              <th className="p-3 border-b border-r border-gray-200 dark:border-logos-border w-48 bg-gray-50 dark:bg-logos-surface align-bottom text-xs font-bold text-gray-500 dark:text-g-sub">
+              <th className="p-3 border-b border-r border-logos-border w-48 bg-logos-hover align-bottom text-xs font-bold text-g-sub">
                 評価項目 ＼ 比較パターン
               </th>
               {patterns.map((p, i) => (
-                <th key={i} className="p-4 border-b border-r border-gray-200 dark:border-logos-border w-64 bg-gray-50 dark:bg-logos-surface align-top">
+                <th key={i} className="p-4 border-b border-r border-logos-border w-64 bg-logos-hover align-top">
                   <div className="font-bold text-blue-600 dark:text-blue-400 mb-1 text-lg">{p.title}</div>
                   <p className="text-sm text-gray-600 dark:text-g-sub whitespace-pre-wrap font-normal">{p.description}</p>
                 </th>
@@ -259,7 +259,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               const evals = item.evaluations ?? item.scores ?? [];
               return (
                 <tr key={ri}>
-                  <td className="p-3 border-b border-r border-gray-200 dark:border-logos-border bg-gray-50 dark:bg-logos-surface font-bold text-base text-gray-900 dark:text-g-text">
+                  <td className="p-3 border-b border-r border-logos-border bg-logos-hover font-bold text-base text-g-text">
                     {item.itemTitle}
                   </td>
                   {patterns.map((_, ci) => {
@@ -267,7 +267,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
                     const val = e?.score !== undefined && e?.score !== null ? Number(e.score) : -1;
                     const style = scoreStyle(val);
                     return (
-                      <td key={ci} className="p-3 border-b border-r border-gray-200 dark:border-logos-border bg-white dark:bg-logos-surface align-top">
+                      <td key={ci} className="p-3 border-b border-r border-logos-border bg-logos-surface align-top">
                         {style && <span className={`inline-block px-2 py-0.5 text-[10px] font-bold rounded border mb-2 ${style.cls}`}>{style.text}</span>}
                         <p className="text-sm text-gray-800 dark:text-g-text whitespace-pre-wrap">{e?.reason ?? ""}</p>
                       </td>
@@ -277,13 +277,13 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
               );
             })}
           </tbody>
-          <tfoot className="bg-gray-50 dark:bg-logos-surface">
+          <tfoot className="bg-logos-hover">
             <tr>
-              <td className="p-3 border-r border-gray-200 dark:border-logos-border text-right text-xs font-bold text-gray-500 dark:text-g-sub">総合評価</td>
+              <td className="p-3 border-r border-logos-border text-right text-xs font-bold text-g-sub">総合評価</td>
               {totals.map((total, i) => {
                 const isMax = isCalculated[i] && total === maxTotal;
                 return (
-                  <td key={i} className={`p-3 border-r border-gray-200 dark:border-logos-border text-center${isMax ? " ring-2 ring-inset ring-blue-500" : ""}`}>
+                  <td key={i} className={`p-3 border-r border-logos-border text-center${isMax ? " ring-2 ring-inset ring-blue-500" : ""}`}>
                     {isCalculated[i]
                       ? <><span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{total}</span><span className="text-xs text-gray-500 ml-1">pt</span></>
                       : <span className="text-sm text-gray-400">未評価</span>
@@ -314,7 +314,7 @@ function AnalysisContent({ analysis }: { analysis: Analysis }) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {boxes.map((box, i) => (
-          <div key={i} className={`bg-white ${box.bg} dark:bg-logos-surface border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
+          <div key={i} className={`bg-logos-surface ${box.bg} border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-logos-border`}>
             <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-logos-border pb-2 flex items-center`}>
               <span className="text-2xl mr-2" aria-hidden="true">{box.label[0]}</span>
               {box.label.slice(1)}

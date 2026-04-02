@@ -249,7 +249,7 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {boxes.map((box, i) => (
-          <div key={i} className={`bg-white ${box.bg} dark:bg-logos-surface border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-gray-200`}>
+          <div key={i} className={`bg-logos-surface ${box.bg} border-t-4 ${box.border} rounded-lg p-5 shadow-sm border-x border-b dark:border-transparent border-logos-border`}>
             <h2 className={`text-lg font-bold ${box.title} mb-3 border-b border-gray-200 dark:border-logos-border pb-2 flex items-center`}>
               <span className="text-2xl mr-2" aria-hidden="true">{box.label[0]}</span>
               {box.label.slice(1)}
