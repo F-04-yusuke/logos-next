@@ -60,6 +60,17 @@
 | `app/topics/[id]/hooks/useTopicPage.ts` | PROXY_BASE 移行（SWR キー変更） |
 | `app/topics/[id]/_components/AnalysisModal.tsx` | PROXY_BASE 移行 |
 
+**React Hook Form + Zod 導入:**
+
+| ファイル | スキーマ | 変更内容 |
+|---|---|---|
+| `app/login/page.tsx` | `loginSchema`（email・password） | useState+手動バリデーション → RHF+Zod にリライト |
+| `app/register/page.tsx` | `registerSchema`（name・email・password・password_confirmation） | 同上 |
+
+- `npm install react-hook-form zod @hookform/resolvers` 導入済み
+- エラーメッセージは `errors.field?.message` で一元管理
+- submit 時のみ Laravel API エラーを `setError("root")` でフォームに反映
+
 **変更しなかったファイル（意図的）:**
 - `app/topics/[id]/_components/PostCard.tsx` — API_BASE は /storage/... のみ（公開アセット URL）
 - `lib/transforms.ts` — NEXT_PUBLIC_API_BASE_URL は /storage/... のみ（公開アセット URL）
