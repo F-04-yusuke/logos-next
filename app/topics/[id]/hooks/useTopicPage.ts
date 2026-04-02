@@ -3,13 +3,12 @@ import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/context/SidebarContext";
-import { getAuthHeaders } from "@/lib/auth";
 import { transformTopic } from "@/lib/transforms";
 import type { TopicDetail } from "../_types";
-import { API_BASE } from "../_helpers";
+import { PROXY_BASE } from "../_helpers";
 
 async function topicFetcher(url: string): Promise<TopicDetail> {
-  const res = await fetch(url, { headers: getAuthHeaders() });
+  const res = await fetch(url);
   if (!res.ok) throw new Error();
   return transformTopic(await res.json()) as TopicDetail;
 }
@@ -31,7 +30,7 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     isLoading: loading,
     error: topicError,
     mutate: mutateTopic,
-  } = useSWR(`${API_BASE}/api/topics/${id}`, topicFetcher, {
+  } = useSWR(`${PROXY_BASE}/topics/${id}`, topicFetcher, {
     fallbackData: initialTopic ?? undefined,
     revalidateOnFocus: false,
     shouldRetryOnError: false,
@@ -100,10 +99,9 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
         formData.append("custom_thumbnail", imageFile);
         if (customTitle) formData.append("custom_title", customTitle);
         formData.append("is_published", isDraft ? "0" : "1");
-        res = await fetch(`${API_BASE}/api/topics/${id}/posts`, {
+        res = await fetch(`${PROXY_BASE}/topics/${id}/posts`, {
           method: "POST",
-          headers: getAuthHeaders(),
-          body: formData,
+              body: formData,
         });
       } else {
         const body: Record<string, unknown> = {
@@ -113,9 +111,9 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
           is_published: !isDraft,
         };
         if (customTitle) body.custom_title = customTitle;
-        res = await fetch(`${API_BASE}/api/topics/${id}/posts`, {
+        res = await fetch(`${PROXY_BASE}/topics/${id}/posts`, {
           method: "POST",
-          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
       }
@@ -148,9 +146,9 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
     if (!commentBody.trim()) return;
     setSubmitting(true);
     try {
-      const res = await fetch(`${API_BASE}/api/topics/${id}/comments`, {
+      const res = await fetch(`${PROXY_BASE}/topics/${id}/comments`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body: commentBody }),
       });
       if (!res.ok) {
@@ -174,9 +172,8 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
 
   const handlePostLike = async (postId: number) => {
     if (!user) { alert("いいねするにはログインが必要です"); return; }
-    const res = await fetch(`${API_BASE}/api/posts/${postId}/like`, {
+    const res = await fetch(`${PROXY_BASE}/posts/${postId}/like`, {
       method: "POST",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       const data = await res.json();
@@ -197,9 +194,8 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
 
   const handleCommentLike = async (commentId: number) => {
     if (!user) { alert("いいねするにはログインが必要です"); return; }
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}/like`, {
+    const res = await fetch(`${PROXY_BASE}/comments/${commentId}/like`, {
       method: "POST",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       const data = await res.json();
@@ -219,9 +215,8 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   };
 
   const handlePostDelete = async (postId: number) => {
-    await fetch(`${API_BASE}/api/posts/${postId}`, {
+    await fetch(`${PROXY_BASE}/posts/${postId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     updateTopic((prev) =>
       prev ? { ...prev, posts: prev.posts.filter((p) => p.id !== postId) } : prev
@@ -229,9 +224,9 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   };
 
   const handlePostSupplement = async (postId: number, supplement: string) => {
-    const res = await fetch(`${API_BASE}/api/posts/${postId}/supplement`, {
+    const res = await fetch(`${PROXY_BASE}/posts/${postId}/supplement`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ supplement }),
     });
     if (!res.ok) {
@@ -248,9 +243,9 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   };
 
   const handleAnalysisSupplement = async (analysisId: number, supplement: string) => {
-    const res = await fetch(`${API_BASE}/api/analyses/${analysisId}/supplement`, {
+    const res = await fetch(`${PROXY_BASE}/analyses/${analysisId}/supplement`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ supplement }),
     });
     if (!res.ok) {
@@ -268,18 +263,16 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
 
   const handleAnalysisDelete = async (analysisId: number) => {
     if (!confirm("この分析・図解を本当に削除しますか？")) return;
-    await fetch(`${API_BASE}/api/analyses/${analysisId}`, {
+    await fetch(`${PROXY_BASE}/analyses/${analysisId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     fetchTopic();
   };
 
   const handleAnalysisLike = async (analysisId: number) => {
     if (!user) { alert("いいねするにはログインが必要です"); return; }
-    const res = await fetch(`${API_BASE}/api/analyses/${analysisId}/like`, {
+    const res = await fetch(`${PROXY_BASE}/analyses/${analysisId}/like`, {
       method: "POST",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       const data = await res.json();
@@ -299,9 +292,9 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   };
 
   const handleReplySubmit = async (commentId: number, body: string) => {
-    const res = await fetch(`${API_BASE}/api/comments/${commentId}/reply`, {
+    const res = await fetch(`${PROXY_BASE}/comments/${commentId}/reply`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ body }),
     });
     if (!res.ok) {
@@ -325,9 +318,8 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   };
 
   const handleDeleteComment = async (commentId: number) => {
-    await fetch(`${API_BASE}/api/comments/${commentId}`, {
+    await fetch(`${PROXY_BASE}/comments/${commentId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     updateTopic((prev) =>
       prev
@@ -337,9 +329,8 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   };
 
   const handleDeleteReply = async (commentId: number, replyId: number) => {
-    await fetch(`${API_BASE}/api/comments/${replyId}`, {
+    await fetch(`${PROXY_BASE}/comments/${replyId}`, {
       method: "DELETE",
-      headers: getAuthHeaders(),
     });
     updateTopic((prev) =>
       prev
@@ -357,9 +348,8 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
 
   const handleReplyLike = async (commentId: number, replyId: number) => {
     if (!user) { alert("いいねするにはログインが必要です"); return; }
-    const res = await fetch(`${API_BASE}/api/comments/${replyId}/like`, {
+    const res = await fetch(`${PROXY_BASE}/comments/${replyId}/like`, {
       method: "POST",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       const data = await res.json();
@@ -388,10 +378,9 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   const handleTimelineGenerate = async () => {
     setTimelineLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/topics/${id}/timeline/generate`, {
+      const res = await fetch(`${PROXY_BASE}/topics/${id}/timeline/generate`, {
         method: "POST",
-        headers: getAuthHeaders(),
-      });
+        });
       const data = await res.json();
       if (!res.ok) { alert(data.message ?? "時系列の生成に失敗しました"); return; }
       updateTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
@@ -405,10 +394,9 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
   const handleTimelineUpdate = async () => {
     setTimelineLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/topics/${id}/timeline/update`, {
+      const res = await fetch(`${PROXY_BASE}/topics/${id}/timeline/update`, {
         method: "POST",
-        headers: getAuthHeaders(),
-      });
+        });
       const data = await res.json();
       if (!res.ok) { alert(data.message ?? "AI更新に失敗しました"); return; }
       updateTopic((prev) => prev ? { ...prev, timeline: data.timeline } : prev);
@@ -421,9 +409,8 @@ export function useTopicPage(id: string, initialTopic?: TopicDetail | null) {
 
   const handleBookmark = async () => {
     if (!user) { alert("ブックマークするにはログインが必要です"); return; }
-    const res = await fetch(`${API_BASE}/api/topics/${id}/bookmark`, {
+    const res = await fetch(`${PROXY_BASE}/topics/${id}/bookmark`, {
       method: "POST",
-      headers: getAuthHeaders(),
     });
     if (res.ok) {
       const data = await res.json();

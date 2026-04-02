@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getAuthHeaders } from "@/lib/auth";
 import { transformAnalysis } from "@/lib/transforms";
 import type { TopicAnalysis } from "../_types";
-import { API_BASE } from "../_helpers";
+import { PROXY_BASE } from "../_helpers";
 import { typeBadge } from "./AnalysisCard";
 
 export function AnalysisModal({
@@ -29,7 +28,7 @@ export function AnalysisModal({
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/user/analyses`, { headers: getAuthHeaders() })
+    fetch(`${PROXY_BASE}/user/analyses`)
       .then((r) => r.json())
       .then((data) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,9 +41,9 @@ export function AnalysisModal({
   const handlePublish = async (analysisId: number) => {
     setPublishingId(analysisId);
     try {
-      const res = await fetch(`${API_BASE}/api/analyses/${analysisId}/publish`, {
+      const res = await fetch(`${PROXY_BASE}/analyses/${analysisId}/publish`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topic_id: topicId }),
       });
       if (!res.ok) {
@@ -69,9 +68,8 @@ export function AnalysisModal({
       const formData = new FormData();
       formData.append("title", imageTitle.trim());
       formData.append("image", imageFile);
-      const res = await fetch(`${API_BASE}/api/topics/${topicId}/analyses/image`, {
+      const res = await fetch(`${PROXY_BASE}/topics/${topicId}/analyses/image`, {
         method: "POST",
-        headers: getAuthHeaders(),
         body: formData,
       });
       if (!res.ok) {
