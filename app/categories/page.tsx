@@ -166,9 +166,9 @@ export default function CategoriesPage() {
       <div className="py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse space-y-6">
-            <div className="h-7 bg-white/[0.06] rounded-md w-1/3 mb-2" />
-            <div className="h-48 bg-white/[0.04] rounded-xl" />
-            <div className="h-64 bg-white/[0.04] rounded-xl" />
+            <div className="h-7 bg-logos-hover rounded-md w-1/3 mb-2" />
+            <div className="h-48 bg-logos-hover rounded-xl" />
+            <div className="h-64 bg-logos-hover rounded-xl" />
           </div>
         </div>
       </div>
@@ -179,7 +179,7 @@ export default function CategoriesPage() {
   if (!user || !user.is_admin) {
     return (
       <div className="flex justify-center items-center py-24">
-        <p className="text-gray-400 text-sm">このページは管理者専用です。</p>
+        <p className="text-logos-sub text-sm">このページは管理者専用です。</p>
       </div>
     );
   }
@@ -189,7 +189,8 @@ export default function CategoriesPage() {
       <div className="py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
 
-          <h1 className="text-2xl font-bold dark:text-g-text pl-3 border-l-4 border-indigo-500">
+          <h1 className="text-2xl font-bold text-logos-text flex items-center gap-2.5">
+            <span className="inline-block w-1 h-6 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
             カテゴリ管理（大分類・中分類）
           </h1>
 
@@ -203,13 +204,13 @@ export default function CategoriesPage() {
           {/* カテゴリ一覧ページ 即時反映ボタン */}
           <div className="flex items-center justify-between p-4 bg-logos-surface rounded-xl border border-logos-border">
             <div>
-              <p className="text-sm font-bold text-g-text">カテゴリ一覧ページを今すぐ反映</p>
-              <p className="text-xs text-g-sub mt-0.5">追加・変更後にクリックすると即時反映されます（通常は最大1時間後に自動反映）</p>
+              <p className="text-sm font-bold text-logos-text">カテゴリ一覧ページを今すぐ反映</p>
+              <p className="text-xs text-logos-sub mt-0.5">追加・変更後にクリックすると即時反映されます（通常は最大1時間後に自動反映）</p>
             </div>
             <button
               onClick={handleRevalidate}
               disabled={revalidating}
-              className="shrink-0 ml-4 bg-indigo-600 hover:bg-indigo-700 text-logos-text text-sm font-bold py-2 px-4 rounded-lg transition-colors duration-100 disabled:opacity-50 cursor-pointer"
+              className="shrink-0 ml-4 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold py-2 px-6 rounded-full text-sm shadow-sm hover:shadow-indigo-500/25 hover:shadow-md transition-all disabled:opacity-50 cursor-pointer"
             >
               {revalidating ? "更新中..." : "今すぐ反映"}
             </button>
@@ -218,41 +219,44 @@ export default function CategoriesPage() {
           {/* 1. 新しいカテゴリの追加カード */}
           <div className="p-6 sm:p-8 bg-logos-surface shadow-sm sm:rounded-xl border border-logos-border">
             <header>
-              <h2 className="text-base font-bold text-g-text pl-2 border-l-2 border-gray-700">新しいカテゴリの追加</h2>
+              <h2 className="font-bold text-logos-text text-base flex items-center gap-2">
+                <span className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
+                新しいカテゴリの追加
+              </h2>
             </header>
             <form onSubmit={handleAdd} className="mt-6 space-y-6 max-w-xl">
               {addError && (
                 <p className="text-red-400 text-sm">{addError}</p>
               )}
               <div>
-                <label htmlFor="add-name" className="block text-lg font-bold text-gray-300 mb-1.5">カテゴリ名</label>
+                <label htmlFor="add-name" className="block text-base font-bold text-logos-text mb-1">カテゴリ名</label>
                 <input
                   id="add-name"
                   type="text"
                   value={addName}
                   onChange={(e) => setAddName(e.target.value)}
                   required
-                  className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg shadow-sm"
+                  className="block w-full rounded-lg border border-logos-border bg-logos-surface text-logos-text focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none px-3 py-2 text-base"
                 />
               </div>
               <div>
-                <label htmlFor="add-sort" className="block text-lg font-bold text-gray-300 mb-1.5">表示順（数字が小さいほど上に表示されます）</label>
+                <label htmlFor="add-sort" className="block text-base font-bold text-logos-text mb-1">表示順（数字が小さいほど上に表示されます）</label>
                 <input
                   id="add-sort"
                   type="number"
                   value={addSortOrder}
                   onChange={(e) => setAddSortOrder(Number(e.target.value))}
                   required
-                  className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg shadow-sm"
+                  className="block w-full rounded-lg border border-logos-border bg-logos-surface text-logos-text focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none px-3 py-2 text-base"
                 />
               </div>
               <div>
-                <label htmlFor="add-parent" className="block text-lg font-bold text-gray-300 mb-1.5">親カテゴリ（中分類にする場合のみ選択）</label>
+                <label htmlFor="add-parent" className="block text-base font-bold text-logos-text mb-1">親カテゴリ（中分類にする場合のみ選択）</label>
                 <select
                   id="add-parent"
                   value={addParentId}
                   onChange={(e) => setAddParentId(e.target.value)}
-                  className="block w-full rounded-md border border-logos-border bg-logos-bg text-logos-text focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-3 py-2 text-lg shadow-sm"
+                  className="block w-full rounded-lg border border-logos-border bg-logos-surface text-logos-text focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none px-3 py-2 text-base"
                 >
                   <option value="">-- なし（新しい大分類を作成する） --</option>
                   {categories.map((cat) => (
@@ -264,7 +268,7 @@ export default function CategoriesPage() {
                 <button
                   type="submit"
                   disabled={addLoading}
-                  className="bg-blue-600 hover:bg-blue-700 text-logos-text font-bold py-2.5 px-6 rounded-md transition-colors duration-100 shadow-sm disabled:opacity-50 cursor-pointer"
+                  className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold py-2 px-6 rounded-full text-base shadow-sm hover:shadow-indigo-500/25 hover:shadow-md transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {addLoading ? "追加中..." : "追加する"}
                 </button>
@@ -275,11 +279,14 @@ export default function CategoriesPage() {
           {/* 2. 現在のカテゴリ一覧カード */}
           <div className="p-6 sm:p-8 bg-logos-surface shadow-sm sm:rounded-xl border border-logos-border">
             <header className="mb-6">
-              <h2 className="text-base font-bold text-g-text pl-2 border-l-2 border-gray-700">現在のカテゴリ一覧（数字で並び替え）</h2>
+              <h2 className="font-bold text-logos-text text-base flex items-center gap-2">
+                <span className="inline-block w-1 h-4 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600 flex-shrink-0" aria-hidden="true" />
+                現在のカテゴリ一覧（数字で並び替え）
+              </h2>
             </header>
             <div className="bg-logos-bg rounded-xl p-4 sm:p-6 border border-logos-border">
               {categories.length === 0 ? (
-                <p className="text-base text-gray-500 text-center py-4">まだカテゴリが登録されていません。</p>
+                <p className="text-base text-logos-sub text-center py-4">まだカテゴリが登録されていません。</p>
               ) : (
                 <ul className="space-y-4">
                   {categories.map((cat) => (
@@ -300,7 +307,7 @@ export default function CategoriesPage() {
                           <div className="flex space-x-2">
                             <button
                               onClick={() => startEdit(cat)}
-                              className="text-sm bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 py-1 px-3 rounded transition-colors duration-100 cursor-pointer"
+                              className="text-sm bg-logos-hover hover:bg-logos-elevated border border-logos-border text-logos-text py-1 px-3 rounded transition-colors duration-100 cursor-pointer"
                             >
                               編集
                             </button>
@@ -321,25 +328,25 @@ export default function CategoriesPage() {
                               type="text"
                               value={editName}
                               onChange={(e) => setEditName(e.target.value)}
-                              className="rounded border border-logos-border bg-logos-surface text-logos-text text-sm py-1.5 px-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                              className="rounded border border-logos-border bg-logos-surface text-logos-text text-sm py-1.5 px-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                               required
                             />
                             <input
                               type="number"
                               value={editSortOrder}
                               onChange={(e) => setEditSortOrder(Number(e.target.value))}
-                              className="w-20 rounded border border-logos-border bg-logos-surface text-logos-text text-sm py-1.5 px-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                              className="w-20 rounded border border-logos-border bg-logos-surface text-logos-text text-sm py-1.5 px-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                               title="表示順"
                             />
                             <button
                               onClick={() => handleSaveEdit(cat.id)}
-                              className="bg-blue-600 hover:bg-blue-700 text-logos-text text-sm font-bold py-1.5 px-4 rounded transition-colors duration-100 cursor-pointer"
+                              className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white text-sm font-bold py-1.5 px-4 rounded transition-all cursor-pointer"
                             >
                               保存
                             </button>
                             <button
                               onClick={() => setEditingId(null)}
-                              className="text-sm font-bold text-gray-500 hover:text-gray-300 px-2 py-1.5"
+                              className="text-sm font-bold text-logos-sub hover:text-logos-text px-2 py-1.5"
                             >
                               キャンセル
                             </button>
@@ -349,13 +356,13 @@ export default function CategoriesPage() {
 
                       {/* 中分類のリスト */}
                       {cat.children.length > 0 && (
-                        <ul className="mt-4 sm:ml-7 space-y-2 border-l-2 border-gray-800 pl-3 sm:pl-4">
+                        <ul className="mt-4 sm:ml-7 space-y-2 border-l-2 border-logos-border pl-3 sm:pl-4">
                           {cat.children.map((child) => (
                             <li key={child.id} className="flex flex-col py-1">
                               {editingId !== child.id ? (
                                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 w-full">
-                                  <div className="text-base font-bold text-gray-300 flex items-center">
-                                    <svg aria-hidden="true" className="h-4 w-4 text-gray-500 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <div className="text-base font-bold text-logos-text flex items-center">
+                                    <svg aria-hidden="true" className="h-4 w-4 text-logos-sub mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>
                                     {child.name}
@@ -366,7 +373,7 @@ export default function CategoriesPage() {
                                   <div className="flex space-x-2">
                                     <button
                                       onClick={() => startEdit(child)}
-                                      className="text-xs bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 py-1 px-2 rounded transition-colors duration-100 cursor-pointer"
+                                      className="text-xs bg-logos-hover hover:bg-logos-elevated border border-logos-border text-logos-text py-1 px-2 rounded transition-colors duration-100 cursor-pointer"
                                     >
                                       編集
                                     </button>
@@ -387,25 +394,25 @@ export default function CategoriesPage() {
                                       type="text"
                                       value={editName}
                                       onChange={(e) => setEditName(e.target.value)}
-                                      className="rounded border border-logos-border bg-logos-surface text-logos-text text-xs py-1.5 px-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                                      className="rounded border border-logos-border bg-logos-surface text-logos-text text-xs py-1.5 px-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                                       required
                                     />
                                     <input
                                       type="number"
                                       value={editSortOrder}
                                       onChange={(e) => setEditSortOrder(Number(e.target.value))}
-                                      className="w-16 rounded border border-logos-border bg-logos-surface text-logos-text text-xs py-1.5 px-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                                      className="w-16 rounded border border-logos-border bg-logos-surface text-logos-text text-xs py-1.5 px-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                                       title="表示順"
                                     />
                                     <button
                                       onClick={() => handleSaveEdit(child.id)}
-                                      className="bg-blue-600 hover:bg-blue-700 text-logos-text text-[11px] font-bold py-1.5 px-3 rounded transition-colors duration-100 cursor-pointer"
+                                      className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white text-[11px] font-bold py-1.5 px-3 rounded transition-all cursor-pointer"
                                     >
                                       保存
                                     </button>
                                     <button
                                       onClick={() => setEditingId(null)}
-                                      className="text-[11px] font-bold text-gray-500 hover:text-gray-300 px-2 py-1.5"
+                                      className="text-[11px] font-bold text-logos-sub hover:text-logos-text px-2 py-1.5"
                                     >
                                       キャンセル
                                     </button>
