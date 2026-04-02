@@ -191,7 +191,7 @@ export default function HomeClient({
   const fetchTopics = useCallback((page: number, sortVal: SortOption) => {
     setLoading(true);
     setError(false);
-    fetch(`/api/topics?sort=${sortVal}&page=${page}`)
+    fetch(`/api/proxy/topics?sort=${sortVal}&page=${page}`)
       .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
       .then((data: TopicsResponse) => {
         setTopics(data.data ?? []);
@@ -208,14 +208,14 @@ export default function HomeClient({
   useEffect(() => {
     if (categories.length === 0) return;
     categories.forEach((cat) => {
-      fetch(`/api/topics?category=${cat.id}&per_page=8`)
+      fetch(`/api/proxy/topics?category=${cat.id}&per_page=8`)
         .then((r) => r.json())
         .then((data: TopicsResponse) => {
           setTabTopics((prev) => ({ ...prev, [cat.id]: data.data ?? [] }));
         })
         .catch(() => {});
 
-      fetch(`/api/categories/${cat.id}/featured-post`)
+      fetch(`/api/proxy/categories/${cat.id}/featured-post`)
         .then((r) => r.json())
         .then((data: FeaturedPost | null) => {
           setFeaturedPosts((prev) => ({ ...prev, [cat.id]: data }));

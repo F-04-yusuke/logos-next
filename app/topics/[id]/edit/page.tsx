@@ -45,7 +45,7 @@ export default function TopicEditPage() {
 
     Promise.all([
       fetch(`${PROXY_BASE}/topics/${topicId}`),
-      fetch(`/api/categories`),
+      fetch(`/api/proxy/categories`),
     ])
       .then(async ([topicRes, catRes]) => {
         if (topicRes.status === 404) { setNotFound(true); return; }

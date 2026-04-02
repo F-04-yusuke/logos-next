@@ -35,7 +35,7 @@ export default function TopicCreatePage() {
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    fetch(`/api/categories`)
+    fetch(`/api/proxy/categories`)
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((data) => { if (Array.isArray(data)) setCategories(data); })
       .catch(() => {});

@@ -81,7 +81,7 @@ export default function CategoryTopicsClient({
   const [parentCategory, setParentCategory] = useState<{ id: number; name: string } | null>(null);
 
   useEffect(() => {
-    fetch("/api/categories")
+    fetch("/api/proxy/categories")
       .then((r) => r.json())
       .then((cats: Category[]) => {
         // 大分類を探す
@@ -107,7 +107,7 @@ export default function CategoryTopicsClient({
   const fetchTopics = useCallback((page: number, sortVal: SortOption) => {
     setLoading(true);
     setError(false);
-    fetch(`/api/topics?category=${categoryId}&sort=${sortVal}&page=${page}`)
+    fetch(`/api/proxy/topics?category=${categoryId}&sort=${sortVal}&page=${page}`)
       .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
       .then((data: TopicsResponse) => {
         setTopics(data.data ?? []);
