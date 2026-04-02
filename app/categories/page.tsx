@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
 
 type Category = {
   id: number;
@@ -13,7 +12,7 @@ type Category = {
   children: Category[];
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 export default function CategoriesPage() {
   const { user, loading } = useAuth();
@@ -42,10 +41,7 @@ export default function CategoriesPage() {
   async function handleRevalidate() {
     setRevalidating(true);
     try {
-      const res = await fetch("/api/revalidate", {
-        method: "POST",
-        headers: { ...getAuthHeaders(), Accept: "application/json" },
-      });
+      const res = await fetch("/api/revalidate", { method: "POST" });
       if (res.ok) {
         setStatusMsg("カテゴリ一覧ページのキャッシュを更新しました");
       } else {
@@ -62,7 +58,7 @@ export default function CategoriesPage() {
   async function fetchCategories() {
     setFetching(true);
     try {
-      const res = await fetch(`${BASE_URL}/api/categories`, {
+      const res = await fetch(`${PROXY_BASE}/categories`, {
         headers: { Accept: "application/json" },
       });
       if (res.ok) {
@@ -85,9 +81,9 @@ export default function CategoriesPage() {
     setAddError("");
     setAddLoading(true);
     try {
-      const res = await fetch(`${BASE_URL}/api/categories`, {
+      const res = await fetch(`${PROXY_BASE}/categories`, {
         method: "POST",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: addName,
           sort_order: addSortOrder,
@@ -121,9 +117,9 @@ export default function CategoriesPage() {
   async function handleSaveEdit(catId: number) {
     setEditError("");
     try {
-      const res = await fetch(`${BASE_URL}/api/categories/${catId}`, {
+      const res = await fetch(`${PROXY_BASE}/categories/${catId}`, {
         method: "PATCH",
-        headers: { ...getAuthHeaders(), "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: editName, sort_order: editSortOrder }),
       });
       if (!res.ok) {
@@ -145,9 +141,8 @@ export default function CategoriesPage() {
       : "削除しますか？";
     if (!confirm(msg)) return;
     try {
-      const res = await fetch(`${BASE_URL}/api/categories/${catId}`, {
+      const res = await fetch(`${PROXY_BASE}/categories/${catId}`, {
         method: "DELETE",
-        headers: { ...getAuthHeaders(), Accept: "application/json" },
       });
       if (!res.ok) {
         alert("削除に失敗しました");

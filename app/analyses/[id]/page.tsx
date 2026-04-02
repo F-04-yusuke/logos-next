@@ -2,9 +2,8 @@
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { getAuthHeaders } from "@/lib/auth";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? ""; // storage URL 用
+const PROXY_BASE = "/api/proxy";
 
 // -------- 型定義 --------
 type TreeNode = {
@@ -358,7 +357,7 @@ export default function AnalysisShowPage({ params }: { params: Promise<{ id: str
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/analyses/${id}`, { headers: getAuthHeaders() })
+    fetch(`${PROXY_BASE}/analyses/${id}`)
       .then(async (res) => {
         if (!res.ok) { setNotFound(true); return; }
         setAnalysis(await res.json());

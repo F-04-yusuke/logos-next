@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef, FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getAuthHeaders } from "@/lib/auth";
 
 type Category = {
   id: number;
@@ -19,7 +18,7 @@ type TimelineItem = {
   is_ai: boolean;
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const PROXY_BASE = "/api/proxy";
 
 export default function TopicCreatePage() {
   const router = useRouter();
@@ -36,7 +35,7 @@ export default function TopicCreatePage() {
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/categories`, { headers: { Accept: "application/json" } })
+    fetch(`/api/categories`)
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((data) => { if (Array.isArray(data)) setCategories(data); })
       .catch(() => {});
@@ -75,13 +74,9 @@ export default function TopicCreatePage() {
     setErrors({});
     setSubmitting(true);
     try {
-      const res = await fetch(`${BASE_URL}/api/topics`, {
+      const res = await fetch(`${PROXY_BASE}/topics`, {
         method: "POST",
-        headers: {
-          ...getAuthHeaders(),
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
           content,

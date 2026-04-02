@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { getToken } from "@/lib/auth";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost"; // storage URL 用
+const PROXY_BASE = "/api/proxy";
 
 type ProfileData = {
   id: number;
@@ -23,10 +23,6 @@ function avatarUrl(avatar: string | null): string | null {
   return `${API_BASE}/storage/${avatar}`;
 }
 
-function authHeader(): HeadersInit {
-  const token = getToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
 
 // ===== Section 1: プロフィール情報 =====
 
@@ -71,9 +67,8 @@ function ProfileInfoSection({ profile, onSaved }: {
     if (avatarFile) formData.append("avatar", avatarFile);
 
     try {
-      const res = await fetch(`${API_BASE}/api/profile`, {
+      const res = await fetch(`${PROXY_BASE}/profile`, {
         method: "POST",
-        headers: authHeader(),
         body: formData,
       });
       const data = await res.json();
@@ -222,9 +217,9 @@ function PasswordSection() {
     setSuccess(false);
 
     try {
-      const res = await fetch(`${API_BASE}/api/profile/password`, {
+      const res = await fetch(`${PROXY_BASE}/profile/password`, {
         method: "PUT",
-        headers: { ...authHeader(), "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           current_password: currentPassword,
           password,
@@ -343,9 +338,9 @@ function DeleteAccountSection() {
     setErrors({});
 
     try {
-      const res = await fetch(`${API_BASE}/api/profile`, {
+      const res = await fetch(`${PROXY_BASE}/profile`, {
         method: "DELETE",
-        headers: { ...authHeader(), "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
       const data = await res.json();
@@ -353,8 +348,8 @@ function DeleteAccountSection() {
         setErrors(data.errors ?? {});
         return;
       }
-      // トークン削除してログインへ
-      localStorage.removeItem("token");
+      // Cookie削除してログインへ
+      await fetch("/api/auth/logout", { method: "POST" });
       router.replace("/login");
     } catch {
       setErrors({ _: ["通信エラーが発生しました"] });
@@ -454,9 +449,7 @@ export default function ProfilePage() {
       return;
     }
     if (!authLoading && user) {
-      fetch(`${API_BASE}/api/profile`, {
-        headers: { ...authHeader(), Accept: "application/json" },
-      })
+      fetch(`${PROXY_BASE}/profile`)
         .then((res) => (res.ok ? res.json() : Promise.reject()))
         .then((data: ProfileData) => setProfile(data))
         .catch(() => {})
