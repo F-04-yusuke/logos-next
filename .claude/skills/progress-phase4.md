@@ -1,8 +1,62 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-04-02（Session 45 完了）
+最終更新: 2026-04-02（Session 47 完了）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
+
+---
+
+## Session 47: カテゴリ管理ページ・AppLogo 刷新（2026-04-02）
+
+### カテゴリ管理（`app/categories/page.tsx`）✅
+- ページヘッダーをグラデーションアクセントバー（h-6, blue-indigo）に変更
+- セクションヘッダー×2をグラデーションアクセントバー（h-4）に変更
+- 「今すぐ反映」ボタン・「追加する」ボタン → グラデーション pill（indigo）
+- フォームラベル `text-lg text-gray-300` → `text-base text-logos-text`
+- フォーム入力・select → `rounded-lg bg-logos-surface border-logos-border focus:indigo`
+- 編集ボタン `bg-gray-700 text-gray-300` → `bg-logos-hover text-logos-text border-logos-border`
+- 保存ボタン → グラデーション indigo `rounded`
+- キャンセルボタン `text-gray-500 hover:text-gray-300` → `text-logos-sub hover:text-logos-text`
+- 中分類テキスト・区切り線 → セマンティック変数統一
+- スケルトン `bg-white/[0.06]` → `bg-logos-hover`
+**Gitタグ:** `v6.79-session47-before-categories-design`
+
+### AppLogo 刷新（`components/AppLogo.tsx`）✅
+- 旧デザイン: 3D等角投影「L」（5枚の多角形パス） → 廃止
+- **新デザイン: Λ（ギリシャ文字ラムダ）グラデーション円形バッジ ＋ ワードマーク**
+  - Λ = λόγος（ロゴス）の語源。論理・理性・言葉の象徴。L重複問題を解消
+  - 円形バッジ: blue-500 → indigo-600 グラデーション、h-6 w-6
+  - 白いΛストローク（polyline, strokeWidth=2.5, rounded caps）
+  - drop shadow 廃止（主要アプリのロゴに準拠）
+  - テキスト: font-black tracking-tight text-logos-text（単色・グラデーション廃止）
+  - gap-2 でバッジとテキストのキャップハイトを均等に
+**Gitタグ:** `v6.80-session47-before-logo-redesign`
+
+---
+
+## Session 46: デザインシステム全ページ適用 後半（2026-04-02）
+
+Session 45 で確立したデザインシステムを以下のページへ適用した。
+
+### 分析ツール 3 本 ✅
+- `app/tools/tree/page.tsx`: 保存ボタン(yellow-orange pill)・AIボタン(indigo pill)・select chevron・セマンティック変数統一
+- `app/tools/matrix/page.tsx`: テーブルヘッダー/セル・ボタン・セマンティック変数統一
+- `app/tools/swot/page.tsx`: BoxPanel・フレームワーク選択 select chevron・セマンティック変数統一
+**Gitタグ:** `v6.75-session46-before-tools-design`（tree）/ `v6.76-session46-before-matrix-design` / `v6.77-session46-before-swot-design`
+
+### カテゴリ公開一覧（`app/category-list/page.tsx`）✅
+- h1 グラデーションspan・カード/カードヘッダーセマンティック変数統一
+
+### カテゴリ別トピック（`app/categories/[id]/_components/CategoryTopicsClient.tsx`）✅
+- h1 グラデーションspan・パンくず修正・ソートselect chevron・バッジ・ホバー統一
+
+### プロフィール（`app/profile/page.tsx`）✅
+- h1/h2 グラデーションspan・フォームスタイル統一・ボタン pill・モーダルセマンティック変数
+
+### 通知ベル（ナビバー）✅
+- `components/Header/NotificationBell.tsx` + `components/Header/index.tsx`
+- strokeWidth 1.5→2・text-gray-400→text-logos-sub・hover:bg-gray-800→hover:bg-logos-hover
+**Gitタグ:** `v6.78-session46-before-notif-icon-fix`
 
 ---
 
