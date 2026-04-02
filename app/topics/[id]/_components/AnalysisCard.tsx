@@ -185,11 +185,11 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
         <table className="w-full text-left border-collapse min-w-[500px]">
           <thead>
             <tr>
-              <th className="p-2 border-b border-r border-gray-200 dark:border-logos-border bg-gray-50 dark:bg-logos-bg text-[10px] font-bold text-gray-500 dark:text-g-sub w-28 align-bottom">
+              <th className="p-2 border-b border-r border-logos-border bg-logos-hover text-[10px] font-bold text-g-sub w-28 align-bottom">
                 評価項目 ＼ 比較パターン
               </th>
               {patterns.map((p, i) => (
-                <th key={i} className="p-2 border-b border-r border-gray-200 dark:border-logos-border bg-gray-50 dark:bg-logos-bg align-top">
+                <th key={i} className="p-2 border-b border-r border-logos-border bg-logos-hover align-top">
                   <div className="font-bold text-blue-600 dark:text-blue-400 mb-0.5 text-sm">{p.title}</div>
                   <p className="text-[10px] text-gray-500 dark:text-g-sub font-normal line-clamp-2">{p.description}</p>
                 </th>
@@ -201,14 +201,14 @@ function AnalysisPreview({ analysis }: { analysis: TopicAnalysis }) {
               const evals = item.evaluations ?? item.scores ?? [];
               return (
                 <tr key={ri}>
-                  <td className="p-2 border-b border-r border-gray-200 dark:border-logos-border bg-gray-50 dark:bg-logos-bg font-bold text-sm text-gray-900 dark:text-g-text">
+                  <td className="p-2 border-b border-r border-logos-border bg-logos-hover font-bold text-sm text-g-text">
                     {item.itemTitle}
                   </td>
                   {patterns.map((_, ci) => {
                     const e = evals[ci];
                     const badge = badgeInfo(e?.score ?? -1);
                     return (
-                      <td key={ci} className="p-2 border-b border-r border-gray-200 dark:border-logos-border align-top">
+                      <td key={ci} className="p-2 border-b border-r border-logos-border bg-logos-surface align-top">
                         {badge && <span className={`inline-block px-1.5 py-0.5 text-[10px] font-bold rounded mb-1 ${badge.color}`}>{badge.text}</span>}
                         <p className="text-[10px] text-gray-700 dark:text-g-text line-clamp-2">{e?.reason ?? ""}</p>
                       </td>
