@@ -1,6 +1,6 @@
 # ロードマップ・Gitタグ履歴・プロジェクト理念
 
-最終更新: 2026-03-23（Session 12 Phase 4 開始）
+最終更新: 2026-04-02（Session 49 Phase 4 完了）
 
 ---
 
@@ -20,8 +20,8 @@
 | Phase 1 | MVPの磨き込み（Laravel Blade版） | 〜2026-03-19 | ✅ 完了 |
 | Phase 2 | フロントエンドのモダン化（Next.js移行） | 2026-03-19〜2026-03-22 | ✅ 完了 |
 | Phase 3 | 技術的負債解消・コード品質改善 | 2026-03-22〜2026-03-23 | ✅ 完了 |
-| Phase 4 | 集客・マーケティング基盤 | 2026-03-23〜 | 🔄 進行中 |
-| Phase 5 | スケールとマネタイズ | 未着手 | 🔲 未着手 |
+| Phase 4 | UI/UX全面改善・デザインシステム確立 | 2026-03-23〜2026-04-02 | ✅ 完了 |
+| Phase 5 | 集客・マーケティング基盤・スケール | 2026-04-02〜 | 🔲 未着手 |
 
 ※ 旧ドキュメントでは「Phase 3」が「集客・マーケティング」として定義されていたが、実際には技術改善（B-1〜B-6・F-1〜F-7）を Phase 3 として実施した。集客・マーケティングは Phase 4 に繰り下げ。
 
@@ -58,23 +58,49 @@
 - LOGOSの思想・機能・UIデザインに影響しない純粋な技術改善
 - 詳細 → `progress-phase3.md`
 
-### Phase 4：集客・マーケティング基盤（進行中 2026-03-23〜）
+### Phase 4：UI/UX全面改善・デザインシステム確立（完了 2026-03-23〜2026-04-02）
 
-- SEO対策: 適切なHTMLタグ（h1, h2）の使用、メタデータ（OGP設定）
-- 表示速度の最適化: 画像の圧縮、不要なコードの削減
-- LP作成: LOGOSの魅力（レスバではなく議論、AIサポートなど）を伝える登録用ページ
-- KPI設定: 新規登録者数、トピック投稿数、継続率などの計測
-- Stripe Webhook受け口のみ実装（決済コードの作り込みはしない）
-- トークン認証 → httpOnly Cookie化（セキュリティ向上）
+実際に実施した内容（Session 12〜48）:
+- UI/UX 全面改善（全18ページ刷新・Session 12〜48）
+- ライト/ダーク両対応デザインシステム確立（セマンティックカラー変数・gradient pill・underlineタブ等）
+- スマホ対応（ボトムナビゲーション・モバイルヘッダー最適化）
+- Vercel パフォーマンス改善（LCP 2.96s → 0.56s）
+- PostCard・CommentCard 共通コンポーネント化
+- カテゴリ別トピックページ新設・On-Demand ISR
+- アバター表示統一・アップロード上限 5MB
 
-### Phase 5：スケールとマネタイズ（未着手）
+詳細 → `progress-phase4.md`（overview）/ `progress-phase4-s12-s19.md` 〜 `progress-phase4-s42-s48.md`
 
-- インフラ移行: さくら環境からAWSやVercel等へ。Docker等を用いた本格運用
-- 本人確認（eKYC）: TRUSTDOCK連携等による質の高いユーザー層の担保
-- 有料課金（Stripe連携）: PRO機能や特定トピック作成権限などのサブスク決済システム実装
-- AIの全自動更新: エビデンス投稿時に、AIが自動的に時系列や評価表をアップデートするロジック構築
-- Laravel Socialite: Google / X (Twitter) ワンクリック登録（SNSログイン）
-- Liquid eKYC / TRUSTDOCK: 本人確認・質の高い議論コミュニティの維持
+**当初計画だった以下の項目は Phase 5 に移行:**
+- SEO対策・表示速度最適化・LP作成・KPI設定・Stripe Webhook・httpOnly Cookie化
+
+### Phase 5：集客・マーケティング基盤・スケール（未着手 2026-04-02〜）
+
+#### 最優先（Phase 4 持越し・技術的負債解消）
+- **httpOnly Cookie 化**: localStorage → httpOnly Cookie（Phase 2 から持越しのセキュリティ課題）
+- **表示速度最適化**: 画像の圧縮（intervention/image によるアバター自動リサイズ含む）・不要なコードの削減
+- **AnalysisCard 抜本的改革**: tree/matrix/SWOT 描画コードの共通コンポーネント化（AnalysisCard と analyses/[id] の重複解消）
+
+#### 優先度高（集客・マーケティング）
+- SEO対策: 適切な h1/h2 整備・メタデータ（OGP設定）
+- LP作成: LOGOSの魅力を伝える登録用ページ（welcome.blade.php は未実装）
+- KPI設定: 新規登録者数・トピック投稿数・継続率などの計測
+
+#### 優先度中
+- Stripe Webhook 受け口のみ実装（決済コードの作り込みはしない）
+- パスワードリセット機能: SMTP設定（さくら or SendGrid）と合わせて実装
+- /analyses/[id] SSR 化: httpOnly Cookie 導入後に対応（F-1 残タスク）
+- /categories/[id] SSR 化: httpOnly Cookie 導入後に再試行
+- Sonner（トーストライブラリ）導入: 自作トーストを shadcn/ui 標準実装に置き換え
+- React Hook Form + Zod 導入: ログイン・登録・トピック作成等フォームのバリデーション一元化
+
+#### 優先度低
+- メール認証（MustVerifyEmail 有効化）
+- インフラ移行: さくら環境から AWS へ（本格運用）
+- 本人確認（eKYC）: TRUSTDOCK 連携
+- 有料課金（Stripe 連携）: PRO サブスク決済
+- AI 全自動更新: エビデンス投稿時に時系列・評価表を自動更新
+- Laravel Socialite: Google / X（SNSログイン）
 
 ---
 
@@ -135,6 +161,13 @@
 | v6.59-session43-before-ui-polish | Session43・ロゴ/タブ/ボタンpolish前 | 2026-04-01 |
 | v6.60-session43-before-full-ui-redesign | Session43・全体UIリデザイン前 | 2026-04-01 |
 | v6.61-session43-before-topic-redesign | Session43完了・トピックページリデザイン前（次セッション課題） | 2026-04-01 |
+| v6.69-session44-before-tab-text-scroll | Session44・デザインシステム確立（アンダーラインタブ・gradient pill・セマンティック変数） | 2026-04-01 |
+| v6.74-session45-before-topic-create-edit-redesign | Session45完了・デザインシステム全ページ適用（ダッシュボード等5ページ） | 2026-04-02 |
+| v6.78-session46-before-notif-icon-fix | Session46完了・デザインシステム適用（ツール3本・カテゴリ系・プロフィール） | 2026-04-02 |
+| v6.80-session47-before-logo-redesign | Session47完了・AppLogoをΛバッジに刷新 | 2026-04-02 |
+| v6.83-session48-before-analysiscard-matrix-fix | Session48完了・Phase4最終タグ（SWOT色チント・Matrixヘッダー修正） | 2026-04-02 |
+| v6.84-session49-before-phase4-docs | Session49・Phase4ドキュメント整理前 | 2026-04-02 |
+| v6.85-session49-before-phase5-prep | Session49・Phase5準備前 | 2026-04-02 |
 
 ### logos-laravel
 
