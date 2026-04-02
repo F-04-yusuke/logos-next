@@ -1,8 +1,30 @@
 # Phase 4 進行中：集客・マーケティング基盤
 
-最終更新: 2026-04-02（Session 47 完了）
+最終更新: 2026-04-02（Session 48 完了）
 
 **Session 12〜19 の記録は `progress-phase4-s12-s19.md` を参照**
+
+---
+
+## Session 48: 分析スタンドアロン・SWOT/Matrix バグ修正（2026-04-02）
+
+### 分析スタンドアロン（`app/analyses/[id]/page.tsx`）デザインシステム適用 ✅
+- ローディング・404・戻るボタンをセマンティック変数に統一
+**Gitタグ:** `v6.81-session48-before-analyses-design`
+
+### SWOT 色チント復元（`analyses/[id]` + `AnalysisCard`）✅
+- **原因:** `9a46c4d` ライトモードコミットで `${box.bg} dark:bg-logos-surface` の順になりチントが上書きされていた
+- 修正: `bg-logos-surface ${box.bg}` の順に変更（ツール側の正しい実装に合わせる）
+**Gitタグ:** `v6.82-session48-before-swot-matrix-fix`
+
+### Matrix ヘッダー/データセル色区別修正（`analyses/[id]` + `AnalysisCard`）✅
+- `analyses/[id]`: `bg-gray-50 dark:bg-logos-surface` → `bg-logos-hover`（ヘッダー/ラベル）・`bg-logos-surface`（データセル）
+- `AnalysisCard`: `bg-gray-50 dark:bg-logos-bg` → `bg-logos-hover`（Session 36 の統一コミットの取り残し）
+**Gitタグ:** `v6.83-session48-before-analysiscard-matrix-fix`
+
+### 技術的負債・現状維持決定
+- `AnalysisCard` と `analyses/[id]` は tree/matrix/SWOT 全タイプで描画コードが重複（コンポーネント共通化なし）
+- AnalysisCard 抜本的改革予定のため**現状維持**。改革時に共通化を検討する
 
 ---
 
