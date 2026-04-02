@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-03-25（Session 32 / dashboard リファクタリング）
+最終更新: 2026-04-03（Session 50 / Phase 5 Step 1 完了・httpOnly Cookie + RHF+Zod）
 
 ```
 logos-next/
@@ -11,16 +11,33 @@ logos-next/
 │   ├── page.tsx                         # / トピック一覧【SSR Server Component】初期データfetch → HomeClient に渡す
 │   ├── _components/
 │   │   └── HomeClient.tsx               # / トピック一覧CSR部分（ソート・ページネーション・タブ・useAuth）
-│   ├── api/                             # Route Handler プロキシ層（F-1 Phase3）
+│   ├── api/                             # Route Handler プロキシ層（F-1 Phase3 / auth・proxy Phase5）
+│   │   ├── auth/                        # 認証エンドポイント群（Phase 5 Step 1 新規）
+│   │   │   ├── login/
+│   │   │   │   └── route.ts             # POST: Laravel /api/login → logos_token Cookie セット
+│   │   │   ├── logout/
+│   │   │   │   └── route.ts             # POST: Cookie 削除 + Laravel ログアウト（best effort）
+│   │   │   ├── me/
+│   │   │   │   └── route.ts             # GET: Cookie 読み取り → Laravel /api/user/me 転送
+│   │   │   └── register/
+│   │   │       └── route.ts             # POST: Laravel /api/register → logos_token Cookie セット
+│   │   ├── proxy/
+│   │   │   └── [...path]/
+│   │   │       └── route.ts             # catch-all プロキシ（GET/POST/PUT/PATCH/DELETE、multipart 対応）（Phase 5 Step 1 新規）
 │   │   ├── topics/
 │   │   │   ├── route.ts                 # GET /api/topics（クエリ文字列転送）
 │   │   │   └── [id]/
 │   │   │       └── route.ts             # GET /api/topics/[id]（Authorizationヘッダー転送）
 │   │   ├── categories/
-│   │   │   └── route.ts                 # GET /api/categories
-│   │   └── analyses/
-│   │       └── [id]/
-│   │           └── route.ts             # GET /api/analyses/[id]（Authorizationヘッダー転送）
+│   │   │   ├── route.ts                 # GET /api/categories
+│   │   │   └── [id]/
+│   │   │       └── featured-post/
+│   │   │           └── route.ts         # GET /api/categories/[id]/featured-post
+│   │   ├── analyses/
+│   │   │   └── [id]/
+│   │   │       └── route.ts             # GET /api/analyses/[id]（Authorizationヘッダー転送）
+│   │   └── revalidate/
+│   │       └── route.ts                 # POST: On-Demand ISR revalidate（Cookie 認証・Phase 5 Step 1 で変更）
 │   ├── analyses/
 │   │   └── [id]/
 │   │       └── page.tsx                 # /analyses/[id] 分析スタンドアロン閲覧（CSR・auth必須のためSSR未対応）
@@ -104,7 +121,7 @@ logos-next/
 │   ├── AuthContext.tsx                  # 認証コンテキスト（Sanctumトークン・useSWR・useAuthフック・unread_notifications_count）
 │   └── SidebarContext.tsx               # サイドバー開閉・bookmarkRefreshKey・openProModal を管理
 ├── lib/
-│   ├── auth.ts                          # トークン管理（getToken/setToken/removeToken/getAuthHeaders）
+│   ├── auth.ts                          # httpOnly Cookie 移行済みコメントのみ（Phase 5 Step 1・スタブ削除済み）
 │   ├── proxy-fetch.ts                   # Route Handler用さくらAPIプロキシユーティリティ（サーバー専用・F-1 Phase3）
 │   ├── transforms.ts                    # boolean型変換レイヤー（transformUser/Post/Comment/Reply/Analysis/Topic）（F-3 Phase3）
 │   └── utils.ts                         # shadcn/ui utility（cn関数）+ timeAgo（Session 22 共通化）
@@ -123,9 +140,12 @@ logos-next/
 │       ├── progress-phase1.md           # Phase 1 完了記録（Laravel Blade版MVP）
 │       ├── progress-phase2.md           # Phase 2 完了記録（Next.js移行・Step1〜14）
 │       ├── progress-phase3.md           # Phase 3 完了記録（技術改善 B-1〜B-6 / F-1〜F-7）
-│       ├── progress-phase4.md           # Phase 4 進行中記録（UI/UX改善・Session 12〜）
-│       ├── handoff-session33.md         # 最新引継ぎプロンプト
-│       └── handoff-archive/             # 過去セッション引継ぎ（Session 6〜31）
+│       ├── progress-phase4.md           # Phase 4 完了記録（UI/UX改善・Session 12〜48 概要）
+│       ├── progress-phase4-s42-s48.md   # Phase 4 記録（Session 42〜48・ライトモード・デザインシステム全適用）
+│       ├── progress-phase5.md           # Phase 5 進行中記録（Session 50〜）
+│       ├── handoff-session49.md         # Session 49 引継ぎ（アーカイブ）
+│       ├── handoff-session50.md         # Session 50 引継ぎ（アーカイブ）
+│       └── handoff-session51.md         # 最新引継ぎプロンプト（Session 51用）
 ├── next.config.ts
 ├── package.json                         # swr@^2.4.1 など依存関係
 ├── tailwind.config.ts
