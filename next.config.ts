@@ -12,6 +12,8 @@ try {
   // fallback to localhost
 }
 
+const isDev = process.env.NODE_ENV !== "production";
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -19,6 +21,9 @@ const nextConfig: NextConfig = {
     ],
     // デフォルト [16,32,48,64,96,128,256,384] に Avatar の実寸 28/36/40px を追加
     imageSizes: [16, 28, 32, 36, 40, 48, 64, 96, 128, 256, 384],
+    // 開発環境では localhost → 127.0.0.1 がプライベートIPとしてブロックされるため無効化
+    // 本番（Vercel）では公開ドメインを使うため最適化を有効のまま維持
+    unoptimized: isDev,
   },
 };
 
