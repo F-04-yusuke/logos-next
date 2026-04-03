@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-04-03（Session 53 / Phase 5 Step 3 SSR化完了・Blade参照ルール整理）
+最終更新: 2026-04-03（Session 54 / profile useEffect修正・アバター自動リサイズ実装）
 
 ---
 
@@ -171,8 +171,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v7.09-session53-after-ssr`（Session 53 最終タグ・Phase 5 Step 3 SSR化完了）
-- logos-laravel: `v4.4-session31-liked-by-me`（変更なし）
+- logos-next: `v7.10-session54-before-profile-fix`（Session 54 着手前タグ）
+- logos-laravel: `v4.4-session31-liked-by-me`（タグなし・intervention/image v4 追加済み）
 
 ## Phase 2 未対応・将来検討項目
 
@@ -205,7 +205,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase4-s32-s41.md` | Phase 4 記録（Session 32〜41・テキストサイズ・分析UI・スマホ対応） |
 | `.claude/skills/progress-phase4-s42-s48.md` | Phase 4 記録（Session 42〜48・ライトモード・デザインシステム全適用） |
 | `.claude/skills/progress-phase5.md` | Phase 5 進行中記録（Session 50〜） |
-| `.claude/skills/handoff-session54.md` | **最新引継ぎプロンプト**（Session 54用） |
+| `.claude/skills/handoff-session55.md` | **最新引継ぎプロンプト**（Session 55用） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
 

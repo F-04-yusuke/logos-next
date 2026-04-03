@@ -1,6 +1,6 @@
 # Phase 5 進行中記録
 
-最終更新: 2026-04-03（Session 53）
+最終更新: 2026-04-03（Session 54）
 
 ---
 
@@ -257,11 +257,41 @@ httpOnly Cookie 認証解禁により、Server Component からも認証済み A
 
 ---
 
+---
+
+## Step 3 追加修正: 技術的負債2件解消 ✅（Session 54 / 2026-04-03）
+
+### ① `profile/page.tsx` useEffect 不要再フェッチ修正
+
+`useEffect` deps に `user` が含まれていたため、プロフィール保存後に `updateUser()` が呼ばれると
+`user` が更新され → useEffect 再実行 → `/profile` を不要に再フェッチする問題を修正。
+
+**変更:** `hasFetched` ref を追加し `hasFetched.current` チェックで初回フェッチのみ実行。
+- `app/profile/page.tsx`: `useRef(false)` 追加、`if (hasFetched.current) return;` + `hasFetched.current = true;` 追加
+
+### ② アバター自動リサイズ実装（Laravel 側）
+
+アップロードされた画像を保存前に自動でリサイズする仕組みを追加。
+`intervention/image` v4.0.0（2026-03-28 リリース）を導入。
+
+**変更:** `ProfileApiController::update()`
+- `scaleDown(400, 400)` で最大 400×400px にリサイズ（縦横比維持）
+- `JpegEncoder(85)` で JPEG 85品質に変換
+- GD ドライバー使用（さくら PHP 8.3・Sail PHP 8.5 両対応）
+
+**⚠️ 本番適用残:** `git pull` + `composer install --no-dev` + `config:cache` が必要
+
+### Git タグ（Session 54）
+- `v7.10-session54-before-profile-fix`（着手前）
+
+---
+
 ## Step 4 以降（未着手）
 
-- AnalysisCard 抜本的改革（共通コンポーネント化）
+- Laravel Socialite（Google / X ログイン）※Session 54 で導入コスト調査済み（3〜3.5セッション）
 - SEO（h1/h2・OGP）
 - LP 作成
+- AnalysisCard 抜本的改革（共通コンポーネント化）
 - Stripe Webhook
 - パスワードリセット
 - KPI 設定
