@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-04-03（Session 51 / Phase 5 Step 2 完了・dead code 削除・Sonner・Image移行）
+最終更新: 2026-04-03（Session 52 / Phase 5 Step 2 追加修正完了・アバター表示バグ修正）
 
 ---
 
@@ -163,7 +163,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v7.01-session51-after-step2-complete`（Session 51 最終タグ・Phase 5 Step 2 完了）
+- logos-next: `v7.07-session52-after-avatar-cleanup`（Session 52 最終タグ・Phase 5 Step 2 追加修正完了）
 - logos-laravel: `v4.4-session31-liked-by-me`（変更なし）
 
 ## /categories/[id] の実装上の注意（Session 23 技術的負債）
@@ -209,7 +209,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase4-s32-s41.md` | Phase 4 記録（Session 32〜41・テキストサイズ・分析UI・スマホ対応） |
 | `.claude/skills/progress-phase4-s42-s48.md` | Phase 4 記録（Session 42〜48・ライトモード・デザインシステム全適用） |
 | `.claude/skills/progress-phase5.md` | Phase 5 進行中記録（Session 50〜） |
-| `.claude/skills/handoff-session52.md` | **最新引継ぎプロンプト**（Session 52用） |
+| `.claude/skills/handoff-session53.md` | **最新引継ぎプロンプト**（Session 53用） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
 

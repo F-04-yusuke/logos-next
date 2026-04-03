@@ -158,23 +158,6 @@ const nextConfig: NextConfig = {
 
 **注意: `app/profile/page.tsx` の previewSrc は `data:` URL のため `<img>` のまま維持（`<Image>` は data: URL 未対応）**
 
-#### ⚠️ Session 52 で修正必要な既知バグ
-
-**① アバター `fill` → 明示的サイズへの変更（パフォーマンス問題）:**
-- `fill` + `sizes` 未指定の場合、Next.js は `100vw` をデフォルトと見なし 1920px 相当の画像をダウンロード
-- アバター（実際は 28〜40px）に 1920px を配信するのは `<img>` より悪化する可能性あり
-- 修正対象: `components/UserAvatar.tsx`、`components/Header/UserMenu.tsx`
-  - `<Image fill>` → `<Image width={sz} height={sz}>` の明示的ピクセル指定に変更
-  - UserAvatar の sm/md/lg サイズは 28/32/40px、UserMenu アバターは 36px
-
-**② アバター不一致（プロフィール保存後のナビゲーション表示ずれ）:**
-- 根本原因: `fetchUser()` in `AuthContext.tsx` の `fetch("/api/auth/me")` に `cache: "no-store"` が不足
-  → ブラウザが古い /api/auth/me レスポンスをキャッシュし、プロフィール保存後も旧アバターが表示される
-- 修正方針:
-  1. `fetchUser()` の fetch に `cache: "no-store"` を追加
-  2. `updateUser(partial)` ヘルパーを AuthContext に追加（SWR optimistic update）
-  3. `profile/page.tsx` の `handleProfileSaved` で保存レスポンスから即時 UI 更新
-
 ### Git タグ（Session 51）
 - `v6.95-session51-before-doc-fixes`
 - `v6.96-session51-before-directorymap-fix`
@@ -183,6 +166,55 @@ const nextConfig: NextConfig = {
 - `v6.99-session51-before-sonner`
 - `v7.00-session51-before-image-migration`
 - `v7.01-session51-after-step2-complete`（Step 2 完了タグ）
+
+---
+
+## Step 2 追加修正: アバター表示バグ完全修正 ✅（Session 52 / 2026-04-03）
+
+### 実施内容
+
+#### ① `<Image fill>` → 明示的サイズ（Bug 1 完全修正）
+
+| ファイル | 変更 |
+|---|---|
+| `components/UserAvatar.tsx` | `fill` → `width={px} height={px}`（sm=28/md=32/lg=40）、`relative` 削除 |
+| `components/Header/UserMenu.tsx` | `fill` → `width={px} height={px}`、`sizePx` prop 廃止・`TAILWIND_SIZE_PX` マップで自動導出 |
+| `app/notifications/page.tsx` | `fill` → `width={36} height={36}`、`relative` 削除 |
+| `app/topics/[id]/_components/AnalysisCard.tsx` | `fill` → `width={32} height={32}`、`relative` 削除 |
+
+#### ② AuthContext updateUser + cache:no-store（Bug 2 修正）
+
+| ファイル | 変更 |
+|---|---|
+| `context/AuthContext.tsx` | `fetchUser()` に `cache: "no-store"` 追加、`updateUser(partial)` 追加 |
+| `app/profile/page.tsx` | `refetch()` → 単一 `updateUser(patch)` 呼び出し + `globalMutate` でトピック SWR 再検証 |
+
+#### ③ next.config.ts 修正（根本原因2件）
+
+**問題1:** `imageSizes` にアバター実寸（28/36/40px）が未登録 → `/_next/image` が 400 を返す
+→ `imageSizes: [16, 28, 32, 36, 40, 48, 64, 96, 128, 256, 384]` に追加
+
+**問題2:** 開発環境で `localhost` → `127.0.0.1`（プライベートIP）と判定され Next.js SSRF 防御でブロック
+→ `unoptimized: process.env.NODE_ENV !== "production"` で開発環境は最適化をバイパス
+（本番 Vercel は公開ドメインのため最適化維持）
+
+#### ④ スマホヘッダー Avatar sizePx 修正
+
+`components/Header/index.tsx`: `<Avatar size="h-10 w-10">` に `sizePx={40}` を追加 → 後に `sizePx` prop 廃止で不要に
+
+### 技術的教訓（Session 52）
+
+- **検証なし実装の危険性**: `/_next/image` の 400 エラーと private IP ブロックは curl 1行で発見できた。コード修正前に API 疎通確認を徹底する
+- **Next.js `<Image>` + localhost**: 開発環境では `localhost` がプライベートIPとしてブロックされる。`unoptimized: isDev` が正解
+- **`imageSizes`**: `<Image width={px}>` で指定する px は `imageSizes` または `deviceSizes` に含まれている必要がある
+
+### Git タグ（Session 52）
+- `v7.02-session52-before-avatar-fix`
+- `v7.03-session52-after-avatar-fix`
+- `v7.04-session52-after-avatar-complete`
+- `v7.05-session52-after-imagesizes-fix`
+- `v7.06-session52-after-unoptimized-dev`
+- `v7.07-session52-after-avatar-cleanup`（Session 52 最終タグ）
 
 ---
 
