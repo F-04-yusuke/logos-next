@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { timeAgo } from "@/lib/utils";
 
@@ -59,6 +59,8 @@ type Props = {
   initialPage: number;
   initialLastPage: number;
   initialTotal: number;
+  categoryName: string;
+  parentCategory: { id: number; name: string } | null;
 };
 
 export default function CategoryTopicsClient({
@@ -67,6 +69,8 @@ export default function CategoryTopicsClient({
   initialPage,
   initialLastPage,
   initialTotal,
+  categoryName,
+  parentCategory,
 }: Props) {
   const [topics, setTopics] = useState<Topic[]>(initialTopics);
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -75,34 +79,6 @@ export default function CategoryTopicsClient({
   const [sort, setSort] = useState<SortOption>("newest");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
-  // カテゴリ名・親カテゴリ名をクライアント側で解決
-  const [categoryName, setCategoryName] = useState<string>("");
-  const [parentCategory, setParentCategory] = useState<{ id: number; name: string } | null>(null);
-
-  useEffect(() => {
-    fetch("/api/proxy/categories")
-      .then((r) => r.json())
-      .then((cats: Category[]) => {
-        // 大分類を探す
-        const root = cats.find((c) => c.id === categoryId);
-        if (root) {
-          setCategoryName(root.name);
-          setParentCategory(null);
-          return;
-        }
-        // 中分類を探す
-        for (const parent of cats) {
-          const child = (parent.children ?? []).find((c) => c.id === categoryId);
-          if (child) {
-            setCategoryName(child.name);
-            setParentCategory({ id: parent.id, name: parent.name });
-            return;
-          }
-        }
-      })
-      .catch(() => {});
-  }, [categoryId]);
 
   const fetchTopics = useCallback((page: number, sortVal: SortOption) => {
     setLoading(true);
