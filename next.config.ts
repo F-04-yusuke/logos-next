@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: apiProtocol, hostname: apiHostname },
     ],
+    // デフォルト [16,32,48,64,96,128,256,384] に Avatar の実寸 28/36/40px を追加
+    imageSizes: [16, 28, 32, 36, 40, 48, 64, 96, 128, 256, 384],
   },
 };
 
