@@ -142,7 +142,7 @@ export async function GET(request: Request) {
 - **検証済み（curl）**: トップページ・topics/[id] ともにSSR HTML にコンテンツ含まれることを確認
 - **Vercel環境変数**: `API_BASE_URL=https://gs-f04.sakura.ne.jp`（NEXT_PUBLIC_なし・SSR用）✅ 2026-03-22設定済み
 
-**F-1 残（将来タスク）**: `/analyses/[id]` SSR化 — Sakura API が `auth:sanctum` 必須のためSSR不可。Cookie ベース認証導入まで保留。
+**F-1 残（当時の将来タスク）**: `/analyses/[id]` SSR化 — Sakura API が `auth:sanctum` 必須のためSSR不可。Cookie ベース認証導入まで保留。→ **Phase 5 Session 50 で httpOnly Cookie 化・Session 53 で SSR化 完了済み**
 
 ---
 
@@ -281,11 +281,11 @@ export async function GET(request: Request) {
 - **着手条件**: 関連 Resource（Post/Comment/Reply/Analysis）を全て揃えてから一括対応が望ましい
 - **優先度**: 低（現状バグなし・機能に影響しない純粋な技術改善）
 
-### 【負債④】/analyses/[id] SSR 化
+### 【負債④】/analyses/[id] SSR 化 ✅ **Phase 5 Session 53 で解消済み**
 
-- **現状**: CSR のまま（auth:sanctum 必須のため SSR 不可）
-- **着手条件**: Cookie ベース認証（httpOnly Cookie）の導入後
-- **優先度**: Phase 4 以降
+- ~~**現状**: CSR のまま（auth:sanctum 必須のため SSR 不可）~~
+- ~~**着手条件**: Cookie ベース認証（httpOnly Cookie）の導入後~~
+- **解消**: Phase 5 Session 50 で httpOnly Cookie 化 → Session 53 で Server Component + AnalysisShowClient.tsx に分離してSSR化完了
 
 ---
 

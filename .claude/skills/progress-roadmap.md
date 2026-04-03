@@ -93,8 +93,8 @@
 - **KPI設定**: 新規登録者数・トピック投稿数・継続率などの計測
 - Stripe Webhook 受け口のみ実装
 - パスワードリセット機能: SMTP設定と合わせて実装
-- /analyses/[id] SSR 化（httpOnly Cookie 解禁済み）
-- /categories/[id] SSR 化（同上）
+- ~~`/analyses/[id]` SSR 化~~ → **Session 53 完了済み**
+- ~~`/categories/[id]` SSR 化~~ → **Session 53 完了済み**
 
 #### 優先度低
 - メール認証（MustVerifyEmail 有効化）

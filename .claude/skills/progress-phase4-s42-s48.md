@@ -333,11 +333,12 @@ Session 45 で確立したデザインシステムを以下のページへ適用
 - **SEO対策**: Next.js メタデータ（OGP）の適切な設定・h1/h2タグ整理
 - **Stripe Webhook受け口**: 決済コード作り込みなし・受け取るだけの最小実装
 
-#### 優先度中
-- **認証セキュリティ強化**: localStorage → httpOnly Cookie 化（Phase 2 暫定実装の解消）
-- **/analyses/[id] SSR化**: Cookie認証導入後に対応（F-1 残タスク）
-- **パスワードリセット機能**: SMTP設定（さくら or SendGrid）と合わせて実装
-- **AnalysisCard 抜本的改革**: tree/matrix/SWOT 描画コードの共通コンポーネント化
+#### 優先度中（Phase 4 完了時点での見通し・実際の進捗は progress-phase5.md 参照）
+- ~~**認証セキュリティ強化**: localStorage → httpOnly Cookie 化~~ → **Phase 5 Session 50 完了済み**
+- ~~**/analyses/[id] SSR化**: Cookie認証導入後に対応~~ → **Phase 5 Session 53 完了済み**
+- ~~**/categories/[id] SSR化**~~ → **Phase 5 Session 53 完了済み**
+- **パスワードリセット機能**: SMTP設定（さくら or SendGrid）と合わせて実装（未着手）
+- **AnalysisCard 抜本的改革**: tree/matrix/SWOT 描画コードの共通コンポーネント化（未着手）
 
 #### 優先度低
 - **eKYC連携**: TRUSTDOCK等（本人確認・質の高い議論コミュニティの維持）

@@ -50,7 +50,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost
 - Next.js Route Handler（`app/api/`）をプロキシとして作成し、SSRに復帰
 - Vercel サーバーがさくら API を叩き、ブラウザには Vercel が返す構成（Vercel内部完結）
 - `/` と `/topics/[id]` が SSR Server Component に移行済み
-- **残タスク**: `/analyses/[id]` のSSR化 — `auth:sanctum` 必須のためCookie認証導入まで保留
+- **当時の残タスク**: `/analyses/[id]` のSSR化 — `auth:sanctum` 必須のためCookie認証導入まで保留 → **Phase 5 Session 53 で完了済み**
 
 ### Session 38 パフォーマンス改善（2026-03-26）
 - `vercel.json` 新規作成 — `regions: ["hnd1"]`（東京）でVercel↔さくら間RTT削減

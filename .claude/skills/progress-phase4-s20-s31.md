@@ -185,10 +185,11 @@ const val = e.score !== undefined && e.score !== null ? Number(e.score) : -1;
 - `app/_components/HomeClient.tsx` — 「もっと見る」リンク `/?category=ID` → `/categories/ID`
 - `app/category-list/page.tsx` — 大分類・中分類リンク `/?category=ID` → `/categories/ID`
 
-**技術的負債（将来改善）:**
+**技術的負債（当時・Session 23）:**
 カテゴリ名の解決を SSR で行おうとしたが、Server Component から `http://localhost/api/categories` を
 fetch しても中分類が null を返す不具合（原因不明・Node.js 単体では正常）。
 暫定措置として `CategoryTopicsClient` の `useEffect` でクライアント側から `/api/categories` を取得。
+→ **Phase 5 Session 53 で再検証したところ不具合が再現せず、`fetchCategoryInfo()` を Server Component に追加してSSR化・`useEffect` 削除で解消済み**
 
 ### B-7: TopicApiController カテゴリフィルタ追加 ✅（logos-laravel）
 
