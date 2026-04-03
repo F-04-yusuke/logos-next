@@ -444,20 +444,22 @@ export default function ProfilePage() {
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [fetching, setFetching] = useState(true);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    if (!authLoading && !user) {
+    if (authLoading) return;
+    if (!user) {
       router.replace("/login");
       return;
     }
-    if (!authLoading && user) {
-      fetch(`${PROXY_BASE}/profile`)
-        .then((res) => (res.ok ? res.json() : Promise.reject()))
-        .then((data: ProfileData) => setProfile(data))
-        .catch(() => {})
-        .finally(() => setFetching(false));
-    }
-  }, [authLoading, user]);
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+    fetch(`${PROXY_BASE}/profile`)
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
+      .then((data: ProfileData) => setProfile(data))
+      .catch(() => {})
+      .finally(() => setFetching(false));
+  }, [authLoading, user, router]);
 
   function handleProfileSaved(updated: Partial<ProfileData>) {
     setProfile((prev) => prev ? { ...prev, ...updated } : prev);
