@@ -194,7 +194,7 @@ export default function Header() {
               <div className="pt-4 pb-1 border-t border-logos-border">
                 <div className="px-4 flex items-center">
                   <div className="shrink-0 mr-3">
-                    <Avatar avatar={user.avatar} name={user.name} size="h-10 w-10" iconSize="h-6 w-6" />
+                    <Avatar avatar={user.avatar} name={user.name} size="h-10 w-10" iconSize="h-6 w-6" sizePx={40} />
                   </div>
                   <div>
                     <div className="text-base text-logos-text">{user.name}</div>

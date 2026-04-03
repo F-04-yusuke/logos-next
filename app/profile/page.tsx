@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useSWRConfig } from "swr";
 import { useAuth } from "@/context/AuthContext";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost"; // storage URL 用
@@ -439,6 +440,7 @@ function DeleteAccountSection() {
 export default function ProfilePage() {
   const router = useRouter();
   const { user, loading: authLoading, updateUser } = useAuth();
+  const { mutate: globalMutate } = useSWRConfig();
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [fetching, setFetching] = useState(true);
@@ -459,9 +461,21 @@ export default function ProfilePage() {
 
   function handleProfileSaved(updated: Partial<ProfileData>) {
     setProfile((prev) => prev ? { ...prev, ...updated } : prev);
-    // 保存レスポンスで SWR キャッシュを即時更新（再フェッチ不要）
-    if (updated.avatar !== undefined) updateUser({ avatar: updated.avatar });
-    if (updated.name !== undefined) updateUser({ name: updated.name });
+
+    // AuthContext を1回の呼び出しで即時更新（2回に分けると2回目が1回目を上書くリスクあり）
+    const patch: Partial<{ name: string; avatar: string | null }> = {};
+    if (updated.avatar !== undefined) patch.avatar = updated.avatar;
+    if (updated.name !== undefined) patch.name = updated.name;
+    if (Object.keys(patch).length > 0) updateUser(patch);
+
+    // アバター変更時はトピックページの SWR キャッシュも再検証（投稿のアバター即時反映）
+    if (updated.avatar !== undefined) {
+      globalMutate(
+        (key: unknown) => typeof key === "string" && key.startsWith("/api/proxy/topics/"),
+        undefined,
+        { revalidate: true }
+      );
+    }
   }
 
   if (authLoading || fetching) {
