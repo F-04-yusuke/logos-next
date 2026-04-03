@@ -279,7 +279,7 @@ httpOnly Cookie 認証解禁により、Server Component からも認証済み A
 - `JpegEncoder(85)` で JPEG 85品質に変換
 - GD ドライバー使用（さくら PHP 8.3・Sail PHP 8.5 両対応）
 
-**⚠️ 本番適用残:** `git pull` + `composer install --no-dev` + `config:cache` が必要
+**本番適用済み（Session 54）:** `git pull` + `composer install` + `config:cache` + `route:cache` 完了
 
 ### Git タグ（Session 54）
 - `v7.10-session54-before-profile-fix`（着手前）

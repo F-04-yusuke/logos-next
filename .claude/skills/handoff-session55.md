@@ -52,15 +52,7 @@ $user->avatar = $filename;
 - `EncodedImage` は `Stringable` 実装済みのため `(string)` キャストで文字列化
 - GD ドライバー使用（さくら PHP 8.3・Sail PHP 8.5 両方で動作確認済み）
 
-**⚠️ 本番適用が必要（まだ未実施）:**
-```bash
-ssh gs-f04@gs-f04.sakura.ne.jp
-cd ~/www/logos
-git pull origin main
-~/bin/composer install --no-dev --optimize-autoloader
-php artisan config:cache
-```
-（マイグレーションなし）
+**本番適用済み（Session 54）:** `git pull` + `composer install` + `config:cache` + `route:cache` 完了
 
 **Git タグ（Session 54）:**
 - `v7.10-session54-before-profile-fix`（着手前）
