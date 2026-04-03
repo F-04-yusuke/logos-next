@@ -438,7 +438,7 @@ function DeleteAccountSection() {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, loading: authLoading, refetch } = useAuth();
+  const { user, loading: authLoading, updateUser } = useAuth();
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [fetching, setFetching] = useState(true);
@@ -459,7 +459,9 @@ export default function ProfilePage() {
 
   function handleProfileSaved(updated: Partial<ProfileData>) {
     setProfile((prev) => prev ? { ...prev, ...updated } : prev);
-    refetch(); // ヘッダーのアバターを即時更新
+    // 保存レスポンスで SWR キャッシュを即時更新（再フェッチ不要）
+    if (updated.avatar !== undefined) updateUser({ avatar: updated.avatar });
+    if (updated.name !== undefined) updateUser({ name: updated.name });
   }
 
   if (authLoading || fetching) {

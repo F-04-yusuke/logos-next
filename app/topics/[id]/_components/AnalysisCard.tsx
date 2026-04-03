@@ -329,8 +329,8 @@ export function AnalysisCard({
       <div className="flex items-center gap-3 cursor-pointer">
         <div className="shrink-0 mt-0.5">
           {avatarSrc ? (
-            <div className="h-8 w-8 rounded-full overflow-hidden border border-gray-200 dark:border-logos-border relative">
-              <Image src={avatarSrc} alt={analysis.user.name} fill className="object-cover" />
+            <div className="h-8 w-8 rounded-full overflow-hidden border border-gray-200 dark:border-logos-border">
+              <Image src={avatarSrc} alt={analysis.user.name} width={32} height={32} className="object-cover" />
             </div>
           ) : (
             <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-logos-border">

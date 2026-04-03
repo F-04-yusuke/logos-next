@@ -18,17 +18,19 @@ export function Avatar({
   name,
   size = "h-8 w-8",
   iconSize = "h-5 w-5",
+  sizePx = 32,
 }: {
   avatar?: string | null;
   name?: string;
   size?: string;
   iconSize?: string;
+  sizePx?: number;
 }) {
   const avatarSrc = buildAvatarUrl(avatar);
   if (avatarSrc) {
     return (
-      <div className={`${size} rounded-full overflow-hidden border border-logos-border relative`}>
-        <Image src={avatarSrc} alt={name ? `${name}のアイコン` : "アイコン"} fill className="object-cover" />
+      <div className={`${size} rounded-full overflow-hidden border border-logos-border`}>
+        <Image src={avatarSrc} alt={name ? `${name}のアイコン` : "アイコン"} width={sizePx} height={sizePx} className="object-cover" />
       </div>
     );
   }
@@ -72,7 +74,7 @@ export default function UserMenu({
         aria-label="アカウントメニュー"
         aria-expanded={dropdownOpen}
       >
-        <Avatar avatar={user.avatar} name={user.name} size="h-9 w-9" iconSize="h-6 w-6" />
+        <Avatar avatar={user.avatar} name={user.name} size="h-9 w-9" iconSize="h-6 w-6" sizePx={36} />
       </button>
 
       {dropdownOpen && (

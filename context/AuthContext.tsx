@@ -18,6 +18,7 @@ type AuthContextType = {
   loading: boolean;
   logout: () => void;
   refetch: () => Promise<void>;
+  updateUser: (partial: Partial<AuthUser>) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -25,12 +26,13 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   logout: () => {},
   refetch: async () => {},
+  updateUser: () => {},
 });
 
 /** httpOnly Cookie経由でユーザー情報を取得（トークンはサーバー側で処理） */
 async function fetchUser(): Promise<AuthUser | null> {
   try {
-    const res = await fetch("/api/auth/me");
+    const res = await fetch("/api/auth/me", { cache: "no-store" });
     if (res.ok) return res.json();
     return null;
   } catch {
@@ -53,9 +55,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await mutate();
   }, [mutate]);
 
+  const updateUser = useCallback((partial: Partial<AuthUser>) => {
+    mutate((prev) => prev ? { ...prev, ...partial } : prev, { revalidate: false });
+  }, [mutate]);
+
   return (
     <AuthContext.Provider
-      value={{ user: user ?? null, loading: isLoading, logout, refetch }}
+      value={{ user: user ?? null, loading: isLoading, logout, refetch, updateUser }}
     >
       {children}
     </AuthContext.Provider>

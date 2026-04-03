@@ -12,10 +12,11 @@ export function UserAvatar({
 }) {
   const dim = size === "lg" ? "h-10 w-10" : size === "md" ? "h-8 w-8" : "h-7 w-7";
   const icon = size === "lg" ? "h-6 w-6" : size === "md" ? "h-5 w-5" : "h-4 w-4";
+  const px = size === "lg" ? 40 : size === "md" ? 32 : 28;
   const avatarSrc = buildAvatarUrl(user.avatar);
   return avatarSrc ? (
-    <div className={`${dim} rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 relative`}>
-      <Image src={avatarSrc} alt={`${user.name}のアイコン`} fill className="object-cover" />
+    <div className={`${dim} rounded-full overflow-hidden border border-gray-200 dark:border-gray-700`}>
+      <Image src={avatarSrc} alt={`${user.name}のアイコン`} width={px} height={px} className="object-cover" />
     </div>
   ) : (
     <div
