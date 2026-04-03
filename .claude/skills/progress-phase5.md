@@ -1,6 +1,6 @@
 # Phase 5 進行中記録
 
-最終更新: 2026-04-03（Session 51）
+最終更新: 2026-04-03（Session 53）
 
 ---
 
@@ -218,12 +218,42 @@ const nextConfig: NextConfig = {
 
 ---
 
-## Step 3: SSR 化（未着手）
+## Step 3: SSR 化 ✅ 完了（Session 53 / 2026-04-03）
 
 httpOnly Cookie 認証解禁により、Server Component からも認証済み API リクエストが可能になった。
 
-- `/analyses/[id]` SSR 化（Phase 3 F-1 残タスク）
-- `/categories/[id]` SSR 化（Phase 4 Session 23 技術的負債）
+### ① /categories/[id] 完全 SSR 化
+
+**変更ファイル:** `app/categories/[id]/page.tsx`・`app/categories/[id]/_components/CategoryTopicsClient.tsx`
+
+- `page.tsx` に `fetchCategoryInfo()` を追加（`revalidate: 3600`）
+- カテゴリ名・親カテゴリを Server Component で解決し props として渡す
+- `CategoryTopicsClient.tsx` の `useEffect`（`/api/proxy/categories` CSRフェッチ）を削除
+
+**背景:** Phase 4 Session 23 時点は「Server Component から `http://localhost/api/categories` を fetch すると中分類が null」の不具合で CSR 解決を余儀なくされていた。Session 53 で curl 確認したところ不具合が再現せず、SSR化を完了。
+
+### ② /analyses/[id] SSR 化（Phase 3 F-1 残タスク）
+
+**変更ファイル:** `app/analyses/[id]/page.tsx`（書き換え）・`app/analyses/[id]/_components/AnalysisShowClient.tsx`（新規）
+
+- `page.tsx` → Server Component。`cookies()` で `logos_token` 取得 → `${API_BASE_URL}/api/analyses/${id}` に直接 fetch（`cache: "no-store"`）
+- 未認証（401）/ 404 → SSR で「分析データが見つかりませんでした」を返却（ローディング状態なし）
+- `AnalysisShowClient.tsx` → `"use client"`。全描画ロジック・`handleBack`・`Analysis` 型（export）を担当
+- `topics/[id]`（Server Component → TopicPageClient）と同一パターンに統一
+
+**検証結果（curl）:**
+- Cookie 付き `/analyses/11` → 分析内容がSSR HTML に含まれる ✅
+- Cookie なし → 「見つかりませんでした」がSSR HTML に含まれる ✅
+- `/categories/7` → 「国際情勢」「政治」がSSR HTML に含まれる ✅
+
+### Blade 参照ルール整理（同 Session）
+
+技術的リファクタリング（SSR化・型改善等）では Blade 参照が不要であることを CLAUDE.md に明記。
+「機能追加・ロジック変更」の曖昧な表現を作業種別ごとの表に整理した。
+
+### Git タグ（Session 53）
+- `v7.08-session53-before-ssr`（着手前）
+- `v7.09-session53-after-ssr`（Step 3 完了）
 
 ---
 

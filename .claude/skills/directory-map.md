@@ -28,7 +28,9 @@ logos-next/
 │   │       └── route.ts                 # POST: On-Demand ISR revalidate（Cookie 認証・Phase 5 Step 1 で変更）
 │   ├── analyses/
 │   │   └── [id]/
-│   │       └── page.tsx                 # /analyses/[id] 分析スタンドアロン閲覧（CSR・auth必須のためSSR未対応）
+│   │       ├── page.tsx                 # /analyses/[id] 分析スタンドアロン閲覧【SSR Server Component・Session 53】Cookie認証→Laravel直接fetch
+│   │       └── _components/
+│   │           └── AnalysisShowClient.tsx  # 分析閲覧CSR部分（"use client"・handleBack・全描画ロジック・Analysis型をexport）
 │   ├── login/
 │   │   └── page.tsx                     # /login ログイン画面（Blade忠実再現・eKYC/SNSボタンUI）
 │   ├── register/
@@ -36,9 +38,9 @@ logos-next/
 │   ├── categories/
 │   │   ├── page.tsx                     # /categories カテゴリ（admin: インライン編集CRUD / 一般: グリッド一覧）
 │   │   └── [id]/
-│   │       ├── page.tsx                 # /categories/[id] カテゴリ別トピック一覧【SSR初期トピック+CSRカテゴリ名解決】
+│   │       ├── page.tsx                 # /categories/[id] カテゴリ別トピック一覧【SSR Server Component・Session 53完全SSR化】トピック+カテゴリ名両方fetch
 │   │       └── _components/
-│   │           └── CategoryTopicsClient.tsx  # カテゴリ別トピック一覧CSR（useEffectでカテゴリ名取得・ソート・ページネーション）
+│   │           └── CategoryTopicsClient.tsx  # カテゴリ別トピック一覧CSR（propsでカテゴリ名受取・ソート・ページネーション）
 │   ├── category-list/
 │   │   └── page.tsx                     # /category-list カテゴリ公開グリッド一覧【SSR Server Component・Session 38】（大分類・中分類 → /categories/[id]）
 │   ├── notifications/
@@ -150,7 +152,7 @@ logos-next/
 | `/login` | app/login/page.tsx | CSR | ✅ |
 | `/register` | app/register/page.tsx | CSR | ✅ |
 | `/categories` | app/categories/page.tsx | CSR | ✅ |
-| `/categories/[id]` | app/categories/[id]/page.tsx | SSR初期トピック+CSRカテゴリ名 | ✅ |
+| `/categories/[id]` | app/categories/[id]/page.tsx | SSR（Session 53 完全SSR化） | ✅ |
 | `/category-list` | app/category-list/page.tsx | SSR（Session 38） | ✅ |
 | `/notifications` | app/notifications/page.tsx | CSR | ✅ |
 | `/likes` | app/likes/page.tsx | CSR | ✅ |
@@ -160,7 +162,7 @@ logos-next/
 | `/topics/create` | app/topics/create/page.tsx | CSR | ✅ |
 | `/topics/[id]` | app/topics/[id]/page.tsx | SSR（Phase 3 F-1） | ✅ |
 | `/topics/[id]/edit` | app/topics/[id]/edit/page.tsx | CSR | ✅ |
-| `/analyses/[id]` | app/analyses/[id]/page.tsx | CSR（SSR未対応・将来） | ✅ |
+| `/analyses/[id]` | app/analyses/[id]/page.tsx | SSR（Session 53・Cookie認証） | ✅ |
 | `/tools/tree` | app/tools/tree/page.tsx | CSR | ✅ |
 | `/tools/matrix` | app/tools/matrix/page.tsx | CSR | ✅ |
 | `/tools/swot` | app/tools/swot/page.tsx | CSR | ✅ |

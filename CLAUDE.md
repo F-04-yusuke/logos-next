@@ -1,5 +1,5 @@
 # LOGOS フロントエンド仕様書（logos-next）
-最終更新: 2026-04-03（Session 53 / Blade参照ルール整理）
+最終更新: 2026-04-03（Session 53 / Phase 5 Step 3 SSR化完了・Blade参照ルール整理）
 
 ---
 
@@ -155,7 +155,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/login` | ログイン |
 | `/register` | ユーザー登録 |
 | `/categories` | カテゴリ（admin: CRUD / 一般: 一覧） |
-| `/categories/[id]` | カテゴリ別トピック一覧（大分類・中分類対応・SSR初期データ+CSRカテゴリ名解決） |
+| `/categories/[id]` | カテゴリ別トピック一覧（大分類・中分類対応・SSR完全対応） |
 | `/category-list` | カテゴリ公開一覧（大分類・中分類リンク → /categories/[id]）【SSR・Session 38】 |
 | `/topics/create` | トピック作成（PRO限定） |
 | `/topics/[id]` | トピック詳細（3タブ・投稿・コメント・いいね・ブックマーク） |
@@ -171,20 +171,8 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `/tools/swot` | SWOT/PEST分析作成（PRO限定・AIアシスタント・Gemini連携） |
 
 ## 現在のタグ
-- logos-next: `v7.07-session52-after-avatar-cleanup`（Session 52 最終タグ・Phase 5 Step 2 追加修正完了）
+- logos-next: `v7.09-session53-after-ssr`（Session 53 最終タグ・Phase 5 Step 3 SSR化完了）
 - logos-laravel: `v4.4-session31-liked-by-me`（変更なし）
-
-## /categories/[id] の実装上の注意（Session 23 技術的負債）
-
-`app/categories/[id]/page.tsx` はトピック初期データのみ SSR で取得し、
-カテゴリ名（大分類・中分類）の解決は `CategoryTopicsClient` の `useEffect` でクライアント側が担う。
-
-**理由:** Server Component から `http://localhost/api/categories` を fetch すると
-中分類の検索ロジックが null を返す不具合が確認された（原因不明・Node.js 単体では正常動作）。
-
-**将来の改善方針:** httpOnly Cookie 認証導入後に SSR 化を検討。
-または Next.js の Route Segment Config（`export const dynamic = 'force-dynamic'`）や
-`unstable_noStore` を試して SSR fetch の安定化を図る。
 
 ## Phase 2 未対応・将来検討項目
 
@@ -217,7 +205,7 @@ docker exec logos-laravel.test-1 php artisan tinker --execute="Model::where(...)
 | `.claude/skills/progress-phase4-s32-s41.md` | Phase 4 記録（Session 32〜41・テキストサイズ・分析UI・スマホ対応） |
 | `.claude/skills/progress-phase4-s42-s48.md` | Phase 4 記録（Session 42〜48・ライトモード・デザインシステム全適用） |
 | `.claude/skills/progress-phase5.md` | Phase 5 進行中記録（Session 50〜） |
-| `.claude/skills/handoff-session53.md` | **最新引継ぎプロンプト**（Session 53用） |
+| `.claude/skills/handoff-session54.md` | **最新引継ぎプロンプト**（Session 54用） |
 
 ## logos-laravel（バックエンド・必要に応じて参照）
 
