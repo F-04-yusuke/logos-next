@@ -1,5 +1,5 @@
 # logos-next ディレクトリ構成
-最終更新: 2026-04-03（Session 50 / Phase 5 Step 1 完了・httpOnly Cookie + RHF+Zod）
+最終更新: 2026-04-03（Session 51 / Phase 5 Step 2 完了・Dead code削除・Sonner・next/image移行）
 
 ```
 logos-next/
@@ -24,18 +24,6 @@ logos-next/
 │   │   ├── proxy/
 │   │   │   └── [...path]/
 │   │   │       └── route.ts             # catch-all プロキシ（GET/POST/PUT/PATCH/DELETE、multipart 対応）（Phase 5 Step 1 新規）
-│   │   ├── topics/
-│   │   │   ├── route.ts                 # GET /api/topics（クエリ文字列転送）
-│   │   │   └── [id]/
-│   │   │       └── route.ts             # GET /api/topics/[id]（Authorizationヘッダー転送）
-│   │   ├── categories/
-│   │   │   ├── route.ts                 # GET /api/categories
-│   │   │   └── [id]/
-│   │   │       └── featured-post/
-│   │   │           └── route.ts         # GET /api/categories/[id]/featured-post
-│   │   ├── analyses/
-│   │   │   └── [id]/
-│   │   │       └── route.ts             # GET /api/analyses/[id]（Authorizationヘッダー転送）
 │   │   └── revalidate/
 │   │       └── route.ts                 # POST: On-Demand ISR revalidate（Cookie 認証・Phase 5 Step 1 で変更）
 │   ├── analyses/
@@ -121,8 +109,6 @@ logos-next/
 │   ├── AuthContext.tsx                  # 認証コンテキスト（httpOnly Cookie + SWR + /api/auth/me・useAuthフック・unread_notifications_count）
 │   └── SidebarContext.tsx               # サイドバー開閉・bookmarkRefreshKey・openProModal を管理
 ├── lib/
-│   ├── auth.ts                          # httpOnly Cookie 移行済みコメントのみ（Phase 5 Step 1・スタブ削除済み）
-│   ├── proxy-fetch.ts                   # Route Handler用さくらAPIプロキシユーティリティ（サーバー専用・F-1 Phase3）
 │   ├── transforms.ts                    # boolean型変換レイヤー（transformUser/Post/Comment/Reply/Analysis/Topic）（F-3 Phase3）
 │   └── utils.ts                         # shadcn/ui utility（cn関数）+ timeAgo（Session 22 共通化）
 ├── public/                              # SVG等の静的ファイル
@@ -146,10 +132,10 @@ logos-next/
 │       ├── progress-phase4-s32-s41.md   # Phase 4 記録（Session 32〜41・テキストサイズ・分析UI・スマホ対応）
 │       ├── progress-phase4-s42-s48.md   # Phase 4 記録（Session 42〜48・ライトモード・デザインシステム全適用）
 │       ├── progress-phase5.md           # Phase 5 進行中記録（Session 50〜）
-│       ├── handoff-session51.md         # 最新引継ぎプロンプト（Session 51用）
-│       └── handoff-archive/             # 過去セッション引継ぎ（Session 49・50）
-├── next.config.ts
-├── package.json                         # swr@^2.4.1 など依存関係
+│       ├── handoff-session52.md         # 最新引継ぎプロンプト（Session 52用）
+│       └── handoff-archive/             # 過去セッション引継ぎ（Session 49・50・51）
+├── next.config.ts                       # images.remotePatterns を NEXT_PUBLIC_API_BASE_URL から動的生成（Phase 5 Step 2）
+├── package.json                         # swr@^2.4.1・sonner・react-hook-form・zod など依存関係
 ├── tailwind.config.ts
 └── tsconfig.json
 ```
